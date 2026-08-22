@@ -22,3 +22,4 @@ import './blocks/section-heading';
 import './blocks/split-list';
 import './blocks/steps';
 import './blocks/template-grid';
+import './blocks/template-library';

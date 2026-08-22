@@ -29,6 +29,10 @@ $heading    = (string) ($attributes['heading'] ?? '');
 $intro      = (string) ($attributes['intro'] ?? '');
 $price_from = (string) ($attributes['priceFrom'] ?? '');
 $limit      = (int) ($attributes['limit'] ?? 9);
+$more_text  = (string) ($attributes['moreText'] ?? '');
+$more_url   = (string) ($attributes['moreUrl'] ?? '');
+$compact    = (bool) ($attributes['compact'] ?? false);
+$tone       = (string) ($attributes['tone'] ?? 'plain');
 
 $templates = fm_get_templates($limit);
 
@@ -45,7 +49,16 @@ if ($templates === []) {
     return;
 }
 ?>
-<section <?php echo fm_wrapper(['fm-template-grid']); ?>>
+<?php
+$classes = ['fm-template-grid', 'fm-template-grid--' . sanitize_html_class($tone)];
+
+// The compact card drops the description and price, showing only the name and
+// niche — that is how the services page lists them.
+if ($compact) {
+    $classes[] = 'fm-template-grid--compact';
+}
+?>
+<section <?php echo fm_wrapper($classes); ?>>
     <?php if ($number !== '' || $label !== '') : ?>
         <?php echo fm_section_rule($number, $label, $aside); ?>
     <?php endif; ?>
@@ -103,20 +116,31 @@ if ($templates === []) {
 
                         <span class="fm-template-card__name"><?php echo esc_html($template['name']); ?></span>
 
-                        <?php if ($template['description'] !== '') : ?>
-                            <span class="fm-template-card__desc"><?php echo esc_html($template['description']); ?></span>
-                        <?php endif; ?>
+                        <?php if (!$compact) : ?>
+                            <?php if ($template['description'] !== '') : ?>
+                                <span class="fm-template-card__desc"><?php echo esc_html($template['description']); ?></span>
+                            <?php endif; ?>
 
-                        <span class="fm-template-card__meta">
-                            <span><?php echo esc_html($price_from); ?></span>
-                            <span class="fm-template-card__view">
-                                <?php esc_html_e('View demo', 'foundations'); ?>
-                                <span aria-hidden="true">&#8599;</span>
+                            <span class="fm-template-card__meta">
+                                <span><?php echo esc_html($price_from); ?></span>
+                                <span class="fm-template-card__view">
+                                    <?php esc_html_e('View demo', 'foundations'); ?>
+                                    <span aria-hidden="true">&#8599;</span>
+                                </span>
                             </span>
-                        </span>
+                        <?php endif; ?>
                     </span>
                 </a>
             </li>
         <?php endforeach; ?>
     </ul>
+
+    <?php if ($more_text !== '') : ?>
+        <p class="fm-template-grid__more">
+            <a class="fm-template-grid__more-link" href="<?php echo fm_url($more_url); ?>">
+                <?php echo esc_html($more_text); ?>
+                <span aria-hidden="true">&rarr;</span>
+            </a>
+        </p>
+    <?php endif; ?>
 </section>

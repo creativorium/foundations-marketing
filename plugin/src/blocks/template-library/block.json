@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/template-library",
+  "title": "Template library",
+  "category": "foundations",
+  "icon": "screenoptions",
+  "description": "The full catalogue with niche filtering, read from published Site Templates.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "number":      { "type": "string",  "default": "01" },
+    "label":       { "type": "string",  "default": "The library" },
+    "aside":       { "type": "string",  "default": "Every template" },
+    "priceFrom":   { "type": "string",  "default": "From £249" },
+    "allLabel":    { "type": "string",  "default": "All" },
+    "showFilters": { "type": "boolean", "default": true },
+    "note":        { "type": "string",  "default": "" },
+    "limit":       { "type": "number",  "default": -1 }
+  },
+  "render": "file:./render.php"
+}
