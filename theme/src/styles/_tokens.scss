@@ -1,0 +1,138 @@
+// =============================================================================
+// Design tokens — Foundations Marketing
+//
+// Source of truth: the client's design-canvas files (doc/client-html/extracted/).
+// Two colour schemes ship: Steel (default) and Nari. Nari is applied by adding
+// `data-palette="nari"` to <html>.
+//
+// NEVER hardcode a brand colour inside a block. Use var(--fm-*).
+// =============================================================================
+
+:root {
+  // --- Steel (default) ------------------------------------------------------
+  --fm-bg:            #EBEBDF;
+  --fm-bg-2:          #E0E0D1;
+  --fm-ink:           #1F1E1A;
+  --fm-muted:         #5E5D53;
+  --fm-line:          #CBCBB9;
+
+  --fm-accent:        #EA631B;
+  --fm-accent-deep:   #C24E11;
+
+  --fm-bezel:         #25241F;
+  --fm-bezel-dot:     #57554C;
+
+  --fm-band:          #EA631B;
+  --fm-band-ink:      #FFF3EA;
+
+  --fm-warm:          #A8C2E0;
+  --fm-warm-muted:    #33475C;
+  --fm-warm-accent:   #C24E11;
+
+  --fm-pastel:        #C9DCEC;
+  --fm-pastel-ink:    #2E4C68;
+
+  --fm-cta:           #A8C2E0;
+  --fm-cta-ink:       #1F1E1A;
+  --fm-cta-muted:     #33475C;
+  --fm-cta-accent:    #C24E11;
+  --fm-cta-btn:       #EA631B;
+  --fm-cta-btn-ink:   #FFFFFF;
+
+  --fm-photo-bg:      #DEDED0;
+  --fm-photo-stripe:  repeating-linear-gradient(45deg, #D5D5C5 0 10px, #E4E4D6 10px 20px);
+  --fm-hero-screen:   #A8C2E0;
+
+  // Rotating tints for cards / step blocks
+  --fm-tint-1: #EBEBDF;
+  --fm-tint-2: #F5D3BE;
+  --fm-tint-3: #C9DCEC;
+  --fm-tint-4: #E0E0D1;
+
+  // Template preview screens, in catalogue order
+  --fm-screen-1: #A8C2E0;
+  --fm-screen-2: #EA631B;
+  --fm-screen-3: #5A7EA5;
+  --fm-screen-4: #F2A06B;
+  --fm-screen-5: #7E9CBF;
+  --fm-screen-6: #C24E11;
+  --fm-screen-7: #8FA9C4;
+  --fm-screen-8: #D8B79B;
+  --fm-screen-9: #3F6187;
+
+  // --- Type -----------------------------------------------------------------
+  // Archivo carries the whole design. Instrument Serif is used only for the italic
+  // asides and the pull-quote. DM Mono appears in the canvas but ONLY inside
+  // "[ photo ]" placeholders, which become real images — so it never ships.
+  --fm-font:       'Archivo', Helvetica, Arial, sans-serif;
+  --fm-font-serif: 'Instrument Serif', Georgia, 'Times New Roman', serif;
+
+  // The design leans on one repeated treatment: small, heavily letterspaced,
+  // uppercase eyebrow text above a tight, near-black display heading.
+  --fm-eyebrow-size:    11px;
+  --fm-eyebrow-track:   0.14em;
+  --fm-display-track:  -0.03em;
+
+  // --- Structure ------------------------------------------------------------
+  --fm-rule:        1.5px;              // the hairline that separates every band
+  --fm-gutter:      40px;
+  --fm-header-h:    74px;
+  --fm-radius-pill: 40px;
+  --fm-radius-card: 18px;
+}
+
+// --- Nari ------------------------------------------------------------------
+:root[data-palette='nari'] {
+  --fm-bg:            #EAE7DE;
+  --fm-bg-2:          #D9DEE0;
+  --fm-ink:           #2A2622;
+  --fm-muted:         #635C52;
+  --fm-line:          #C8C3B6;
+
+  --fm-accent:        #B0754A;
+  --fm-accent-deep:   #8C5733;
+
+  --fm-bezel:         #2A2622;
+  --fm-bezel-dot:     #5B544C;
+
+  --fm-band:          #B0754A;
+  --fm-band-ink:      #F2EFE7;
+
+  --fm-warm:          #F0C34B;
+  --fm-warm-muted:    #5C4E22;
+  --fm-warm-accent:   #8C5733;
+
+  --fm-pastel:        #B9D4E0;
+  --fm-pastel-ink:    #2F5566;
+
+  --fm-cta:           #94974A;
+  --fm-cta-ink:       #F5EFE6;
+  --fm-cta-muted:     rgba(245, 239, 230, 0.82);
+  --fm-cta-accent:    #F0AEC4;
+  --fm-cta-btn:       #F0AEC4;
+  --fm-cta-btn-ink:   #2A2622;
+
+  --fm-photo-bg:      #DDDACF;
+  --fm-photo-stripe:  repeating-linear-gradient(45deg, #D3CFC2 0 10px, #E4E1D6 10px 20px);
+  --fm-hero-screen:   #B0754A;
+
+  --fm-tint-1: #EAE7DE;
+  --fm-tint-2: #F6E2AC;
+  --fm-tint-3: #D9DEE0;
+  --fm-tint-4: #F7D9E2;
+
+  --fm-screen-1: #B0754A;
+  --fm-screen-2: #F0C34B;
+  --fm-screen-3: #94974A;
+  --fm-screen-4: #7FB3CC;
+  --fm-screen-5: #F0AEC4;
+  --fm-screen-6: #8C5733;
+  --fm-screen-7: #CBD3EE;
+  --fm-screen-8: #A8B45C;
+  --fm-screen-9: #C9A27C;
+}
+
+// Breakpoints — the canvas is designed at 1200px and collapses to one column.
+$fm-bp-lap: 1024px;
+$fm-bp-tab: 820px;
+$fm-bp-mob: 560px;

@@ -42,3 +42,6 @@ uploads/
 # Template packages / client asset drops
 /dist-themes/
 *.zip
+
+# Self-hosted webfonts are dropped in by hand (see doc/FONTS.md), not committed
+theme/assets/fonts/*.woff2

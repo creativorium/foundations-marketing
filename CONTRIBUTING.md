@@ -9,7 +9,21 @@ git checkout main && git pull origin main
 git checkout -b feat/my-thing
 ```
 
-`feat/` new work · `fix/` bug · `theme/` a site template in the catalogue · `chore/` build/config/docs.
+Branch name is `Prefix/short-kebab-description`:
+
+| Prefix | Use for |
+|---|---|
+| `Feat/` | new feature, component or page |
+| `BugFix/` | a normal bug fix |
+| `HotFix/` | production is broken right now — smallest possible fix |
+| `Theme/` | a site template in the catalogue |
+| `Refactor/` | restructuring, no behaviour change |
+| `Chore/` | build, config, dependencies |
+| `Docs/` | documentation only |
+| `Content/` | copy, images, catalogue entries |
+| `Security/` | vulnerability patch or cleanup |
+
+Prefix capitalised exactly as shown, description lowercase kebab-case, under ~50 characters.
 Never commit to `main`. Never reuse a finished branch.
 
 ## 2. Push and merge rights

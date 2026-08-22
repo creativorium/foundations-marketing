@@ -1,0 +1,33 @@
+@use 'tokens' as *;
+
+body.login {
+  background: var(--fm-bg);
+  font-family: var(--fm-font);
+
+  h1 a {
+    background-image: none;
+    width: auto; height: auto;
+    text-indent: 0;
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+    color: var(--fm-ink);
+    &::after { content: 'FOUNDATIONS'; }
+  }
+
+  form {
+    background: var(--fm-bg-2);
+    border: var(--fm-rule) solid var(--fm-ink);
+    border-radius: var(--fm-radius-card);
+    box-shadow: none;
+  }
+
+  .button-primary {
+    background: var(--fm-accent);
+    border-color: var(--fm-accent);
+    border-radius: var(--fm-radius-pill);
+    text-transform: uppercase;
+    letter-spacing: var(--fm-eyebrow-track);
+    &:hover { background: var(--fm-accent-deep); border-color: var(--fm-accent-deep); }
+  }
+}

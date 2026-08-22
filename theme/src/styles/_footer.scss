@@ -1,0 +1,43 @@
+@use 'tokens' as *;
+
+.fm-footer {
+  padding: 56px var(--fm-gutter) 28px;
+  background: var(--fm-bg);
+
+  &__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    padding-bottom: 36px;
+    border-bottom: var(--fm-rule) solid var(--fm-ink);
+    font-size: var(--fm-eyebrow-size);
+    font-weight: 600;
+    letter-spacing: var(--fm-eyebrow-track);
+    text-transform: uppercase;
+    a { color: var(--fm-ink); }
+  }
+
+  // The oversized wordmark that anchors the bottom of every page.
+  &__wordmark {
+    margin: 36px 0 24px;
+    font-size: clamp(48px, 10.6vw, 230px);
+    font-weight: 800;
+    letter-spacing: -0.055em;
+    line-height: 0.82;
+    color: var(--fm-accent);
+  }
+
+  &__meta {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 18px;
+    border-top: var(--fm-rule) solid var(--fm-ink);
+    font-size: var(--fm-eyebrow-size);
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fm-muted);
+  }
+}
