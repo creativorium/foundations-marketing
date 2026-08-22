@@ -8,7 +8,6 @@
  * when a second H1 is placed on a page.
  *
  * @var array    $attributes
- * @var string   $content
  * @var WP_Block $block
  */
 
@@ -49,6 +48,4 @@ $classes = ['fm-section-heading', 'fm-section-heading--' . sanitize_html_class($
             <?php endif; ?>
         </<?php echo esc_attr($tag); ?>>
     <?php endif; ?>
-
-    <?php echo $content; // Inner blocks, already escaped by their own render. ?>
 </section>

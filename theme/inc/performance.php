@@ -121,24 +121,19 @@ function fm_clean_head(): void
 add_action('init', 'fm_clean_head');
 
 /**
- * The first image on a page is almost always the LCP element. WordPress lazy-loads
- * it by default, which delays the paint — so exempt it and give it high priority.
+ * The first image on a page is almost always the LCP element, and lazy-loading it
+ * delays the paint. Since WordPress 6.3 core works this out itself — it marks the
+ * first few images as not-lazy and puts fetchpriority="high" on the one it believes
+ * is the LCP — so we do not second-guess it with a filter of our own.
+ *
+ * What we control is the threshold: how many images from the top of the document are
+ * exempt from lazy-loading. Our pages open with a hero image and, on the template
+ * grid, a row of cards, so 2 is a better fit than the default.
+ *
+ * Blocks that know they render above the fold should still pass $eager = true to
+ * fm_image() — that is explicit and does not depend on document order.
  */
-function fm_first_image_is_eager(string $html, string $context, $attachment_id): string
-{
-    static $seen = false;
-
-    if ($seen || $context !== 'the_content') {
-        return $html;
-    }
-
-    $seen = true;
-
-    $html = str_replace(' loading="lazy"', ' loading="eager" fetchpriority="high"', $html);
-
-    return $html;
-}
-add_filter('wp_get_attachment_image', 'fm_first_image_is_eager', 10, 3);
+add_filter('wp_omit_loading_attr_threshold', fn (): int => 2);
 
 /**
  * WebP/AVIF uploads (SEO strategy §4 asks for WebP). WordPress allows WebP already;

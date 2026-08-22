@@ -5,6 +5,11 @@
  * Blocks are discovered by scanning src/blocks/ for block.json — adding a component
  * means adding a folder, nothing here changes. Each block.json points at its own
  * render.php via `render: file:./render.php`, so markup stays inside the component.
+ *
+ * block.json deliberately does NOT declare editorScript/style handles: every block's
+ * JS and CSS is compiled into one shared bundle (build/editor.js, build/frontend.css)
+ * and enqueued once in inc/assets.php. Per-block handles would mean per-block files,
+ * which is more requests, not fewer.
  */
 
 declare(strict_types=1);

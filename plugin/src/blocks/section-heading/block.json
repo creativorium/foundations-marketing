@@ -21,7 +21,5 @@
     "level":     { "type": "number", "default": 2 },
     "tone":      { "type": "string", "default": "bg" }
   },
-  "render": "file:./render.php",
-  "editorScript": "fm-blocks-editor",
-  "style": "fm-blocks"
+  "render": "file:./render.php"
 }
