@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/page-hero",
+  "title": "Page hero",
+  "category": "foundations",
+  "icon": "align-pull-left",
+  "description": "Interior page opener: headline and lede, with an at-a-glance spec card. Owns the page H1.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true, "multiple": false },
+  "attributes": {
+    "badge":         { "type": "string", "default": "" },
+    "note":          { "type": "string", "default": "" },
+    "heading":       { "type": "string", "default": "" },
+    "headingAccent": { "type": "string", "default": "" },
+    "lede":          { "type": "string", "default": "" },
+    "cardTitle":     { "type": "string", "default": "At a glance" },
+    "rows":          { "type": "array",  "default": [] },
+    "ctaText":       { "type": "string", "default": "" },
+    "ctaUrl":        { "type": "string", "default": "" }
+  },
+  "render": "file:./render.php"
+}

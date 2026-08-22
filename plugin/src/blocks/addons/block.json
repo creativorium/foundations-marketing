@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/addons",
+  "title": "Add-ons",
+  "category": "foundations",
+  "icon": "plus-alt",
+  "description": "Priced add-on cards with a description and when each is worth it.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "number":  { "type": "string", "default": "03" },
+    "label":   { "type": "string", "default": "Add-ons" },
+    "aside":   { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "intro":   { "type": "string", "default": "" },
+    "items":   { "type": "array",  "default": [] },
+    "note":    { "type": "string", "default": "" }
+  },
+  "render": "file:./render.php"
+}

@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/split-list",
+  "title": "Split list",
+  "category": "foundations",
+  "icon": "columns",
+  "description": "Two facing cards — what we handle and what you bring.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "number":     { "type": "string", "default": "01" },
+    "label":      { "type": "string", "default": "The split" },
+    "aside":      { "type": "string", "default": "" },
+    "heading":    { "type": "string", "default": "" },
+    "intro":      { "type": "string", "default": "" },
+    "leftEyebrow":{ "type": "string", "default": "Our job" },
+    "leftTitle":  { "type": "string", "default": "" },
+    "leftItems":  { "type": "array",  "default": [] },
+    "rightEyebrow":{ "type": "string","default": "Your part" },
+    "rightTitle": { "type": "string", "default": "" },
+    "rightItems": { "type": "array",  "default": [] },
+    "rightNote":  { "type": "string", "default": "" }
+  },
+  "render": "file:./render.php"
+}

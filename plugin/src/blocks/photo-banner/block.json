@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/photo-banner",
+  "title": "Photo banner",
+  "category": "foundations",
+  "icon": "format-image",
+  "description": "A single full-bleed image band.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "mediaId":  { "type": "number", "default": 0 },
+    "mediaAlt": { "type": "string", "default": "" },
+    "caption":  { "type": "string", "default": "" },
+    "spacedTop":{ "type": "boolean","default": true }
+  },
+  "render": "file:./render.php"
+}

@@ -4,15 +4,21 @@
 // because every file is called style.scss and Sass would otherwise see many modules
 // all claiming the namespace "style". The block files export no members — they only
 // emit CSS — so the alias is purely to keep Sass happy and to read clearly.
+@use '../blocks/addons/style' as addons;
+@use '../blocks/audience/style' as audience;
 @use '../blocks/benefits/style' as benefits;
 @use '../blocks/cta/style' as cta;
 @use '../blocks/faq/style' as faq;
+@use '../blocks/feature-cards/style' as feature-cards;
 @use '../blocks/hero/style' as hero;
 @use '../blocks/marquee/style' as marquee;
+@use '../blocks/page-hero/style' as page-hero;
+@use '../blocks/photo-banner/style' as photo-banner;
 @use '../blocks/photo-strip/style' as photo-strip;
 @use '../blocks/pricing/style' as pricing;
 @use '../blocks/quotes/style' as quotes;
 @use '../blocks/section-heading/style' as section-heading;
+@use '../blocks/split-list/style' as split-list;
 @use '../blocks/steps/style' as steps;
 @use '../blocks/template-grid/style' as template-grid;
 

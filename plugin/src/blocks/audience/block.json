@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/audience",
+  "title": "Audience",
+  "category": "foundations",
+  "icon": "groups",
+  "description": "Who the service is for, as pill tags beside a portrait.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "number":        { "type": "string", "default": "05" },
+    "label":         { "type": "string", "default": "Who it's for" },
+    "aside":         { "type": "string", "default": "" },
+    "heading":       { "type": "string", "default": "" },
+    "headingAccent": { "type": "string", "default": "" },
+    "tags":          { "type": "string", "default": "" },
+    "mediaId":       { "type": "number", "default": 0 },
+    "mediaAlt":      { "type": "string", "default": "" },
+    "caption":       { "type": "string", "default": "" }
+  },
+  "render": "file:./render.php"
+}
