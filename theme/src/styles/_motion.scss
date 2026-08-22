@@ -131,9 +131,6 @@
 
   // The pill CTA already has a border, so the underline would fight it.
   .fm-nav li:last-child > a { background-image: none; }
-
-  .fm-faq__item { transition: background 220ms var(--fm-ease); }
-  .fm-faq__item[open] { background: rgba(0, 0, 0, 0.02); }
 }
 
 // --- Keyframes ---------------------------------------------------------------

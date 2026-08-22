@@ -108,9 +108,7 @@ export default function Edit({ attributes, setAttributes }) {
             {items.length === 0 && <p>{__('Add a question in the sidebar.', 'foundations')}</p>}
             {items.map((item, i) => (
               <div key={i} className="fm-faq__item">
-                <p className="fm-faq__q">
-                  <span>{item.q}</span>
-                </p>
+                <h3 className="fm-faq__q">{item.q}</h3>
                 <p className="fm-faq__a">{item.a}</p>
               </div>
             ))}

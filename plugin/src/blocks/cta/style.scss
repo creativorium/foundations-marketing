@@ -30,7 +30,9 @@
     font-size: 19px;
     line-height: 1.55;
     color: var(--fm-cta-muted);
-    max-width: 520px;
+    // Wide enough to hold the closing sentence on a single line on desktop; the
+    // percentage keeps it wrapping normally once the screen is narrower than that.
+    max-width: min(100%, 680px);
     margin: 0 auto 38px;
     text-wrap: pretty;
   }
