@@ -46,7 +46,9 @@
     letter-spacing: -0.045em;
     text-transform: uppercase;
     margin-bottom: 28px;
-    text-wrap: balance;
+    // Same reasoning as the CTA heading: the hero H1 is set in deliberate lines,
+    // so it should fill rather than be balanced into a narrow stack.
+    text-wrap: pretty;
   }
 
   &__title-accent { display: block; color: var(--fm-accent); }

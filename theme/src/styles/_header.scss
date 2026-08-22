@@ -17,7 +17,7 @@
 .fm-logo {
   display: flex;
   align-items: baseline;
-  gap: 9px;
+  gap: 8px;
   flex: none;
   &:hover { text-decoration: none; }
 
@@ -30,10 +30,12 @@
     color: var(--fm-accent);
   }
 
+  // Same size and weight as the mark — the two words read as one wordmark,
+  // "FOUNDATIONS MARKETING", not a name with a label attached.
   &__sub {
-    font-size: 12px;
+    font-size: 19px;
     font-weight: 800;
-    letter-spacing: 0.14em;
+    letter-spacing: -0.035em;
     text-transform: uppercase;
     color: var(--fm-accent);
   }
