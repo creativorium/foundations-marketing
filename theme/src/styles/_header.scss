@@ -21,6 +21,7 @@
   flex: none;
   &:hover { text-decoration: none; }
 
+  // The whole lockup is the brand: both words bold and in accent, not just the first.
   &__mark {
     font-size: 19px;
     font-weight: 800;
@@ -30,11 +31,11 @@
   }
 
   &__sub {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 0.24em;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--fm-muted);
+    color: var(--fm-accent);
   }
 }
 
