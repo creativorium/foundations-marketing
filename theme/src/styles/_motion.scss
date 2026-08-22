@@ -28,18 +28,66 @@
 @media (prefers-reduced-motion: no-preference) {
 
   // --- Page transitions ------------------------------------------------------
-  // Cross-document view transitions: a short cross-fade between pages, for free.
-  // Paired with the speculation rules in inc/performance.php (which prerender
-  // same-site links on hover) navigation is both instant and smooth.
+  // Cross-document view transitions: the browser holds the outgoing page, paints the
+  // incoming one, and animates between them. Paired with the speculation rules in
+  // inc/performance.php (which prerender same-site links on hover), navigation is both
+  // instant and smooth. Costs nothing when unsupported — the page just swaps as normal.
   @view-transition { navigation: auto; }
 
-  ::view-transition-old(root) { animation-duration: 180ms; }
-  ::view-transition-new(root) { animation-duration: 260ms; }
+  // The default is a plain cross-fade. Adding a small vertical movement gives the
+  // navigation a direction, which reads as intent rather than as a dissolve.
+  ::view-transition-old(root) {
+    animation: fm-page-out 220ms var(--fm-ease) both;
+  }
 
-  // The header and the footer wordmark persist between pages, so they should stay
-  // put while the content changes rather than cross-fading with everything else.
+  ::view-transition-new(root) {
+    animation: fm-page-in 380ms var(--fm-ease) both;
+  }
+
+  // The header and the footer wordmark exist on every page, so they are named and
+  // held still while the content between them changes. Without this they would
+  // cross-fade with everything else and the whole page would appear to blink.
   .fm-header           { view-transition-name: fm-header; }
   .fm-footer__wordmark { view-transition-name: fm-wordmark; }
+
+  ::view-transition-old(fm-header),
+  ::view-transition-new(fm-header),
+  ::view-transition-old(fm-wordmark),
+  ::view-transition-new(fm-wordmark) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+
+  // --- Footer wordmark, letter by letter -------------------------------------
+  // The <text> is one fitted unit, so the timeline is taken from the container and
+  // each letter reads its progress from that shared timeline. Staggering by
+  // animation-range rather than animation-delay is what makes it work on a scroll
+  // timeline, where delays have no meaning.
+  .fm-footer__wordmark {
+    view-timeline-name: --fm-wordmark-view;
+    view-timeline-axis: block;
+  }
+
+  @supports (animation-timeline: view()) {
+    .fm-footer__wordmark tspan {
+      // fill-box keeps the transform relative to each glyph rather than the whole SVG.
+      transform-box: fill-box;
+      transform-origin: 50% 100%;
+      animation: fm-letter-in linear both;
+      animation-timeline: --fm-wordmark-view;
+    }
+
+    // Eleven letters in FOUNDATIONS; the loop covers a longer brand too.
+    @for $i from 1 through 16 {
+      .fm-footer__wordmark tspan:nth-child(#{$i}) {
+        // The unit lives inside the interpolation: a bare `%` straight after
+        // `#{...}` is parsed as a modulo operator, not as a percentage.
+        animation-range:
+          entry #{(2 + ($i - 1) * 3.2) * 1%}
+          entry #{(46 + ($i - 1) * 3.2) * 1%};
+      }
+    }
+  }
 
   // --- The editorial reveal --------------------------------------------------
   // A masked slide-up: the text sits inside a clipping box and rises into it. On a
@@ -109,6 +157,18 @@
   .fm-hero__footnote { animation-delay: 250ms; }
   .fm-hero__media    { animation-delay: 120ms; }
 
+  // --- Header wordmark -------------------------------------------------------
+  // The two words settle in on load, a beat apart. Kept deliberately small: this is
+  // in the corner of every page, so anything more than a suggestion becomes a tic.
+  // Because the header is a named view transition, it holds still during same-site
+  // navigation and this only plays on a genuine page load.
+  .fm-logo__mark,
+  .fm-logo__sub {
+    animation: fm-word-in 460ms var(--fm-ease) both;
+  }
+
+  .fm-logo__sub { animation-delay: 80ms; }
+
   // --- Interaction -----------------------------------------------------------
   .fm-nav a,
   .fm-footer__links a {
@@ -145,4 +205,28 @@
 @keyframes fm-fade-up {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fm-page-out {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-10px); }
+}
+
+@keyframes fm-page-in {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// A word arriving: a short rise with the faintest tightening of the tracking, which
+// reads as type settling rather than as an element sliding in.
+@keyframes fm-word-in {
+  from { opacity: 0; transform: translateY(5px); letter-spacing: 0.02em; }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// Each letter rises into place and settles. Kept small — at this size a large
+// movement reads as a bounce, not as typesetting.
+@keyframes fm-letter-in {
+  from { opacity: 0; transform: translateY(0.16em) scaleY(0.94); }
+  to   { opacity: 1; transform: translateY(0) scaleY(1); }
 }
