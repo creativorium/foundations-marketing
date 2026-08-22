@@ -1,0 +1,15 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/photo-strip",
+  "title": "Photo strip",
+  "category": "foundations",
+  "icon": "images-alt2",
+  "description": "A full-bleed row of images separated by the hairline rule.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "items": { "type": "array", "default": [] }
+  },
+  "render": "file:./render.php"
+}

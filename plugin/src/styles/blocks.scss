@@ -1,7 +1,7 @@
 // Every block's front-end styles, collected into one stylesheet.
 //
 // One @use per block folder, kept alphabetical. Each is aliased to its block name
-// because every file is called style.scss and Sass would otherwise see eight modules
+// because every file is called style.scss and Sass would otherwise see many modules
 // all claiming the namespace "style". The block files export no members — they only
 // emit CSS — so the alias is purely to keep Sass happy and to read clearly.
 @use '../blocks/benefits/style' as benefits;
@@ -9,6 +9,9 @@
 @use '../blocks/faq/style' as faq;
 @use '../blocks/hero/style' as hero;
 @use '../blocks/marquee/style' as marquee;
+@use '../blocks/photo-strip/style' as photo-strip;
+@use '../blocks/pricing/style' as pricing;
+@use '../blocks/quotes/style' as quotes;
 @use '../blocks/section-heading/style' as section-heading;
 @use '../blocks/steps/style' as steps;
 @use '../blocks/template-grid/style' as template-grid;

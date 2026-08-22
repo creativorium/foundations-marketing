@@ -1,0 +1,124 @@
+// foundations/quotes
+
+.fm-quotes {
+  padding: 96px var(--fm-gutter) 104px;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    margin-top: 44px;
+    align-items: start;
+  }
+
+  &__founder {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    border: var(--fm-rule) solid var(--fm-ink);
+    background: var(--fm-warm);
+    margin: 0;
+  }
+
+  &__portrait {
+    aspect-ratio: 4 / 5;
+    background-color: var(--fm-photo-bg);
+    background-image: var(--fm-photo-stripe);
+    overflow: hidden;
+  }
+
+  &__portrait-img { width: 100%; height: 100%; object-fit: cover; }
+
+  &__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 100%;
+    padding: 24px;
+    text-align: center;
+  }
+
+  &__tag, &__hint {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fm-muted);
+  }
+
+  &__founder-body {
+    padding: 32px 30px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  // The one pull-quote treatment: Instrument Serif, large.
+  &__founder-text {
+    margin: 0 0 20px;
+
+    p {
+      font-family: var(--fm-font-serif);
+      font-size: 26px;
+      line-height: 1.35;
+      margin: 0;
+      text-wrap: pretty;
+    }
+  }
+
+  &__list { display: grid; gap: 24px; }
+
+  &__item {
+    border: var(--fm-rule) solid var(--fm-ink);
+    background: var(--fm-bg-2);
+    padding: 26px 24px;
+    margin: 0;
+
+    blockquote { margin: 0 0 16px; }
+
+    p {
+      font-size: 15.5px;
+      line-height: 1.65;
+      margin: 0;
+      text-wrap: pretty;
+    }
+  }
+
+  &__attribution {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  &__name {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  &__role {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fm-muted);
+  }
+
+  // The open slot is a deliberate gap, drawn as a dashed outline.
+  &__open {
+    border: var(--fm-rule) dashed var(--fm-ink);
+    padding: 26px 24px;
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--fm-muted);
+    text-wrap: pretty;
+  }
+}
+
+@media (max-width: 820px) {
+  .fm-quotes { padding-block: 64px 72px; }
+  .fm-quotes__grid { margin-top: 28px; }
+  .fm-quotes__founder-text p { font-size: 22px; }
+}

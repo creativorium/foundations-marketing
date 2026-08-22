@@ -1,0 +1,28 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/pricing",
+  "title": "Pricing band",
+  "category": "foundations",
+  "icon": "money-alt",
+  "description": "The headline price, what every site includes, and the optional add-ons.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "number":        { "type": "string", "default": "02" },
+    "label":         { "type": "string", "default": "The price" },
+    "aside":         { "type": "string", "default": "One number, no tiers" },
+    "prefix":        { "type": "string", "default": "from" },
+    "price":         { "type": "string", "default": "\u00a3249" },
+    "lede":          { "type": "string", "default": "" },
+    "ctaText":       { "type": "string", "default": "Start my site" },
+    "ctaUrl":        { "type": "string", "default": "#cta" },
+    "smallprint":    { "type": "string", "default": "" },
+    "includedTitle": { "type": "string", "default": "Every site includes" },
+    "included":      { "type": "array",  "default": [] },
+    "addonsTitle":   { "type": "string", "default": "Add only what you need" },
+    "addons":        { "type": "array",  "default": [] },
+    "addonsNote":    { "type": "string", "default": "" }
+  },
+  "render": "file:./render.php"
+}
