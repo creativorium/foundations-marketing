@@ -14,11 +14,11 @@ if (!defined('ABSPATH')) {
         </div>
     <?php endif; ?>
 
-    <div class="fm-footer__wordmark" aria-hidden="true"><?php bloginfo('name'); ?></div>
+    <div class="fm-footer__wordmark" aria-hidden="true"><?php echo esc_html(fm_brand_mark()); ?></div>
 
     <div class="fm-footer__meta">
         <span><?php esc_html_e('Made by Cular Creative', 'foundations'); ?></span>
-        <span>&copy; <?php echo esc_html((string) date('Y')); ?> <?php bloginfo('name'); ?></span>
+        <span>&copy; <?php echo esc_html((string) date('Y')); ?> <?php echo esc_html(FM_BRAND); ?></span>
     </div>
 </footer>
 

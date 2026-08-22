@@ -5,25 +5,43 @@
   background: var(--fm-bg);
 
   &__links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
     padding-bottom: 36px;
     border-bottom: var(--fm-rule) solid var(--fm-ink);
-    font-size: var(--fm-eyebrow-size);
-    font-weight: 600;
-    letter-spacing: var(--fm-eyebrow-track);
-    text-transform: uppercase;
-    a { color: var(--fm-ink); }
+
+    // Same as the header: wp_nav_menu puts the items in a <ul>, so the row is laid
+    // out there. Wrapping is fine here — the footer has more links than the header.
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 12px 30px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    a {
+      display: inline-block;
+      font-size: var(--fm-eyebrow-size);
+      font-weight: 600;
+      letter-spacing: var(--fm-eyebrow-track);
+      text-transform: uppercase;
+      line-height: 1;
+      white-space: nowrap;
+      color: var(--fm-ink);
+      padding-block: 8px;
+    }
   }
 
-  // The oversized wordmark that anchors the bottom of every page.
+  // The oversized wordmark that anchors the bottom of every page. It is the brand's
+  // first word only — "FOUNDATIONS" — set as large as the viewport allows.
   &__wordmark {
     margin: 36px 0 24px;
-    font-size: clamp(48px, 10.6vw, 230px);
+    font-size: clamp(48px, 15.5vw, 240px);
     font-weight: 800;
     letter-spacing: -0.055em;
     line-height: 0.82;
+    text-transform: uppercase;
     color: var(--fm-accent);
   }
 

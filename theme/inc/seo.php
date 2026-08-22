@@ -151,3 +151,31 @@ function fm_fallback_open_graph(): void
     }
 }
 add_action('wp_head', 'fm_fallback_open_graph', 3);
+
+/**
+ * The brand split into the two pieces the logo lockup uses.
+ *
+ * The canvas sets the name as a heavy uppercase "FOUNDATIONS" with a small, widely
+ * tracked "Marketing" beside it — one wordmark, two spans. Deriving both from FM_BRAND
+ * rather than from the WordPress site title means the logo cannot drift back to the
+ * singular "Foundation", which is the exact problem the SEO audit found (strategy §1a).
+ *
+ * @return array{0:string, 1:string} [mark, suffix] — e.g. ['FOUNDATIONS', 'Marketing'].
+ */
+function fm_brand_parts(): array
+{
+    $parts = explode(' ', FM_BRAND, 2);
+
+    return [
+        mb_strtoupper($parts[0]),
+        $parts[1] ?? '',
+    ];
+}
+
+/**
+ * The oversized wordmark used in the footer: the first word only, in caps.
+ */
+function fm_brand_mark(): string
+{
+    return fm_brand_parts()[0];
+}

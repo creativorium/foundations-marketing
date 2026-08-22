@@ -18,10 +18,11 @@ if (!defined('ABSPATH')) {
 <a class="fm-skip-link" href="#fm-content"><?php esc_html_e('Skip to content', 'foundations'); ?></a>
 
 <header class="fm-header">
-    <a class="fm-logo" href="<?php echo esc_url(home_url('/')); ?>">
-        <span class="fm-logo__mark"><?php bloginfo('name'); ?></span>
-        <?php if ($tagline = get_bloginfo('description')) : ?>
-            <span class="fm-logo__sub"><?php echo esc_html($tagline); ?></span>
+    <?php [$brand_mark, $brand_suffix] = fm_brand_parts(); ?>
+    <a class="fm-logo" href="<?php echo esc_url(home_url('/')); ?>" rel="home">
+        <span class="fm-logo__mark"><?php echo esc_html($brand_mark); ?></span>
+        <?php if ($brand_suffix !== '') : ?>
+            <span class="fm-logo__sub"><?php echo esc_html($brand_suffix); ?></span>
         <?php endif; ?>
     </a>
 
