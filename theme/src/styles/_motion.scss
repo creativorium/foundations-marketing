@@ -1,0 +1,151 @@
+@use 'tokens' as *;
+
+// =============================================================================
+// Motion
+//
+// The brief: sleek, elegant, restrained. This is a newspaper-ish editorial layout —
+// hairline rules, heavy display type, hard edges — so the motion is editorial too:
+// things arrive by being *revealed*, as if a mask slid off, not by flying in.
+//
+// Everything here is native CSS. No JavaScript, no IntersectionObserver, no animation
+// library — so the whole motion system costs 0 bytes of script and cannot block the
+// 85+ mobile PageSpeed target.
+//
+// Every rule lives inside `prefers-reduced-motion: no-preference`. That way stillness
+// is the DEFAULT and motion is the enhancement, rather than motion being the default
+// with an opt-out bolted on. If a browser does not understand the query, nothing
+// animates and nothing is ever stuck invisible.
+// =============================================================================
+
+:root {
+  // One curve for the whole site. A single easing is what makes motion read as
+  // designed rather than assorted.
+  --fm-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --fm-duration: 620ms;
+  --fm-duration-fast: 320ms;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+  // --- Page transitions ------------------------------------------------------
+  // Cross-document view transitions: a short cross-fade between pages, for free.
+  // Paired with the speculation rules in inc/performance.php (which prerender
+  // same-site links on hover) navigation is both instant and smooth.
+  @view-transition { navigation: auto; }
+
+  ::view-transition-old(root) { animation-duration: 180ms; }
+  ::view-transition-new(root) { animation-duration: 260ms; }
+
+  // The header and the footer wordmark persist between pages, so they should stay
+  // put while the content changes rather than cross-fading with everything else.
+  .fm-header           { view-transition-name: fm-header; }
+  .fm-footer__wordmark { view-transition-name: fm-wordmark; }
+
+  // --- The editorial reveal --------------------------------------------------
+  // A masked slide-up: the text sits inside a clipping box and rises into it. On a
+  // layout built from hairline rules this reads like a line being set, which is the
+  // "newspaper" character asked for.
+  //
+  // `animation-timeline: view()` is scroll-driven — the browser runs it as the
+  // element enters the viewport, off the main thread, with no observer to wire up.
+  @supports (animation-timeline: view()) {
+
+    .fm-hero__title,
+    .fm-section-heading__title,
+    .fm-template-grid__heading,
+    .fm-steps__heading,
+    .fm-benefits__heading,
+    .fm-faq__heading,
+    .fm-cta__heading,
+    .fm-pricing__amount {
+      // The mask is what makes it a reveal rather than a slide.
+      clip-path: inset(-0.1em -0.15em -0.15em -0.05em);
+    }
+
+    // Headings below the fold reveal as they scroll in.
+    .fm-section-heading__title,
+    .fm-template-grid__heading,
+    .fm-steps__heading,
+    .fm-benefits__heading,
+    .fm-faq__heading,
+    .fm-cta__heading,
+    .fm-pricing__amount {
+      animation: fm-rise linear both;
+      animation-timeline: view();
+      // Finish well before the element reaches the middle of the screen — motion
+      // that is still running when you are reading it is motion in the way.
+      animation-range: entry 5% cover 26%;
+    }
+
+    // Body-level content gets a plainer, shorter fade-up. Less is deliberate:
+    // if everything performs, nothing reads as considered.
+    .fm-steps__item,
+    .fm-benefits__item,
+    .fm-template-grid__item,
+    .fm-quotes__item,
+    .fm-pricing__card,
+    .fm-photo-strip__cell {
+      animation: fm-fade-up linear both;
+      animation-timeline: view();
+      animation-range: entry 2% cover 22%;
+    }
+  }
+
+  // --- Above the fold --------------------------------------------------------
+  // The hero is already in view on load, so a scroll timeline would never run it.
+  // It plays once, immediately, with a short stagger down the block.
+  .fm-hero__flags    { animation: fm-fade-up var(--fm-duration-fast) var(--fm-ease) both; }
+  .fm-hero__title    { animation: fm-rise    var(--fm-duration)      var(--fm-ease) both; }
+  .fm-hero__lede     { animation: fm-fade-up var(--fm-duration-fast) var(--fm-ease) both; }
+  .fm-hero__actions  { animation: fm-fade-up var(--fm-duration-fast) var(--fm-ease) both; }
+  .fm-hero__footnote { animation: fm-fade-up var(--fm-duration-fast) var(--fm-ease) both; }
+  .fm-hero__media    { animation: fm-fade-up var(--fm-duration)      var(--fm-ease) both; }
+
+  // Stagger stays under ~60ms a step. Beyond that a sequence stops feeling brisk
+  // and starts feeling like waiting.
+  .fm-hero__title    { animation-delay:  60ms; }
+  .fm-hero__lede     { animation-delay: 140ms; }
+  .fm-hero__actions  { animation-delay: 200ms; }
+  .fm-hero__footnote { animation-delay: 250ms; }
+  .fm-hero__media    { animation-delay: 120ms; }
+
+  // --- Interaction -----------------------------------------------------------
+  .fm-nav a,
+  .fm-footer__links a {
+    // A rule that draws itself in from the left on hover — the same hairline the
+    // layout is built from, reused as the hover state.
+    background-image: linear-gradient(var(--fm-accent), var(--fm-accent));
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% var(--fm-rule);
+    transition: background-size 220ms var(--fm-ease);
+  }
+
+  .fm-nav a:hover,
+  .fm-nav a:focus-visible,
+  .fm-footer__links a:hover,
+  .fm-footer__links a:focus-visible {
+    background-size: 100% var(--fm-rule);
+    text-decoration: none;
+  }
+
+  // The pill CTA already has a border, so the underline would fight it.
+  .fm-nav li:last-child > a { background-image: none; }
+
+  .fm-faq__item { transition: background 220ms var(--fm-ease); }
+  .fm-faq__item[open] { background: rgba(0, 0, 0, 0.02); }
+}
+
+// --- Keyframes ---------------------------------------------------------------
+// Only transform and opacity: both composite on the GPU and never trigger layout,
+// which is what keeps this smooth on the mid-range Android phones our buyers use.
+
+@keyframes fm-rise {
+  from { opacity: 0; transform: translateY(0.42em); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fm-fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}

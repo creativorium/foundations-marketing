@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  height: var(--fm-header-h);
+  min-height: var(--fm-header-h);
   padding-inline: var(--fm-gutter);
   background: var(--fm-bg);
   border-bottom: var(--fm-rule) solid var(--fm-ink);
@@ -18,33 +18,55 @@
   display: flex;
   align-items: baseline;
   gap: 9px;
-  color: var(--fm-ink);
+  flex: none;
   &:hover { text-decoration: none; }
 
+  // The whole lockup is the brand: both words bold and in accent, not just the first.
   &__mark {
     font-size: 19px;
     font-weight: 800;
     letter-spacing: -0.035em;
-  }
-  &__sub {
-    font-size: 9px;
-    font-weight: 600;
-    letter-spacing: 0.24em;
     text-transform: uppercase;
-    color: var(--fm-muted);
+    color: var(--fm-accent);
+  }
+
+  &__sub {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fm-accent);
   }
 }
 
 .fm-nav {
-  display: flex;
-  align-items: center;
-  gap: 30px;
-  font-size: var(--fm-eyebrow-size);
-  font-weight: 600;
-  letter-spacing: var(--fm-eyebrow-track);
-  text-transform: uppercase;
+  // wp_nav_menu() renders <nav><ul class="menu"><li>… — so the <ul> is the single
+  // child here and the row has to be laid out on IT, not on the <nav>. Flexing the
+  // <nav> alone leaves every <li> stacked in a column.
+  ul {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
 
-  a { color: var(--fm-ink); }
+  li { display: block; }
+
+  a {
+    display: inline-block;
+    font-size: var(--fm-eyebrow-size);
+    font-weight: 600;
+    letter-spacing: var(--fm-eyebrow-track);
+    text-transform: uppercase;
+    line-height: 1;
+    white-space: nowrap;
+    color: var(--fm-ink);
+    // Vertical padding gives a 44px tap target without changing the visual position.
+    padding-block: 16px;
+  }
+
   .current-menu-item > a,
   a[aria-current='page'] { color: var(--fm-accent); }
 
@@ -52,41 +74,55 @@
   li:last-child > a {
     border: var(--fm-rule) solid var(--fm-ink);
     border-radius: var(--fm-radius-pill);
-    padding: 9px 20px;
+    padding: 12px 20px;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    &:hover { background: var(--fm-ink); color: var(--fm-bg); text-decoration: none; }
   }
 }
 
 .fm-nav-toggle {
   display: none;
+  flex: none;
   background: none;
   border: var(--fm-rule) solid var(--fm-ink);
   border-radius: var(--fm-radius-pill);
-  padding: 8px 16px;
+  padding: 11px 18px;
   font: inherit;
   font-size: var(--fm-eyebrow-size);
   font-weight: 600;
   letter-spacing: var(--fm-eyebrow-track);
   text-transform: uppercase;
+  color: var(--fm-ink);
   cursor: pointer;
 }
 
-@media (max-width: $fm-bp-tab) {
+// The nav needs to collapse as soon as the row stops fitting, which is well before
+// the tablet breakpoint — five uppercase, letterspaced items are wide.
+@media (max-width: 1024px) {
   .fm-nav-toggle { display: block; }
 
   .fm-nav {
     position: absolute;
     inset: var(--fm-header-h) 0 auto 0;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0;
-    padding: 8px var(--fm-gutter) 24px;
     background: var(--fm-bg);
     border-bottom: var(--fm-rule) solid var(--fm-ink);
+    padding: 8px var(--fm-gutter) 24px;
 
     &[data-open='false'] { display: none; }
 
+    ul {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+    }
+
     li { width: 100%; }
-    li > a { display: block; padding: 14px 0; }
+    li > a { display: block; padding-block: 14px; }
     li:last-child > a { display: inline-block; margin-top: 10px; }
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fm-nav li:last-child > a { transition: none; }
 }
