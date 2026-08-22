@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/cta",
+  "title": "Closing CTA",
+  "category": "foundations",
+  "icon": "megaphone",
+  "description": "The full-bleed closing call to action.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "heading":       { "type": "string", "default": "" },
+    "headingAccent": { "type": "string", "default": "" },
+    "lede":          { "type": "string", "default": "" },
+    "primaryText":   { "type": "string", "default": "" },
+    "primaryUrl":    { "type": "string", "default": "" },
+    "secondaryText": { "type": "string", "default": "" },
+    "secondaryUrl":  { "type": "string", "default": "" },
+    "footnote":      { "type": "string", "default": "" },
+    "level":         { "type": "number", "default": 2 }
+  },
+  "render": "file:./render.php"
+}

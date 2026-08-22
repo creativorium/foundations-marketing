@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/hero",
+  "title": "Hero",
+  "category": "foundations",
+  "icon": "cover-image",
+  "description": "The page-opening hero. Owns the page H1 — use one per page, and never a second.",
+  "textdomain": "foundations",
+  "supports": {
+    "html": false,
+    "anchor": true,
+    "multiple": false
+  },
+  "attributes": {
+    "variant":      { "type": "string",  "default": "a" },
+    "badge":        { "type": "string",  "default": "Done-for-you landing pages" },
+    "note":         { "type": "string",  "default": "Live in 5 days" },
+    "heading":      { "type": "string",  "default": "" },
+    "headingAccent":{ "type": "string",  "default": "" },
+    "lede":         { "type": "string",  "default": "" },
+    "primaryText":  { "type": "string",  "default": "See the templates" },
+    "primaryUrl":   { "type": "string",  "default": "#templates" },
+    "secondaryText":{ "type": "string",  "default": "Book a free 20-min call" },
+    "secondaryUrl": { "type": "string",  "default": "#cta" },
+    "footnote":     { "type": "string",  "default": "" },
+    "mediaId":      { "type": "number",  "default": 0 },
+    "mediaAlt":     { "type": "string",  "default": "" },
+    "captionLeft":  { "type": "string",  "default": "" },
+    "captionRight": { "type": "string",  "default": "" }
+  },
+  "render": "file:./render.php"
+}

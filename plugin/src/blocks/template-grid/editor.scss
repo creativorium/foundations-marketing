@@ -1,0 +1,8 @@
+// foundations/template-grid — editor only.
+.wp-block-foundations-template-grid {
+  .fm-template-card { pointer-events: none; }
+  .fm-template-grid__empty {
+    border: 1px dashed var(--fm-line);
+    text-align: center;
+  }
+}

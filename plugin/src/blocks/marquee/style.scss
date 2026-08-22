@@ -1,0 +1,45 @@
+// foundations/marquee
+
+.fm-marquee {
+  border-block: var(--fm-rule) solid var(--fm-ink);
+  background: var(--fm-band);
+  padding: 16px 0;
+  overflow: hidden;
+  white-space: nowrap;
+
+  &--spaced { margin-top: 72px; }
+
+  &__track {
+    display: inline-block;
+    animation: fm-marquee-scroll var(--fm-marquee-speed, 46s) linear infinite;
+  }
+
+  &__strip {
+    padding-right: 40px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fm-band-ink);
+  }
+}
+
+@keyframes fm-marquee-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+// Motion is decorative here. Anyone who has asked for less of it gets a static,
+// scrollable strip instead of an animation they cannot stop.
+@media (prefers-reduced-motion: reduce) {
+  .fm-marquee {
+    overflow-x: auto;
+
+    &__track { animation: none; }
+    &__strip:last-child { display: none; }
+  }
+}
+
+@media (max-width: 820px) {
+  .fm-marquee--spaced { margin-top: 48px; }
+}

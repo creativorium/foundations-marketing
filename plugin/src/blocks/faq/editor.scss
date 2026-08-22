@@ -1,0 +1,5 @@
+// foundations/faq — editor only. Show every answer while editing.
+.wp-block-foundations-faq {
+  .fm-faq__heading { position: static; }
+  .fm-faq__item { border-bottom: 1px solid var(--fm-line); }
+}
