@@ -1,0 +1,17 @@
+// Furniture repeated across blocks. Tokens come from the theme (theme/src/styles/_tokens.scss),
+// which is loaded first — blocks only ever read var(--fm-*), never redefine it.
+
+.fm-section-rule {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 24px;
+  padding-bottom: 12px;
+  border-bottom: var(--fm-rule) solid var(--fm-ink);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+
+  &__aside { color: var(--fm-accent); }
+}

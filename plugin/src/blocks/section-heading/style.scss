@@ -1,0 +1,30 @@
+// Front-end styles for foundations/section-heading.
+// Tokens only — never a raw hex. See theme/src/styles/_tokens.scss.
+
+.fm-section-heading {
+  padding: 96px var(--fm-gutter) 104px;
+  background: var(--fm-bg);
+
+  &--bg2 { background: var(--fm-bg-2); border-block: var(--fm-rule) solid var(--fm-ink); }
+  &--band { background: var(--fm-band); color: var(--fm-band-ink); }
+
+  &__title {
+    margin-top: 44px;
+    font-size: clamp(36px, 5vw, 56px);
+    line-height: 0.92;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    text-transform: uppercase;
+    text-wrap: balance;
+  }
+
+  &__highlight {
+    color: var(--fm-accent);
+    // The highlight sits on its own line in the design.
+    display: block;
+  }
+}
+
+@media (max-width: 820px) {
+  .fm-section-heading { padding-block: 64px 72px; }
+}

@@ -1,0 +1,25 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/section-heading",
+  "title": "Section heading",
+  "category": "foundations",
+  "icon": "heading",
+  "description": "The numbered rule and display heading that opens most bands in the design.",
+  "textdomain": "foundations",
+  "supports": {
+    "html": false,
+    "anchor": true,
+    "align": ["wide", "full"]
+  },
+  "attributes": {
+    "number":    { "type": "string", "default": "01" },
+    "label":     { "type": "string", "default": "" },
+    "aside":     { "type": "string", "default": "" },
+    "heading":   { "type": "string", "default": "" },
+    "highlight": { "type": "string", "default": "" },
+    "level":     { "type": "number", "default": 2 },
+    "tone":      { "type": "string", "default": "bg" }
+  },
+  "render": "file:./render.php"
+}

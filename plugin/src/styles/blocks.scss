@@ -1,0 +1,6 @@
+// Every block's front-end styles, collected into one stylesheet.
+// One @use per block folder — keep it alphabetical.
+@use '../blocks/section-heading/style';
+
+// Shared section furniture used by several blocks.
+@use 'shared';

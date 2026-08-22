@@ -1,0 +1,49 @@
+@use 'tokens' as *;
+
+// The canvas design is edge-to-edge with a fixed 40px gutter and hairline rules
+// separating full-bleed bands. These two utilities carry that everywhere.
+
+.fm-gutter { padding-inline: var(--fm-gutter); }
+
+.fm-band {
+  border-bottom: var(--fm-rule) solid var(--fm-ink);
+}
+
+.fm-eyebrow {
+  font-size: var(--fm-eyebrow-size);
+  font-weight: 600;
+  letter-spacing: var(--fm-eyebrow-track);
+  text-transform: uppercase;
+  color: var(--fm-muted);
+}
+
+.fm-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: var(--fm-rule) solid var(--fm-ink);
+  border-radius: var(--fm-radius-pill);
+  padding: 9px 20px;
+  font-size: var(--fm-eyebrow-size);
+  font-weight: 600;
+  letter-spacing: var(--fm-eyebrow-track);
+  text-transform: uppercase;
+  color: var(--fm-ink);
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover { text-decoration: none; background: var(--fm-ink); color: var(--fm-bg); }
+
+  &--solid {
+    background: var(--fm-accent);
+    border-color: var(--fm-accent);
+    color: #fff;
+    &:hover { background: var(--fm-accent-deep); border-color: var(--fm-accent-deep); color: #fff; }
+  }
+}
+
+@media (max-width: $fm-bp-tab) {
+  :root { --fm-gutter: 20px; }
+}

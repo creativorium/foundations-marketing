@@ -1,0 +1,92 @@
+@use 'tokens' as *;
+
+.fm-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  height: var(--fm-header-h);
+  padding-inline: var(--fm-gutter);
+  background: var(--fm-bg);
+  border-bottom: var(--fm-rule) solid var(--fm-ink);
+}
+
+.fm-logo {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  color: var(--fm-ink);
+  &:hover { text-decoration: none; }
+
+  &__mark {
+    font-size: 19px;
+    font-weight: 800;
+    letter-spacing: -0.035em;
+  }
+  &__sub {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--fm-muted);
+  }
+}
+
+.fm-nav {
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  font-size: var(--fm-eyebrow-size);
+  font-weight: 600;
+  letter-spacing: var(--fm-eyebrow-track);
+  text-transform: uppercase;
+
+  a { color: var(--fm-ink); }
+  .current-menu-item > a,
+  a[aria-current='page'] { color: var(--fm-accent); }
+
+  // The last item in the menu renders as the outlined pill CTA.
+  li:last-child > a {
+    border: var(--fm-rule) solid var(--fm-ink);
+    border-radius: var(--fm-radius-pill);
+    padding: 9px 20px;
+  }
+}
+
+.fm-nav-toggle {
+  display: none;
+  background: none;
+  border: var(--fm-rule) solid var(--fm-ink);
+  border-radius: var(--fm-radius-pill);
+  padding: 8px 16px;
+  font: inherit;
+  font-size: var(--fm-eyebrow-size);
+  font-weight: 600;
+  letter-spacing: var(--fm-eyebrow-track);
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
+@media (max-width: $fm-bp-tab) {
+  .fm-nav-toggle { display: block; }
+
+  .fm-nav {
+    position: absolute;
+    inset: var(--fm-header-h) 0 auto 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 8px var(--fm-gutter) 24px;
+    background: var(--fm-bg);
+    border-bottom: var(--fm-rule) solid var(--fm-ink);
+
+    &[data-open='false'] { display: none; }
+
+    li { width: 100%; }
+    li > a { display: block; padding: 14px 0; }
+    li:last-child > a { display: inline-block; margin-top: 10px; }
+  }
+}

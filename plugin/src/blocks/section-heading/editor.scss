@@ -1,0 +1,8 @@
+// Editor-only affordances. Never affects the front end.
+
+.wp-block-foundations-section-heading {
+  .fm-section-heading__title:empty::before {
+    content: attr(data-placeholder);
+    color: var(--fm-muted);
+  }
+}
