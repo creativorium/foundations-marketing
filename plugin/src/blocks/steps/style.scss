@@ -1,0 +1,65 @@
+// foundations/steps
+
+.fm-steps {
+  padding: 96px var(--fm-gutter) 104px;
+
+  &__heading {
+    margin: 34px 0 44px;
+    font-size: clamp(38px, 5.6vw, 64px);
+    line-height: 0.92;
+    text-transform: uppercase;
+    letter-spacing: -0.04em;
+    text-wrap: balance;
+  }
+
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+
+  &__item {
+    background: var(--fm-step-tint, var(--fm-bg-2));
+    border: var(--fm-rule) solid var(--fm-ink);
+    padding: 30px 28px 32px;
+  }
+
+  &__n {
+    display: block;
+    font-size: 44px;
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1;
+    color: var(--fm-accent);
+    margin-bottom: 18px;
+  }
+
+  &__title {
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    line-height: 1.25;
+    margin-bottom: 12px;
+    text-wrap: balance;
+  }
+
+  &__body {
+    font-size: 15px;
+    line-height: 1.65;
+    text-wrap: pretty;
+  }
+
+  // The italic serif aside is the one place Instrument Serif is used.
+  &__aside {
+    font-family: var(--fm-font-serif);
+    font-style: italic;
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--fm-muted);
+    margin: 0;
+  }
+}
+
+@media (max-width: 820px) {
+  .fm-steps { padding-block: 64px 72px; }
+  .fm-steps__heading { margin-block: 26px 30px; }
+}

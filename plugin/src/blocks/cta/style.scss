@@ -1,0 +1,73 @@
+// foundations/cta
+
+.fm-cta {
+  background: var(--fm-cta);
+  color: var(--fm-cta-ink);
+  padding: 110px var(--fm-gutter) 116px;
+  text-align: center;
+
+  &__heading {
+    font-size: clamp(42px, 6.6vw, 104px);
+    line-height: 0.9;
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
+    max-width: 1100px;
+    margin: 0 auto 26px;
+    text-wrap: balance;
+  }
+
+  &__heading-accent { color: var(--fm-cta-accent); }
+
+  &__lede {
+    font-size: 19px;
+    line-height: 1.55;
+    color: var(--fm-cta-muted);
+    max-width: 520px;
+    margin: 0 auto 38px;
+    text-wrap: pretty;
+  }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    margin: 0;
+  }
+
+  &__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--fm-cta-btn);
+    color: var(--fm-cta-btn-ink);
+    padding: 18px 40px;
+    border-radius: var(--fm-radius-pill);
+    font-size: 15px;
+    font-weight: 700;
+
+    &:hover { text-decoration: none; filter: brightness(0.94); }
+  }
+
+  &__link {
+    color: var(--fm-cta-ink);
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom: var(--fm-rule) solid var(--fm-cta-ink);
+    padding-block: 11px 2px;
+  }
+
+  &__footnote {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fm-cta-muted);
+    margin: 28px 0 0;
+  }
+}
+
+@media (max-width: 820px) {
+  .fm-cta { padding-block: 72px 76px; }
+}

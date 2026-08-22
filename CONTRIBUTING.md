@@ -1,73 +1,15 @@
-# Contributing — Foundations Marketing
+# Contributing
 
-The shareable version of the working rules. (Owner-only operational notes live outside the repo.)
+**All working rules live in [how-to-work.md](how-to-work.md).** Read that first — it
+covers start-up checks, branching, push/merge permissions, how to build a component,
+previewing in Local, responsiveness, speed, SEO, and the pre-commit checklist.
 
-## 1. One branch per task
+Quick version:
 
-```bash
-git checkout main && git pull origin main
-git checkout -b feat/my-thing
-```
-
-Branch name is `Prefix/short-kebab-description`:
-
-| Prefix | Use for |
-|---|---|
-| `Feat/` | new feature, component or page |
-| `BugFix/` | a normal bug fix |
-| `HotFix/` | production is broken right now — smallest possible fix |
-| `Theme/` | a site template in the catalogue |
-| `Refactor/` | restructuring, no behaviour change |
-| `Chore/` | build, config, dependencies |
-| `Docs/` | documentation only |
-| `Content/` | copy, images, catalogue entries |
-| `Security/` | vulnerability patch or cleanup |
-
-Prefix capitalised exactly as shown, description lowercase kebab-case, under ~50 characters.
-Never commit to `main`. Never reuse a finished branch.
-
-## 2. Push and merge rights
-
-- **Owner (`nego94` / `creativorium`)** — may push to `main` and merge.
-- **Everyone else** — push your feature branch and **open a Pull Request**. Do not push to
-  `main`, do not merge your own PR, do not force-push.
-
-## 3. Front-end contributors: stay inside your component
-
-The site is built from blocks. Each block is self-contained:
-
-```
-plugin/src/blocks/<block-name>/
-  index.js      registration + editor controls
-  render.php    server-side markup (this is what ships)
-  style.scss    front-end styles
-  editor.scss   editor-only styles
-  block.json    metadata
-```
-
-You should never need to open `theme/functions.php`, `theme/inc/`,
-`plugin-marketplace/`, `vite.config.js` or `package.json`. If a component needs data from
-the backend, ask the owner for a helper function instead of querying the database.
-
-Use the design tokens in `theme/src/styles/_tokens.scss`. Don't hardcode brand colours.
-
-## 4. Setup
-
-Requires **Node 20+** (your machine only — the production host runs no Node) and
-**[Local](https://localwp.com)** for WordPress/PHP/MySQL.
-
-```bash
-npm install
-npm run build     # required before the site has CSS/JS
-npm run dev       # watch mode
-```
-
-Never edit `theme/build/` or `plugin/build/` — generated and gitignored.
-The repo is linked into Local with directory junctions; ask the owner for the setup path.
-
-## 5. Before you push
-
-- `npm run build` passes.
-- `git status` is clean of local notes, DB dumps, `.env`, client asset drops and scratch
-  markdown. Those belong in `/doc/` (gitignored), never in a commit.
-- Checked in the browser at your Local URL, not only in the editor.
+1. `git pull origin main`, then branch: `Prefix/short-kebab-description`
+   (`Feat/`, `BugFix/`, `HotFix/`, `Theme/`, `Refactor/`, `Chore/`, `Docs/`, `Content/`, `Security/`).
+2. Components are self-contained folders in `plugin/src/blocks/<name>/`. Copy
+   `section-heading/` as the pattern. Don't touch the backend.
+3. `npm run build`, check it in Local at 375px / 820px / 1440px.
+4. Push your branch and **open a Pull Request**. Only `nego94` / `creativorium` may push
+   to `main` or merge.

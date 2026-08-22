@@ -1,0 +1,19 @@
+// Editor-only affordances for foundations/hero.
+
+.wp-block-foundations-hero {
+  .fm-hero__shot-placeholder {
+    margin: auto;
+    padding: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.85);
+    text-align: center;
+  }
+
+  // The buttons are not links in the editor, so make that obvious rather than
+  // letting someone click them and wonder why nothing happens.
+  .fm-hero__cta,
+  .fm-hero__link { cursor: default; }
+}

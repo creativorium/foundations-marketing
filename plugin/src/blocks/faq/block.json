@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/faq",
+  "title": "FAQ",
+  "category": "foundations",
+  "icon": "editor-help",
+  "description": "Questions and answers, with FAQPage schema for search results.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "number":    { "type": "string",  "default": "06" },
+    "label":     { "type": "string",  "default": "Questions" },
+    "aside":     { "type": "string",  "default": "" },
+    "heading":   { "type": "string",  "default": "" },
+    "headingAccent": { "type": "string", "default": "" },
+    "items":     { "type": "array",   "default": [] },
+    "emitSchema":{ "type": "boolean", "default": true }
+  },
+  "render": "file:./render.php"
+}

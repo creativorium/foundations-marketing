@@ -183,3 +183,105 @@ function fm_speculation_rules(): void
     );
 }
 add_action('wp_footer', 'fm_speculation_rules');
+
+/**
+ * Elementor is still active because the template demo pages are built with it, but it
+ * enqueues its frontend CSS/JS on *every* page — including the block-built ones that
+ * contain no Elementor content at all. On those, its stylesheets alone are a few hundred
+ * KB of render-blocking CSS for markup that does not exist.
+ *
+ * This drops Elementor's assets only when the current page genuinely has no Elementor
+ * data. As pages are migrated to blocks they each get faster automatically, and when the
+ * last Elementor page is gone this whole function can be deleted along with the plugin.
+ *
+ * Deliberately conservative: anything that might be Elementor keeps its assets.
+ */
+function fm_page_uses_elementor(): bool
+{
+    if (!did_action('elementor/loaded')) {
+        return false;
+    }
+
+    if (!is_singular()) {
+        // Archives can render Elementor templates; never strip assets there.
+        return true;
+    }
+
+    $post_id = get_queried_object_id();
+
+    if ($post_id <= 0) {
+        return true;
+    }
+
+    // Elementor sets this on every post it has ever edited.
+    if (get_post_meta($post_id, '_elementor_edit_mode', true) === 'builder') {
+        return true;
+    }
+
+    // Elementor Pro theme parts (header/footer/popup) render outside the post.
+    if (function_exists('elementor_theme_do_location')) {
+        foreach (['header', 'footer', 'single', 'archive'] as $location) {
+            if (\Elementor\Plugin::$instance->documents ?? null) {
+                // If Pro has a template assigned to any location, keep everything.
+                if (apply_filters('fm_elementor_has_location_' . $location, false)) {
+                    return true;
+                }
+            }
+        }
+    }
+
+    return false;
+}
+
+function fm_dequeue_elementor_assets(): void
+{
+    if (is_admin() || fm_page_uses_elementor()) {
+        return;
+    }
+
+    $styles = [
+        'elementor-frontend', 'elementor-post', 'elementor-icons',
+        'elementor-common', 'elementor-global', 'elementor-gf-local-roboto',
+        'elementor-gf-local-robotoslab', 'e-animations', 'widget-image',
+        'widget-heading', 'widget-text-editor', 'swiper', 'e-swiper',
+    ];
+
+    foreach ($styles as $handle) {
+        wp_dequeue_style($handle);
+        wp_deregister_style($handle);
+    }
+
+    $scripts = [
+        'elementor-frontend', 'elementor-frontend-modules', 'elementor-webpack-runtime',
+        'elementor-common', 'elementor-pro-frontend', 'e-sticky', 'swiper', 'e-swiper',
+        'elementor-waypoints', 'preloaded-modules', 'share-link', 'imagesloaded',
+    ];
+
+    foreach ($scripts as $handle) {
+        wp_dequeue_script($handle);
+        wp_deregister_script($handle);
+    }
+}
+add_action('wp_enqueue_scripts', 'fm_dequeue_elementor_assets', 999);
+
+add_action('wp_print_styles', 'fm_dequeue_elementor_assets', 100);
+
+/**
+ * Elementor's global kit enqueues its Google Fonts while the document renders, which is
+ * after every dequeue pass has already run — so dequeuing cannot catch them whatever
+ * priority it uses. Suppressing the tag at output time works regardless of when the
+ * style was registered.
+ *
+ * The kit asks for Roboto and Roboto Slab in every weight and italic. The design uses
+ * neither, so on a block-built page that is two full font families and a third-party
+ * connection fetched for text that never renders in them.
+ */
+function fm_suppress_elementor_kit_fonts(string $tag, string $handle): string
+{
+    if (is_admin() || !str_starts_with($handle, 'elementor-gf-')) {
+        return $tag;
+    }
+
+    return fm_page_uses_elementor() ? $tag : '';
+}
+add_filter('style_loader_tag', 'fm_suppress_elementor_kit_fonts', 10, 2);

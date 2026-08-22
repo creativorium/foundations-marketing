@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/marquee",
+  "title": "Marquee band",
+  "category": "foundations",
+  "icon": "controls-repeat",
+  "description": "The scrolling accent band listing the niches served.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "items":    { "type": "string", "default": "" },
+    "speed":    { "type": "number", "default": 46 },
+    "spacedTop":{ "type": "boolean", "default": true }
+  },
+  "render": "file:./render.php"
+}

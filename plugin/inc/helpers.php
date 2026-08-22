@@ -68,3 +68,59 @@ function fm_url(string $url): string
 {
     return $url !== '' ? esc_url($url) : '#';
 }
+
+/**
+ * The site templates offered in the catalogue.
+ *
+ * Reads the `site_template` CPT registered by the Foundation Packages plugin, so blocks
+ * never touch the database or WP_Query themselves — that is the boundary that lets a
+ * front-end contributor work in one folder (CONTRIBUTING.md §3).
+ *
+ * Returns a plain array of scalars, ready to echo. Every value is already the raw string;
+ * escape at the point of output, not here.
+ *
+ * @param int $limit Maximum templates to return. -1 for all.
+ *
+ * @return array<int, array{
+ *     id:int, name:string, niche:string, description:string,
+ *     url:string, thumb_id:int, packages:array<int,string>
+ * }>
+ */
+function fm_get_templates(int $limit = 9): array
+{
+    if (!post_type_exists('site_template')) {
+        return [];
+    }
+
+    $query = new WP_Query([
+        'post_type'              => 'site_template',
+        'post_status'            => 'publish',
+        'posts_per_page'         => $limit,
+        'orderby'                => 'menu_order title',
+        'order'                  => 'ASC',
+        'ignore_sticky_posts'    => true,
+        // We only need the post rows plus meta; skip the term cache entirely.
+        'update_post_term_cache' => false,
+        'no_found_rows'          => true,
+    ]);
+
+    $templates = [];
+
+    foreach ($query->posts as $post) {
+        $packages = get_post_meta($post->ID, 'tpl_packages', true);
+
+        $templates[] = [
+            'id'          => (int) $post->ID,
+            'name'        => (string) $post->post_title,
+            'niche'       => (string) get_post_meta($post->ID, 'tpl_niche', true),
+            'description' => (string) get_post_meta($post->ID, 'tpl_description', true),
+            'url'         => (string) get_post_meta($post->ID, 'tpl_demo_url', true),
+            'thumb_id'    => (int) get_post_thumbnail_id($post->ID),
+            'packages'    => is_array($packages) ? array_map('strval', $packages) : [],
+        ];
+    }
+
+    wp_reset_postdata();
+
+    return $templates;
+}

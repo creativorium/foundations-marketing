@@ -36,6 +36,7 @@ const TARGETS = {
       '@wordpress/element',
       '@wordpress/i18n',
       '@wordpress/data',
+      '@wordpress/server-side-render',
     ],
     globals: {
       '@wordpress/blocks': 'wp.blocks',
@@ -44,6 +45,7 @@ const TARGETS = {
       '@wordpress/element': 'wp.element',
       '@wordpress/i18n': 'wp.i18n',
       '@wordpress/data': 'wp.data',
+      '@wordpress/server-side-render': 'wp.serverSideRender',
     },
   },
   login: {

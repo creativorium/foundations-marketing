@@ -24,7 +24,17 @@ function fm_blocks_enqueue_editor(): void
     wp_enqueue_script(
         'fm-blocks-editor',
         FM_BLOCKS_URL . 'build/editor.js',
-        ['wp-blocks', 'wp-block-editor', 'wp-components', 'wp-element', 'wp-i18n', 'wp-data'],
+        [
+            'wp-blocks',
+            'wp-block-editor',
+            'wp-components',
+            'wp-element',
+            'wp-i18n',
+            'wp-data',
+            // Blocks that read live data (the template grid) preview themselves
+            // through the REST render endpoint rather than duplicating PHP in JS.
+            'wp-server-side-render',
+        ],
         fm_blocks_asset_version('build/editor.js'),
         true
     );

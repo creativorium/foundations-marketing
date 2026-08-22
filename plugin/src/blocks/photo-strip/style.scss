@@ -1,0 +1,47 @@
+// foundations/photo-strip
+
+.fm-photo-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  border-block: var(--fm-rule) solid var(--fm-ink);
+
+  &__cell {
+    aspect-ratio: 4 / 3;
+    margin: 0;
+    border-right: var(--fm-rule) solid var(--fm-ink);
+    background-color: var(--fm-photo-bg);
+    background-image: var(--fm-photo-stripe);
+    overflow: hidden;
+
+    &:last-child { border-right: 0; }
+  }
+
+  &__img { width: 100%; height: 100%; object-fit: cover; }
+
+  &__placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 100%;
+    padding: 24px;
+    text-align: center;
+  }
+
+  &__tag,
+  &__hint {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fm-muted);
+  }
+
+  &__hint {
+    font-size: 13px;
+    line-height: 1.5;
+    text-transform: none;
+    letter-spacing: 0;
+    max-width: 230px;
+  }
+}

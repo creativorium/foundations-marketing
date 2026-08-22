@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/quotes",
+  "title": "Quotes",
+  "category": "foundations",
+  "icon": "format-quote",
+  "description": "A founder quote alongside client testimonials.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "number":       { "type": "string", "default": "05" },
+    "label":        { "type": "string", "default": "Proof" },
+    "aside":        { "type": "string", "default": "" },
+    "founderQuote": { "type": "string", "default": "" },
+    "founderName":  { "type": "string", "default": "" },
+    "founderRole":  { "type": "string", "default": "" },
+    "founderMediaId":{ "type": "number","default": 0 },
+    "founderMediaAlt":{ "type": "string","default": "" },
+    "items":        { "type": "array",  "default": [] },
+    "openSlot":     { "type": "string", "default": "" }
+  },
+  "render": "file:./render.php"
+}
