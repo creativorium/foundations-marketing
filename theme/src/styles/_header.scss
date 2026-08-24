@@ -97,34 +97,159 @@
   text-transform: uppercase;
   color: var(--fm-ink);
   cursor: pointer;
+  place-items: center;
+  // Sits above the drawer and the scrim: this button is also the close control.
+  position: relative;
+  z-index: 101;
+
+  // Both labels occupy the same cell, so the button is as wide as the longer of
+  // the two and never resizes when the state flips.
+  &__label {
+    grid-area: 1 / 1;
+    // Opacity, not visibility — the "Menu" label must stay in the accessibility
+    // tree while open so the button keeps a stable accessible name, with
+    // aria-expanded carrying the state.
+    transition: opacity 0.15s ease;
+  }
+
+  &__label--close { opacity: 0; }
+
+  &[aria-expanded='true'] {
+    .fm-nav-toggle__label--open  { opacity: 0; }
+    .fm-nav-toggle__label--close { opacity: 1; }
+  }
 }
+
+// --- The drawer backdrop -----------------------------------------------------
+// display:none above the drawer breakpoint, so it can never intercept a click on
+// the desktop layout.
+.fm-nav-scrim { display: none; }
 
 // The nav needs to collapse as soon as the row stops fitting, which is well before
 // the tablet breakpoint — five uppercase, letterspaced items are wide.
 @media (max-width: 1024px) {
-  .fm-nav-toggle { display: block; }
+  .fm-nav-toggle {
+    display: grid;
+    // Tighter than the desktop pill on both axes, for two different reasons.
+    // Horizontal: stacking "Menu" and "Close" sizes the button to the longer of the
+    // two, and the header row is already tight at 375px — trimming the sides pays
+    // that back with room to spare. Vertical: 11px caps inside 11px of padding is a
+    // ~38px control, under the 44px minimum, so the block padding goes up.
+    padding: 15px 14px;
+  }
 
+  // A right-hand drawer rather than a top drop-down. It slides in from the edge it
+  // is anchored to, which is the only direction that reads as a drawer rather than
+  // as a panel that happens to move.
+  //
+  // It starts below the header so the header rule stays unbroken and the toggle
+  // stays reachable as the close control — no second close button to explain.
   .fm-nav {
-    position: absolute;
-    inset: var(--fm-header-h) 0 auto 0;
+    position: fixed;
+    inset: var(--fm-header-h) 0 0 auto;
+    width: min(84vw, 360px);
+    z-index: 99;
     background: var(--fm-bg);
-    border-bottom: var(--fm-rule) solid var(--fm-ink);
-    padding: 8px var(--fm-gutter) 24px;
+    border-left: var(--fm-rule) solid var(--fm-ink);
+    padding: 4px var(--fm-gutter) 32px;
 
-    &[data-open='false'] { display: none; }
+    // A long menu on a short phone has to scroll, and that scroll must not chain
+    // through to the page behind the drawer.
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    // `visibility` is what does the accessibility work here: hidden takes the links
+    // out of the tab order and out of the accessibility tree, exactly as the old
+    // `display: none` did — but unlike display it can be deferred until the slide
+    // has finished, so the panel is not ripped away mid-animation.
+    transform: translateX(100%);
+    visibility: hidden;
+    transition:
+      transform 320ms var(--fm-ease),
+      visibility 0s linear 320ms;
+
+    &[data-open='true'] {
+      transform: translateX(0);
+      visibility: visible;
+      transition:
+        transform 380ms var(--fm-ease),
+        visibility 0s;
+    }
 
     ul {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: stretch;
       gap: 0;
     }
 
-    li { width: 100%; }
-    li > a { display: block; padding-block: 14px; }
-    li:last-child > a { display: inline-block; margin-top: 10px; }
+    // Hairline separators: the same rule the rest of the layout is built from,
+    // so the drawer reads as part of the newspaper grid and not as a bolt-on.
+    li {
+      width: 100%;
+      border-bottom: var(--fm-rule) solid var(--fm-line);
+    }
+
+    li > a {
+      display: block;
+      // The links inherit `line-height: 1`, so an 11px item is 11px tall and the
+      // padding is doing all of the work: 17px either side clears 44px with a
+      // pixel in hand. Measured, not assumed — 16px landed at 43.
+      padding-block: 17px;
+      white-space: normal;
+    }
+
+    // The CTA is the one item that is not a list row — it keeps its pill and gets
+    // the space to sit as a button at the foot of the drawer.
+    li:last-child {
+      border-bottom: 0;
+      margin-top: 20px;
+    }
+
+    li:last-child > a {
+      display: block;
+      text-align: center;
+      // A pixel less block padding than the plain rows, because the pill's own
+      // 1.5px border is part of the target. Measures 45px, same as the rest.
+      padding: 16px 20px;
+    }
   }
+
+  .fm-nav-scrim {
+    display: block;
+    position: fixed;
+    inset: var(--fm-header-h) 0 0 0;
+    z-index: 98;
+    background: rgba(31, 30, 26, 0.4);
+    background: color-mix(in srgb, var(--fm-ink) 40%, transparent);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 320ms var(--fm-ease),
+      visibility 0s linear 320ms;
+
+    &[data-open='true'] {
+      opacity: 1;
+      visibility: visible;
+      transition:
+        opacity 380ms var(--fm-ease),
+        visibility 0s;
+    }
+  }
+
+  // Set on <body> while the drawer is open. Without it the page scrolls behind the
+  // drawer under the reader's thumb, which is the classic off-canvas bug.
+  .fm-nav-is-open { overflow: hidden; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .fm-nav li:last-child > a { transition: none; }
+
+  // The drawer still opens and closes — it just arrives instead of travelling.
+  .fm-nav,
+  .fm-nav[data-open='true'],
+  .fm-nav-scrim,
+  .fm-nav-scrim[data-open='true'],
+  .fm-nav-toggle__label { transition: none; }
+
+  .fm-nav { transform: none; }
 }

@@ -26,11 +26,14 @@ if (!defined('ABSPATH')) {
         <?php endif; ?>
     </a>
 
+    <?php // Two labels stacked in one grid cell: the button keeps the width of the
+          // longer word, so opening the drawer never nudges the header layout. ?>
     <button class="fm-nav-toggle" type="button"
             data-fm-nav-toggle
             aria-expanded="false"
             aria-controls="fm-primary-nav">
-        <?php esc_html_e('Menu', 'foundations'); ?>
+        <span class="fm-nav-toggle__label fm-nav-toggle__label--open"><?php esc_html_e('Menu', 'foundations'); ?></span>
+        <span class="fm-nav-toggle__label fm-nav-toggle__label--close" aria-hidden="true"><?php esc_html_e('Close', 'foundations'); ?></span>
     </button>
 
     <nav class="fm-nav" id="fm-primary-nav" data-fm-nav data-open="false"
@@ -38,5 +41,9 @@ if (!defined('ABSPATH')) {
         <?php fm_nav_menu('primary'); ?>
     </nav>
 </header>
+
+<?php // The drawer's backdrop. Kept outside <header> so it can cover the page without
+      // inheriting the header's flex row. Hidden entirely above the drawer breakpoint. ?>
+<div class="fm-nav-scrim" data-fm-nav-scrim data-open="false"></div>
 
 <main id="fm-content">

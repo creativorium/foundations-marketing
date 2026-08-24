@@ -23,6 +23,17 @@
   --fm-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   --fm-duration: 620ms;
   --fm-duration-fast: 320ms;
+
+  // How far the incoming page is tipped up off the spine before it settles. Small
+  // on purpose: past roughly 20deg the perspective distortion on the type starts to
+  // show and the page stops looking like paper and starts looking like a 3D card.
+  --fm-turn: 16deg;
+}
+
+// A phone screen is narrow, so the same angle sweeps a much larger share of the
+// viewport and reads as a bigger movement. Shallower keeps it equivalent.
+@media (max-width: 560px) {
+  :root { --fm-turn: 10deg; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -34,14 +45,27 @@
   // instant and smooth. Costs nothing when unsupported — the page just swaps as normal.
   @view-transition { navigation: auto; }
 
-  // The default is a plain cross-fade. Adding a small vertical movement gives the
-  // navigation a direction, which reads as intent rather than as a dissolve.
+  // The turn. The layout is a newspaper — hairline rules, heavy display type, hard
+  // edges — so navigation is a sheet of paper being laid down, not a cross-fade.
+  //
+  // The incoming page is hinged at the left edge, the spine, and swings down flat
+  // onto the outgoing one, which dims as it passes into shadow underneath. The
+  // header is a named transition (below) and so is held still through all of it —
+  // it is the part of the book that does not turn, which is what gives the page
+  // something to hinge against.
+  //
+  // `perspective()` is written into the transform rather than set as a property on
+  // the parent because the view-transition pseudo tree does not give us a reliable
+  // element to hang a shared perspective on. Per-element perspective is fine here:
+  // there is only ever one page turning.
   ::view-transition-old(root) {
-    animation: fm-page-out 220ms var(--fm-ease) both;
+    animation: fm-page-under 300ms var(--fm-ease) both;
   }
 
   ::view-transition-new(root) {
-    animation: fm-page-in 380ms var(--fm-ease) both;
+    // The spine. Everything about the turn follows from this one line.
+    transform-origin: left center;
+    animation: fm-page-turn 460ms var(--fm-ease) both;
   }
 
   // The header and the footer wordmark exist on every page, so they are named and
@@ -169,6 +193,27 @@
 
   .fm-logo__sub { animation-delay: 80ms; }
 
+  // --- The mobile drawer -----------------------------------------------------
+  // The panel itself slides in CSS (styles/_header.scss). This is the second beat:
+  // the rows arrive just behind the edge of the drawer, so the menu reads as being
+  // set down rather than as a block that was already there.
+  //
+  // Scoped to the drawer breakpoint — above it the nav is a row and these rows are
+  // always on screen, where a delayed entrance would just be a flicker on load.
+  @media (max-width: 1024px) {
+    .fm-nav[data-open='true'] li {
+      animation: fm-drawer-row 300ms var(--fm-ease) both;
+    }
+
+    // Five items today, headroom for a couple more before the pattern runs out.
+    @for $i from 1 through 8 {
+      .fm-nav[data-open='true'] li:nth-child(#{$i}) {
+        // Starts after the panel is already moving, ends before it lands.
+        animation-delay: #{80 + ($i - 1) * 45}ms;
+      }
+    }
+  }
+
   // --- Interaction -----------------------------------------------------------
   .fm-nav a,
   .fm-footer__links a {
@@ -207,14 +252,27 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes fm-page-out {
-  from { opacity: 1; transform: translateY(0); }
-  to   { opacity: 0; transform: translateY(-10px); }
+// The page being covered. It does not move away — it stays put and goes dark, the
+// way the left page of an open book does when the right page comes over it. The
+// slight scale is the only travel: just enough to sit *under* rather than beside.
+@keyframes fm-page-under {
+  from { opacity: 1; transform: scale(1);     filter: brightness(1); }
+  to   { opacity: 0; transform: scale(0.988); filter: brightness(0.9); }
 }
 
-@keyframes fm-page-in {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: translateY(0); }
+// The page being turned. Hinged at the spine by `transform-origin` on the pseudo
+// element; this only has to describe the fall. The opacity ramp finishes early so
+// the type is solid for most of the movement rather than fading the whole way.
+@keyframes fm-page-turn {
+  from  { opacity: 0; transform: perspective(1600px) rotateY(var(--fm-turn)); }
+  38%   { opacity: 1; }
+  to    { opacity: 1; transform: perspective(1600px) rotateY(0deg); }
+}
+
+// A drawer row arriving from the edge it was hidden behind.
+@keyframes fm-drawer-row {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
 }
 
 // A word arriving: a short rise with the faintest tightening of the tracking, which
