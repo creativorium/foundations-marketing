@@ -28,8 +28,8 @@ if (!defined('ABSPATH')) {
  * Without the stylesheet these divs have no size, no background and no position, so
  * a CSS failure leaves nothing on screen rather than a black box over the site.
  */
-$fm_px_rows = 6;
-$fm_px_cols = 11;
+$fm_px_rows = 10;
+$fm_px_cols = 18;
 ?>
 <div class="fm-px" aria-hidden="true"><?php
     echo str_repeat('<div class="fm-px__cell"></div>', $fm_px_rows * $fm_px_cols);
