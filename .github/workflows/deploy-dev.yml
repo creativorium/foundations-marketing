@@ -71,17 +71,44 @@ jobs:
 
       # Secrets go in through env rather than being interpolated into the script, so
       # their contents can never be parsed as shell.
+      #
+      # DEV_SSH_KNOWN_HOSTS is optional but strongly wanted. Pinned, the host key is
+      # checked against a value supplied out of band and a machine-in-the-middle
+      # cannot impersonate the server. Unpinned, the first thing the runner hears is
+      # trusted — which is how most deploys work, but it is weaker.
+      #
+      # The unpinned path prints the SHA256 fingerprint of whatever it trusted, with
+      # the hostname stripped, because this repo's Action logs are public. Compare it
+      # against what your own ssh client shows on first connect, set the secret, and
+      # this branch stops being taken.
       - name: Configure SSH
         env:
           KEY: ${{ secrets.DEV_SSH_KEY }}
           KNOWN_HOSTS: ${{ secrets.DEV_SSH_KNOWN_HOSTS }}
+          SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
+          SSH_PORT: ${{ secrets.DEV_SSH_PORT }}
         run: |
           set -euo pipefail
           mkdir -p ~/.ssh
           printf '%s\n' "$KEY" > ~/.ssh/id_deploy
           chmod 600 ~/.ssh/id_deploy
-          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+
+          if [ -n "${KNOWN_HOSTS:-}" ]; then
+            printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+            echo "Host key pinned from DEV_SSH_KNOWN_HOSTS."
+          else
+            echo "::warning::DEV_SSH_KNOWN_HOSTS is not set — trusting the host key presented at run time. Pin it once you have verified the fingerprint below."
+            ssh-keyscan -p "${SSH_PORT:-22}" "$SSH_HOST" > ~/.ssh/known_hosts 2>/dev/null || true
+            echo "Fingerprint(s) trusted this run (hostname withheld — these logs are public):"
+            ssh-keygen -lf ~/.ssh/known_hosts | awk '{print "  ", $1, $2, $NF}'
+          fi
+
           chmod 644 ~/.ssh/known_hosts
+
+          if [ ! -s ~/.ssh/known_hosts ]; then
+            echo "::error::No host key available. DEV_SSH_HOST may be wrong, or the SSH port is closed."
+            exit 1
+          fi
 
       # The guard that makes --delete safe. If DEV_WP_PATH is wrong or empty, rsync
       # would happily mirror into the wrong directory and delete what was there.
