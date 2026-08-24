@@ -35,7 +35,7 @@ $fm_px_cols = 11;
     echo str_repeat('<div class="fm-px__cell"></div>', $fm_px_rows * $fm_px_cols);
 ?></div>
 
-<a class="fm-skip-link" href="#fm-content"><?php esc_html_e('Skip to content', 'foundations'); ?></a>
+<a class="fm-skip-link" href="#fm-content"><?php esc_html_e('Skip to content', 'foundations-marketing'); ?></a>
 
 <header class="fm-header">
     <?php [$brand_mark, $brand_suffix] = fm_brand_parts(); ?>
@@ -52,12 +52,12 @@ $fm_px_cols = 11;
             data-fm-nav-toggle
             aria-expanded="false"
             aria-controls="fm-primary-nav">
-        <span class="fm-nav-toggle__label fm-nav-toggle__label--open"><?php esc_html_e('Menu', 'foundations'); ?></span>
-        <span class="fm-nav-toggle__label fm-nav-toggle__label--close" aria-hidden="true"><?php esc_html_e('Close', 'foundations'); ?></span>
+        <span class="fm-nav-toggle__label fm-nav-toggle__label--open"><?php esc_html_e('Menu', 'foundations-marketing'); ?></span>
+        <span class="fm-nav-toggle__label fm-nav-toggle__label--close" aria-hidden="true"><?php esc_html_e('Close', 'foundations-marketing'); ?></span>
     </button>
 
     <nav class="fm-nav" id="fm-primary-nav" data-fm-nav data-open="false"
-         aria-label="<?php esc_attr_e('Primary', 'foundations'); ?>">
+         aria-label="<?php esc_attr_e('Primary', 'foundations-marketing'); ?>">
 
         <?php /*
          * The drawer covers the header on mobile, so it carries its own wordmark —

@@ -80,7 +80,7 @@ cmd /c mklink /J "$wp\plugins\foundations-blocks" "$src\plugin"
 > Never `rmdir /s` into it, and never `rm -rf` it from Git Bash — that deletes the
 > **real files in your repo**, not just the link.
 
-macOS/Linux equivalent: `ln -s "$src/theme" "$wp/themes/foundations"` etc.
+macOS/Linux equivalent: `ln -s "$src/theme" "$wp/themes/foundations-marketing"` etc.
 
 Then confirm Local itself is up: open the **Local** app, start the
 **foundationsmarketing** site, and load <http://foundationsmarketing.local>.
@@ -192,7 +192,7 @@ Foundations Marketing/
 ├─ package.json              build scripts
 ├─ vite.config.js            four build targets
 │
-├─ theme/                    → junctioned to wp-content/themes/foundations
+├─ theme/                    → junctioned to wp-content/themes/foundations-marketing
 │  ├─ style.css              theme header only — never put real CSS here
 │  ├─ functions.php          bootstrap; loads inc/*
 │  ├─ header.php footer.php index.php page.php single.php 404.php

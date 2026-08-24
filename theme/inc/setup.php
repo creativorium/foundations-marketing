@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
 
 function fm_theme_setup(): void
 {
-    load_theme_textdomain('foundations', FM_THEME_DIR . '/languages');
+    load_theme_textdomain('foundations-marketing', FM_THEME_DIR . '/languages');
 
     add_theme_support('title-tag');
     add_theme_support('post-thumbnails');
@@ -29,8 +29,8 @@ function fm_theme_setup(): void
     add_theme_support('wc-product-gallery-slider');
 
     register_nav_menus([
-        'primary' => __('Primary navigation', 'foundations'),
-        'footer'  => __('Footer links', 'foundations'),
+        'primary' => __('Primary navigation', 'foundations-marketing'),
+        'footer'  => __('Footer links', 'foundations-marketing'),
     ]);
 }
 add_action('after_setup_theme', 'fm_theme_setup');
@@ -60,12 +60,12 @@ function fm_customize_palette(WP_Customize_Manager $wp_customize): void
     ]);
 
     $wp_customize->add_control('fm_palette', [
-        'label'   => __('Colour scheme', 'foundations'),
+        'label'   => __('Colour scheme', 'foundations-marketing'),
         'section' => 'colors',
         'type'    => 'select',
         'choices' => [
-            'steel' => __('Steel (default)', 'foundations'),
-            'nari'  => __('Nari', 'foundations'),
+            'steel' => __('Steel (default)', 'foundations-marketing'),
+            'nari'  => __('Nari', 'foundations-marketing'),
         ],
     ]);
 }

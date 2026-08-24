@@ -41,7 +41,7 @@ if (!defined('ABSPATH')) {
     </div>
 
     <div class="fm-footer__meta">
-        <span><?php esc_html_e('Made by Cular Creative', 'foundations'); ?></span>
+        <span><?php esc_html_e('Made by Cular Creative', 'foundations-marketing'); ?></span>
         <span>&copy; <?php echo esc_html((string) date('Y')); ?> <?php echo esc_html(FM_BRAND); ?></span>
     </div>
 </footer>

@@ -157,7 +157,7 @@ jobs:
             --exclude 'node_modules/' \
             --exclude 'src/' \
             --exclude '.DS_Store' \
-            theme/ "$SSH_USER@$SSH_HOST:$WP_PATH/wp-content/themes/foundations/"
+            theme/ "$SSH_USER@$SSH_HOST:$WP_PATH/wp-content/themes/foundations-marketing/"
 
       - name: Deploy the blocks plugin
         env:
