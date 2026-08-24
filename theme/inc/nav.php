@@ -29,6 +29,51 @@ function fm_nav_menu(string $location, array $args = []): void
 }
 
 /**
+ * The secondary links for the foot of the mobile drawer.
+ *
+ * Sourced from the footer menu rather than hardcoded, so Privacy, Terms and whatever
+ * else the business needs stay editable in Appearance > Menus and never drift out of
+ * sync with the footer itself.
+ *
+ * The footer menu also repeats most of the primary menu, though, and a drawer that
+ * lists "Services" twice is worse than one with space in it. So the primary menu's own
+ * URLs are subtracted, leaving exactly the items the drawer is not already showing.
+ * Trailing slashes are normalised before comparing: "/services" and "/services/" are
+ * the same destination, and menus are hand-edited, so both spellings turn up.
+ *
+ * @return WP_Post[]
+ */
+function fm_drawer_secondary_items(): array
+{
+    if (!has_nav_menu('footer')) {
+        return [];
+    }
+
+    $locations = get_nav_menu_locations();
+
+    $footer_items = wp_get_nav_menu_items($locations['footer'] ?? 0);
+
+    if (!$footer_items) {
+        return [];
+    }
+
+    $primary_urls = [];
+
+    if (has_nav_menu('primary')) {
+        foreach ((array) wp_get_nav_menu_items($locations['primary'] ?? 0) as $item) {
+            $primary_urls[] = untrailingslashit((string) ($item->url ?? ''));
+        }
+    }
+
+    $secondary = array_filter(
+        $footer_items,
+        static fn ($item): bool => !in_array(untrailingslashit((string) ($item->url ?? '')), $primary_urls, true)
+    );
+
+    return array_values($secondary);
+}
+
+/**
  * Strip aria-current from anchor-only menu links.
  *
  * The primary menu is all in-page anchors (/#templates, /#price, …). WordPress compares

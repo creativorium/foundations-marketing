@@ -38,7 +38,51 @@ if (!defined('ABSPATH')) {
 
     <nav class="fm-nav" id="fm-primary-nav" data-fm-nav data-open="false"
          aria-label="<?php esc_attr_e('Primary', 'foundations'); ?>">
+
+        <?php /*
+         * The drawer covers the header on mobile, so it carries its own wordmark —
+         * the header's is hidden while it is open (styles/_header.scss), and only
+         * ever one of the two is in the accessibility tree at a time.
+         *
+         * Set on two lines rather than one because the lockup is ~270px wide and the
+         * drawer's content box is narrower than that on a small phone, where it would
+         * otherwise be clipped by the Close button.
+         *
+         * The whole head is display:none above the drawer breakpoint: on desktop the
+         * real header logo is right there and this would be a duplicate link.
+         */ ?>
+        <div class="fm-nav__head">
+            <a class="fm-nav__brand" href="<?php echo esc_url(home_url('/')); ?>" rel="home">
+                <span class="fm-nav__brand-line"><?php echo esc_html($brand_mark); ?></span>
+                <?php if ($brand_suffix !== '') : ?>
+                    <span class="fm-nav__brand-line"><?php echo esc_html($brand_suffix); ?></span>
+                <?php endif; ?>
+            </a>
+        </div>
+
         <?php fm_nav_menu('primary'); ?>
+
+        <?php
+        // Whatever the footer menu carries that the drawer does not already list —
+        // Privacy, Terms and the like. Nothing renders if there is no such item.
+        $fm_secondary = fm_drawer_secondary_items();
+        ?>
+        <?php if ($fm_secondary !== []) : ?>
+            <div class="fm-nav__foot">
+                <ul class="fm-nav__secondary">
+                    <?php foreach ($fm_secondary as $fm_item) : ?>
+                        <li>
+                            <a href="<?php echo esc_url((string) $fm_item->url); ?>">
+                                <?php echo esc_html((string) $fm_item->title); ?>
+                            </a>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+                <p class="fm-nav__legal">
+                    &copy; <?php echo esc_html((string) date('Y')); ?> <?php echo esc_html(FM_BRAND); ?>
+                </p>
+            </div>
+        <?php endif; ?>
     </nav>
 </header>
 

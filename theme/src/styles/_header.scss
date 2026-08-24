@@ -98,9 +98,11 @@
   color: var(--fm-ink);
   cursor: pointer;
   place-items: center;
-  // Sits above the drawer and the scrim: this button is also the close control.
+  // Top of the stack. The drawer covers the header on mobile, so this button has to
+  // float above it — it is also the close control, and a close control underneath
+  // the thing it closes is no use to anyone.
   position: relative;
-  z-index: 101;
+  z-index: 103;
 
   // Both labels occupy the same cell, so the button is as wide as the longer of
   // the two and never resizes when the state flips.
@@ -125,6 +127,12 @@
 // the desktop layout.
 .fm-nav-scrim { display: none; }
 
+// The drawer's own head and foot exist only inside the drawer. On desktop the nav is
+// a row in the header, where a wordmark and a legal line would be duplicates of the
+// header logo and the footer.
+.fm-nav__head,
+.fm-nav__foot { display: none; }
+
 // The nav needs to collapse as soon as the row stops fitting, which is well before
 // the tablet breakpoint — five uppercase, letterspaced items are wide.
 @media (max-width: 1024px) {
@@ -142,16 +150,24 @@
   // is anchored to, which is the only direction that reads as a drawer rather than
   // as a panel that happens to move.
   //
-  // It starts below the header so the header rule stays unbroken and the toggle
-  // stays reachable as the close control — no second close button to explain.
+  // It runs the full height of the screen and covers the header, so it can carry the
+  // wordmark itself. Anchoring it below the header instead would put a second copy of
+  // the lockup 74px under the real one, which reads as a mistake rather than as a
+  // masthead. The toggle floats above it and stays reachable as the close control —
+  // no second close button to explain.
   .fm-nav {
     position: fixed;
-    inset: var(--fm-header-h) 0 0 auto;
+    inset: 0 0 0 auto;
     width: min(84vw, 360px);
-    z-index: 99;
+    z-index: 102;
+
+    // Column layout is what lets the foot sit at the bottom of the panel on a tall
+    // screen rather than trailing straight after the last menu item.
+    display: flex;
+    flex-direction: column;
     background: var(--fm-bg);
     border-left: var(--fm-rule) solid var(--fm-ink);
-    padding: 4px var(--fm-gutter) 32px;
+    padding: 0 var(--fm-gutter) 24px;
 
     // A long menu on a short phone has to scroll, and that scroll must not chain
     // through to the page behind the drawer.
@@ -175,6 +191,41 @@
         transform 380ms var(--fm-ease),
         visibility 0s;
     }
+
+    // The drawer's masthead. Sized to the header it is covering, so the Close button
+    // — which is still laid out by the header's flex row — lands centred beside it.
+    .fm-nav__head {
+      display: flex;
+      align-items: center;
+      flex: none;
+      min-height: var(--fm-header-h);
+      // Clears the Close button, which floats over this corner.
+      padding-right: 96px;
+      border-bottom: var(--fm-rule) solid var(--fm-ink);
+      // The drawer's side padding is the gutter; the head spans the full panel so its
+      // rule meets the panel edges the way the header's rule meets the screen edges.
+      margin-inline: calc(var(--fm-gutter) * -1);
+      padding-left: var(--fm-gutter);
+    }
+
+    .fm-nav__brand {
+      display: block;
+      line-height: 1.05;
+      &:hover { text-decoration: none; }
+    }
+
+    .fm-nav__brand-line {
+      display: block;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      text-transform: uppercase;
+      color: var(--fm-accent);
+    }
+
+    // wp_nav_menu()'s <ul> is the only child that should absorb the spare height, so
+    // the foot is pushed to the bottom of a tall panel.
+    ul.menu { flex: 1 0 auto; }
 
     ul {
       flex-direction: column;
@@ -212,13 +263,77 @@
       // 1.5px border is part of the target. Measures 45px, same as the rest.
       padding: 16px 20px;
     }
+
+    // --- The foot ------------------------------------------------------------
+    // Privacy, Terms and whatever else the footer menu carries. Small and muted:
+    // these are the links you go looking for, not the ones being offered.
+    .fm-nav__foot {
+      display: block;
+      flex: none;
+      margin-top: 28px;
+      padding-top: 4px;
+      border-top: var(--fm-rule) solid var(--fm-line);
+    }
+
+    .fm-nav__secondary {
+      // Overrides the column direction the drawer sets on every other <ul>: these
+      // are short and read as a footer row, not as more menu.
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      column-gap: 22px;
+
+      li {
+        width: auto;
+        border-bottom: 0;
+      }
+
+      li > a {
+        display: block;
+        // Small type, but still a 44px target — a legal link is no less tappable
+        // for being quiet. 17px against a 10px line measures 44; 16px measured 42.
+        padding-block: 17px;
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--fm-muted);
+      }
+
+      // The CTA pill rule matches any last child in the nav, including this list.
+      li:last-child {
+        margin-top: 0;
+
+        > a {
+          border: 0;
+          border-radius: 0;
+          text-align: left;
+          padding: 17px 0;
+        }
+      }
+    }
+
+    .fm-nav__legal {
+      margin: 0;
+      padding-bottom: 4px;
+      font-size: 10px;
+      letter-spacing: var(--fm-eyebrow-track);
+      text-transform: uppercase;
+      color: var(--fm-muted);
+    }
   }
+
+  // The header's own wordmark while the drawer is open. `visibility` rather than
+  // `opacity` so it leaves the accessibility tree too — otherwise there would be two
+  // links to the homepage exposed at once, one of them invisible.
+  .fm-nav-is-open .fm-logo { visibility: hidden; }
 
   .fm-nav-scrim {
     display: block;
     position: fixed;
-    inset: var(--fm-header-h) 0 0 0;
-    z-index: 98;
+    // Full-bleed, matching the drawer. It dims the header along with everything else,
+    // so the strip of header left uncovered to the left of the drawer sits at the
+    // same value as the page below it instead of staying lit on its own.
+    inset: 0;
+    z-index: 101;
     background: rgba(31, 30, 26, 0.4);
     background: color-mix(in srgb, var(--fm-ink) 40%, transparent);
     opacity: 0;
