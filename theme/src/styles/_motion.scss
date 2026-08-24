@@ -23,17 +23,6 @@
   --fm-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
   --fm-duration: 620ms;
   --fm-duration-fast: 320ms;
-
-  // How far the incoming page is tipped up off the spine before it settles. Small
-  // on purpose: past roughly 20deg the perspective distortion on the type starts to
-  // show and the page stops looking like paper and starts looking like a 3D card.
-  --fm-turn: 16deg;
-}
-
-// A phone screen is narrow, so the same angle sweeps a much larger share of the
-// viewport and reads as a bigger movement. Shallower keeps it equivalent.
-@media (max-width: 560px) {
-  :root { --fm-turn: 10deg; }
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -45,27 +34,21 @@
   // instant and smooth. Costs nothing when unsupported — the page just swaps as normal.
   @view-transition { navigation: auto; }
 
-  // The turn. The layout is a newspaper — hairline rules, heavy display type, hard
-  // edges — so navigation is a sheet of paper being laid down, not a cross-fade.
+  // A plain cross-fade, and a short one. Navigation is the one moment where motion
+  // is most likely to be in the way: the reader has already decided where they are
+  // going, so anything with a shape to it — a slide, a turn, a direction — is a
+  // delay dressed up as a flourish. This is only here to take the hard edge off the
+  // swap, and it is deliberately short enough to read as instant.
   //
-  // The incoming page is hinged at the left edge, the spine, and swings down flat
-  // onto the outgoing one, which dims as it passes into shadow underneath. The
-  // header is a named transition (below) and so is held still through all of it —
-  // it is the part of the book that does not turn, which is what gives the page
-  // something to hinge against.
-  //
-  // `perspective()` is written into the transform rather than set as a property on
-  // the parent because the view-transition pseudo tree does not give us a reliable
-  // element to hang a shared perspective on. Per-element perspective is fine here:
-  // there is only ever one page turning.
+  // No transform: movement is what made the previous version feel slow even when
+  // the duration was reasonable, because the eye tracks travel and waits for it to
+  // stop. Opacity alone has nothing to follow.
   ::view-transition-old(root) {
-    animation: fm-page-under 300ms var(--fm-ease) both;
+    animation: fm-page-out 90ms linear both;
   }
 
   ::view-transition-new(root) {
-    // The spine. Everything about the turn follows from this one line.
-    transform-origin: left center;
-    animation: fm-page-turn 460ms var(--fm-ease) both;
+    animation: fm-page-in 140ms linear both;
   }
 
   // The header and the footer wordmark exist on every page, so they are named and
@@ -252,21 +235,17 @@
   to   { opacity: 1; transform: translateY(0); }
 }
 
-// The page being covered. It does not move away — it stays put and goes dark, the
-// way the left page of an open book does when the right page comes over it. The
-// slight scale is the only travel: just enough to sit *under* rather than beside.
-@keyframes fm-page-under {
-  from { opacity: 1; transform: scale(1);     filter: brightness(1); }
-  to   { opacity: 0; transform: scale(0.988); filter: brightness(0.9); }
+// Opacity only, on both halves. `linear` rather than the site easing: over 90ms an
+// easing curve is not perceivable, and a linear ramp keeps the two halves in step
+// so there is no moment where both pages are faint at once.
+@keyframes fm-page-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
 }
 
-// The page being turned. Hinged at the spine by `transform-origin` on the pseudo
-// element; this only has to describe the fall. The opacity ramp finishes early so
-// the type is solid for most of the movement rather than fading the whole way.
-@keyframes fm-page-turn {
-  from  { opacity: 0; transform: perspective(1600px) rotateY(var(--fm-turn)); }
-  38%   { opacity: 1; }
-  to    { opacity: 1; transform: perspective(1600px) rotateY(0deg); }
+@keyframes fm-page-in {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 // A drawer row arriving from the edge it was hidden behind.
