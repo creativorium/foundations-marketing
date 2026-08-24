@@ -1,0 +1,172 @@
+# Deploy the theme and the blocks plugin to the dev site.
+#
+#   https://dev.cularcreative.com/foundationmarketing
+#
+# Node never runs on the server (how-to-work.md §0), and theme/build + plugin/build
+# are gitignored, so the repo alone is not deployable. This builds the four Vite
+# targets here and ships the result.
+#
+# Every value that describes the server is a repository secret — this repo is public.
+# See DEPLOYMENT.md for how to create them.
+
+name: Deploy to dev
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Dry run — list what would change, write nothing"
+        type: boolean
+        default: false
+
+# One deploy at a time. Two rsyncs into the same directory can interleave and leave
+# a half-updated theme on the server; queueing is cheap, a broken dev site is not.
+concurrency:
+  group: deploy-dev
+  cancel-in-progress: false
+
+# The job only reads the repo. It never needs to write back to GitHub.
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out the branch being deployed
+        uses: actions/checkout@v4
+
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build all four Vite targets
+        run: npm run build
+
+      # A silent build failure would rsync an empty build/ over a working one and
+      # take the site's CSS and JS with it. Check before touching the server.
+      - name: Fail if the build produced nothing
+        run: |
+          set -euo pipefail
+          missing=0
+          for f in \
+            theme/build/main.css theme/build/main.js theme/build/login.css \
+            plugin/build/editor.js plugin/build/frontend.css
+          do
+            if [ ! -s "$f" ]; then
+              echo "::error::missing or empty build artefact: $f"
+              missing=1
+            fi
+          done
+          [ "$missing" -eq 0 ]
+
+      # Secrets go in through env rather than being interpolated into the script, so
+      # their contents can never be parsed as shell.
+      - name: Configure SSH
+        env:
+          KEY: ${{ secrets.DEV_SSH_KEY }}
+          KNOWN_HOSTS: ${{ secrets.DEV_SSH_KNOWN_HOSTS }}
+        run: |
+          set -euo pipefail
+          mkdir -p ~/.ssh
+          printf '%s\n' "$KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          printf '%s\n' "$KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+
+      # The guard that makes --delete safe. If DEV_WP_PATH is wrong or empty, rsync
+      # would happily mirror into the wrong directory and delete what was there.
+      # Refuse to go further unless the path really is a WordPress install.
+      - name: Preflight — confirm the target is the dev WordPress install
+        env:
+          SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
+          SSH_PORT: ${{ secrets.DEV_SSH_PORT }}
+          SSH_USER: ${{ secrets.DEV_SSH_USER }}
+          WP_PATH: ${{ secrets.DEV_WP_PATH }}
+        run: |
+          set -euo pipefail
+          if [ -z "${WP_PATH:-}" ]; then
+            echo "::error::DEV_WP_PATH is empty — refusing to deploy"
+            exit 1
+          fi
+          ssh -i ~/.ssh/id_deploy -p "${SSH_PORT:-22}" \
+              -o BatchMode=yes -o StrictHostKeyChecking=yes \
+              "$SSH_USER@$SSH_HOST" \
+              "test -f '$WP_PATH/wp-config.php' && test -d '$WP_PATH/wp-content/themes' && test -d '$WP_PATH/wp-content/plugins'"
+          echo "Target confirmed: $WP_PATH"
+
+      # -a preserves modification times, which matters more than it looks: the theme
+      # cache-busts assets with filemtime(), so preserved mtimes mean the ?ver= only
+      # changes for files that actually changed.
+      #
+      # theme/src is build-time only and is excluded. plugin/src is NOT — register.php
+      # discovers blocks by scanning plugin/src/blocks/*/block.json at runtime, and
+      # each block.json points at its own render.php. Excluding plugin/src would
+      # unregister every block on the server.
+      - name: Deploy the theme
+        env:
+          SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
+          SSH_PORT: ${{ secrets.DEV_SSH_PORT }}
+          SSH_USER: ${{ secrets.DEV_SSH_USER }}
+          WP_PATH: ${{ secrets.DEV_WP_PATH }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          DRY=""
+          [ "${DRY_RUN:-false}" = "true" ] && DRY="--dry-run"
+          rsync -az --delete --itemize-changes $DRY \
+            --chmod=D755,F644 \
+            -e "ssh -i ~/.ssh/id_deploy -p ${SSH_PORT:-22} -o BatchMode=yes" \
+            --exclude '.git*' \
+            --exclude 'node_modules/' \
+            --exclude 'src/' \
+            --exclude '.DS_Store' \
+            theme/ "$SSH_USER@$SSH_HOST:$WP_PATH/wp-content/themes/foundations/"
+
+      - name: Deploy the blocks plugin
+        env:
+          SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
+          SSH_PORT: ${{ secrets.DEV_SSH_PORT }}
+          SSH_USER: ${{ secrets.DEV_SSH_USER }}
+          WP_PATH: ${{ secrets.DEV_WP_PATH }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          DRY=""
+          [ "${DRY_RUN:-false}" = "true" ] && DRY="--dry-run"
+          rsync -az --delete --itemize-changes $DRY \
+            --chmod=D755,F644 \
+            -e "ssh -i ~/.ssh/id_deploy -p ${SSH_PORT:-22} -o BatchMode=yes" \
+            --exclude '.git*' \
+            --exclude 'node_modules/' \
+            --exclude 'src/styles/' \
+            --exclude '*.scss' \
+            --exclude '*.jsx' \
+            --exclude '.DS_Store' \
+            plugin/ "$SSH_USER@$SSH_HOST:$WP_PATH/wp-content/plugins/foundations-blocks/"
+
+      - name: Check the dev site still answers
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          set -euo pipefail
+          code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 \
+            https://dev.cularcreative.com/foundationmarketing/)
+          echo "dev site returned HTTP $code"
+          # A 5xx means we probably just broke it; anything else is the site's own
+          # business (a redirect or a 403 from Cloudflare is not our deploy failing).
+          case "$code" in
+            5*) echo "::error::dev site is returning $code after deploy"; exit 1 ;;
+          esac
+
+      - name: Clean up the key
+        if: always()
+        run: rm -f ~/.ssh/id_deploy
