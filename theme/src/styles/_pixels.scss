@@ -18,13 +18,18 @@
 //    state every page starts in, and it leaves. The swap itself happens behind it,
 //    so nothing is lost, and no navigation is ever held up waiting for a tween.
 //
-// Total run: 410ms. That is the whole budget, stagger included.
+// Grid is 10 x 18 = 180 cells. Finer than it started (6 x 11): at eleven columns
+// across a laptop each cell was ~116px wide, which reads as a shutter rather than
+// as pixels. The step time comes down with the cell size so the extra columns do
+// not buy a longer animation — more cells, same budget.
+//
+// Total run: (10-1 + 18-1) x 8ms stagger + 180ms cell = 388ms.
 // =============================================================================
 
-$fm-px-rows: 6;
-$fm-px-cols: 11;
-$fm-px-step: 14ms;   // per step of (row + column)
-$fm-px-cell: 200ms;  // one cell's own wipe
+$fm-px-rows: 10;
+$fm-px-cols: 18;
+$fm-px-step: 8ms;   // per step of (row + column)
+$fm-px-cell: 180ms;  // one cell's own wipe
 
 @media (prefers-reduced-motion: no-preference) {
 
@@ -56,7 +61,7 @@ $fm-px-cell: 200ms;  // one cell's own wipe
 
   // The stagger. Delay keyed to (row + column) reproduces the grid stagger the demo
   // gets from GSAP's `from: 'start'`: a diagonal wave off the top-left corner, which
-  // reads as horizontal because the columns dominate.
+  // reads as horizontal because the columns dominate — eighteen of them against ten rows.
   //
   // The mixin exists because the delay depends on how many columns the grid is
   // currently laid out in — the cells are a flat list, and the same cell is in a
