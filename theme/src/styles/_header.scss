@@ -326,6 +326,21 @@
   // links to the homepage exposed at once, one of them invisible.
   .fm-nav-is-open .fm-logo { visibility: hidden; }
 
+  // The drawer is a child of <header>, and <header> is `position: sticky` with a
+  // z-index, so it opens a stacking context. That means the drawer's own z-index is
+  // resolved INSIDE the header and can never climb past the header's 100 — which put
+  // the scrim, a root-level sibling at 101, on top of the menu and dimmed it.
+  //
+  // So the header is what has to move. While the drawer is open it goes above the
+  // scrim and stops painting anything of its own: the scrim then dims the whole
+  // viewport, including the band the header used to occupy, and only the drawer and
+  // the Close button inside it come back over the top.
+  .fm-nav-is-open .fm-header {
+    z-index: 103;
+    background: transparent;
+    border-bottom-color: transparent;
+  }
+
   .fm-nav-scrim {
     display: block;
     position: fixed;
