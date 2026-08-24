@@ -48,3 +48,7 @@ theme/assets/fonts/*.woff2
 
 # Agent skills installed locally — never committed (see doc/SKILLS.md)
 .claude/
+
+# Deploy keypair — generated locally, never committed (see DEPLOYMENT.md)
+fm-deploy
+fm-deploy.pub

@@ -245,8 +245,14 @@ npm run watch:editor
 npm run watch:frontend
 ```
 
-**Deploying:** upload `theme/` and `plugin/` **including** their `build/` folders. Those
-are gitignored, so always `npm run build` before you deploy.
+**Deploying:** `theme/` and `plugin/` must ship **including** their `build/` folders.
+Those are gitignored, so a copy of the repo is not a deployable site — always
+`npm run build` first.
+
+The dev site deploys itself: pushing to `main` runs `.github/workflows/deploy-dev.yml`,
+which builds and rsyncs over SSH. **Read [DEPLOYMENT.md](DEPLOYMENT.md)** for the secrets
+it needs, how to run it by hand against a feature branch, and what it deliberately does
+not touch (the database, uploads, and theme activation).
 
 ---
 
