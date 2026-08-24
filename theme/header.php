@@ -15,6 +15,26 @@ if (!defined('ABSPATH')) {
 <body <?php body_class(); ?>>
 <?php wp_body_open(); ?>
 
+<?php
+/*
+ * The page-transition curtain: a grid of solid cells covering the viewport, which
+ * wipes away column by column as the page loads. It is markup rather than a CSS mask
+ * because the effect needs each cell timed separately, and one mask cannot carry
+ * sixty-six different delays.
+ *
+ * Purely decorative and never interactive — aria-hidden, and the container is
+ * pointer-events:none, so it cannot swallow a tap even mid-animation.
+ *
+ * Without the stylesheet these divs have no size, no background and no position, so
+ * a CSS failure leaves nothing on screen rather than a black box over the site.
+ */
+$fm_px_rows = 6;
+$fm_px_cols = 11;
+?>
+<div class="fm-px" aria-hidden="true"><?php
+    echo str_repeat('<div class="fm-px__cell"></div>', $fm_px_rows * $fm_px_cols);
+?></div>
+
 <a class="fm-skip-link" href="#fm-content"><?php esc_html_e('Skip to content', 'foundations'); ?></a>
 
 <header class="fm-header">

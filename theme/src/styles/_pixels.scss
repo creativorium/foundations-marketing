@@ -1,0 +1,99 @@
+@use 'sass:math';
+@use 'tokens' as *;
+
+// =============================================================================
+// The page transition — a pixel curtain
+//
+// Modelled on Codrops' PixelTransition demo 6: a grid of solid cells that scale
+// horizontally, staggered across the grid so the wipe sweeps left to right.
+//
+// Two deliberate departures from that demo:
+//
+// 1. No GSAP. The stagger is generated at build time as one `animation-delay` per
+//    cell, so the whole effect is declarative CSS and ships 0 bytes of script.
+//
+// 2. Only the second half — the uncover. The demo covers the old page, waits, then
+//    uncovers the new one, which costs roughly two seconds and puts an animation
+//    between the reader and the thing they clicked. Here the curtain is simply the
+//    state every page starts in, and it leaves. The swap itself happens behind it,
+//    so nothing is lost, and no navigation is ever held up waiting for a tween.
+//
+// Total run: 410ms. That is the whole budget, stagger included.
+// =============================================================================
+
+$fm-px-rows: 6;
+$fm-px-cols: 11;
+$fm-px-step: 14ms;   // per step of (row + column)
+$fm-px-cell: 200ms;  // one cell's own wipe
+
+@media (prefers-reduced-motion: no-preference) {
+
+  .fm-px {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    // The curtain is scenery. It must never be able to take a click, not even
+    // during the 410ms it is on screen.
+    pointer-events: none;
+
+    display: grid;
+    grid-template-columns: repeat(#{$fm-px-cols}, 1fr);
+    grid-template-rows: repeat(#{$fm-px-rows}, 1fr);
+
+    // A hard stop, independent of the cells. If a cell animation is interrupted —
+    // a dropped frame budget, a paused tab, an animation that never fires — the
+    // container removes itself anyway and the page is never left covered.
+    animation: fm-px-clear 1ms linear ($fm-px-cell + $fm-px-step * ($fm-px-rows + $fm-px-cols)) both;
+  }
+
+  .fm-px__cell {
+    background: var(--fm-ink);
+    // The right edge is the hinge, so each cell empties towards its right and the
+    // page appears from the left of it. This is what makes the wipe horizontal.
+    transform-origin: 100% 50%;
+    animation: fm-px-wipe $fm-px-cell cubic-bezier(0.4, 0, 0.2, 1) both;
+  }
+
+  // The stagger. Delay keyed to (row + column) reproduces the grid stagger the demo
+  // gets from GSAP's `from: 'start'`: a diagonal wave off the top-left corner, which
+  // reads as horizontal because the columns dominate.
+  //
+  // The mixin exists because the delay depends on how many columns the grid is
+  // currently laid out in — the cells are a flat list, and the same cell is in a
+  // different place in an 11-wide grid than in a 6-wide one.
+  @mixin fm-px-stagger($cols) {
+    @for $i from 1 through ($fm-px-rows * $fm-px-cols) {
+      $index: $i - 1;
+      $row: math.floor(math.div($index, $cols));
+      $col: $index - $row * $cols;
+
+      .fm-px__cell:nth-child(#{$i}) {
+        animation-delay: ($row + $col) * $fm-px-step;
+      }
+    }
+  }
+
+  .fm-px { @include fm-px-stagger($fm-px-cols); }
+
+  // A phone is portrait, so eleven columns across it would be 34px wide against a
+  // 120px row — bars, not pixels. Turning the grid on its side keeps the cells
+  // roughly square, which is the whole point of the effect. 66 cells factorises
+  // either way, so the markup does not change.
+  @media (max-width: 820px) {
+    .fm-px {
+      grid-template-columns: repeat(#{$fm-px-rows}, 1fr);
+      grid-template-rows: repeat(#{$fm-px-cols}, 1fr);
+
+      @include fm-px-stagger($fm-px-rows);
+    }
+  }
+}
+
+@keyframes fm-px-wipe {
+  from { transform: scaleX(1); }
+  to   { transform: scaleX(0); }
+}
+
+@keyframes fm-px-clear {
+  to { visibility: hidden; }
+}

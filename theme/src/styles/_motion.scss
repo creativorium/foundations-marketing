@@ -28,42 +28,16 @@
 @media (prefers-reduced-motion: no-preference) {
 
   // --- Page transitions ------------------------------------------------------
-  // Cross-document view transitions: the browser holds the outgoing page, paints the
-  // incoming one, and animates between them. Paired with the speculation rules in
-  // inc/performance.php (which prerender same-site links on hover), navigation is both
-  // instant and smooth. Costs nothing when unsupported — the page just swaps as normal.
-  @view-transition { navigation: auto; }
-
-  // A plain cross-fade, and a short one. Navigation is the one moment where motion
-  // is most likely to be in the way: the reader has already decided where they are
-  // going, so anything with a shape to it — a slide, a turn, a direction — is a
-  // delay dressed up as a flourish. This is only here to take the hard edge off the
-  // swap, and it is deliberately short enough to read as instant.
+  // Handled entirely by the pixel curtain in styles/_pixels.scss, which is a real
+  // grid of elements on the incoming page rather than a snapshot effect.
   //
-  // No transform: movement is what made the previous version feel slow even when
-  // the duration was reasonable, because the eye tracks travel and waits for it to
-  // stop. Opacity alone has nothing to follow.
-  ::view-transition-old(root) {
-    animation: fm-page-out 90ms linear both;
-  }
-
-  ::view-transition-new(root) {
-    animation: fm-page-in 140ms linear both;
-  }
-
-  // The header and the footer wordmark exist on every page, so they are named and
-  // held still while the content between them changes. Without this they would
-  // cross-fade with everything else and the whole page would appear to blink.
-  .fm-header           { view-transition-name: fm-header; }
-  .fm-footer__wordmark { view-transition-name: fm-wordmark; }
-
-  ::view-transition-old(fm-header),
-  ::view-transition-new(fm-header),
-  ::view-transition-old(fm-wordmark),
-  ::view-transition-new(fm-wordmark) {
-    animation: none;
-    mix-blend-mode: normal;
-  }
+  // The cross-document view transition that used to live here has been removed
+  // rather than kept alongside it: `@view-transition` holds the new page back until
+  // its snapshot is ready, and the curtain would then start on top of that delay.
+  // Two transitions for one navigation is just a slower navigation.
+  //
+  // Removing it also retires the named `fm-header` / `fm-wordmark` transitions —
+  // outside a view transition a `view-transition-name` does nothing at all.
 
   // --- Footer wordmark, letter by letter -------------------------------------
   // The <text> is one fitted unit, so the timeline is taken from the container and
@@ -233,19 +207,6 @@
 @keyframes fm-fade-up {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
-}
-
-// Opacity only, on both halves. `linear` rather than the site easing: over 90ms an
-// easing curve is not perceivable, and a linear ramp keeps the two halves in step
-// so there is no moment where both pages are faint at once.
-@keyframes fm-page-out {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
-
-@keyframes fm-page-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
 }
 
 // A drawer row arriving from the edge it was hidden behind.
