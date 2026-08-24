@@ -22,27 +22,27 @@ get_header();
 ?>
 <section class="fm-error">
     <div class="fm-error__rule">
-        <span><?php esc_html_e('Error 404', 'foundations'); ?></span>
-        <span class="fm-error__rule-aside"><?php esc_html_e('Page not found', 'foundations'); ?></span>
+        <span><?php esc_html_e('Error 404', 'foundations-marketing'); ?></span>
+        <span class="fm-error__rule-aside"><?php esc_html_e('Page not found', 'foundations-marketing'); ?></span>
     </div>
 
     <div class="fm-error__grid">
         <div>
             <h1 class="fm-error__title">
-                <?php esc_html_e('This page', 'foundations'); ?>
-                <span class="fm-error__title-accent"><?php esc_html_e('moved on', 'foundations'); ?></span>
+                <?php esc_html_e('This page', 'foundations-marketing'); ?>
+                <span class="fm-error__title-accent"><?php esc_html_e('moved on', 'foundations-marketing'); ?></span>
             </h1>
 
             <p class="fm-error__lede">
                 <?php esc_html_e(
                     'The link is broken or the page has been retired. Nothing is wrong on your end — try a search, or pick up one of the routes below.',
-                    'foundations'
+                    'foundations-marketing'
                 ); ?>
             </p>
 
             <form class="fm-error__search" role="search" method="get" action="<?php echo esc_url(home_url('/')); ?>">
                 <label class="fm-sr-only" for="fm-404-search">
-                    <?php esc_html_e('Search this site', 'foundations'); ?>
+                    <?php esc_html_e('Search this site', 'foundations-marketing'); ?>
                 </label>
                 <input
                     class="fm-error__search-field"
@@ -50,21 +50,21 @@ get_header();
                     type="search"
                     name="s"
                     value="<?php echo esc_attr(get_search_query()); ?>"
-                    placeholder="<?php esc_attr_e('Search…', 'foundations'); ?>"
+                    placeholder="<?php esc_attr_e('Search…', 'foundations-marketing'); ?>"
                     autocomplete="off">
                 <button class="fm-error__search-button" type="submit">
-                    <?php esc_html_e('Search', 'foundations'); ?>
+                    <?php esc_html_e('Search', 'foundations-marketing'); ?>
                 </button>
             </form>
         </div>
 
-        <nav class="fm-error__routes" aria-label="<?php esc_attr_e('Helpful links', 'foundations'); ?>">
+        <nav class="fm-error__routes" aria-label="<?php esc_attr_e('Helpful links', 'foundations-marketing'); ?>">
             <?php
             $routes = [
-                ['/#templates', __('The templates', 'foundations'),  __('Browse the library by niche', 'foundations')],
-                ['/#price',     __('Pricing', 'foundations'),        __('One number, no tiers', 'foundations')],
-                ['/#how',       __('How it works', 'foundations'),   __('Chosen to launched in three steps', 'foundations')],
-                ['/#faq',       __('Questions', 'foundations'),      __('Answered up front', 'foundations')],
+                ['/#templates', __('The templates', 'foundations-marketing'),  __('Browse the library by niche', 'foundations-marketing')],
+                ['/#price',     __('Pricing', 'foundations-marketing'),        __('One number, no tiers', 'foundations-marketing')],
+                ['/#how',       __('How it works', 'foundations-marketing'),   __('Chosen to launched in three steps', 'foundations-marketing')],
+                ['/#faq',       __('Questions', 'foundations-marketing'),      __('Answered up front', 'foundations-marketing')],
             ];
 
             foreach ($routes as [$url, $label, $hint]) :

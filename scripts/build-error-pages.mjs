@@ -157,12 +157,12 @@ const htaccess = `# Foundations Marketing — error documents
 # 404 is deliberately absent: WordPress renders it through the theme (404.php),
 # which gives a searchable, linked page instead of a dead end. Let WordPress keep it.
 
-${PAGES.map((p) => `ErrorDocument ${p.code} /wp-content/themes/foundations/errors/${p.file}`).join('\n')}
+${PAGES.map((p) => `ErrorDocument ${p.code} /wp-content/themes/foundations-marketing/errors/${p.file}`).join('\n')}
 
 # Serve the error pages themselves without rewriting them into WordPress.
 <IfModule mod_rewrite.c>
   RewriteEngine On
-  RewriteRule ^wp-content/themes/foundations/errors/ - [L]
+  RewriteRule ^wp-content/themes/foundations-marketing/errors/ - [L]
 </IfModule>
 
 # A 503 should tell crawlers when to come back. Without Retry-After, a long outage
