@@ -28,18 +28,47 @@
 @media (prefers-reduced-motion: no-preference) {
 
   // --- Page transitions ------------------------------------------------------
-  // Cross-document view transitions: a short cross-fade between pages, for free.
-  // Paired with the speculation rules in inc/performance.php (which prerender
-  // same-site links on hover) navigation is both instant and smooth.
-  @view-transition { navigation: auto; }
+  // Handled entirely by the pixel curtain in styles/_pixels.scss, which is a real
+  // grid of elements on the incoming page rather than a snapshot effect.
+  //
+  // The cross-document view transition that used to live here has been removed
+  // rather than kept alongside it: `@view-transition` holds the new page back until
+  // its snapshot is ready, and the curtain would then start on top of that delay.
+  // Two transitions for one navigation is just a slower navigation.
+  //
+  // Removing it also retires the named `fm-header` / `fm-wordmark` transitions —
+  // outside a view transition a `view-transition-name` does nothing at all.
 
-  ::view-transition-old(root) { animation-duration: 180ms; }
-  ::view-transition-new(root) { animation-duration: 260ms; }
+  // --- Footer wordmark, letter by letter -------------------------------------
+  // The <text> is one fitted unit, so the timeline is taken from the container and
+  // each letter reads its progress from that shared timeline. Staggering by
+  // animation-range rather than animation-delay is what makes it work on a scroll
+  // timeline, where delays have no meaning.
+  .fm-footer__wordmark {
+    view-timeline-name: --fm-wordmark-view;
+    view-timeline-axis: block;
+  }
 
-  // The header and the footer wordmark persist between pages, so they should stay
-  // put while the content changes rather than cross-fading with everything else.
-  .fm-header           { view-transition-name: fm-header; }
-  .fm-footer__wordmark { view-transition-name: fm-wordmark; }
+  @supports (animation-timeline: view()) {
+    .fm-footer__wordmark tspan {
+      // fill-box keeps the transform relative to each glyph rather than the whole SVG.
+      transform-box: fill-box;
+      transform-origin: 50% 100%;
+      animation: fm-letter-in linear both;
+      animation-timeline: --fm-wordmark-view;
+    }
+
+    // Eleven letters in FOUNDATIONS; the loop covers a longer brand too.
+    @for $i from 1 through 16 {
+      .fm-footer__wordmark tspan:nth-child(#{$i}) {
+        // The unit lives inside the interpolation: a bare `%` straight after
+        // `#{...}` is parsed as a modulo operator, not as a percentage.
+        animation-range:
+          entry #{(2 + ($i - 1) * 3.2) * 1%}
+          entry #{(46 + ($i - 1) * 3.2) * 1%};
+      }
+    }
+  }
 
   // --- The editorial reveal --------------------------------------------------
   // A masked slide-up: the text sits inside a clipping box and rises into it. On a
@@ -109,6 +138,39 @@
   .fm-hero__footnote { animation-delay: 250ms; }
   .fm-hero__media    { animation-delay: 120ms; }
 
+  // --- Header wordmark -------------------------------------------------------
+  // The two words settle in on load, a beat apart. Kept deliberately small: this is
+  // in the corner of every page, so anything more than a suggestion becomes a tic.
+  // Because the header is a named view transition, it holds still during same-site
+  // navigation and this only plays on a genuine page load.
+  .fm-logo__mark,
+  .fm-logo__sub {
+    animation: fm-word-in 460ms var(--fm-ease) both;
+  }
+
+  .fm-logo__sub { animation-delay: 80ms; }
+
+  // --- The mobile drawer -----------------------------------------------------
+  // The panel itself slides in CSS (styles/_header.scss). This is the second beat:
+  // the rows arrive just behind the edge of the drawer, so the menu reads as being
+  // set down rather than as a block that was already there.
+  //
+  // Scoped to the drawer breakpoint — above it the nav is a row and these rows are
+  // always on screen, where a delayed entrance would just be a flicker on load.
+  @media (max-width: 1024px) {
+    .fm-nav[data-open='true'] li {
+      animation: fm-drawer-row 300ms var(--fm-ease) both;
+    }
+
+    // Five items today, headroom for a couple more before the pattern runs out.
+    @for $i from 1 through 8 {
+      .fm-nav[data-open='true'] li:nth-child(#{$i}) {
+        // Starts after the panel is already moving, ends before it lands.
+        animation-delay: #{80 + ($i - 1) * 45}ms;
+      }
+    }
+  }
+
   // --- Interaction -----------------------------------------------------------
   .fm-nav a,
   .fm-footer__links a {
@@ -131,9 +193,6 @@
 
   // The pill CTA already has a border, so the underline would fight it.
   .fm-nav li:last-child > a { background-image: none; }
-
-  .fm-faq__item { transition: background 220ms var(--fm-ease); }
-  .fm-faq__item[open] { background: rgba(0, 0, 0, 0.02); }
 }
 
 // --- Keyframes ---------------------------------------------------------------
@@ -148,4 +207,24 @@
 @keyframes fm-fade-up {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+// A drawer row arriving from the edge it was hidden behind.
+@keyframes fm-drawer-row {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+// A word arriving: a short rise with the faintest tightening of the tracking, which
+// reads as type settling rather than as an element sliding in.
+@keyframes fm-word-in {
+  from { opacity: 0; transform: translateY(5px); letter-spacing: 0.02em; }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// Each letter rises into place and settles. Kept small — at this size a large
+// movement reads as a bounce, not as typesetting.
+@keyframes fm-letter-in {
+  from { opacity: 0; transform: translateY(0.16em) scaleY(0.94); }
+  to   { opacity: 1; transform: translateY(0) scaleY(1); }
 }

@@ -82,8 +82,8 @@ function fm_url(string $url): string
  * @param int $limit Maximum templates to return. -1 for all.
  *
  * @return array<int, array{
- *     id:int, name:string, niche:string, description:string,
- *     url:string, thumb_id:int, packages:array<int,string>
+ *     id:int, name:string, niche:string, description:string, category:string,
+ *     sections:array<int,string>, url:string, thumb_id:int, packages:array<int,string>
  * }>
  */
 function fm_get_templates(int $limit = 9): array
@@ -108,12 +108,27 @@ function fm_get_templates(int $limit = 9): array
 
     foreach ($query->posts as $post) {
         $packages = get_post_meta($post->ID, 'tpl_packages', true);
+        $sections = get_post_meta($post->ID, 'tpl_sections', true);
+
+        // Sections may be stored as an array or as one-per-line text, depending on
+        // how the template was entered. Accept either.
+        if (is_string($sections) && $sections !== '') {
+            $sections = preg_split('/
+||
+/', $sections) ?: [];
+        }
+
+        $sections = is_array($sections)
+            ? array_values(array_filter(array_map('trim', array_map('strval', $sections))))
+            : [];
 
         $templates[] = [
             'id'          => (int) $post->ID,
             'name'        => (string) $post->post_title,
             'niche'       => (string) get_post_meta($post->ID, 'tpl_niche', true),
             'description' => (string) get_post_meta($post->ID, 'tpl_description', true),
+            'category'    => (string) get_post_meta($post->ID, 'tpl_category', true),
+            'sections'    => $sections,
             'url'         => (string) get_post_meta($post->ID, 'tpl_demo_url', true),
             'thumb_id'    => (int) get_post_thumbnail_id($post->ID),
             'packages'    => is_array($packages) ? array_map('strval', $packages) : [],

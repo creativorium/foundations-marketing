@@ -3,10 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "Foundations Marketing — WordPress rebuild (classic theme + native Gutenberg blocks, Vite-built, server-rendered).",
+  "description": "Foundations Marketing \u2014 WordPress rebuild (classic theme + native Gutenberg blocks, Vite-built, server-rendered).",
   "scripts": {
     "clean": "node --input-type=commonjs -e \"const{rmSync}=require('fs');for(const d of ['theme/build','plugin/build'])rmSync(d,{recursive:true,force:true})\"",
-    "build": "npm run clean && npm run build:theme && npm run build:login && npm run build:editor && npm run build:frontend",
+    "build": "npm run clean && npm run build:theme && npm run build:login && npm run build:editor && npm run build:frontend && npm run build:errors",
     "build:theme": "vite build --mode theme",
     "build:login": "vite build --mode login",
     "build:editor": "vite build --mode editor",
@@ -14,7 +14,8 @@
     "dev": "vite build --mode theme --watch",
     "watch:theme": "vite build --mode theme --watch",
     "watch:editor": "vite build --mode editor --watch",
-    "watch:frontend": "vite build --mode frontend --watch"
+    "watch:frontend": "vite build --mode frontend --watch",
+    "build:errors": "node scripts/build-error-pages.mjs"
   },
   "devDependencies": {
     "sass": "^1.83.0",

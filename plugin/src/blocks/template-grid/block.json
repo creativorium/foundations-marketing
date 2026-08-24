@@ -7,15 +7,55 @@
   "icon": "grid-view",
   "description": "The catalogue of site templates, read live from the Site Templates you have published.",
   "textdomain": "foundations",
-  "supports": { "html": false, "anchor": true },
+  "supports": {
+    "html": false,
+    "anchor": true
+  },
   "attributes": {
-    "number":   { "type": "string", "default": "01" },
-    "label":    { "type": "string", "default": "The templates" },
-    "aside":    { "type": "string", "default": "Browse by niche" },
-    "heading":  { "type": "string", "default": "" },
-    "intro":    { "type": "string", "default": "" },
-    "priceFrom":{ "type": "string", "default": "From \u00a3249" },
-    "limit":    { "type": "number", "default": 9 }
+    "number": {
+      "type": "string",
+      "default": "01"
+    },
+    "label": {
+      "type": "string",
+      "default": "The templates"
+    },
+    "aside": {
+      "type": "string",
+      "default": "Browse by niche"
+    },
+    "heading": {
+      "type": "string",
+      "default": ""
+    },
+    "intro": {
+      "type": "string",
+      "default": ""
+    },
+    "priceFrom": {
+      "type": "string",
+      "default": "From £249"
+    },
+    "limit": {
+      "type": "number",
+      "default": 9
+    },
+    "moreText": {
+      "type": "string",
+      "default": ""
+    },
+    "moreUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "compact": {
+      "type": "boolean",
+      "default": false
+    },
+    "tone": {
+      "type": "string",
+      "default": "plain"
+    }
   },
   "render": "file:./render.php"
 }

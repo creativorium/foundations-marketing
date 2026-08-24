@@ -17,7 +17,7 @@
 .fm-logo {
   display: flex;
   align-items: baseline;
-  gap: 9px;
+  gap: 8px;
   flex: none;
   &:hover { text-decoration: none; }
 
@@ -30,10 +30,12 @@
     color: var(--fm-accent);
   }
 
+  // Same size and weight as the mark — the two words read as one wordmark,
+  // "FOUNDATIONS MARKETING", not a name with a label attached.
   &__sub {
-    font-size: 12px;
+    font-size: 19px;
     font-weight: 800;
-    letter-spacing: 0.14em;
+    letter-spacing: -0.035em;
     text-transform: uppercase;
     color: var(--fm-accent);
   }
@@ -95,34 +97,289 @@
   text-transform: uppercase;
   color: var(--fm-ink);
   cursor: pointer;
+  place-items: center;
+  // Top of the stack. The drawer covers the header on mobile, so this button has to
+  // float above it — it is also the close control, and a close control underneath
+  // the thing it closes is no use to anyone.
+  position: relative;
+  z-index: 103;
+
+  // Both labels occupy the same cell, so the button is as wide as the longer of
+  // the two and never resizes when the state flips.
+  &__label {
+    grid-area: 1 / 1;
+    // Opacity, not visibility — the "Menu" label must stay in the accessibility
+    // tree while open so the button keeps a stable accessible name, with
+    // aria-expanded carrying the state.
+    transition: opacity 0.15s ease;
+  }
+
+  &__label--close { opacity: 0; }
+
+  &[aria-expanded='true'] {
+    .fm-nav-toggle__label--open  { opacity: 0; }
+    .fm-nav-toggle__label--close { opacity: 1; }
+  }
 }
+
+// --- The drawer backdrop -----------------------------------------------------
+// display:none above the drawer breakpoint, so it can never intercept a click on
+// the desktop layout.
+.fm-nav-scrim { display: none; }
+
+// The drawer's own head and foot exist only inside the drawer. On desktop the nav is
+// a row in the header, where a wordmark and a legal line would be duplicates of the
+// header logo and the footer.
+.fm-nav__head,
+.fm-nav__foot { display: none; }
 
 // The nav needs to collapse as soon as the row stops fitting, which is well before
 // the tablet breakpoint — five uppercase, letterspaced items are wide.
 @media (max-width: 1024px) {
-  .fm-nav-toggle { display: block; }
+  .fm-nav-toggle {
+    display: grid;
+    // Tighter than the desktop pill on both axes, for two different reasons.
+    // Horizontal: stacking "Menu" and "Close" sizes the button to the longer of the
+    // two, and the header row is already tight at 375px — trimming the sides pays
+    // that back with room to spare. Vertical: 11px caps inside 11px of padding is a
+    // ~38px control, under the 44px minimum, so the block padding goes up.
+    padding: 15px 14px;
+  }
 
+  // A right-hand drawer rather than a top drop-down. It slides in from the edge it
+  // is anchored to, which is the only direction that reads as a drawer rather than
+  // as a panel that happens to move.
+  //
+  // It runs the full height of the screen and covers the header, so it can carry the
+  // wordmark itself. Anchoring it below the header instead would put a second copy of
+  // the lockup 74px under the real one, which reads as a mistake rather than as a
+  // masthead. The toggle floats above it and stays reachable as the close control —
+  // no second close button to explain.
   .fm-nav {
-    position: absolute;
-    inset: var(--fm-header-h) 0 auto 0;
-    background: var(--fm-bg);
-    border-bottom: var(--fm-rule) solid var(--fm-ink);
-    padding: 8px var(--fm-gutter) 24px;
+    position: fixed;
+    inset: 0 0 0 auto;
+    width: min(84vw, 360px);
+    z-index: 102;
 
-    &[data-open='false'] { display: none; }
+    // Column layout is what lets the foot sit at the bottom of the panel on a tall
+    // screen rather than trailing straight after the last menu item.
+    display: flex;
+    flex-direction: column;
+    background: var(--fm-bg);
+    border-left: var(--fm-rule) solid var(--fm-ink);
+    padding: 0 var(--fm-gutter) 24px;
+
+    // A long menu on a short phone has to scroll, and that scroll must not chain
+    // through to the page behind the drawer.
+    overflow-y: auto;
+    overscroll-behavior: contain;
+
+    // `visibility` is what does the accessibility work here: hidden takes the links
+    // out of the tab order and out of the accessibility tree, exactly as the old
+    // `display: none` did — but unlike display it can be deferred until the slide
+    // has finished, so the panel is not ripped away mid-animation.
+    transform: translateX(100%);
+    visibility: hidden;
+    transition:
+      transform 320ms var(--fm-ease),
+      visibility 0s linear 320ms;
+
+    &[data-open='true'] {
+      transform: translateX(0);
+      visibility: visible;
+      transition:
+        transform 380ms var(--fm-ease),
+        visibility 0s;
+    }
+
+    // The drawer's masthead. Sized to the header it is covering, so the Close button
+    // — which is still laid out by the header's flex row — lands centred beside it.
+    .fm-nav__head {
+      display: flex;
+      align-items: center;
+      flex: none;
+      min-height: var(--fm-header-h);
+      // Clears the Close button, which floats over this corner.
+      padding-right: 96px;
+      border-bottom: var(--fm-rule) solid var(--fm-ink);
+      // The drawer's side padding is the gutter; the head spans the full panel so its
+      // rule meets the panel edges the way the header's rule meets the screen edges.
+      margin-inline: calc(var(--fm-gutter) * -1);
+      padding-left: var(--fm-gutter);
+    }
+
+    .fm-nav__brand {
+      display: block;
+      line-height: 1.05;
+      &:hover { text-decoration: none; }
+    }
+
+    .fm-nav__brand-line {
+      display: block;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.035em;
+      text-transform: uppercase;
+      color: var(--fm-accent);
+    }
+
+    // wp_nav_menu()'s <ul> is the only child that should absorb the spare height, so
+    // the foot is pushed to the bottom of a tall panel.
+    ul.menu { flex: 1 0 auto; }
 
     ul {
       flex-direction: column;
-      align-items: flex-start;
+      align-items: stretch;
       gap: 0;
     }
 
-    li { width: 100%; }
-    li > a { display: block; padding-block: 14px; }
-    li:last-child > a { display: inline-block; margin-top: 10px; }
+    // Hairline separators: the same rule the rest of the layout is built from,
+    // so the drawer reads as part of the newspaper grid and not as a bolt-on.
+    li {
+      width: 100%;
+      border-bottom: var(--fm-rule) solid var(--fm-line);
+    }
+
+    li > a {
+      display: block;
+      // The links inherit `line-height: 1`, so an 11px item is 11px tall and the
+      // padding is doing all of the work: 17px either side clears 44px with a
+      // pixel in hand. Measured, not assumed — 16px landed at 43.
+      padding-block: 17px;
+      white-space: normal;
+    }
+
+    // The CTA is the one item that is not a list row — it keeps its pill and gets
+    // the space to sit as a button at the foot of the drawer.
+    li:last-child {
+      border-bottom: 0;
+      margin-top: 20px;
+    }
+
+    li:last-child > a {
+      display: block;
+      text-align: center;
+      // A pixel less block padding than the plain rows, because the pill's own
+      // 1.5px border is part of the target. Measures 45px, same as the rest.
+      padding: 16px 20px;
+    }
+
+    // --- The foot ------------------------------------------------------------
+    // Privacy, Terms and whatever else the footer menu carries. Small and muted:
+    // these are the links you go looking for, not the ones being offered.
+    .fm-nav__foot {
+      display: block;
+      flex: none;
+      margin-top: 28px;
+      padding-top: 4px;
+      border-top: var(--fm-rule) solid var(--fm-line);
+    }
+
+    .fm-nav__secondary {
+      // Overrides the column direction the drawer sets on every other <ul>: these
+      // are short and read as a footer row, not as more menu.
+      flex-direction: row;
+      flex-wrap: wrap;
+      align-items: center;
+      column-gap: 22px;
+
+      li {
+        width: auto;
+        border-bottom: 0;
+      }
+
+      li > a {
+        display: block;
+        // Small type, but still a 44px target — a legal link is no less tappable
+        // for being quiet. 17px against a 10px line measures 44; 16px measured 42.
+        padding-block: 17px;
+        font-size: 10px;
+        font-weight: 600;
+        color: var(--fm-muted);
+      }
+
+      // The CTA pill rule matches any last child in the nav, including this list.
+      li:last-child {
+        margin-top: 0;
+
+        > a {
+          border: 0;
+          border-radius: 0;
+          text-align: left;
+          padding: 17px 0;
+        }
+      }
+    }
+
+    .fm-nav__legal {
+      margin: 0;
+      padding-bottom: 4px;
+      font-size: 10px;
+      letter-spacing: var(--fm-eyebrow-track);
+      text-transform: uppercase;
+      color: var(--fm-muted);
+    }
   }
+
+  // The header's own wordmark while the drawer is open. `visibility` rather than
+  // `opacity` so it leaves the accessibility tree too — otherwise there would be two
+  // links to the homepage exposed at once, one of them invisible.
+  .fm-nav-is-open .fm-logo { visibility: hidden; }
+
+  // The drawer is a child of <header>, and <header> is `position: sticky` with a
+  // z-index, so it opens a stacking context. That means the drawer's own z-index is
+  // resolved INSIDE the header and can never climb past the header's 100 — which put
+  // the scrim, a root-level sibling at 101, on top of the menu and dimmed it.
+  //
+  // So the header is what has to move. While the drawer is open it goes above the
+  // scrim and stops painting anything of its own: the scrim then dims the whole
+  // viewport, including the band the header used to occupy, and only the drawer and
+  // the Close button inside it come back over the top.
+  .fm-nav-is-open .fm-header {
+    z-index: 103;
+    background: transparent;
+    border-bottom-color: transparent;
+  }
+
+  .fm-nav-scrim {
+    display: block;
+    position: fixed;
+    // Full-bleed, matching the drawer. It dims the header along with everything else,
+    // so the strip of header left uncovered to the left of the drawer sits at the
+    // same value as the page below it instead of staying lit on its own.
+    inset: 0;
+    z-index: 101;
+    background: rgba(31, 30, 26, 0.4);
+    background: color-mix(in srgb, var(--fm-ink) 40%, transparent);
+    opacity: 0;
+    visibility: hidden;
+    transition:
+      opacity 320ms var(--fm-ease),
+      visibility 0s linear 320ms;
+
+    &[data-open='true'] {
+      opacity: 1;
+      visibility: visible;
+      transition:
+        opacity 380ms var(--fm-ease),
+        visibility 0s;
+    }
+  }
+
+  // Set on <body> while the drawer is open. Without it the page scrolls behind the
+  // drawer under the reader's thumb, which is the classic off-canvas bug.
+  .fm-nav-is-open { overflow: hidden; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .fm-nav li:last-child > a { transition: none; }
+
+  // The drawer still opens and closes — it just arrives instead of travelling.
+  .fm-nav,
+  .fm-nav[data-open='true'],
+  .fm-nav-scrim,
+  .fm-nav-scrim[data-open='true'],
+  .fm-nav-toggle__label { transition: none; }
+
+  .fm-nav { transform: none; }
 }

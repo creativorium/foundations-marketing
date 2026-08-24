@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/feature-cards",
+  "title": "Feature list",
+  "category": "foundations",
+  "icon": "editor-ul",
+  "description": "Numbered features divided by hairline rules, with an optional price bar.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "number":     { "type": "string",  "default": "02" },
+    "label":      { "type": "string",  "default": "" },
+    "aside":      { "type": "string",  "default": "" },
+    "heading":    { "type": "string",  "default": "" },
+    "intro":      { "type": "string",  "default": "" },
+    "tone":       { "type": "string",  "default": "warm" },
+    "items":      { "type": "array",   "default": [] },
+    "showPrice":  { "type": "boolean", "default": true },
+    "pricePrefix":{ "type": "string",  "default": "from" },
+    "price":      { "type": "string",  "default": "£249" },
+    "priceNote":  { "type": "string",  "default": "" },
+    "ctaText":    { "type": "string",  "default": "" },
+    "ctaUrl":     { "type": "string",  "default": "" }
+  },
+  "render": "file:./render.php"
+}

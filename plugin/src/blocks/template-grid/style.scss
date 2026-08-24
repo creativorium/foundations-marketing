@@ -39,6 +39,61 @@
     padding: 24px;
     color: var(--fm-muted);
   }
+
+  // The services page sets this section on the recessed band.
+  &--bg2 {
+    background: var(--fm-bg-2);
+    border-block: var(--fm-rule) solid var(--fm-ink);
+  }
+
+  // --- browse the full library ----------------------------------------------
+  &__more {
+    text-align: center;
+    margin: 44px 0 0;
+  }
+
+  &__more-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: var(--fm-rule) solid var(--fm-ink);
+    border-radius: var(--fm-radius-pill);
+    padding: 16px 32px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--fm-ink);
+    transition: background 0.15s ease, color 0.15s ease;
+
+    &:hover { background: var(--fm-ink); color: var(--fm-bg); text-decoration: none; }
+  }
+}
+
+// The compact card shows only name and niche — the services page listing.
+.fm-template-grid--compact {
+  .fm-template-card__body { padding-bottom: 18px; }
+
+  .fm-template-card__name {
+    font-size: 22px;
+    margin-bottom: 0;
+  }
+
+  .fm-template-card__niche {
+    order: 2;
+    font-size: 9.5px;
+    letter-spacing: 0.12em;
+    color: var(--fm-muted);
+    margin: 4px 0 0;
+  }
+
+  // Name above niche, which is the reverse of the full card.
+  .fm-template-card__body { display: flex; flex-direction: column; }
+  .fm-template-card__name { order: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fm-template-grid__more-link { transition: none; }
 }
 
 .fm-template-card {
