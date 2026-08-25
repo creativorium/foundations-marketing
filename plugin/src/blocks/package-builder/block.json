@@ -7,20 +7,100 @@
   "icon": "cart",
   "description": "The three-step checkout: preview the chosen template, add extras, review and pay.",
   "textdomain": "foundations",
-  "supports": { "html": false, "anchor": true, "multiple": false },
+  "supports": {
+    "html": false,
+    "anchor": true,
+    "multiple": false
+  },
   "attributes": {
-    "basePrice":      { "type": "number", "default": 249 },
-    "baseLabel":      { "type": "string", "default": "base build" },
-    "extraPagePrice": { "type": "number", "default": 50 },
-    "productId":      { "type": "number", "default": 0 },
-    "previewHeading": { "type": "string", "default": "Your template" },
-    "extrasHeading":  { "type": "string", "default": "Add only what you need" },
-    "reviewHeading":  { "type": "string", "default": "Check it over, then we start" },
-    "included":       { "type": "array",  "default": [] },
-    "freeItems":      { "type": "array",  "default": [] },
-    "addons":         { "type": "array",  "default": [] },
-    "extraPages":     { "type": "array",  "default": [] },
-    "afterSteps":     { "type": "array",  "default": [] }
+    "basePrice": {
+      "type": "number",
+      "default": 249
+    },
+    "baseLabel": {
+      "type": "string",
+      "default": "base build"
+    },
+    "extraPagePrice": {
+      "type": "number",
+      "default": 50
+    },
+    "productId": {
+      "type": "number",
+      "default": 0
+    },
+    "previewHeading": {
+      "type": "string",
+      "default": "Your template"
+    },
+    "extrasHeading": {
+      "type": "string",
+      "default": "Add only what you need"
+    },
+    "reviewHeading": {
+      "type": "string",
+      "default": "Check it over, then we start"
+    },
+    "included": {
+      "type": "array",
+      "default": []
+    },
+    "freeItems": {
+      "type": "array",
+      "default": []
+    },
+    "addons": {
+      "type": "array",
+      "default": []
+    },
+    "extraPages": {
+      "type": "array",
+      "default": []
+    },
+    "afterSteps": {
+      "type": "array",
+      "default": []
+    },
+    "step1Heading": {
+      "type": "string",
+      "default": "What you're getting for £249"
+    },
+    "step1Intro": {
+      "type": "string",
+      "default": "Every template costs the same and includes the same base build. Extras are optional and priced on the next step."
+    },
+    "step2Intro": {
+      "type": "string",
+      "default": "Nothing is pre-selected. Skip all of it and your site still launches complete in five days."
+    },
+    "step3Intro": {
+      "type": "string",
+      "default": "One payment, no subscription. Change your mind on any line below before you pay."
+    },
+    "includedLabel": {
+      "type": "string",
+      "default": "Included as standard"
+    },
+    "freeHeading": {
+      "type": "string",
+      "default": "Also free, no decision needed"
+    },
+    "freeBody": {
+      "type": "string",
+      "default": "A contact page and a UK-compliant privacy policy page are added to every build at no cost. You don't have to tick anything."
+    },
+    "pagesNote": {
+      "type": "string",
+      "default": "Contact and privacy pages are always included free — they're already in your build."
+    },
+    "previewNote": {
+      "type": "string",
+      "default": "Preview only — your copy, colours, logo and photos replace all of this."
+    },
+    "payNote": {
+      "type": "string",
+      "default": "No contract · One revision round included · Site handed over in full"
+    }
   },
   "render": "file:./render.php"
 }

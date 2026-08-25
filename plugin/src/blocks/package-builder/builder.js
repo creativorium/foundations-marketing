@@ -21,7 +21,10 @@ export default function initPackageBuilder() {
 
   const form = root.querySelector('.fm-builder__form');
   const panels = [...root.querySelectorAll('[data-fm-panel]')];
-  const stepBtns = [...root.querySelectorAll('[data-fm-step]')];
+  // Only the bar's own buttons. The "Change" link in the order summary also
+  // carries data-fm-step, and it must not pick up aria-current as though it
+  // were one of the three step controls.
+  const stepBtns = [...root.querySelectorAll('.fm-builder__step-btn[data-fm-step]')];
   const nextBtn = root.querySelector('[data-fm-next]');
   const totals = [...root.querySelectorAll('[data-fm-total]')];
   const linesEl = root.querySelector('[data-fm-lines]');
@@ -79,7 +82,10 @@ export default function initPackageBuilder() {
     });
   };
 
-  const show = (n) => {
+  const pane = root.querySelector('.fm-builder__pane');
+  const still = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  const show = (n, { scroll = false } = {}) => {
     step = Math.min(3, Math.max(1, n));
 
     panels.forEach((panel) => {
@@ -103,13 +109,26 @@ export default function initPackageBuilder() {
     }
 
     paint();
+
+    // Changing step swaps the whole right column, so without this the reader is
+    // left looking at wherever the last step happened to be scrolled to — often
+    // the middle of a list, or the new heading tucked under the sticky bar.
+    // Never on first paint: nobody asked to be moved on arrival.
+    if (scroll && pane) {
+      pane.scrollIntoView({ behavior: still.matches ? 'auto' : 'smooth', block: 'start' });
+    }
   };
 
   stepBtns.forEach((btn) => {
-    btn.addEventListener('click', () => show(Number(btn.dataset.fmStep)));
+    btn.addEventListener('click', () => show(Number(btn.dataset.fmStep), { scroll: true }));
   });
 
-  nextBtn?.addEventListener('click', () => show(step + 1));
+  nextBtn?.addEventListener('click', () => show(step + 1, { scroll: true }));
+
+  // "Change" on the base line: back to the preview, same as tapping step 1.
+  root.querySelectorAll('.fm-builder__change[data-fm-step]').forEach((btn) => {
+    btn.addEventListener('click', () => show(Number(btn.dataset.fmStep), { scroll: true }));
+  });
 
   // Extras. aria-pressed is the state — the styling and the sums both read from it,
   // so there is only ever one source of truth and it is the accessible one.
