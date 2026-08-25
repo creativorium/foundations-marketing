@@ -82,7 +82,7 @@ if ($compact) {
             $screen = 'var(--fm-screen-' . (($i % 9) + 1) . ')';
             ?>
             <li class="fm-template-grid__item" style="--fm-card-tint: <?php echo esc_attr($tint); ?>">
-                <a class="fm-template-card" href="<?php echo fm_url($template['url']); ?>">
+                <a class="fm-template-card" href="<?php echo fm_url(fm_template_card_url($template)); ?>">
                     <span class="fm-template-card__frame">
                         <span class="fm-template-card__device">
                             <span class="fm-template-card__dot" aria-hidden="true"></span>

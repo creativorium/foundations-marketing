@@ -96,7 +96,7 @@ $show_filters = (bool) ($attributes['showFilters'] ?? true) && count($categories
                 class="fm-library__item"
                 style="--fm-card-tint: <?php echo esc_attr($tint); ?>"
                 data-fm-category="<?php echo esc_attr($template['category']); ?>">
-                <a class="fm-template-card" href="<?php echo fm_url($template['url']); ?>">
+                <a class="fm-template-card" href="<?php echo fm_url(fm_template_card_url($template)); ?>">
                     <span class="fm-template-card__frame">
                         <span class="fm-template-card__device">
                             <span class="fm-template-card__dot" aria-hidden="true"></span>

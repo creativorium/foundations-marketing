@@ -1,0 +1,463 @@
+// =============================================================================
+// Package builder — the checkout
+//
+// Three panels behind one sticky bar. Built from the same hairline-and-tint
+// vocabulary as the rest of the site: no shadows, no rounded cards except the
+// pill controls, and every colour from a --fm-* token so both palettes hold.
+// =============================================================================
+
+.fm-builder {
+  --fm-builder-gap: 28px;
+
+  &__form {
+    margin: 0;
+  }
+
+  // --- The sticky bar --------------------------------------------------------
+  &__bar {
+    position: sticky;
+    // Sits directly under the site header rather than at the top of the viewport,
+    // so the two never overlap on a small screen.
+    top: var(--fm-header-h);
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+    padding: 14px var(--fm-gutter);
+    background: var(--fm-bg);
+    border-bottom: var(--fm-rule) solid var(--fm-ink);
+  }
+
+  &__steps {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__step-btn {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    background: none;
+    border: 0;
+    padding: 10px 6px;
+    font: inherit;
+    cursor: pointer;
+    color: var(--fm-ink);
+    // Steps already visited stay legible; steps not yet reached recede. Opacity
+    // rather than colour so it reads the same in both palettes.
+    opacity: 0.4;
+  }
+
+  .is-done &__step-btn { opacity: 0.75; }
+
+  &__step-btn[aria-current='step'] { opacity: 1; }
+
+  &__step-dot {
+    display: grid;
+    place-items: center;
+    width: 26px;
+    height: 26px;
+    border: var(--fm-rule) solid var(--fm-ink);
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  &__step-btn[aria-current='step'] &__step-dot,
+  .fm-builder__step-btn[aria-current='step'] .fm-builder__step-dot {
+    background: var(--fm-accent);
+    border-color: var(--fm-accent);
+    color: #fff;
+  }
+
+  .is-done .fm-builder__step-dot {
+    background: var(--fm-ink);
+    color: var(--fm-bg);
+  }
+
+  &__step-label {
+    font-size: var(--fm-eyebrow-size);
+    font-weight: 600;
+    letter-spacing: var(--fm-eyebrow-track);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  &__bar-end {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  &__running {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+  }
+
+  &__running-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: var(--fm-eyebrow-track);
+    text-transform: uppercase;
+    color: var(--fm-muted);
+  }
+
+  &__running-total {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  &__next,
+  &__pay {
+    background: var(--fm-accent);
+    color: #fff;
+    border: var(--fm-rule) solid var(--fm-accent);
+    border-radius: var(--fm-radius-pill);
+    padding: 14px 24px;
+    font: inherit;
+    font-size: var(--fm-eyebrow-size);
+    font-weight: 600;
+    letter-spacing: var(--fm-eyebrow-track);
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.15s ease, color 0.15s ease;
+
+    &:hover {
+      background: var(--fm-accent-deep);
+      border-color: var(--fm-accent-deep);
+    }
+  }
+
+  // --- Panels ---------------------------------------------------------------
+  &__panel {
+    padding: 48px var(--fm-gutter) 64px;
+    border-bottom: var(--fm-rule) solid var(--fm-line);
+  }
+
+  &__eyebrow,
+  &__list-label {
+    margin: 0 0 10px;
+    font-size: var(--fm-eyebrow-size);
+    font-weight: 600;
+    letter-spacing: var(--fm-eyebrow-track);
+    text-transform: uppercase;
+    color: var(--fm-muted);
+  }
+
+  &__heading,
+  &__template-name {
+    margin: 0;
+    font-size: clamp(34px, 6vw, 62px);
+    line-height: 0.95;
+    letter-spacing: var(--fm-display-track);
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  &__sub {
+    margin: 36px 0 14px;
+    font-size: clamp(20px, 3vw, 28px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-weight: 800;
+  }
+
+  // --- Step 1 ---------------------------------------------------------------
+  &__preview-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  &__live {
+    font-size: var(--fm-eyebrow-size);
+    font-weight: 600;
+    letter-spacing: var(--fm-eyebrow-track);
+    text-transform: uppercase;
+    white-space: nowrap;
+    padding-block: 14px;
+  }
+
+  &__devices {
+    display: flex;
+    gap: 8px;
+    margin: 26px 0 16px;
+  }
+
+  &__device {
+    background: none;
+    border: var(--fm-rule) solid var(--fm-ink);
+    border-radius: var(--fm-radius-pill);
+    padding: 11px 18px;
+    font: inherit;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: var(--fm-eyebrow-track);
+    text-transform: uppercase;
+    color: var(--fm-ink);
+    cursor: pointer;
+
+    &[aria-pressed='true'] {
+      background: var(--fm-ink);
+      color: var(--fm-bg);
+    }
+  }
+
+  // The frame narrows rather than the image shrinking, so the preview reads as the
+  // same site seen on a smaller screen.
+  &__frame {
+    margin-inline: auto;
+    background: var(--fm-photo-bg);
+    border: var(--fm-rule) solid var(--fm-ink);
+    overflow: hidden;
+    transition: width 0.3s var(--fm-ease, ease);
+
+    img { display: block; width: 100%; height: auto; }
+
+    &[data-device='desktop'] { width: 100%; }
+    &[data-device='tablet']  { width: min(62%, 620px); }
+    &[data-device='mobile']  { width: min(34%, 340px); }
+  }
+
+  &__frame-empty {
+    aspect-ratio: 16 / 10;
+    background: var(--fm-photo-stripe);
+  }
+
+  &__ticks {
+    margin: 0 0 26px;
+    padding: 0;
+    list-style: none;
+
+    li {
+      position: relative;
+      padding: 13px 0 13px 30px;
+      border-bottom: var(--fm-rule) solid var(--fm-line);
+
+      // Inline mark rather than an icon font — §9 forbids one, and a pseudo-element
+      // costs no request.
+      &::before {
+        content: '';
+        position: absolute;
+        left: 4px;
+        top: 1.15em;
+        width: 10px;
+        height: 5px;
+        border-left: 2px solid var(--fm-accent);
+        border-bottom: 2px solid var(--fm-accent);
+        transform: rotate(-45deg);
+      }
+    }
+
+    &--free li::before {
+      border-color: var(--fm-pastel-ink);
+    }
+  }
+
+  // --- Step 2 ---------------------------------------------------------------
+  &__cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 0 0 34px;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__card {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+    height: 100%;
+    text-align: left;
+    background: var(--fm-bg);
+    border: var(--fm-rule) solid var(--fm-ink);
+    border-radius: var(--fm-radius-card);
+    padding: 22px;
+    font: inherit;
+    color: var(--fm-ink);
+    cursor: pointer;
+    transition: background 0.15s ease;
+
+    &[aria-pressed='true'] { background: var(--fm-tint-2); }
+
+    &--page[aria-pressed='true'] { background: var(--fm-pastel); }
+  }
+
+  &__card-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__card-name {
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  &__card-price {
+    margin-left: auto;
+    font-size: 17px;
+    font-weight: 800;
+  }
+
+  // The tick that appears when a card is chosen. Driven by aria-pressed so the
+  // visual state and the announced state cannot disagree.
+  &__mark {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 22px;
+    height: 22px;
+    border: var(--fm-rule) solid var(--fm-ink);
+    border-radius: 50%;
+  }
+
+  &__card[aria-pressed='true'] &__mark,
+  .fm-builder__card[aria-pressed='true'] .fm-builder__mark {
+    background: var(--fm-accent);
+    border-color: var(--fm-accent);
+
+    &::after {
+      content: '';
+      width: 9px;
+      height: 4px;
+      border-left: 2px solid #fff;
+      border-bottom: 2px solid #fff;
+      transform: rotate(-45deg) translate(1px, -1px);
+    }
+  }
+
+  .fm-builder__card--page[aria-pressed='true'] .fm-builder__mark {
+    background: var(--fm-ink);
+    border-color: var(--fm-ink);
+  }
+
+  &__card-body { color: var(--fm-muted); }
+
+  &__card-when {
+    font-size: var(--fm-eyebrow-size);
+    font-weight: 600;
+    letter-spacing: var(--fm-eyebrow-track);
+    text-transform: uppercase;
+    color: var(--fm-accent-deep);
+  }
+
+  // --- Step 3 ---------------------------------------------------------------
+  &__lines {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__line {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 15px 0;
+    border-bottom: var(--fm-rule) solid var(--fm-line);
+
+    &--free .fm-builder__line-amount { color: var(--fm-pastel-ink); }
+  }
+
+  &__line-amount {
+    font-weight: 800;
+    white-space: nowrap;
+  }
+
+  &__total {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 16px;
+    margin: 22px 0 0;
+    padding-top: 18px;
+    border-top: var(--fm-rule) solid var(--fm-ink);
+    font-size: clamp(22px, 4vw, 34px);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
+
+  &__after-list {
+    margin: 0 0 34px;
+    padding: 0;
+    list-style: none;
+    counter-reset: fm-after;
+
+    li {
+      display: grid;
+      grid-template-columns: minmax(90px, 140px) 1fr;
+      gap: 16px;
+      padding: 15px 0;
+      border-bottom: var(--fm-rule) solid var(--fm-line);
+    }
+  }
+
+  &__after-when {
+    font-size: var(--fm-eyebrow-size);
+    font-weight: 600;
+    letter-spacing: var(--fm-eyebrow-track);
+    text-transform: uppercase;
+    color: var(--fm-muted);
+  }
+
+  &__pay {
+    width: 100%;
+    margin-top: 8px;
+    font-size: 13px;
+    padding: 20px 24px;
+  }
+
+  &__warn {
+    margin: 12px 0 0;
+    font-size: 13px;
+    color: var(--fm-accent-deep);
+  }
+}
+
+@media (max-width: 820px) {
+  .fm-builder {
+    &__bar { gap: 12px; padding-block: 10px; }
+
+    // The labels go visually; the numbered dots carry the meaning on a narrow
+    // screen. Clipped rather than display:none so a screen reader still reads
+    // "Preview", "Add extras", "Review & pay" — the dots alone say nothing.
+    &__step-label {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+
+    &__frame[data-device='tablet'] { width: min(80%, 620px); }
+    &__frame[data-device='mobile'] { width: min(56%, 340px); }
+
+    &__after-list li { grid-template-columns: 1fr; gap: 4px; }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fm-builder__frame,
+  .fm-builder__card,
+  .fm-builder__next,
+  .fm-builder__pay { transition: none; }
+}

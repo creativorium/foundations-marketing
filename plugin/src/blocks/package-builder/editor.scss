@@ -1,0 +1,31 @@
+// Editor-only affordances for foundations/package-builder.
+//
+// The block previews itself with ServerSideRender, so the front-end styles already
+// apply here. These rules only undo the things that make sense on the front end and
+// not inside the editor canvas.
+
+.wp-block-foundations-package-builder {
+  // The bar is sticky against the site header on the front end. Inside the editor
+  // there is no such header, and a sticky element inside the canvas detaches from
+  // the block and floats over the editor chrome.
+  .fm-builder__bar {
+    position: static;
+  }
+
+  // Every panel is shown at once while editing: the editor has no JavaScript from
+  // this block, and a step the author cannot see is a step they cannot check.
+  .fm-builder__panel[hidden] {
+    display: block;
+    outline: 1px dashed var(--fm-line, #cbcbb9);
+    outline-offset: -8px;
+  }
+
+  // The controls are previews, not working buttons, in the canvas.
+  .fm-builder__card,
+  .fm-builder__device,
+  .fm-builder__next,
+  .fm-builder__pay,
+  .fm-builder__step-btn {
+    pointer-events: none;
+  }
+}

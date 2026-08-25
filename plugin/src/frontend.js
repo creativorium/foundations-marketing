@@ -5,5 +5,7 @@
 import './styles/blocks.scss';
 
 import initTemplateLibrary from './blocks/template-library/filter.js';
+import initPackageBuilder from './blocks/package-builder/builder.js';
 
 initTemplateLibrary();
+initPackageBuilder();
