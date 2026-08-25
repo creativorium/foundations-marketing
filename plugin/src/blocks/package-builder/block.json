@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/package-builder",
+  "title": "Package builder (checkout)",
+  "category": "foundations",
+  "icon": "cart",
+  "description": "The three-step checkout: preview the chosen template, add extras, review and pay.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true, "multiple": false },
+  "attributes": {
+    "basePrice":      { "type": "number", "default": 249 },
+    "baseLabel":      { "type": "string", "default": "base build" },
+    "extraPagePrice": { "type": "number", "default": 50 },
+    "productId":      { "type": "number", "default": 0 },
+    "previewHeading": { "type": "string", "default": "Your template" },
+    "extrasHeading":  { "type": "string", "default": "Add only what you need" },
+    "reviewHeading":  { "type": "string", "default": "Check it over, then we start" },
+    "included":       { "type": "array",  "default": [] },
+    "freeItems":      { "type": "array",  "default": [] },
+    "addons":         { "type": "array",  "default": [] },
+    "extraPages":     { "type": "array",  "default": [] },
+    "afterSteps":     { "type": "array",  "default": [] }
+  },
+  "render": "file:./render.php"
+}

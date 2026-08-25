@@ -5,6 +5,7 @@
  * one @use in styles/blocks.scss. The PHP side discovers blocks by scanning for
  * block.json, so nothing else changes. Keep both lists alphabetical.
  */
+import './blocks/package-builder';
 import './blocks/addons';
 import './blocks/audience';
 import './blocks/benefits';
