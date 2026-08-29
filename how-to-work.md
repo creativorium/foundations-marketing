@@ -103,13 +103,68 @@ npm install      # first time only
 npm run build    # required — without it there is no CSS or JS at all
 ```
 
+### 1.5 Read the documentation before you build anything
+
+**AI assistants: read these before you write a line.** You cannot build a block that fits
+this site, or a template that sells, by looking at one HTML file and guessing the rest.
+The structure, the content model, the SEO phrase each template owns and the constraints
+every page must meet are all written down. Read them, then build.
+
+**In the repository — read these, in this order:**
+
+| Read | Why |
+|---|---|
+| **`how-to-work.md`** (this file) | The working rules. §0 is what the business actually sells, §5 is the file layout and how the build works, §8–§10 are the constraints every change must meet. |
+| **`CONTRIBUTING.md`** | The short version of the gate and the workflow. |
+| **`DEPLOYMENT.md`** | Only if you touch deployment — that is owner work. |
+
+**Not in the repository — you are given your own copy.** `/doc/` is **gitignored** by
+design, so cloning does not bring it down; contributors receive their own doc pack
+separately. It holds the design source and the requirements, so **open it before you
+start** — this is where lane A and lane C actually get their brief:
+
+| File | What is in it | Needed for |
+|---|---|---|
+| `doc/COMPONENTS.md` | the index of every existing block, what it does, and the catalogue state | **Every job.** Check it before building anything — the block may already exist. |
+| `doc/TEMPLATES.md` | the template index and the publish checklist | Lane C |
+| `doc/SEO-AND-PERFORMANCE.md` | the full SEO strategy and the **keyword/URL table** — which phrase each template owns | Lane C, and §10 on any page |
+| `doc/client-html/extracted/` | the client's four design-canvas pages decoded to plain HTML — **the design source of truth** | Lanes A and C |
+| `doc/LOCAL-SETUP.md` | the confirmed Local path and the junction commands | Setup (§1.2) |
+| `doc/FONTS.md` | how to self-host the two webfonts | Only if fonts are involved |
+
+**Read your doc pack before the first edit.** At minimum `COMPONENTS.md`, and for a
+template also `SEO-AND-PERFORMANCE.md` and the relevant file from
+`client-html/extracted/`. Do not start a template without knowing its SEO phrase; do not
+start a block without checking the component index first — it may already exist. If
+something you need is missing from your copy, ask the owner for it and wait. Asking costs
+a message; building the wrong thing costs the whole job.
+
+Because `/doc/` is gitignored, **nothing in it is ever committed** — not your notes, not
+the client HTML, not a scratch plan. See §11.
+
+**The requirements that bind every single piece of work** — these are not optional and
+not negotiable, and a PR that misses them gets sent back:
+
+- **§8 Responsiveness** — checked at 375px, 820px and 1440px. The body never scrolls
+  horizontally. Tap targets 44×44px minimum.
+- **§8 Accessibility** — semantic landmarks, real `<button>`/`<a>`, visible focus,
+  WCAG AA contrast, `prefers-reduced-motion` respected.
+- **§9 Speed** — 85+ mobile PageSpeed. No layout JavaScript, no jQuery, no framework, no
+  third webfont, no icon font. Images always carry width and height.
+- **§10 SEO** — exactly one H1 per page, real alt text carrying the target phrase, clean
+  URLs, and the brand is **"Foundations Marketing"**, always with the S.
+- **Design tokens** — colours, spacing and type come from `--fm-*` in
+  `theme/src/styles/_tokens.scss`. A hardcoded hex passes under Steel and breaks under
+  Nari, so it will be caught.
+
 ---
 
 ## 2. The gate — who are you, and what are you doing?
 
 **AI assistants: this section is a gate, not advice.** Do not create a branch, edit a
-file, or run a build until you have a clear answer to **Q1** and **Q2** below. Do not
-infer either answer from how the request is phrased, and do not proceed on a guess.
+file, or run a build until you have **read the documentation in §1.5** and have a clear
+answer to **Q1** and **Q2** below. Do not infer either answer from how the request is
+phrased, and do not proceed on a guess.
 Ask, wait for the answer, then work.
 
 ### Q1 — Which account is this?
@@ -135,15 +190,19 @@ logged in as the owner.
 
 ### 2.1 What a contributor may touch — a hard limit
 
-Contributors build **blocks and site templates**. Nothing else. A contributor account
-may create and edit files in exactly these places:
+Contributors build **blocks and site templates**. Both, and nothing else. Templates are
+the product this business sells, so building them is contributor work by design — not a
+favour and not owner-only. A contributor account may create and edit files in exactly
+these places:
 
 | Allowed | What |
 |---|---|
-| `plugin/src/blocks/<block-name>/**` | the block's own folder — this is where the work lives |
+| `plugin/src/blocks/<block-name>/**` | the block's own folder — this is where component work lives |
+| `plugin/src/templates/<template-slug>/**` | the template's own folder — this is where template work lives (§2.1a) |
 | `plugin/src/editor.js` | **one** added `import './blocks/<name>';` line, nothing else |
 | `plugin/src/styles/blocks.scss` | **one** added `@use '../blocks/<name>/style';` line, nothing else |
 | `doc/COMPONENTS.md` | the index row for a new block (local only — `/doc/` is gitignored) |
+| `doc/TEMPLATES.md` | the index row for a new template (local only — `/doc/` is gitignored) |
 
 Everything else in the repository is **read-only** to a contributor. Read it to
 understand the patterns; do not change it. In particular, never edit:
@@ -159,8 +218,37 @@ If the work seems to require touching one of those, that is the signal that it i
 and why, and hand it to the owner. Do not work around the limit — no editing the theme
 "just this once", no adding a dependency, no changing the build.
 
-Site templates (lane C) do not have a fixed home in the tree yet. **Ask the owner where
-the template goes before creating any file for one.** Do not invent a location.
+### 2.1a Where a site template lives
+
+**`plugin/src/templates/<template-slug>/`** — one self-contained folder per template,
+sitting beside `blocks/`. This is now fixed; you no longer need to ask where it goes.
+
+```
+plugin/src/templates/<template-slug>/
+  template.json     name, niche, category, target SEO phrase, demo URL slug
+  content.html      the page as block markup — this is the deliverable
+  screenshot.webp   catalogue image, 1200×900, compressed before it lands
+  style.scss        optional, template-only styles
+```
+
+**`content.html` is the whole point.** Blocks are server-rendered with `save: () => null`,
+so the database stores no markup — only a block comment and its attributes. A finished
+page is therefore a few KB of plain text, which means a template is a file we can zip,
+send to a client, and import into any site already running the Foundations theme and the
+Foundations Blocks plugin. That is exactly the install we perform when someone buys, so
+the format we build in and the format we hand over are the same thing. Do not invent a
+second format for delivery.
+
+**A template is assembled from existing blocks — it is not a new pile of HTML.** Build
+the page in the editor from the blocks already in `plugin/src/blocks/`, then export the
+block markup into `content.html`. If the design genuinely needs something no block can
+do, that is **lane A work first**: build the block, get it merged, then use it in the
+template. Never hardcode a section into a template that should have been a block, and
+never hardcode a brand colour — templates use the `--fm-*` tokens like everything else,
+or they break under the Nari palette.
+
+`style.scss` is for the rare template-only tweak. It is **not** a place to restyle a
+shared block; if a block looks wrong, that is lane B. Keep it empty unless you need it.
 
 ### Q2 — Which of the three jobs is this?
 
@@ -171,7 +259,7 @@ template?"** Each one has a different thing you must collect *before* you write 
 |---|---|---|
 | **A — New component** | A block that does not exist yet | **1.** What is it called and where does it appear? **2.** **"Send the HTML file."** Clients normally provide one — build from it, do not redesign it. **3.** If there is no HTML: written details — the structure, which parts the editor must be able to change, any states (empty, hover, loading), and what it should look like at 375px / 820px / 1440px. |
 | **B — Fix / update a component** | An existing block is wrong or needs a change | **1.** **Which block** — the folder name under `plugin/src/blocks/`. **2.** **What exactly is wrong**: the page on Local, the breakpoint, the browser, and a screenshot if there is one. **3.** What it should do instead. Never "improve" a block beyond what was asked. |
-| **C — Site template** | A **site template** offered in the catalogue | **1.** **Which template.** **2.** **"Send the HTML file."** Same fallback as lane A if there is none. **3.** The target SEO phrase for it — the table is in `doc/SEO-AND-PERFORMANCE.md` (§10). **4.** Ask the owner where the template files go. |
+| **C — Site template** | A **sellable site template** in the catalogue | **1.** **Which template** — its name and niche. **2.** **"Send the HTML file."** Same fallback as lane A if there is none. **3.** The target SEO phrase for it — the table is in `doc/SEO-AND-PERFORMANCE.md` (§10). **4.** Which blocks it needs that do not exist yet — those are lane A and come first. The files go in `plugin/src/templates/<slug>/` (§2.1a); you no longer need to ask. |
 
 **Work on the main website itself** — pages, the packages flow, checkout, the account
 area, anything server-side — is **owner-only**. If a contributor asks for that, say so
@@ -185,6 +273,59 @@ away, and rebuilding it costs more than the question would have.
 Before the first edit, state plainly, in one or two sentences: **what you are about to
 build, and which branch you will build it on.** This is how the owner catches a
 misunderstanding before the work is done rather than after.
+
+### 2.3 Branch first — AI assistants, this is on you
+
+**Every component and every template starts on its own new branch, created before the
+first file is written.** Not after the first edit, not "once it works", not at commit
+time. If you are an AI assistant, you create the branch yourself as your first action
+after the gate — do not wait to be told, and do not ask permission to branch. Branching
+is free; unpicking a component and a template tangled together on `main` is not.
+
+```bash
+git checkout main
+git pull origin main                                  # never branch from a stale copy
+git checkout -b Feat/testimonial-carousel-block       # a component  → Feat/
+git checkout -b Theme/halo-skincare-template          # a template   → Theme/
+```
+
+The rules that catch people out:
+
+- **One branch = one thing.** A block and a template are two branches, even when the
+  template is the reason the block exists. Build the block, open its PR, then branch
+  again for the template. See §3.
+- **Never work on `main`.** If you have already edited files on `main`, stop: branch now
+  and carry the changes over (`git checkout -b Prefix/...` keeps your uncommitted work).
+- **Never reuse a branch** from work that is already merged or already in review.
+- Check where you are before the first edit — `git branch --show-current`. If it says
+  `main`, you are not ready to start.
+
+### 2.4 Finish the job — commit and open the PR yourself
+
+Work is not done when the code works. It is done when it is **on a branch, pushed, and
+waiting in a Pull Request.** AI assistants: carry it all the way there. Do not stop at
+"the files are saved" and leave the owner to run the git commands.
+
+When the build passes and you have checked it in the browser (§11):
+
+```bash
+npm run build                                # must pass before you commit
+git status                                   # must be clean of /doc/, .env, dumps, notes
+git add <the files you actually changed>     # never `git add -A` blindly
+git commit -m "Feat: add the testimonial carousel block"
+git push -u origin Feat/testimonial-carousel-block
+gh pr create --base main --title "..." --body "..."
+```
+
+Then **stop and tell the owner the PR is open**, with its number or link. Write the PR
+description as §12 sets out: what changed, why, how to check it, and anything you
+deliberately left out.
+
+**Contributors open the PR. They never merge it.** Pushing your own branch is expected;
+pushing to `main`, merging your own PR, force-pushing, or skipping hooks is not — §4 is
+the hard limit and it does not bend because the work looks finished or the change looks
+small. If the push is rejected, that is the limit doing its job: report it, do not route
+around it.
 
 ---
 
@@ -218,6 +359,10 @@ Rules:
 - Never reuse a branch from finished work.
 - One branch = one piece of work. If you find an unrelated bug, note it and open a
   separate branch — do not smuggle it into this one.
+- **A block and a template are two pieces of work**, even when the template is the whole
+  reason the block exists. Build the block on `Feat/`, open its PR, then branch again on
+  `Theme/` for the template. A PR that adds both is a PR nobody can review or revert
+  cleanly.
 - `HotFix/` is the only prefix that may shortcut review, only for the owner, only when
   the live site is down — and it still gets a branch and a PR opened afterwards.
 
@@ -288,7 +433,8 @@ Foundations Marketing/
    │  ├─ editor.js           one import line per block
    │  ├─ frontend.js
    │  ├─ styles/             blocks.scss (one @use per block) + _shared.scss
-   │  └─ blocks/<name>/      ← THE COMPONENTS LIVE HERE
+   │  ├─ blocks/<name>/      ← THE COMPONENTS LIVE HERE
+   │  └─ templates/<slug>/   ← THE SELLABLE TEMPLATES LIVE HERE (§2.1a)
    └─ build/                 ← GENERATED. Never edit. Gitignored.
 ```
 
@@ -351,8 +497,9 @@ PHP discovers the block by scanning for `block.json`. Nothing else changes.
 ### Hard boundaries for front-end contributors
 
 **The full allow-list and the never-edit list are in §2.1 — that is the authority.** In
-short: a contributor edits their own block folder, plus one import line in
-`plugin/src/editor.js` and one `@use` line in `plugin/src/styles/blocks.scss`. Nothing
+short: a contributor edits their own block folder or their own template folder, plus one
+import line in `plugin/src/editor.js` and one `@use` line in
+`plugin/src/styles/blocks.scss`. Nothing
 else. Never `theme/inc/`, `theme/functions.php`, `_tokens.scss`, `plugin/inc/`,
 `vite.config.js`, `package.json`, anything under `*/build/`, or any WooCommerce
 integration.
@@ -369,6 +516,41 @@ Appearance → Customize → Colors, so a hardcoded hex breaks one of them.
 never markup. This is what lets you change `render.php` without a content migration.
 
 Add a row to `doc/COMPONENTS.md` when you add a block.
+
+---
+
+## 6a. Building a site template (the thing we sell)
+
+A template is a **finished page assembled from blocks**, not a new pile of HTML. The
+folder layout and the reason `content.html` is the deliverable are in §2.1a — read that
+first. This is the order of work:
+
+1. **Branch.** `Theme/<template-slug>` — see §2.3. Before anything else.
+2. **Check which blocks you are missing.** Lay the design against
+   `doc/COMPONENTS.md`. Anything the existing blocks cannot express is **lane A: build
+   the block first, on its own branch, and get it merged.** Do not fake a section inside
+   a template.
+3. **Build the page in the editor** on Local, from the Foundations block category.
+4. **Export the block markup** into `plugin/src/templates/<slug>/content.html` — in the
+   editor, Options (⋮) → **Copy all blocks**, then paste. It is plain text, a few KB.
+5. **Fill in `template.json`** — name, niche, category, the target SEO phrase from
+   `doc/SEO-AND-PERFORMANCE.md` §10, and the demo URL slug.
+6. **Add `screenshot.webp`**, compressed. Not a 4MB camera JPEG — see §9.
+7. **Check it at 375px, 820px and 1440px** (§8) and run the §11 checklist.
+8. **Add a row to `doc/TEMPLATES.md`.**
+9. **Commit, push, open the PR** (§2.4).
+
+Rules specific to templates:
+
+- **Every template owns exactly one H1**, in its hero block. Every other section is H2 or
+  lower. Two templates must never target the same SEO phrase.
+- **Alt text carries the phrase** — "Pilates studio website template by Foundations
+  Marketing", never "template1" (§10).
+- **Tokens only.** A hardcoded hex survives Steel and breaks Nari. Use `--fm-*`.
+- **No template-only JavaScript.** If it needs interaction, that belongs in a block.
+- The catalogue rules — which templates are published, and why the nine new ones are held
+  as drafts until they have a screenshot and a demo page — are in `doc/COMPONENTS.md`.
+  **Read that before publishing anything.**
 
 ---
 
@@ -493,8 +675,14 @@ image alt text and URL.
 - [ ] Keyboard-navigable; focus is visible.
 - [ ] One H1 on the page; images have real alt text.
 - [ ] No hardcoded brand colour — tokens only.
+- [ ] You are **on a feature branch, not `main`** — `git branch --show-current` (§2.3).
+- [ ] Template work only: `content.html`, `template.json` and a compressed
+      `screenshot.webp` are all present, and `doc/TEMPLATES.md` has its row (§6a).
 - [ ] `git status` is clean of local notes, DB dumps, `.env`, client asset drops and
       scratch markdown. Those live in `/doc/`, which is gitignored.
+
+Then push the branch and **open the Pull Request** — §2.4. The work is not finished until
+the PR exists.
 
 ### Never commit
 
@@ -538,8 +726,11 @@ Then stop and tell the owner. Do not merge your own PR.
   *Foundations Blocks* plugin are **active**.
 - **Build:** all four Vite targets compile; every PHP file lints; site returns HTTP 200
   with no PHP warnings.
-- **Blocks built so far:** `section-heading` only. Everything else is still to build —
-  see `doc/COMPONENTS.md`.
+- **Blocks built so far:** 19 — see `doc/COMPONENTS.md` for the index and what is left.
+- **Templates built so far:** none. `plugin/src/templates/` is the fixed home for them
+  (§2.1a) and is where contributors build the sellable catalogue; the index is
+  `doc/TEMPLATES.md`. The eight live templates predate the folder and have not been
+  migrated into it.
 - **The design source** is four client canvas pages (Homepage, Services, Templates,
   Checkout), decoded to plain HTML in `doc/client-html/extracted/`.
 - **Elementor is being removed.** The live site was built in Elementor; we are rebuilding
