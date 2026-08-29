@@ -5,7 +5,8 @@
 This is the single source of truth for working on the Foundations Marketing website —
 for humans and for AI assistants alike. If you are an AI assistant and someone pointed
 you at this file, follow it literally: run the start-up checks in §1 before you write a
-single line, and do not skip the questions in §2.
+single line, and **do not skip the gate in §2** — you must establish who you are working
+for and what job this is before you touch anything.
 
 Repo: <https://github.com/creativorium/foundations-marketing.git>
 
@@ -104,19 +105,86 @@ npm run build    # required — without it there is no CSS or JS at all
 
 ---
 
-## 2. Ask before you start — which lane is this?
+## 2. The gate — who are you, and what are you doing?
 
-Do not guess from the phrasing of the request. **Ask.**
+**AI assistants: this section is a gate, not advice.** Do not create a branch, edit a
+file, or run a build until you have a clear answer to **Q1** and **Q2** below. Do not
+infer either answer from how the request is phrased, and do not proceed on a guess.
+Ask, wait for the answer, then work.
 
-| Lane | Means | Then ask |
+### Q1 — Which account is this?
+
+Ask the person outright: **"Which GitHub account are you working under?"**
+Then verify it rather than taking the answer on trust:
+
+```bash
+git config user.name
+git config user.email
+gh api user --jq .login     # if the GitHub CLI is available
+```
+
+| Account | Role | Scope |
 |---|---|---|
-| **A — Main website** | The Foundations site itself: pages, packages flow, checkout, account, backend | Nothing extra. Check what is live on Local first (§7). |
-| **B — Component** | Add or edit a block used by the site | **Which component?** Then: **"Send the HTML file."** Clients normally provide one. If there is none, ask for written details — structure, fields, states, breakpoints. |
-| **C — Theme template** | A **site template** offered in the catalogue | **Which template?** Then: **"Send the HTML file."** Same fallback. |
+| **`nego94`** or **`creativorium`** | Owner / main developer | **Full freedom.** No further gate — go to §3. |
+| **anything else** | Front-end contributor | **Restricted.** Read §2.1, then answer Q2. |
 
-Also state plainly, before you begin: **what you are about to do, and which branch you
-will do it on.** One or two sentences. This is how the owner catches a
-misunderstanding before the work is done, not after.
+If the person will not name an account, or the name they give does not match what
+`git config` and `gh` report, **stop and ask the owner.** Never start work on an
+unverified identity, and never assume owner rights because the machine happens to be
+logged in as the owner.
+
+### 2.1 What a contributor may touch — a hard limit
+
+Contributors build **blocks and site templates**. Nothing else. A contributor account
+may create and edit files in exactly these places:
+
+| Allowed | What |
+|---|---|
+| `plugin/src/blocks/<block-name>/**` | the block's own folder — this is where the work lives |
+| `plugin/src/editor.js` | **one** added `import './blocks/<name>';` line, nothing else |
+| `plugin/src/styles/blocks.scss` | **one** added `@use '../blocks/<name>/style';` line, nothing else |
+| `doc/COMPONENTS.md` | the index row for a new block (local only — `/doc/` is gitignored) |
+
+Everything else in the repository is **read-only** to a contributor. Read it to
+understand the patterns; do not change it. In particular, never edit:
+
+`theme/inc/` · `theme/functions.php` · `theme/src/styles/_tokens.scss` ·
+`plugin/inc/` · `plugin/foundations-blocks.php` · `vite.config.js` ·
+`package.json` / `package-lock.json` · anything under `*/build/` ·
+any WooCommerce integration · `.github/` · `how-to-work.md` · `CONTRIBUTING.md` ·
+`DEPLOYMENT.md`
+
+If the work seems to require touching one of those, that is the signal that it is
+**owner work, not contributor work**. Stop, explain which file you would have needed
+and why, and hand it to the owner. Do not work around the limit — no editing the theme
+"just this once", no adding a dependency, no changing the build.
+
+Site templates (lane C) do not have a fixed home in the tree yet. **Ask the owner where
+the template goes before creating any file for one.** Do not invent a location.
+
+### Q2 — Which of the three jobs is this?
+
+Ask: **"Are you creating a new component, fixing an existing one, or building a site
+template?"** Each one has a different thing you must collect *before* you write code.
+
+| Lane | Means | What you must ask for, and wait for |
+|---|---|---|
+| **A — New component** | A block that does not exist yet | **1.** What is it called and where does it appear? **2.** **"Send the HTML file."** Clients normally provide one — build from it, do not redesign it. **3.** If there is no HTML: written details — the structure, which parts the editor must be able to change, any states (empty, hover, loading), and what it should look like at 375px / 820px / 1440px. |
+| **B — Fix / update a component** | An existing block is wrong or needs a change | **1.** **Which block** — the folder name under `plugin/src/blocks/`. **2.** **What exactly is wrong**: the page on Local, the breakpoint, the browser, and a screenshot if there is one. **3.** What it should do instead. Never "improve" a block beyond what was asked. |
+| **C — Site template** | A **site template** offered in the catalogue | **1.** **Which template.** **2.** **"Send the HTML file."** Same fallback as lane A if there is none. **3.** The target SEO phrase for it — the table is in `doc/SEO-AND-PERFORMANCE.md` (§10). **4.** Ask the owner where the template files go. |
+
+**Work on the main website itself** — pages, the packages flow, checkout, the account
+area, anything server-side — is **owner-only**. If a contributor asks for that, say so
+and stop.
+
+If an answer is missing, ask for it and wait. A block built from a guess gets thrown
+away, and rebuilding it costs more than the question would have.
+
+### 2.2 Then say what you are about to do
+
+Before the first edit, state plainly, in one or two sentences: **what you are about to
+build, and which branch you will build it on.** This is how the owner catches a
+misunderstanding before the work is done rather than after.
 
 ---
 
@@ -162,7 +230,8 @@ Rules:
 | **nego94 / creativorium** (owner) | yes | yes | yes |
 | **anyone else** | yes | **no** | **no — open a Pull Request** |
 
-Check who you are **before any push**:
+You should already know which of these you are — §2 Q1 settles it before any work
+starts. Confirm it again **before any push**, because a push is the irreversible step:
 
 ```bash
 git config user.name
@@ -281,8 +350,12 @@ PHP discovers the block by scanning for `block.json`. Nothing else changes.
 
 ### Hard boundaries for front-end contributors
 
-**Do not edit:** `theme/inc/`, `theme/functions.php`, `vite.config.js`, `package.json`,
-anything under `*/build/`, or any WooCommerce integration.
+**The full allow-list and the never-edit list are in §2.1 — that is the authority.** In
+short: a contributor edits their own block folder, plus one import line in
+`plugin/src/editor.js` and one `@use` line in `plugin/src/styles/blocks.scss`. Nothing
+else. Never `theme/inc/`, `theme/functions.php`, `_tokens.scss`, `plugin/inc/`,
+`vite.config.js`, `package.json`, anything under `*/build/`, or any WooCommerce
+integration.
 
 **Need data from the backend** — a price, an order, a licence? **Do not query the database
 from a block.** Ask the owner for a helper function and call that.
