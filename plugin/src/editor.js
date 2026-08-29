@@ -9,6 +9,7 @@ import './blocks/package-builder';
 import './blocks/addons';
 import './blocks/audience';
 import './blocks/benefits';
+import './blocks/build-your-website';
 import './blocks/cta';
 import './blocks/faq';
 import './blocks/feature-cards';
