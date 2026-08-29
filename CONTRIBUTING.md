@@ -50,9 +50,13 @@ questions before it writes a line. It must ask you; it must not guess.
 2. Components are self-contained folders in `plugin/src/blocks/<name>/`. Copy
    `section-heading/` as the pattern. Don't touch the backend.
 3. Templates are self-contained folders in `plugin/src/templates/<slug>/`, assembled from
-   existing blocks. The deliverable is `content.html` — the page's block markup, which we
-   import onto the client's site. See §2.1a and §6a.
-4. `npm run build`, check it in Local at 375px / 820px / 1440px.
-5. **Commit, push, and open the Pull Request yourself** — the work isn't done until the
+   existing blocks. The deliverable is `content.blocks.txt` — **Gutenberg block markup**,
+   which we import onto the client's site so it arrives editable. It is `<!-- wp:… /-->`
+   comments, **not an HTML page**: if the file has a `<div>` in it, it is wrong. Missing a
+   block you need? Build the block first (new component), then use it. See §2.1a and §6a.
+4. Preview it on Local and get a demo link — paste the markup into the editor's Code
+   editor (`Ctrl+Shift+Alt+M`), or use WP-CLI. See §6b. Put the demo URL in your PR.
+5. `npm run build`, check it in Local at 375px / 820px / 1440px.
+6. **Commit, push, and open the Pull Request yourself** — the work isn't done until the
    PR is open (§2.4). Then tell the owner. Only `nego94` / `creativorium` may push to
    `main` or merge; never merge your own PR.
