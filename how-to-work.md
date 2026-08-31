@@ -37,7 +37,8 @@ raise it with the owner as its own conversation. Do not act on it.
 | Decision | Why it is closed |
 |---|---|
 | **Native Gutenberg blocks. Not ACF, not a page builder.** | ACF Blocks is a paid **ACF PRO** feature, so every client site we ship would need a licensed third-party plugin — a recurring cost and a licensing question against a £199 product. ACF's ownership and its plugin-directory listing have also changed hands recently, which is a dependency risk we will not take on dozens of client sites. Native blocks need **nothing but our own theme and plugin**. |
-| **Blocks are server-rendered** — `save: () => null`, output from `render.php`. | The database stores attributes only, never markup. That is what lets us fix a block once and improve **every site we have ever shipped**, with no content migration. It is also what makes a template a few KB of portable text. |
+| **Blocks are server-rendered** — `save: () => null`, output from `render.php`. | The database stores attributes only, never markup, so `render.php` can change with no content migration. It is also what makes a template a few KB of portable text. |
+| **Each sold template carries its own blocks** (`templates/<slug>/blocks/`). The 19 blocks in `plugin/src/blocks/` are for **our marketing site**, not for the templates we sell. | A template has to be liftable — one folder, installable on a client's hosting, without dragging the rest of the catalogue with it. **Accepted cost:** there is no shared block to fix once, so the same bug in three templates is three fixes. Chosen deliberately for independence; see §2.1b. |
 | **No new plugin dependency**, for the site or for a client build. | Every plugin is another thing to license, update, and have compromised. We have already had a backdoor on this site once. |
 | **No JS framework, no jQuery, no layout JavaScript.** | The target is 85+ mobile PageSpeed on shared hosting (§9). JSX compiles to `wp.element.createElement`; **no React ships to the browser**. Ship vanilla JS only for real interaction, from the block's own folder. |
 | **Elementor is being removed, not extended.** | The live site was built in it; we are rebuilding page by page as blocks. Everything new is blocks. Do not half-convert a page (§13). |
@@ -212,10 +213,10 @@ these places:
 
 | Allowed | What |
 |---|---|
-| `plugin/src/blocks/<block-name>/**` | the block's own folder — this is where component work lives |
-| `plugin/src/templates/<template-slug>/**` | the template's own folder — this is where template work lives (§2.1a) |
-| `plugin/src/editor.js` | **one** added `import './blocks/<name>';` line, nothing else |
-| `plugin/src/styles/blocks.scss` | **one** added `@use '../blocks/<name>/style';` line, nothing else |
+| `plugin/src/blocks/<block-name>/**` | a **main-website** block — the Foundations Marketing site itself (§2.1b) |
+| `plugin/src/templates/<template-slug>/**` | the template's whole folder, **including its own blocks** — this is where template work lives (§2.1a) |
+| `plugin/src/editor.js` | **one added `import` line per block**, nothing else — `'./blocks/<name>'` for a main-site block, `'./templates/<slug>/blocks/<name>'` for a template block |
+| `plugin/src/styles/blocks.scss` | **one added `@use` line per block**, nothing else — `'../blocks/<name>/style'` or `'../templates/<slug>/blocks/<name>/style'` |
 | `doc/COMPONENTS.md` | the index row for a new block (local only — `/doc/` is gitignored) |
 | `doc/TEMPLATES.md` | the index row for a new template (local only — `/doc/` is gitignored) |
 
@@ -243,8 +244,45 @@ plugin/src/templates/<template-slug>/
   template.json        name, niche, category, target SEO phrase, demo URL slug
   content.blocks.txt   the page as Gutenberg block markup — this is the deliverable
   screenshot.webp      catalogue image, 1200×900, compressed before it lands
-  style.scss           optional, template-only styles
+  palette.scss         this template's --fm-* token set — what makes it look like its own site
+  blocks/              THIS TEMPLATE'S OWN BLOCKS — one folder each, same anatomy as §6
+    <block-name>/
+      block.json  index.js  edit.jsx  render.php  style.scss  editor.scss
+  style.scss           optional, template-level styles that are not a block
 ```
+
+### 2.1b Two kinds of block — know which you are building
+
+This trips people up, so be clear before you start:
+
+| Kind | Lives in | For | Who |
+|---|---|---|---|
+| **Main-website block** | `plugin/src/blocks/<name>/` | the Foundations Marketing site itself — homepage, services, templates, checkout | Shared by our own pages. Changing one affects **our** site. |
+| **Template block** | `plugin/src/templates/<slug>/blocks/<name>/` | one sold template, and only that one | Ships with that template to the client. Bespoke to it. |
+
+**Each sold template carries its own blocks.** A template is a self-contained mini site:
+its own blocks, its own palette, its own content. That is what lets us lift one folder out
+and install it on a client's hosting without dragging the rest of the catalogue with it.
+
+So **do not reach into `plugin/src/blocks/` while building a template.** Those are our
+marketing site's components. If your template needs a hero, it gets **its own** hero at
+`plugin/src/templates/<slug>/blocks/hero/`. Copy `plugin/src/blocks/section-heading/` as
+the starting pattern and then make it yours.
+
+**Naming — namespace every template block with its template slug**, or two templates will
+collide the moment both are installed on our catalogue site:
+
+```json
+{ "name": "foundations/pulse-hero",  "category": "foundations-pulse" }
+{ "name": "foundations/pulse-faq",   "category": "foundations-pulse" }
+```
+
+Never `foundations/hero` — that name belongs to the main site.
+
+**The trade-off you are accepting**, so nobody is surprised later: a fix to a template's
+block improves **that template only**. There is no shared block to fix once. If you find
+the same bug in three templates, it is three fixes. That is the cost of each template
+being independently shippable, and it was chosen deliberately (§0.1).
 
 #### `content.blocks.txt` is Gutenberg block markup — NOT an HTML page
 
@@ -585,12 +623,15 @@ HTML. The folder layout, the block-markup format and the `<div>` test are in §2
 **read that first, it is where people go wrong.** This is the order of work:
 
 1. **Branch.** `Theme/<template-slug>` — see §2.3. Before anything else.
-2. **Check which blocks you are missing.** Lay the design against
-   `doc/COMPONENTS.md`. Anything the existing blocks cannot express is **lane A: build
-   the block first, on its own branch, and get it merged.** Do not fake a section inside
-   a template.
-3. **Build the page** — either way round, see §6b. In the editor on Local from the
-   Foundations block category, or by writing the block markup and pasting it in.
+2. **Break the design into sections**, and build **a block for each**, inside
+   `plugin/src/templates/<slug>/blocks/` (§2.1b). These are *this template's* blocks —
+   namespaced `foundations/<slug>-<name>`. Do not use or edit the main site's blocks in
+   `plugin/src/blocks/`; copy `section-heading/` as a starting pattern and make it yours.
+   Register each one with its `import` line in `editor.js` and its `@use` line in
+   `blocks.scss`.
+3. **Build the page** from your own blocks — either way round, see §6b. In the editor on
+   Local from your template's block category, or by writing the block markup and pasting
+   it in.
 4. **Save the block markup** to `plugin/src/templates/<slug>/content.blocks.txt` — in the
    editor, Options (⋮) → **Copy all blocks**, then paste into the file. Plain text, a few
    KB, no `<div>` anywhere in it.
@@ -849,10 +890,33 @@ Then stop and tell the owner. Do not merge your own PR.
 - **Build:** all four Vite targets compile; every PHP file lints; site returns HTTP 200
   with no PHP warnings.
 - **Blocks built so far:** 19 — see `doc/COMPONENTS.md` for the index and what is left.
-- **Templates built so far:** none. `plugin/src/templates/` is the fixed home for them
-  (§2.1a) and is where contributors build the sellable catalogue; the index is
-  `doc/TEMPLATES.md`. The eight live templates predate the folder and have not been
-  migrated into it.
+- **Templates built so far: none — zero.** `plugin/src/templates/` is the fixed home for
+  them (§2.1a) and is where contributors build the sellable catalogue; the index is
+  `doc/TEMPLATES.md`. **Every catalogue entry that currently exists is a placeholder** —
+  the eight "live" ones (Aether, Birth Space, Bloom, Lumen, Nova, Sequoia, Solis,
+  Solstice) and the nine canvas drafts (Halo, Pulse, Meridian, Harvest, Haven, Compass,
+  Gloss, Canvas, Cadence) alike. None has real blocks, real content or a real demo page.
+  Treat the whole catalogue as empty and build from scratch.
+- **The 19 blocks in `plugin/src/blocks/` are for THIS website**, not for the templates we
+  sell — homepage, services, templates, checkout. Each sold template gets its own blocks
+  under `plugin/src/templates/<slug>/blocks/` (§2.1b). Do not confuse the two.
+
+> ### ⚠️ Owner work required before the first template block will work
+>
+> `plugin/inc/register.php` currently discovers blocks by scanning **`src/blocks/*/block.json`
+> only**. It does **not** scan `src/templates/*/blocks/*/block.json`, so a template's own
+> blocks will register in the editor (via `editor.js`) but **have no server-side render**
+> and will output nothing on the front end.
+>
+> `plugin/inc/` is on the contributor never-edit list, so this is **owner work and it is
+> not done yet.** Until it is, template blocks cannot be previewed properly. Contributors:
+> if your template block renders blank, this is why — say so and stop; do not try to work
+> around it.
+>
+> Also still missing, both owner work: the **packaging pipeline** that turns a template
+> folder into a zip installable on a client's hosting, and the link between a merged
+> `template.json` and the `site_template` catalogue CPT (which lives in the separate
+> `foundation-packages` plugin).
 - **The design source** is four client canvas pages (Homepage, Services, Templates,
   Checkout), decoded to plain HTML in `doc/client-html/extracted/`.
 - **Elementor is being removed.** The live site was built in Elementor; we are rebuilding

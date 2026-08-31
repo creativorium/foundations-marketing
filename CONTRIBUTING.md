@@ -49,8 +49,11 @@ questions before it writes a line. It must ask you; it must not guess.
    branches. See §2.3.
 2. Components are self-contained folders in `plugin/src/blocks/<name>/`. Copy
    `section-heading/` as the pattern. Don't touch the backend.
-3. Templates are self-contained folders in `plugin/src/templates/<slug>/`, assembled from
-   existing blocks. The deliverable is `content.blocks.txt` — **Gutenberg block markup**,
+3. Templates are self-contained mini sites in `plugin/src/templates/<slug>/` — **each one
+   carries its own blocks** in `templates/<slug>/blocks/`, namespaced
+   `foundations/<slug>-<name>`. The 19 blocks in `plugin/src/blocks/` are for *our*
+   marketing site; don't use or edit them in a template (§2.1b).
+   The deliverable is `content.blocks.txt` — **Gutenberg block markup**,
    which we import onto the client's site so it arrives editable. It is `<!-- wp:… /-->`
    comments, **not an HTML page**: if the file has a `<div>` in it, it is wrong. Missing a
    block you need? Build the block first (new component), then use it. See §2.1a and §6a.
