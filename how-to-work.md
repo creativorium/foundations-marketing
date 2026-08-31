@@ -658,16 +658,43 @@ Rules specific to templates:
 
 ## 6b. Previewing a template on Local — getting a demo link
 
-**The file is the *output*, not the input.** You build the page in WordPress, look at it,
-then export it to `content.blocks.txt`. AI assistants get this backwards: they write the
-file first and then have no way to see it. Both directions work — here is how to get from
-a file to a real, viewable demo page.
-
-**Before either method:** the *Foundations Blocks* plugin must be **active** and you must
+**Before anything below:** the *Foundations Blocks* plugin must be **active** and you must
 have run `npm run build`. If the plugin is off, every block renders as **nothing at all**
 (§7) — a blank page means the plugin is inactive, not that your markup is broken.
 
-### Method 1 — paste it into the editor (no tooling, always works)
+### Method 0 — just open the demo URL (use this one)
+
+**`/templates/<demo-slug>/demo/`** on your Local site renders the template straight from
+`content.blocks.txt` **on disk**. No page to create, nothing to paste, no WP-CLI. Save the
+file, refresh the browser.
+
+```
+http://foundationsmarketing.local/templates/pilates-website-design/demo/
+```
+
+The slug is `demoSlug` from your `template.json` — use the SEO phrase from
+`doc/SEO-AND-PERFORMANCE.md` §10. Without a `template.json` it falls back to your folder
+name, so a half-finished template is still previewable.
+
+This renders it **standalone** — the template's own header, hero and footer, with none of
+our site's chrome around it — because that is what the buyer is judging and what gets
+installed. It is the *same code path that serves buyers in production*, so what you sign
+off here is what ships. There is a fixed bar at the bottom to get back out; it is ours,
+not part of the template.
+
+**This is the URL to put in your PR.**
+
+> If you get a 404, the rewrite rules need flushing: visit
+> **Settings → Permalinks** in WP Admin and hit Save (changing nothing). That is the
+> usual cause of a route that "does not exist" right after pulling.
+>
+> If the page loads but a section is **blank**, that section's block is not registered on
+> the server — see the warning in §13.
+
+The two methods below are fallbacks. You want them when you are building the page *in the
+editor* and exporting it, rather than writing the markup by hand.
+
+### Method 1 — paste it into the editor (when you built the page in the editor)
 
 1. WP Admin → **Pages → Add New**
 2. Open the **Code editor**: `Ctrl+Shift+Alt+M` (or Options ⋮ → Code editor)
@@ -702,12 +729,21 @@ No clicking, so an assistant can do it unattended.
 > Windows note: Local's shell and path quoting vary by machine. If the `$(cat …)` form
 > fights you, fall back to Method 1 — it always works.
 
-### The demo page
+### Two URLs per template, and they do different jobs
 
-Every template needs a demo page at **`/templates/<keyword-slug>/`**, using the slug from
-the SEO table in `doc/SEO-AND-PERFORMANCE.md` §10 — not a random preview URL. That page is
-the biggest SEO asset each template has, because each owns its own low-competition phrase.
-A template with no demo page **cannot be published**: catalogue cards would point at a 404.
+Do not confuse these — one is for Google, one is for looking at.
+
+| URL | What it is | Who it is for |
+|---|---|---|
+| `/templates/<keyword-slug>/` | Our **branded detail page** — screenshot, description, and the "choose this template" CTA into the builder. Owns the template's target phrase from the SEO table and is the page that ranks. | Buyers browsing, and Google |
+| `/templates/<keyword-slug>/demo/` | The **standalone mini site** — the template's own header, hero and footer, no chrome of ours. Rendered from `content.blocks.txt` on disk. **`noindex`.** | Buyers clicking "Live Preview", and you |
+
+The demo is deliberately `noindex`: it is the same content with no branding, no
+description and no way to buy, so letting it compete with the detail page would split the
+signal for the phrase and land buyers somewhere they cannot act.
+
+Use the slug from `doc/SEO-AND-PERFORMANCE.md` §10 — never a random preview URL. A
+template with no detail page **cannot be published**: catalogue cards would point at a 404.
 See `doc/TEMPLATES.md` for the full checklist.
 
 **Put the demo URL in your PR** so it can be reviewed without being rebuilt.
