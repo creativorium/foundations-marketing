@@ -4,6 +4,70 @@
 covers start-up checks, branching, push/merge permissions, how to build a component,
 previewing in Local, responsiveness, speed, SEO, and the pre-commit checklist.
 
+---
+
+## Start here
+
+### One-time setup
+
+Do these once. Skip any of them and nothing will render, and it will look like your work
+is broken when it is not.
+
+1. **Clone the repo** and open the folder in VS Code.
+2. **Set up Local** — create the junctions, start the site, and confirm both the
+   *Foundations* theme and the *Foundations Blocks* plugin are **active**. See §1.2–1.3.
+   An inactive plugin makes every block render as *nothing at all*.
+3. **`npm install`**, then **`npm run build`.** Without the build there is no CSS or JS.
+4. **Get the `/doc/` pack from the owner.** It is gitignored, so cloning does not include
+   it — and you cannot pick an SEO phrase or check the component index without it (§1.5).
+
+### Setiap kali mengerjakan tugas
+
+1. **`git pull origin main`** — jangan pernah mulai dari copy yang sudah basi.
+
+2. Ketik ke AI kamu:
+
+   ```
+   baca how-to-work.md dan ikuti isinya
+   ```
+
+   > File-nya bernama **`how-to-work.md`**. Bukan `how-to-read.md` — kalau salah ketik,
+   > AI tidak menemukan apa-apa dan akan menebak-nebak sendiri.
+
+3. **AI akan menanyakan dua hal.** Siapkan jawabannya:
+   - **Pakai akun GitHub yang mana?** — username kamu. Ini yang menentukan file apa saja
+     yang boleh kamu ubah.
+   - **Kerjaan yang mana?** — bikin template baru, bikin komponen baru, atau memperbaiki
+     komponen yang sudah ada.
+
+4. **Berikan yang dibutuhkan**, sesuai jenis kerjaannya:
+
+   | Kerjaan | Yang harus kamu kasih |
+   |---|---|
+   | **Template baru** | File HTML-nya, niche-nya, dan frasa SEO target dari `doc/SEO-AND-PERFORMANCE.md` §10 |
+   | **Komponen baru** | Nama komponennya, dipakai di halaman mana, dan file HTML-nya |
+   | **Perbaikan** | Nama block-nya, apa persisnya yang salah, screenshot, dan di breakpoint berapa |
+
+5. **AI membuat branch-nya sendiri** (§2.3) — kamu tidak perlu memintanya. Kalau AI
+   langsung mengedit file tanpa bikin branch dulu, **hentikan** dan suruh bikin branch.
+
+6. **Cek hasilnya di link preview:** `/templates/<slug>/demo/` di Local kamu.
+
+   Dua hal ini kelihatan seperti kerjaan kamu yang rusak, padahal bukan:
+
+   | Yang terjadi | Artinya |
+   |---|---|
+   | **404** | Rewrite rules perlu di-flush — WP Admin → Settings → Permalinks → **Save** (tanpa mengubah apa pun) |
+   | **Ada bagian yang kosong** | Block itu belum terdaftar di server. Bukan markup kamu yang salah — lihat §13 |
+
+7. **Kalau sudah benar, AI yang commit, push, dan membuka PR-nya sendiri** (§2.4). Kamu
+   tidak perlu buka GitHub manual. Cukup kabari owner kalau PR-nya sudah terbuka.
+
+> **Jangan pernah:** push ke `main`, merge PR sendiri, atau mengubah file di luar folder
+> block/template kamu. Batasnya ada di §2.1 dan §4.
+
+---
+
 ## First — read the docs (§1.5)
 
 Before you write anything, read `how-to-work.md` — §0 for what the business sells, §5 for
