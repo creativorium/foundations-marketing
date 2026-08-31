@@ -26,3 +26,8 @@
 
 // Shared section furniture used by several blocks.
 @use 'shared';
+
+// The bar pinned over a standalone template demo (inc/demo.php). It ships in the
+// front-end bundle because a demo loads that bundle and nothing else — no theme
+// stylesheet, since a demo is the template's own site, not one of our pages.
+@use 'demo-bar';

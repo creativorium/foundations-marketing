@@ -1,0 +1,102 @@
+// The bar pinned over a standalone template demo (inc/demo.php).
+//
+// A demo is the template's own mini site, so every link inside it points at the
+// fictional business. Without this bar the only way back to us is the back button, and
+// the buyer has no way to act on what they are looking at.
+//
+// It sits on top of a design we do not control, so it takes nothing from the template's
+// palette — those tokens are the template's and will differ per template. It uses its own
+// fixed dark treatment instead, which reads on any of them.
+
+.fm-demo-bar {
+  position: fixed;
+  z-index: 2147483000; // above anything a template might pin itself
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 12px clamp(16px, 4vw, 28px);
+
+  background: #1f1e1a;
+  color: #fff;
+  font-family: 'Archivo', Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  line-height: 1.4;
+
+  // Clears the iOS home indicator without eating space on desktop.
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+
+.fm-demo-bar__label {
+  min-width: 0;
+  opacity: 0.85;
+
+  strong {
+    font-weight: 700;
+    opacity: 1;
+  }
+}
+
+.fm-demo-bar__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+  margin-left: auto;
+}
+
+.fm-demo-bar__link,
+.fm-demo-bar__cta {
+  // 44px minimum tap target (§8) without making the bar tall on desktop: the padding
+  // gets it most of the way and min-height finishes the job.
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 8px 18px;
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.fm-demo-bar__link {
+  color: #fff;
+  border-bottom: 1.5px solid rgba(255, 255, 255, 0.5);
+  padding-inline: 0;
+
+  &:hover,
+  &:focus-visible {
+    border-bottom-color: #fff;
+  }
+}
+
+.fm-demo-bar__cta {
+  background: #ea631b;
+  color: #fff;
+  border-radius: 40px;
+
+  &:hover,
+  &:focus-visible {
+    background: #c24e11;
+  }
+}
+
+// :focus-visible is styled globally in the theme, but a demo does not load the theme's
+// stylesheet — it is the template's own site. So the bar restyles it here rather than
+// leaving these two links with no visible focus at all (§8).
+.fm-demo-bar :focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 3px;
+}
+
+@media print {
+  .fm-demo-bar {
+    display: none;
+  }
+}
