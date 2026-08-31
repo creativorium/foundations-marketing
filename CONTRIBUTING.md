@@ -58,7 +58,7 @@ is broken when it is not.
    | Yang terjadi | Artinya |
    |---|---|
    | **404** | Rewrite rules perlu di-flush — WP Admin → Settings → Permalinks → **Save** (tanpa mengubah apa pun) |
-   | **Ada bagian yang kosong** | Block itu belum terdaftar di server. Bukan markup kamu yang salah — lihat §13 |
+   | **Ada satu bagian yang kosong** | Hampir tidak pernah karena markup kamu. Telusuri checklist di §7 sebelum mengubah apa pun |
 
 7. **Kalau sudah benar, AI yang commit, push, dan membuka PR-nya sendiri** (§2.4). Kamu
    tidak perlu buka GitHub manual. Cukup kabari owner kalau PR-nya sudah terbuka.
@@ -121,8 +121,9 @@ questions before it writes a line. It must ask you; it must not guess.
    which we import onto the client's site so it arrives editable. It is `<!-- wp:… /-->`
    comments, **not an HTML page**: if the file has a `<div>` in it, it is wrong. Missing a
    block you need? Build the block first (new component), then use it. See §2.1a and §6a.
-4. Preview it on Local and get a demo link — paste the markup into the editor's Code
-   editor (`Ctrl+Shift+Alt+M`), or use WP-CLI. See §6b. Put the demo URL in your PR.
+4. Preview it at **`/templates/<slug>/demo/`** on your Local — it renders straight from
+   `content.blocks.txt` on disk, so save the file and refresh. See §6b. Put that URL in
+   your PR.
 5. `npm run build`, check it in Local at 375px / 820px / 1440px.
 6. **Commit, push, and open the Pull Request yourself** — the work isn't done until the
    PR is open (§2.4). Then tell the owner. Only `nego94` / `creativorium` may push to

@@ -689,7 +689,7 @@ not part of the template.
 > usual cause of a route that "does not exist" right after pulling.
 >
 > If the page loads but a section is **blank**, that section's block is not registered on
-> the server — see the warning in §13.
+> the server, or its render never ran — work through the checklist in §7.
 
 The two methods below are fallbacks. You want them when you are building the page *in the
 editor* and exporting it, rather than writing the markup by hand.
@@ -766,10 +766,36 @@ If something looks stale or blank:
 
 | Symptom | Usual cause |
 |---|---|
-| Whole section renders as nothing | Foundations Blocks plugin is inactive |
+| **Every** section renders as nothing | Foundations Blocks plugin is inactive (§1.3) |
+| **One** section renders as nothing, the rest are fine | See "a single blank section" below |
 | Changes do nothing at all | junction missing (§1.2), or you forgot `npm run build` |
 | CSS is old | server cache — hard-refresh |
+| Demo URL 404s | rewrite rules need flushing — Settings → Permalinks → **Save** |
 | White screen | PHP fatal; check `wp-content/debug.log` or Local's log tab |
+
+### A single blank section
+
+The block works in the editor and renders nothing on the page. **This is almost never
+your markup** — blocks are `save: () => null`, so there is no saved HTML to fall back on,
+and anything that stops `render.php` running shows up as an empty space rather than an
+error. Work down this list:
+
+1. **Did you run `npm run build`** since adding the block? The editor half comes from
+   `build/editor.js`.
+2. **Is there an `import` line** for it in `plugin/src/editor.js`, and a `@use` line in
+   `plugin/src/styles/blocks.scss`? (§2.1)
+3. **Does the name in `block.json` match** the one you registered? PHP registers whatever
+   `block.json` says; the editor registers what `index.js` imports. If they disagree, the
+   editor shows one block and the server renders a different, non-existent one.
+4. **Is `"render": "file:./render.php"` present** in `block.json`, and does `render.php`
+   actually exist next to it?
+5. **Does `render.php` return early** when an attribute is empty? Several blocks do this
+   deliberately — fill the fields in the editor and look again.
+6. **Is the folder in a place that gets scanned?** `plugin/inc/register.php` scans
+   `src/blocks/*/block.json` and `src/templates/*/blocks/*/block.json`. A block nested any
+   deeper is never found.
+
+If none of those, say so and stop — do not start rewriting working markup.
 
 To see PHP errors, set in `wp-config.php`: `define('WP_DEBUG', true);` and
 `define('WP_DEBUG_LOG', true);`
@@ -937,22 +963,21 @@ Then stop and tell the owner. Do not merge your own PR.
   sell — homepage, services, templates, checkout. Each sold template gets its own blocks
   under `plugin/src/templates/<slug>/blocks/` (§2.1b). Do not confuse the two.
 
-> ### ⚠️ Owner work required before the first template block will work
+> ### ⚠️ Still missing — owner work, not started
 >
-> `plugin/inc/register.php` currently discovers blocks by scanning **`src/blocks/*/block.json`
-> only**. It does **not** scan `src/templates/*/blocks/*/block.json`, so a template's own
-> blocks will register in the editor (via `editor.js`) but **have no server-side render**
-> and will output nothing on the front end.
+> Both live in `plugin/inc/`, which contributors may not edit:
 >
-> `plugin/inc/` is on the contributor never-edit list, so this is **owner work and it is
-> not done yet.** Until it is, template blocks cannot be previewed properly. Contributors:
-> if your template block renders blank, this is why — say so and stop; do not try to work
-> around it.
+> - **The packaging pipeline.** Nothing turns a template folder into a zip installable on
+>   a client's hosting. `DEPLOYMENT.md` covers only rsync to the dev site. Until this
+>   exists, a finished template cannot actually be delivered to a buyer.
+> - **The catalogue link.** Nothing connects a merged `template.json` to the
+>   `site_template` CPT, which lives in the separate `foundation-packages` plugin. So a
+>   merged template does not appear in the catalogue by itself.
 >
-> Also still missing, both owner work: the **packaging pipeline** that turns a template
-> folder into a zip installable on a client's hosting, and the link between a merged
-> `template.json` and the `site_template` catalogue CPT (which lives in the separate
-> `foundation-packages` plugin).
+> **Done, so no longer a blocker:** block discovery now scans
+> `src/templates/*/blocks/*/block.json`, and `/templates/<slug>/demo/` renders a template
+> standalone from its `content.blocks.txt`. If a template block renders blank, work
+> through the checklist in §7 — it is no longer "the owner has not wired this up".
 - **The design source** is four client canvas pages (Homepage, Services, Templates,
   Checkout), decoded to plain HTML in `doc/client-html/extracted/`.
 - **Elementor is being removed.** The live site was built in Elementor; we are rebuilding
