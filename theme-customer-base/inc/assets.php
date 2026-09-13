@@ -2,9 +2,16 @@
 /**
  * Asset loading.
  *
- * A block theme enqueues style.css by itself, so there is very little to do here — and
- * that is the point. The speed budget is 85+ mobile PageSpeed on shared hosting
- * (how-to-work.md §9), which a customer site meets by shipping almost nothing.
+ * A block theme does NOT enqueue its own style.css. Core enqueues the generated global
+ * styles from theme.json, and 'classic-theme-styles' for themes without one — it never
+ * enqueues get_stylesheet_uri(). This file has to do it, and does, below.
+ *
+ * That misreading is how style.css went missing from the front end once already. The
+ * comment is kept pointed the right way round so the mistake is not made twice.
+ *
+ * Beyond that there is very little here, and that is the point. The speed budget is 85+
+ * mobile PageSpeed on shared hosting (how-to-work.md §9), which a customer site meets by
+ * shipping almost nothing.
  *
  * What must NOT appear in this file, on any customer site:
  *   - jQuery, or any JS framework

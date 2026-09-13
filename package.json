@@ -7,8 +7,9 @@
   "scripts": {
     "clean": "node --input-type=commonjs -e \"const{rmSync}=require('fs');for(const d of ['theme/build','plugin/build'])rmSync(d,{recursive:true,force:true})\"",
     "lint:php": "node scripts/lint-php.mjs",
+    "test:blocks": "node scripts/validate-blocks.test.mjs",
     "validate:blocks": "node scripts/validate-blocks.mjs",
-    "build": "npm run clean && npm run lint:php && npm run validate:blocks && npm run build:theme && npm run build:login && npm run build:editor && npm run build:frontend && npm run build:errors",
+    "build": "npm run clean && npm run lint:php && npm run test:blocks && npm run validate:blocks && npm run build:theme && npm run build:login && npm run build:editor && npm run build:frontend && npm run build:errors",
     "build:theme": "vite build --mode theme",
     "build:login": "vite build --mode login",
     "build:editor": "vite build --mode editor",

@@ -121,6 +121,25 @@ npm install      # first time only
 npm run build    # required — without it there is no CSS or JS at all
 ```
 
+`npm run build` now runs three checks before it compiles anything:
+
+| Step | What it catches |
+|---|---|
+| `lint:php` | a PHP syntax error, across theme, plugin **and** `theme-customer-base/` |
+| `test:blocks` | the block linter itself being wrong — it has been, twice |
+| `validate:blocks` | block-markup hazards: undeclared `anchor`/`className`, foreign `data-` attributes, bare `<li>`, unbalanced delimiters, malformed import tokens |
+
+**`lint:php` fails if PHP is not on your PATH.** That is deliberate — it used to skip with
+a warning, which meant a machine without PHP got a green build that had checked nothing.
+Local ships a PHP binary; its path is in `doc/LOCAL-SETUP.md`. If you genuinely cannot
+install it, opt out **explicitly**, and know that no PHP was checked:
+
+```bash
+FM_SKIP_PHP_LINT=1 npm run build
+```
+
+The opt-out is ignored in CI.
+
 ### 1.5 Read the documentation before you build anything
 
 **AI assistants: read these before you write a line.** You cannot build a block that fits

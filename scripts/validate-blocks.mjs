@@ -18,11 +18,15 @@
  *   4. Unbalanced block comments.
  *   5. A malformed import token, or a token in a file that should have none.
  *
- * Run: npm run validate:blocks
+ * Every rule here has a case in validate-blocks.test.mjs. Add one when you add a rule —
+ * an untested linter is worse than no linter, because it is believed.
+ *
+ * Run: npm run validate:blocks   ·   Test: npm run test:blocks
  */
 
 import { readFileSync } from 'node:fs';
 import { glob } from 'node:fs/promises';
+import { pathToFileURL } from 'node:url';
 
 const TARGETS = [
   'theme-customer-base/templates/*.html',
@@ -48,31 +52,47 @@ const GENERATED_CLASS = [
   /^screen-reader-text$/,
 ];
 
-const TOKEN = /\{\{(media|page):([^|}]+)\|(url|id)\}\}/g;
-const MALFORMED_TOKEN = /\{\{(?!(?:media|page):[^|}]+\|(?:url|id)\}\})[^}]*\}\}/g;
+/**
+ * The complete token grammar, anchored so it must match from the `{{` onward.
+ *
+ * Anchoring is the whole point. An earlier version searched for a malformed token with a
+ * pattern that itself required the closing `}}`, so an UNTERMINATED token —
+ * `{{page:contact|url` with no braces — matched nothing and passed, including inside a
+ * template part where no token is allowed at all. Every `{{` is now checked against this;
+ * anything that does not match completely is a problem.
+ */
+const TOKEN_AT = /^\{\{(media|page):([^|{}\s]+)\|(url|id)\}\}/;
 
-const problems = [];
-
-function report(file, line, message) {
-  problems.push({ file, line, message });
+/** Is this file a template part? Parts are rendered as-is and never pass the importer. */
+function isTemplatePart(file) {
+  return /[\\/]parts[\\/]/.test(file);
 }
 
 function lineOf(text, index) {
   return text.slice(0, index).split('\n').length;
 }
 
-/** Parse the attribute JSON out of an opening block comment, tolerating none. */
+/** Parse the attribute JSON out of an opening block comment. null means malformed. */
 function parseAttrs(raw) {
   if (!raw || !raw.trim()) return {};
   try {
     return JSON.parse(raw);
   } catch {
-    return null; // signalled to the caller as malformed
+    return null;
   }
 }
 
-function checkFile(file) {
-  const text = readFileSync(file, 'utf8');
+/**
+ * Lint one file's contents.
+ *
+ * Exported and pure so the test suite can drive it with strings instead of fixtures on
+ * disk.
+ *
+ * @returns {Array<{file: string, line: number, message: string}>}
+ */
+export function checkText(file, text) {
+  const problems = [];
+  const report = (line, message) => problems.push({ file, line, message });
 
   // --- 4. comment balance -------------------------------------------------
   // One ordered pass over openers AND closers. Walking them in separate passes compares
@@ -88,35 +108,35 @@ function checkFile(file) {
     if (isCloser) {
       const top = stack.pop();
       if (!top) {
-        report(file, line, `closing /wp:${name} with nothing open`);
+        report(line, `closing /wp:${name} with nothing open`);
       } else if (top.name !== name) {
-        report(file, line, `closing /wp:${name} but wp:${top.name} is open (line ${top.line})`);
+        report(line, `closing /wp:${name} but wp:${top.name} is open (line ${top.line})`);
       }
       continue;
     }
 
-    if (parseAttrs(rawAttrs) === null) {
-      report(file, line, `block comment for wp:${name} has malformed attribute JSON`);
+    const attrs = parseAttrs(rawAttrs);
+
+    if (attrs === null) {
+      report(line, `block comment for wp:${name} has malformed attribute JSON`);
       continue;
     }
 
     if (!selfClosing) stack.push({ name, line });
 
     // --- 1 & 2. declared vs written attributes ----------------------------
-    const attrs = parseAttrs(rawAttrs) ?? {};
     const after = text.slice(m.index + full.length);
     const el = after.match(/^\s*<([a-z0-9]+)([^>]*)>/i);
 
     if (!el) continue;
 
-    const [, , attrString] = el;
+    const [, tag, attrString] = el;
 
     const idAttr = attrString.match(/\sid="([^"]*)"/);
     if (idAttr && attrs.anchor !== idAttr[1]) {
       report(
-        file,
         line,
-        `<${el[1]} id="${idAttr[1]}"> but wp:${name} does not declare "anchor":"${idAttr[1]}" — ` +
+        `<${tag} id="${idAttr[1]}"> but wp:${name} does not declare "anchor":"${idAttr[1]}" — ` +
           `the editor regenerates this element and the id is lost`
       );
     }
@@ -132,26 +152,21 @@ function checkFile(file) {
 
       if (extra.length) {
         report(
-          file,
           line,
-          `<${el[1]}> carries class ${extra.map((c) => `"${c}"`).join(', ')} that wp:${name} ` +
+          `<${tag}> carries class ${extra.map((c) => `"${c}"`).join(', ')} that wp:${name} ` +
             `does not declare in "className" — add it, or the class is lost on save`
         );
       }
     }
 
     const foreign = [...attrString.matchAll(/\s(data-[a-z0-9-]+)="/g)].map((x) => x[1]);
-    if (foreign.length && name.startsWith('core/') === false && name.includes('/')) {
-      // Our own server-rendered blocks emit nothing, so a data- attribute here is
-      // hand-written markup regardless of which block it sits under.
-      report(file, line, `<${el[1]}> carries ${foreign.join(', ')} — no block save() emits this`);
-    } else if (foreign.length) {
-      report(file, line, `<${el[1]}> carries ${foreign.join(', ')} — no core block save() emits this`);
+    if (foreign.length) {
+      report(line, `<${tag}> carries ${foreign.join(', ')} — no block save() emits this`);
     }
   }
 
   for (const left of stack) {
-    report(file, left.line, `wp:${left.name} is never closed`);
+    report(left.line, `wp:${left.name} is never closed`);
   }
 
   // --- 3. bare list items -------------------------------------------------
@@ -161,7 +176,6 @@ function checkFile(file) {
     const lastClose = before.lastIndexOf('<!-- /wp:list-item');
     if (lastOpen === -1 || lastOpen < lastClose) {
       report(
-        file,
         lineOf(text, m.index),
         '<li> is not inside a wp:list-item block — this is the pre-6.0 list shape and ' +
           'Gutenberg migrates it on open'
@@ -170,48 +184,72 @@ function checkFile(file) {
   }
 
   // --- 5. tokens ----------------------------------------------------------
-  for (const m of text.matchAll(MALFORMED_TOKEN)) {
-    report(
-      file,
-      lineOf(text, m.index),
-      `malformed import token ${m[0]} — expected {{media:<file>|url}}, {{media:<file>|id}}, ` +
-        `{{page:<slug>|url}} or {{page:<slug>|id}}`
-    );
-  }
+  // Check EVERY `{{`, not just things that already look like tokens. A pattern that
+  // requires the closing braces cannot see an unterminated one.
+  const part = isTemplatePart(file);
 
-  // A template part is rendered as-is and never goes through the importer, so a token
-  // in one would ship to the customer literally.
-  if (/\/parts\//.test(file.replace(/\\/g, '/'))) {
-    for (const m of text.matchAll(TOKEN)) {
-      report(file, lineOf(text, m.index), `import token ${m[0]} in a template part — parts are not imported, so it would render literally`);
+  for (const m of text.matchAll(/\{\{/g)) {
+    const line = lineOf(text, m.index);
+    const rest = text.slice(m.index);
+    const matched = rest.match(TOKEN_AT);
+    const excerpt = rest.slice(0, 40).split('\n')[0];
+
+    if (part) {
+      // Parts are never imported, so a token here ships to the customer literally —
+      // whether it is well-formed or not.
+      report(
+        line,
+        `import token \`${matched ? matched[0] : excerpt}\` in a template part — parts are ` +
+          `not imported, so it would render literally`
+      );
+      continue;
+    }
+
+    if (!matched) {
+      report(
+        line,
+        `malformed import token near \`${excerpt}\` — expected {{media:<file>|url}}, ` +
+          `{{media:<file>|id}}, {{page:<slug>|url}} or {{page:<slug>|id}}`
+      );
     }
   }
+
+  return problems;
 }
 
-const files = [];
-for (const pattern of TARGETS) {
-  for await (const entry of glob(pattern)) files.push(entry);
+/** Read and lint one file from disk. */
+export function checkFile(file) {
+  return checkText(file, readFileSync(file, 'utf8'));
 }
 
-if (files.length === 0) {
-  console.log('validate:blocks — no block markup found to check');
-  process.exit(0);
+async function main() {
+  const files = [];
+  for (const pattern of TARGETS) {
+    for await (const entry of glob(pattern)) files.push(entry);
+  }
+
+  if (files.length === 0) {
+    console.log('validate:blocks — no block markup found to check');
+    return 0;
+  }
+
+  const problems = files.sort().flatMap((file) => checkFile(file));
+
+  console.log(`validate:blocks — checked ${files.length} file${files.length === 1 ? '' : 's'}`);
+
+  if (problems.length === 0) {
+    console.log('no hazards found');
+    console.log('\nThis is a hazard lint, NOT a Gutenberg validator. Still open each page in');
+    console.log('the editor, save, and reload to confirm there are no validation errors.');
+    return 0;
+  }
+
+  for (const p of problems) console.error(`${p.file}:${p.line}  ${p.message}`);
+  console.error(`\n${problems.length} problem${problems.length === 1 ? '' : 's'} found`);
+  return 1;
 }
 
-for (const file of files.sort()) checkFile(file);
-
-console.log(`validate:blocks — checked ${files.length} file${files.length === 1 ? '' : 's'}`);
-
-if (problems.length === 0) {
-  console.log('no hazards found');
-  console.log('\nThis is a hazard lint, NOT a Gutenberg validator. Still open each page in');
-  console.log('the editor, save, and reload to confirm there are no validation errors.');
-  process.exit(0);
+// Only run when invoked directly, so the test suite can import checkText().
+if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
+  process.exit(await main());
 }
-
-for (const p of problems) {
-  console.error(`${p.file}:${p.line}  ${p.message}`);
-}
-
-console.error(`\n${problems.length} problem${problems.length === 1 ? '' : 's'} found`);
-process.exit(1);

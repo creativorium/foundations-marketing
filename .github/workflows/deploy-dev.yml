@@ -49,6 +49,13 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # npm run build now starts with lint:php, which FAILS rather than skips when PHP is
+      # missing — a green build that linted nothing is worse than a red one. ubuntu-latest
+      # ships PHP today, but relying on that silently means a runner image change would
+      # surface as a confusing mid-build failure. Check it here, where the error is plain.
+      - name: Confirm PHP is available for the lint
+        run: php --version
+
       - name: Build all four Vite targets
         run: npm run build
 
