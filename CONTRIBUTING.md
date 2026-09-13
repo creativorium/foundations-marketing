@@ -99,7 +99,7 @@ questions before it writes a line. It must ask you; it must not guess.
    |---|---|
    | **New component** | The name, where it appears, and **the HTML file**. No HTML? Then written details: structure, editable fields, states, and 375 / 820 / 1440px behaviour. |
    | **Fix an existing component** | Which block, exactly what is wrong (page on Local, breakpoint, browser, screenshot), and what it should do instead. |
-   | **Site template** | Which template, **the HTML file**, its target SEO phrase, and which blocks it needs that don't exist yet. Files go in `plugin/src/templates/<slug>/` — §2.1a. |
+   | **Site template** | Which template, **the design source**, its target SEO phrase, which pages it has, and which blocks it needs that don't exist yet. Files go in `plugin/src/templates/<slug>/` — §2.1a. |
 
    Work on the main website itself — pages, packages, checkout, account, anything
    server-side — is **owner-only**.
@@ -117,13 +117,19 @@ questions before it writes a line. It must ask you; it must not guess.
    carries its own blocks** in `templates/<slug>/blocks/`, namespaced
    `foundations/<slug>-<name>`. The 19 blocks in `plugin/src/blocks/` are for *our*
    marketing site; don't use or edit them in a template (§2.1b).
-   The deliverable is `content.blocks.txt` — **Gutenberg block markup**,
-   which we import onto the client's site so it arrives editable. It is `<!-- wp:… /-->`
-   comments, **not an HTML page**: if the file has a `<div>` in it, it is wrong. Missing a
-   block you need? Build the block first (new component), then use it. See §2.1a and §6a.
+   A template is a **multi-page** site: one file per page in `content/pages/`, with
+   `home.blocks.txt` required. The deliverable is **Gutenberg block markup**, which we
+   import onto the client's site so it arrives editable. It is `<!-- wp:… /-->` comments,
+   **not an HTML page**: if a file has a `<div>` in it, it is wrong. Header and footer are
+   **template parts** in `parts/`, not blocks in the page content — put one in a page and
+   it repeats on every page. Missing a block you need? Build the block first (new
+   component), then use it. See §2.1a and §6a, and `customer-runtime.md` for what the
+   template is eventually packaged into.
 4. Preview it at **`/templates/<slug>/demo/`** on your Local — it renders straight from
-   `content.blocks.txt` on disk, so save the file and refresh. See §6b. Put that URL in
-   your PR.
+   disk, so save the file and refresh. See §6b. Put that URL in your PR.
+   **Note:** the demo route has not caught up with multi-page templates yet — it still
+   assumes one page with its header in the content. Until it does, preview interior pages
+   by pasting them into the editor (§6b Method 1) and say so in your PR.
 5. `npm run build`, check it in Local at 375px / 820px / 1440px.
 6. **Commit, push, and open the Pull Request yourself** — the work isn't done until the
    PR is open (§2.4). Then tell the owner. Only `nego94` / `creativorium` may push to
