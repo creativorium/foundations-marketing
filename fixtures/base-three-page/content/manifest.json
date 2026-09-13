@@ -1,0 +1,18 @@
+{
+  "$comment": "What the importer reads first. Page order is the order pages are created, which matters because a page linked by another must exist before the link is resolved - the importer creates every page, then resolves tokens in a second pass.",
+  "fixture": true,
+  "versions": {
+    "base": "1.0.0",
+    "template": "fixture 0.1.0",
+    "blocksRuntime": "(none - this fixture uses core blocks only)"
+  },
+  "homepage": "home",
+  "pages": [
+    { "slug": "home",    "title": "Home",    "file": "pages/home.blocks.txt" },
+    { "slug": "about",   "title": "About",   "file": "pages/about.blocks.txt" },
+    { "slug": "contact", "title": "Contact", "file": "pages/contact.blocks.txt" }
+  ],
+  "settings": "settings.json",
+  "navigation": "navigation.json",
+  "media": "media.json"
+}

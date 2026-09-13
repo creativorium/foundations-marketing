@@ -1,0 +1,12 @@
+{
+  "$comment": "Menus link by page SLUG here; the importer resolves each to the page id it just created and stores ids in the settings row. Ids are what survive - an absolute URL would still point at our dev site after install. See theme-customer-base/inc/settings-contract.php fm_nav_url().",
+  "nav_primary": [
+    { "label": "Home",    "page": "home" },
+    { "label": "About",   "page": "about" },
+    { "label": "Contact", "page": "contact" }
+  ],
+  "nav_footer": [
+    { "label": "About",   "page": "about" },
+    { "label": "Contact", "page": "contact" }
+  ]
+}

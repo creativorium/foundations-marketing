@@ -25,9 +25,12 @@ claim that the code is there.
 | `fm_image()`, `fm_url()` and the block helpers | **Implemented** | `plugin/inc/helpers.php` |
 | Multi-page template folder (§2) | **Planned** | — |
 | Multi-page demo routing (§2.3) | **Planned** — current route serves one page only | — |
-| Customer theme base (§3) | **Planned** | `theme-customer-base/` does not exist |
+| Customer theme base — shell, tokens, parts (§3) | **Built** | `theme-customer-base/` |
+| Site Settings **contract** — schema, defaults, read helpers | **Built** | `theme-customer-base/inc/settings-contract.php` |
+| Shell blocks — `foundations/site-header`, `site-footer` (§5.1) | **Built** | `theme-customer-base/blocks/` |
+| Internal three-page fixture | **Built** | `fixtures/base-three-page/` |
 | Customer blocks plugin output (§4) | **Planned** | — |
-| Site Settings screen, roles, capabilities (§5) | **Planned** | — |
+| Site Settings **screen**, Site Owner role, capabilities (§5) | **Planned** | — |
 | Starter-site import (§6a) — **milestone 1** | **Planned** | — |
 | Customised-site export (§6b) — **milestone 2** | **Planned** | — |
 | Maintenance reporting (§8) | **Deferred**, after milestone 2 | — |
@@ -230,6 +233,14 @@ the same as "theme-independent".
 Its `render.php` reads Site Settings from one option row and renders a fixed layout.
 `parts/footer.html` works the same way. One file, one option row, every page.
 
+**These two blocks are registered by the theme base, not by the customer plugin** —
+`theme-customer-base/blocks/`. They are site shell, identical in every design apart from a
+`variant` and the tokens around them, so they are not "a template's blocks" in the §4
+sense. Keeping them in the theme also means `parts/header.html` renders whether or not the
+plugin is present, which is what makes the base testable on its own. A design varies the
+shell through `variant`, its `theme.json` and its own `style.scss` — never by forking
+these files.
+
 **Describe the product accurately, internally and to the customer:**
 
 > Customers edit header and footer **information**. Our team controls their **layout**.
@@ -319,6 +330,18 @@ Two directions, very different amounts of work. Do not conflate them.
 Our master template onto a fresh site. This is the install we perform when someone buys,
 and it is **file-driven**, which is why it is the tractable one. Source is
 `content/` from §2.
+
+**Page files and `settings.json` contain tokens, never real URLs or ids.** Our blocks store
+attachment ids and core blocks store URLs, and neither survives a move between sites, so a
+reference is written as a token and resolved after the pages exist and the media is
+sideloaded:
+
+| Token | Becomes |
+|---|---|
+| `{{media:<filename>\|url}}` | the sideloaded attachment's URL |
+| `{{media:<filename>\|id}}` | its attachment id |
+| `{{page:<slug>\|url}}` | that page's permalink |
+| `{{page:<slug>\|id}}` | that page's post id |
 
 The importer, running on the fresh site:
 
