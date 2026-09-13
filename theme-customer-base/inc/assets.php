@@ -2,9 +2,16 @@
 /**
  * Asset loading.
  *
- * A block theme enqueues style.css by itself, so there is very little to do here — and
- * that is the point. The speed budget is 85+ mobile PageSpeed on shared hosting
- * (how-to-work.md §9), which a customer site meets by shipping almost nothing.
+ * A block theme does NOT enqueue its own style.css. Core enqueues the generated global
+ * styles from theme.json, and 'classic-theme-styles' for themes without one — it never
+ * enqueues get_stylesheet_uri(). This file has to do it, and does, below.
+ *
+ * That misreading is how style.css went missing from the front end once already. The
+ * comment is kept pointed the right way round so the mistake is not made twice.
+ *
+ * Beyond that there is very little here, and that is the point. The speed budget is 85+
+ * mobile PageSpeed on shared hosting (how-to-work.md §9), which a customer site meets by
+ * shipping almost nothing.
  *
  * What must NOT appear in this file, on any customer site:
  *   - jQuery, or any JS framework
@@ -37,16 +44,32 @@ function fm_base_asset_version(string $relative): string
 }
 
 /**
- * WordPress enqueues a block theme's style.css as 'wp-block-theme-styles' — but with the
- * theme version, not the mtime. Re-point it so an unversioned patch still busts caches.
+ * Enqueue the theme stylesheet.
+ *
+ * WordPress does NOT do this for you, block theme or not. Core enqueues the generated
+ * global styles from theme.json (wp_enqueue_global_styles) and, for themes without a
+ * theme.json, 'classic-theme-styles' — but it never enqueues get_stylesheet_uri(). A
+ * block theme that wants its own style.css must say so, exactly as a classic one does.
+ *
+ * This function previously tried to re-version a handle called 'wp-block-theme-styles',
+ * which does not exist in core. The result was that style.css — the entire --fm-* bridge
+ * and every shell style — never loaded on the front end, while add_editor_style() kept
+ * loading it in the editor. So the shell looked correct while editing and unstyled on the
+ * page, which is the most misleading way for this to fail.
+ *
+ * The version goes through wp_enqueue_style(), which is what builds the ?ver= on the URL.
+ * wp_style_add_data(..., 'ver', ...) does not do that.
  */
-function fm_base_style_version(): void
+function fm_base_enqueue_styles(): void
 {
-    if (wp_style_is('wp-block-theme-styles', 'registered')) {
-        wp_style_add_data('wp-block-theme-styles', 'ver', fm_base_asset_version('style.css'));
-    }
+    wp_enqueue_style(
+        'foundations-base',
+        get_stylesheet_uri(),
+        [],
+        fm_base_asset_version('style.css')
+    );
 }
-add_action('wp_enqueue_scripts', 'fm_base_style_version', 20);
+add_action('wp_enqueue_scripts', 'fm_base_enqueue_styles');
 
 /**
  * Remove the core block library's inline SVG duotone filters and classic theme styles,

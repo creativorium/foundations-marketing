@@ -238,8 +238,27 @@ Its `render.php` reads Site Settings from one option row and renders a fixed lay
 `variant` and the tokens around them, so they are not "a template's blocks" in the §4
 sense. Keeping them in the theme also means `parts/header.html` renders whether or not the
 plugin is present, which is what makes the base testable on its own. A design varies the
-shell through `variant`, its `theme.json` and its own `style.scss` — never by forking
-these files.
+shell through `variant`, its `theme.json` and its own `style.scss`.
+
+**When that is not enough, override the part.** CSS can rearrange existing elements, but a
+genuinely different header — different elements, a different nesting, a search field the
+shared one has no concept of — needs different markup, and pretending otherwise would force
+every future design into the first one's structure. So there is a documented escape hatch:
+
+| Need | Do this |
+|---|---|
+| Different arrangement of the same elements | `variant` + the design's `style.scss` |
+| Different markup entirely | Add `parts/header.html` **and** a `blocks/<slug>-site-header/` to the design; the packager prefers a design's own part over the base's |
+
+The escape hatch is deliberately more work than the variant, because a forked header stops
+receiving base fixes. Use it when the design genuinely differs, not to avoid writing a
+selector. Record which designs have forked, so a base fix can be applied by hand to them.
+
+**Staff previewing the shell in the Site Editor.** The two shell blocks are registered in
+PHP only, which gives them no editor UI: opened in the Site Editor they show as an
+unsupported block, not as rendered output. That is harmless for customers, who cannot reach
+that screen — but it makes the parts awkward for *us* to preview. Giving them a minimal
+`edit` using `ServerSideRender` is **step 2 work**, tracked with the runtime plugin.
 
 **Describe the product accurately, internally and to the customer:**
 
@@ -342,6 +361,19 @@ sideloaded:
 | `{{media:<filename>\|id}}` | its attachment id |
 | `{{page:<slug>\|url}}` | that page's permalink |
 | `{{page:<slug>\|id}}` | that page's post id |
+
+**Required behaviour when resolving tokens**, so that a bad bundle fails loudly rather
+than installing a subtly broken site:
+
+- An unresolvable reference is a **hard error** naming the file, the token and the line.
+  Never substitute an empty string — that produces `<img src="">` and a site that looks
+  installed and is not.
+- `|id}}` resolves to an **integer** in the block attribute, not a numeric string. Blocks
+  type their id attributes as integers and a string fails the attribute's type.
+- `|url}}` is escaped for where it lands — `esc_url()` in an href or src, and JSON-encoded
+  when it sits inside a block comment's attribute JSON.
+- After the second pass, **no `{{` may remain anywhere** in any created page, option row
+  or setting. Assert it, and fail the import if one survives.
 
 The importer, running on the fresh site:
 

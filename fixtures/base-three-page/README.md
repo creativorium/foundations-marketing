@@ -38,6 +38,17 @@ of it is hand-written HTML, which is what the rule actually forbids.
 A real template is built from Foundations blocks and so has no markup at all. **Do not cite
 this fixture as precedent for writing HTML into a sellable template.**
 
+The rule that actually governs both, now in `how-to-work.md` §2.1a:
+
+> Content must parse into supported blocks and survive **save and reload in the editor with
+> no validation error**. Raw HTML outside a block's own delimiters is never allowed.
+
+"No `<div>`" was never sufficient in either direction. The first version of this fixture
+contained no forbidden element and was still wrong three ways — a `data-*` attribute on a
+`core/image`, bare `<li>` outside `wp:list-item`, and an `id`/class on a group the block
+comment never declared. `npm run validate:blocks` catches those. Only the editor catches
+the rest.
+
 ## Import tokens
 
 Page files and `settings.json` never contain a real URL, a real attachment id or a real
@@ -80,3 +91,6 @@ There is no automated install on this branch. The manual path:
    ```
 
 6. Work through the acceptance checks in `theme-customer-base/README.md`.
+
+7. **Open each page in the editor, save, and reload.** No validation warnings, no recovery
+   prompts. This is the check the lint cannot do for you.

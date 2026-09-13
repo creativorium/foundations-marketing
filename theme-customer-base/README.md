@@ -18,6 +18,7 @@ foundationsmarketing.co.uk and runs WooCommerce. Two themes, two sites.
 | Token contract (`theme.json`) and the `--fm-*` bridge | **Built** |
 | Page shell — `templates/`, `parts/` | **Built** |
 | Header/footer integration points — `blocks/site-*` | **Built**, reading Site Settings |
+| Front-end stylesheet enqueue | **Built** — was broken in the first version, see `inc/assets.php` |
 | Site Settings **contract** — schema, defaults, read helpers | **Built** |
 | Site Settings **screen**, Site Owner role, capabilities | **Not built — step 2** |
 | Packager | **Not built — step 3** |
@@ -91,11 +92,19 @@ own `theme.json` — with no block CSS touched.
 |---|---|---|
 | A colour, size or spacing step | Add a preset to the **design's** `theme.json`, alias it in that template's `style.scss` | Edit this base's `theme.json` |
 | A Site Settings field one design needs | Declare it in that template's `template.json` under `settings` | Edit `fm_settings_core()` |
-| A different header shape | Set `variant` in the design's `parts/header.html`, restyle via its `style.scss` | Fork `blocks/site-header/` |
+| A different **arrangement** of the same header elements | Set `variant` in the design's `parts/header.html`, restyle via its `style.scss` | Fork `blocks/site-header/` |
+| A genuinely different header **structure** — different elements or nesting | Ship the design's own `parts/header.html` **and** `blocks/<slug>-site-header/`; the packager prefers a design's own part | Bend the shared one with CSS until it breaks |
 
-The rule behind all three: **anything true of one design belongs to that design.** The base
-holds only what is true of all of them. If you are editing the base to make one design
+The rule behind all of these: **anything true of one design belongs to that design.** The
+base holds only what is true of all of them. If you are editing the base to make one design
 work, it is in the wrong place.
+
+**On forking the shell:** the override path is deliberately more work than setting a
+`variant`, because a forked header stops receiving base fixes — but it exists, and it is
+not a failure to use it. CSS can rearrange elements that are already there; it cannot
+invent markup a design needs and the shared header has no concept of. Forcing every future
+design through the first one's structure would be the worse outcome. Record which designs
+have forked, so a base fix can be applied to them by hand.
 
 Core wins a key collision in `fm_settings_schema()` on purpose — a design must not redefine
 `phone` to mean something else, or the shared header stops being shared.
@@ -127,6 +136,22 @@ Each of these is a decision, not an oversight:
 
 Install on a clean WordPress with the fixture — the manual path is in
 [`fixtures/base-three-page/README.md`](../fixtures/base-three-page/README.md).
+
+**Stylesheet actually loads** — this is where the first version failed
+- [ ] View source on the front end: `style.css` is in the `<head>` with a `?ver=`.
+- [ ] The shell is **styled on the page**, not only in the editor. `add_editor_style()`
+      loads style.css for the editor independently, so a missing front-end enqueue looks
+      correct while editing and unstyled on the site — check the page, not the editor.
+- [ ] `getComputedStyle(document.documentElement).getPropertyValue('--fm-accent')` in the
+      browser console returns a colour, not an empty string.
+
+**Editor validation** — the lint is not a substitute
+- [ ] Open each fixture page in the editor, **save, reload**: no "this block contains
+      unexpected content" and no recovery prompt on any block.
+- [ ] Open `parts/header.html` and `parts/footer.html` in the Site Editor. They currently
+      show as unsupported blocks — PHP-only registration gives no editor UI. **Expected on
+      this branch**; giving them a `ServerSideRender` edit is step 2.
+- [ ] `npm run validate:blocks` passes.
 
 **Shell**
 - [ ] All three fixture pages render with a header above and a footer below.
