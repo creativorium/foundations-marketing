@@ -132,7 +132,45 @@ Each of these is a decision, not an oversight:
 
 ---
 
-## Acceptance checks for this branch
+## Audit status — verified 2026-09-13
+
+Installed and exercised on a separate WordPress 7.1 site (`foundations-fixture.local`),
+not the marketing site. **Passed:** all three pages plus 404 at 375/820/1440 with no
+horizontal overflow; stylesheet, tokens, images and navigation loading; exactly one H1,
+header, main and footer per page; **all 28 blocks still valid after a real editor save and
+reload**; a phone change reaching every page; empty logo/nav/CTA fallbacks; a palette change
+reaching rendered buttons; skip-link keyboard path; content and settings surviving a theme
+switch and back.
+
+**Fixed since that audit:** tap targets (see below).
+
+**Still open, and not to be counted as passed:**
+
+| Item | Where it goes |
+|---|---|
+| PageSpeed 85+ — never measured, and local rendering is not a performance score | needs a deployed site |
+| Site Owner capabilities, Site Settings screen | step 2 |
+| Shell blocks in the Site Editor — no client-side registration, so staff see unsupported blocks | step 2 |
+| Packager, importer, exporter | steps 3–5 |
+| Full a11y audit, all header variants, nested nav, archive templates, WP/PHP version matrix | not scheduled |
+
+### The tap-target fix, and what it says about checking only what was reported
+
+The audit found header `Home`/`About` links about 38px wide against the project's 44×44
+rule. The height was already right, which is exactly why it read as done. Checking the rest
+of the stylesheet rather than only the reported line found **two more instances of the same
+defect** that no one had measured:
+
+- `.fm-nav__children .fm-nav__link` carried `min-height: 0`, removing the floor entirely —
+  nested nav links were around 22px tall.
+- `.fm-site-footer__list a` had a colour and no sizing at all — roughly 25px.
+
+All three are fixed. A rule that applies to every tap target is not satisfied by fixing the
+one that was measured.
+
+---
+
+## Acceptance checks
 
 Install on a clean WordPress with the fixture — the manual path is in
 [`fixtures/base-three-page/README.md`](../fixtures/base-three-page/README.md).
@@ -173,7 +211,9 @@ Install on a clean WordPress with the fixture — the manual path is in
 - [ ] One `<header>`, one `<main>`, one `<footer>` — no duplicate landmarks.
 - [ ] Tab from the top of the page: the skip link appears first and reaches `#fm-content`.
 - [ ] Focus is visible on every link and button.
-- [ ] Nav links are at least 44px tall.
+- [ ] Every tap target is at least 44px in **both** dimensions — header nav, **nested**
+      nav children, footer links, and buttons. Measure width as well as height; short
+      labels like "Home" fail on width while passing on height.
 
 **Responsiveness and speed**
 - [ ] 375px, 820px, 1440px — no horizontal scroll on the body.

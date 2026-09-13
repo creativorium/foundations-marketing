@@ -196,14 +196,23 @@ Foundations Blocks Runtime: (unset — stamped by the packager)
 
 .fm-nav__item { position: relative; }
 
+/*
+ * 44x44 minimum tap target (§8) — BOTH dimensions.
+ *
+ * The first version set only min-height, which reads as done and is not: "Home" is about
+ * 38px wide at body size, so a correct-height target was still under-width. min-width and
+ * centring fix that without touching the type scale or the gap between items.
+ */
 .fm-nav__link {
   color: var(--fm-ink);
   text-decoration: none;
   padding-block: 0.5rem;
-  /* 44px minimum tap target (§8). */
+  padding-inline: 0.25rem;
   display: inline-block;
   min-height: 44px;
+  min-width: 44px;
   line-height: 28px;
+  text-align: center;
 }
 
 .fm-nav__link:hover,
@@ -228,10 +237,14 @@ Foundations Blocks Runtime: (unset — stamped by the packager)
   gap: var(--fm-space-2);
 }
 
+/*
+ * A child link is smaller in type, NOT in target. The previous `min-height: 0` removed
+ * the floor entirely, leaving nested items around 22px tall — the same defect as the
+ * header, in a place nobody measured.
+ */
 .fm-nav__children .fm-nav__link {
   font-size: var(--fm-text-sm);
   color: var(--fm-muted);
-  min-height: 0;
 }
 
 /* Button */
@@ -278,9 +291,24 @@ Foundations Blocks Runtime: (unset — stamped by the packager)
   margin-block: 0 var(--fm-space-2);
 }
 
-.fm-site-footer__list { display: grid; gap: var(--fm-space-1); }
+.fm-site-footer__list { display: grid; }
 
-.fm-site-footer__list a { color: var(--fm-ink); }
+/*
+ * Footer links are tap targets too. They had colour and no sizing at all — roughly 25px
+ * tall. The padding supplies both the target and the spacing between rows, which is why
+ * the list gap above is now 0 rather than doubling the gaps.
+ */
+.fm-site-footer__list a {
+  color: var(--fm-ink);
+  display: inline-block;
+  min-height: 44px;
+  min-width: 44px;
+  padding-block: 0.6rem;
+  line-height: 1.6;
+}
+
+/* Not a link, so it needs its own breathing room now the gap is gone. */
+.fm-site-footer__list li:has(> .fm-site-footer__address) { padding-block: 0.6rem; }
 
 .fm-site-footer__address { font-style: normal; }
 

@@ -20,8 +20,8 @@
 <p>A sellable template needs its own blocks, its own palette and a real SEO phrase. This has none of those on purpose — it is the smallest thing that can fail if the base is wrong.</p>
 <!-- /wp:paragraph -->
 
-<!-- wp:image {"sizeSlug":"large","className":"fm-fixture-image"} -->
-<figure class="wp-block-image size-large fm-fixture-image"><img src="{{media:fixture-logo.png|url}}" alt="Placeholder image used by the base fixture"/></figure>
+<!-- wp:image {"id":"{{media:fixture-logo.png|id}}","sizeSlug":"large","linkDestination":"none","className":"fm-fixture-image"} -->
+<figure class="wp-block-image size-large fm-fixture-image"><img src="{{media:fixture-logo.png|url}}" alt="Placeholder image used by the base fixture" class="wp-image-{{media:fixture-logo.png|id}}"/></figure>
 <!-- /wp:image -->
 </section>
 <!-- /wp:group -->

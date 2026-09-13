@@ -325,6 +325,24 @@ an empty field, and the shared core still gets fixed in one place.
 
 Add to the core only what **every** template needs. Everything else is an extension.
 
+#### Business name and the WordPress site title are ONE field
+
+`site_name` drives the shell. WordPress `blogname` drives the `<title>` tag, feeds, the
+admin bar and outgoing mail. Left as two settings they drift, and the customer edits the
+one they can see — then asks why the browser tab still says something else.
+
+**Decision: the Site Settings "Business name" field is the single control, and saving it
+writes `blogname` too.** No separate website-title field is exposed. A service business's
+site title *is* its business name; offering two is a question the customer cannot answer,
+and a support call when they answer it differently.
+
+The read side already behaves this way: `fm_setting('site_name')` falls back to
+`get_bloginfo('name')`, so the shell is correct before the screen exists. **The write-through
+is step 2 work**, and belongs to the settings screen — nothing else may write `blogname`.
+
+Verified on the installed fixture: with a separate `blogname`, the header said one thing
+and the document title another. That is the drift this closes.
+
 ### 5.4 Other capability decisions
 
 - Use block locking — `templateLock`, and per-block `lock` attributes — for sections inside
@@ -370,6 +388,17 @@ than installing a subtly broken site:
   installed and is not.
 - `|id}}` resolves to an **integer** in the block attribute, not a numeric string. Blocks
   type their id attributes as integers and a string fails the attribute's type.
+- **Inside a block comment's attribute JSON the token is authored quoted**, because a bare
+  `{{…}}` is not valid JSON and nothing — editor, parser or lint — could read the block:
+
+  ```
+  <!-- wp:image {"id":"{{media:logo.png|id}}","sizeSlug":"large"} -->
+  ```
+
+  So the importer must replace the **quoted string including its quotes** with a bare
+  integer, not the token alone — substituting inside the quotes leaves `"id":"8"`, a
+  string, and the attribute type fails. The same token unquoted in a class
+  (`class="wp-image-{{media:logo.png|id}}"`) is a plain textual substitution.
 - `|url}}` is escaped for where it lands — `esc_url()` in an href or src, and JSON-encoded
   when it sits inside a block comment's attribute JSON.
 - After the second pass, **no `{{` may remain anywhere** in any created page, option row
