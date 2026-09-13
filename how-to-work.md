@@ -342,10 +342,34 @@ almost nothing else:
 <!-- wp:foundations/cta {"heading":"Book your first class"} /-->
 ```
 
-**The test, and it is not a judgement call:**
+**The test:**
 
-> If the file contains a `<div>`, a `<section>`, an `<h1>`, or a `style=` attribute,
-> **it is wrong.** Delete it and start again from the blocks.
+> Content must parse into supported blocks and survive **save and reload in the editor
+> with no validation error**. Raw HTML outside a block's own delimiters is never allowed.
+
+That is the rule. The old shorthand — "if it contains a `<div>` or a `<section>` it is
+wrong" — is a useful smell but is **not** the test, in either direction:
+
+- **A file can be full of markup and be correct.** Core blocks like `core/group` and
+  `core/list` save their own HTML inside their own delimiters. That is valid content.
+- **A file can contain no `<div>` at all and still be broken.** An attribute written into
+  the markup that the block comment never declared — an `id=` with no `"anchor"`, an extra
+  class with no `"className"` — is regenerated away or marked invalid on save. So is a
+  `data-*` attribute on a core block, or a bare `<li>` outside `wp:list-item`.
+
+**A template built from our own blocks still has no markup at all**, because every one of
+them is `save: () => null`. The rule above is what makes that a consequence rather than a
+separate thing to remember.
+
+**Two checks, and you need both:**
+
+```bash
+npm run validate:blocks    # catches the hazards above; NOT a validator
+```
+
+Then open the page in the editor, **save, and reload**. Only the editor can actually
+validate, because validation means running each block's `save()` and comparing. A green
+lint and an unopened page proves nothing.
 
 Writing raw HTML here fails for four reasons, all fatal:
 
@@ -953,7 +977,8 @@ image alt text and URL.
 
 ## 11. Before you commit
 
-- [ ] `npm run build` passes.
+- [ ] `npm run build` passes — it now runs `lint:php` and `validate:blocks` first, so a
+      PHP syntax error or a block-markup hazard fails the build rather than shipping.
 - [ ] Checked in the browser at your Local URL — **not just in the editor**.
 - [ ] Checked at 375px, 820px and 1440px.
 - [ ] Keyboard-navigable; focus is visible.
@@ -964,9 +989,9 @@ image alt text and URL.
       `parts/header.html`, `parts/footer.html`, the rest of `content/` (`media/`,
       `media.json`, `navigation.json`, `settings.json`, `manifest.json`) and a compressed
       `screenshot.webp` are all present, and `doc/TEMPLATES.md` has its row (§6a).
-- [ ] Template work only: **no page file** contains a `<div>`, a `<section>` or a `style=`
-      — they are block comments, nothing else (§2.1a) — and no page file starts with a
-      header block, because the header is a template part (§6a step 3).
+- [ ] Template work only: `npm run validate:blocks` passes, **and** every page has been
+      opened in the editor, saved and reloaded with no validation error (§2.1a). No page
+      file starts with a header block — the header is a template part (§6a step 3).
 - [ ] Template work only: each page renders as real editable blocks (§6b). Demo URL is in
       the PR, or a note saying why the demo route cannot show it yet.
 - [ ] `git status` is clean of local notes, DB dumps, `.env`, client asset drops and

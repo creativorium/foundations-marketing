@@ -23,12 +23,21 @@
 <!-- /wp:heading -->
 
 <!-- wp:list -->
-<ul class="wp-block-list">
+<ul class="wp-block-list"><!-- wp:list-item -->
 <li>Tokens resolve — colour, type and spacing come from theme.json.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
 <li>The header and footer render from Site Settings, once per page.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
 <li>Navigation links resolve by page id, so they survive an import.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
 <li>The page has exactly one H1, supplied by the content and not the template.</li>
-</ul>
+<!-- /wp:list-item --></ul>
 <!-- /wp:list -->
 </section>
 <!-- /wp:group -->
