@@ -1,0 +1,295 @@
+/*
+Theme Name: Foundations Customer Base
+Theme URI: https://github.com/creativorium/foundations-marketing
+Author: Creativorium
+Author URI: https://creativorium.com
+Description: The base every customer site theme is generated from. Minimal block theme — page shell, header/footer parts, and the token contract. Not shipped as-is; scripts/package.mjs assembles a per-design theme from this plus a template's theme.json and parts.
+Version: 1.0.0
+Requires at least: 6.4
+Tested up to: 6.7
+Requires PHP: 8.0
+License: GPL v2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: foundations-customer
+Foundations Base: 1.0.0
+Foundations Template: (unset — stamped by the packager)
+Foundations Blocks Runtime: (unset — stamped by the packager)
+*/
+
+/*
+ * --------------------------------------------------------------------------
+ * The --fm-* bridge. Do not delete.
+ * --------------------------------------------------------------------------
+ * Template blocks are written against --fm-* tokens (how-to-work.md §1.5), but a block
+ * theme's source of truth is theme.json, which emits --wp--preset--*. Rather than make
+ * every block author learn two vocabularies, the presets are aliased to --fm-* here.
+ *
+ * This means a design changes its palette by editing ONE file — its theme.json — and
+ * every block follows, with no block CSS to touch. It is also what stops a block author
+ * hardcoding a hex because "there is no token for it".
+ *
+ * EXTENSION POINT: a design adds tokens by adding presets to its own theme.json and
+ * aliasing them in the template's style.scss. Never redefine an --fm-* name below to
+ * mean something different — that is how two designs end up silently incompatible.
+ */
+:root {
+  /* Colour */
+  --fm-canvas:      var(--wp--preset--color--canvas);
+  --fm-surface:     var(--wp--preset--color--surface);
+  --fm-ink:         var(--wp--preset--color--ink);
+  --fm-muted:       var(--wp--preset--color--muted);
+  --fm-line:        var(--wp--preset--color--line);
+  --fm-accent:      var(--wp--preset--color--accent);
+  --fm-on-accent:   var(--wp--preset--color--on-accent);
+
+  /* Type */
+  --fm-font-display: var(--wp--preset--font-family--display);
+  --fm-font-body:    var(--wp--preset--font-family--body);
+  --fm-text-sm:      var(--wp--preset--font-size--small);
+  --fm-text-md:      var(--wp--preset--font-size--medium);
+  --fm-text-lg:      var(--wp--preset--font-size--large);
+  --fm-text-xl:      var(--wp--preset--font-size--x-large);
+  --fm-text-2xl:     var(--wp--preset--font-size--xx-large);
+
+  /* Space */
+  --fm-space-1: var(--wp--preset--spacing--10);
+  --fm-space-2: var(--wp--preset--spacing--20);
+  --fm-space-3: var(--wp--preset--spacing--30);
+  --fm-space-4: var(--wp--preset--spacing--40);
+  --fm-space-5: var(--wp--preset--spacing--50);
+  --fm-space-6: var(--wp--preset--spacing--60);
+
+  /* Layout */
+  --fm-content: var(--wp--style--global--content-size);
+  --fm-wide:    var(--wp--style--global--wide-size);
+}
+
+/*
+ * --------------------------------------------------------------------------
+ * Base. Deliberately almost empty.
+ * --------------------------------------------------------------------------
+ * theme.json owns appearance. Only put rules here that theme.json cannot express —
+ * accessibility floors, and things every customer site needs regardless of design.
+ */
+
+/* Skip link. Visually hidden until focused — a keyboard user must be able to reach it. */
+.fm-skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 999;
+  padding: var(--fm-space-2) var(--fm-space-3);
+  background: var(--fm-accent);
+  color: var(--fm-on-accent);
+  text-decoration: none;
+}
+
+.fm-skip-link:focus {
+  left: var(--fm-space-2);
+  top: var(--fm-space-2);
+}
+
+/* Visible focus everywhere. Never remove this without replacing it. (§8) */
+:where(a, button, input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--fm-accent);
+  outline-offset: 2px;
+}
+
+/* Images never overflow their column, and never push the body sideways. (§8) */
+:where(img, svg, video, iframe) {
+  max-width: 100%;
+  height: auto;
+}
+
+/* A site's content region should still be reachable when a design forgets a landmark. */
+.fm-main:focus {
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+ * --------------------------------------------------------------------------
+ * Shell — header, nav, footer.
+ * --------------------------------------------------------------------------
+ * These two components are the same in every design; only their tokens and their
+ * `variant` differ. Layout here, appearance from theme.json.
+ *
+ * EXTENSION POINT: a design restyles the shell from its own style.scss by targeting
+ * these class names, or picks a different `variant` in its parts/*.html. Do not fork
+ * blocks/site-header/ per design — see inc/shell-blocks.php.
+ *
+ * No JavaScript. The nav is a plain list that wraps; there is no burger menu, because
+ * a toggle is layout JavaScript and the speed budget says no (§9). A design that truly
+ * needs one builds it as its own block with its own script.
+ */
+
+.fm-site-header__inner,
+.fm-site-footer__inner {
+  max-width: var(--fm-wide);
+  margin-inline: auto;
+  padding-inline: var(--fm-space-3);
+}
+
+.fm-site-header {
+  border-block-end: 1px solid var(--fm-line);
+  background: var(--fm-canvas);
+}
+
+.fm-site-header__inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--fm-space-2) var(--fm-space-4);
+  padding-block: var(--fm-space-3);
+}
+
+.fm-site-header--inline .fm-site-header__nav { margin-inline-start: auto; }
+.fm-site-header--inline .fm-site-header__cta { margin-inline-start: 0; }
+
+.fm-site-header--centered .fm-site-header__inner,
+.fm-site-header--stacked .fm-site-header__inner {
+  flex-direction: column;
+  text-align: center;
+}
+
+.fm-site-header__home {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.fm-site-header__name {
+  font-family: var(--fm-font-display);
+  font-size: var(--fm-text-lg);
+}
+
+.fm-site-header__logo {
+  display: block;
+  max-height: 3rem;
+  width: auto;
+}
+
+/* Nav */
+.fm-nav,
+.fm-site-footer__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.fm-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fm-space-2) var(--fm-space-3);
+}
+
+.fm-nav__item { position: relative; }
+
+.fm-nav__link {
+  color: var(--fm-ink);
+  text-decoration: none;
+  padding-block: 0.5rem;
+  /* 44px minimum tap target (§8). */
+  display: inline-block;
+  min-height: 44px;
+  line-height: 28px;
+}
+
+.fm-nav__link:hover,
+.fm-nav__link:focus-visible { text-decoration: underline; }
+
+.fm-nav__link[aria-current="page"] {
+  color: var(--fm-accent);
+  text-decoration: underline;
+}
+
+/*
+ * Children render as a nested list, always visible rather than on hover. A hover-only
+ * submenu is unreachable by touch and needs JavaScript to fix; one level of always-open
+ * links is honest and costs nothing.
+ */
+.fm-nav__children {
+  list-style: none;
+  margin: 0;
+  padding-inline-start: var(--fm-space-2);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fm-space-2);
+}
+
+.fm-nav__children .fm-nav__link {
+  font-size: var(--fm-text-sm);
+  color: var(--fm-muted);
+  min-height: 0;
+}
+
+/* Button */
+.fm-button {
+  display: inline-block;
+  background: var(--fm-accent);
+  color: var(--fm-on-accent);
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.25rem;
+  min-height: 44px;
+}
+
+.fm-button:hover,
+.fm-button:focus-visible { opacity: 0.9; }
+
+/* Footer */
+.fm-site-footer {
+  background: var(--fm-surface);
+  border-block-start: 1px solid var(--fm-line);
+  margin-block-start: var(--fm-space-6);
+}
+
+.fm-site-footer__inner {
+  display: grid;
+  gap: var(--fm-space-4);
+  padding-block: var(--fm-space-5);
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 48rem) {
+  .fm-site-footer--columns .fm-site-footer__inner {
+    grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  }
+}
+
+.fm-site-footer--centered .fm-site-footer__inner { text-align: center; }
+
+.fm-site-footer__heading {
+  font-size: var(--fm-text-sm);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fm-muted);
+  margin-block: 0 var(--fm-space-2);
+}
+
+.fm-site-footer__list { display: grid; gap: var(--fm-space-1); }
+
+.fm-site-footer__list a { color: var(--fm-ink); }
+
+.fm-site-footer__address { font-style: normal; }
+
+.fm-site-footer__legal {
+  grid-column: 1 / -1;
+  border-block-start: 1px solid var(--fm-line);
+  padding-block-start: var(--fm-space-3);
+  color: var(--fm-muted);
+  font-size: var(--fm-text-sm);
+}
+
+.fm-site-footer__legal p { margin-block: 0 var(--fm-space-1); }

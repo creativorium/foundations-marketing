@@ -1,0 +1,23 @@
+<!-- wp:group {"tagName":"section","layout":{"type":"constrained"}} -->
+<section class="wp-block-group">
+<!-- wp:heading {"level":1,"fontSize":"xx-large"} -->
+<h1 class="wp-block-heading has-xx-large-font-size">Contact</h1>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph {"fontSize":"large"} -->
+<p class="has-large-font-size">The third page. Contact details live in Site Settings and render in the footer, so this page does not repeat them — proving a customer edits them once.</p>
+<!-- /wp:paragraph -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","layout":{"type":"constrained"}} -->
+<section class="wp-block-group">
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Where to find us</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Replace this with a real address block when a design needs one. A form is deliberately absent — forms need a plugin, and a customer site takes no new plugin dependency.</p>
+<!-- /wp:paragraph -->
+</section>
+<!-- /wp:group -->

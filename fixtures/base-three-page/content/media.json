@@ -1,0 +1,15 @@
+{
+  "$comment": "Media the importer must sideload, and how page files refer to it. Blocks store ATTACHMENT IDS (fm_image()), and core blocks store URLs, so neither survives a move between sites. Page files therefore never contain a real URL or id — they contain a token, and the importer swaps it for the value it got when it sideloaded the file. See customer-runtime.md 6a.",
+  "tokens": {
+    "media": "{{media:<filename>|url}} or {{media:<filename>|id}}",
+    "page": "{{page:<slug>|url}} or {{page:<slug>|id}}"
+  },
+  "files": [
+    {
+      "file": "fixture-logo.png",
+      "title": "Foundations fixture logo",
+      "alt": "Placeholder image used by the base fixture",
+      "usedBy": ["content/pages/about.blocks.txt", "content/settings.json"]
+    }
+  ]
+}

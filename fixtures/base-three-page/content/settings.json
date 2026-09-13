@@ -1,0 +1,15 @@
+{
+  "$comment": "Default Site Settings for this fixture. Keys must exist in fm_settings_core() or in this template's declared extensions - an unknown key is dropped by the importer rather than silently stored where no screen can edit it.",
+  "site_name": "Foundations Fixture",
+  "tagline": "Proving the base, not selling anything",
+  "logo_id": "{{media:fixture-logo.png|id}}",
+  "phone": "0117 000 0000",
+  "email": "hello@example.com",
+  "address": "1 Example Street\nBristol\nBS1 0AA",
+  "cta_label": "Get in touch",
+  "cta_url": "{{page:contact|url}}",
+  "footer_text": "This is a development fixture. It is not a sellable template.",
+  "social": [
+    { "network": "Instagram", "url": "https://example.com/instagram" }
+  ]
+}
