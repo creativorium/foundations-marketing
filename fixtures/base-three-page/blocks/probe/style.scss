@@ -1,0 +1,8 @@
+.fm-fixture-probe {
+  display: flex;
+  align-items: center;
+  gap: var(--fm-space-3);
+  padding: var(--fm-space-3);
+  border: 1px solid var(--fm-line);
+  &__image { width: 48px; height: 48px; object-fit: cover; }
+}

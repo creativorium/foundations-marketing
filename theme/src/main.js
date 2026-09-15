@@ -4,6 +4,27 @@
  */
 import './styles/main.scss';
 
+const curtain = document.querySelector('.fm-px');
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+let leaving = false;
+if (curtain) {
+  document.addEventListener('click', event => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || reducedMotion.matches || leaving) return;
+    const link = event.target.closest('a[href]');
+    if (!link || link.hasAttribute('download') || (link.target && link.target !== '_self')) return;
+    const url = new URL(link.href, location.href);
+    if (url.origin !== location.origin || !/^https?:$/.test(url.protocol) || url.pathname.startsWith('/wp-admin') || url.searchParams.has('add-to-cart')) return;
+    if (url.pathname === location.pathname && url.search === location.search) return;
+    event.preventDefault();
+    leaving = true;
+    curtain.dataset.leaving = '';
+    window.setTimeout(() => location.assign(url.href), 160);
+    // Recover when a download or cancelled navigation leaves this document open.
+    window.setTimeout(() => { delete curtain.dataset.leaving; leaving = false; }, 2500);
+  });
+  window.addEventListener('pageshow', () => { delete curtain.dataset.leaving; leaving = false; });
+}
+
 // -----------------------------------------------------------------------------
 // Mobile nav — a right-hand drawer. Markup lives in theme/header.php, geometry and
 // motion in styles/_header.scss. This file owns state only: it flips `data-open`

@@ -1,5 +1,12 @@
 # Base fixture — three pages
 
+Current workflow: `npm run build`, `npm run package -- base-three-page`, then follow
+[`delivery-operations.md`](../../delivery-operations.md). The fixture now includes a
+small dynamic block to exercise compiled editor JS, frontend CSS, image IDs and page
+IDs. It remains internal and cannot be published in the catalogue. The older manual
+setup below documents the original theme-only audit; do not bypass the importer when
+testing a release. Current results are in [`delivery-verification.md`](../../delivery-verification.md).
+
 **This is not a sellable template and must never reach the catalogue.** It is the smallest
 site that can fail if the customer theme base is wrong: Home, About, Contact, a header, a
 footer, one image and a menu.
@@ -31,8 +38,8 @@ wrong. **These files contain all three, and are still correct.** The distinction
 - **Core blocks save markup.** `core/group`, `core/heading` and `core/list` legitimately
   store their own HTML, inside their own block comments.
 
-This fixture uses core blocks because the template blocks it would otherwise use do not
-exist until step 2. Every element here sits inside a core block's comment delimiters — none
+This fixture combines core blocks with one generated-runtime probe. Every saved HTML
+element sits inside its core block's comment delimiters — none
 of it is hand-written HTML, which is what the rule actually forbids.
 
 A real template is built from Foundations blocks and so has no markup at all. **Do not cite

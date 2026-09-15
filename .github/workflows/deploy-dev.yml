@@ -188,6 +188,27 @@ jobs:
             --exclude '.DS_Store' \
             plugin/ "$SSH_USER@$SSH_HOST:$WP_PATH/wp-content/plugins/foundations-blocks/"
 
+      # First-party plugins; activation remains an explicit WordPress action.
+      - name: Deploy delivery and contact plugins
+        env:
+          SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
+          SSH_PORT: ${{ secrets.DEV_SSH_PORT }}
+          SSH_USER: ${{ secrets.DEV_SSH_USER }}
+          WP_PATH: ${{ secrets.DEV_WP_PATH }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          DRY=""
+          [ "${DRY_RUN:-false}" = "true" ] && DRY="--dry-run"
+          for pair in plugin-delivery:foundations-delivery plugin-contact:fm-contact-discovery; do
+            source="${pair%%:*}"
+            destination="${pair##*:}"
+            rsync -az --delete --itemize-changes $DRY --chmod=D755,F644 \
+              -e "ssh -i ~/.ssh/id_deploy -p ${SSH_PORT:-22} -o BatchMode=yes" \
+              --exclude '.git*' --exclude '*.test.*' \
+              "$source/" "$SSH_USER@$SSH_HOST:$WP_PATH/wp-content/plugins/$destination/"
+          done
+
       - name: Check the dev site still answers
         if: ${{ inputs.dry_run != true }}
         run: |

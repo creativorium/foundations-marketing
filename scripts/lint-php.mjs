@@ -28,6 +28,11 @@ const TARGETS = [
   'theme/**/*.php',
   'plugin/**/*.php',
   'theme-customer-base/**/*.php',
+  'plugin-site/**/*.php',
+  'plugin-delivery/**/*.php',
+  'plugin-contact/**/*.php',
+  'scripts/*.php',
+  'fixtures/**/*.php',
 ];
 
 const IGNORE = /[\\/](node_modules|build|vendor)[\\/]/;

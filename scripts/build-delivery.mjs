@@ -1,0 +1,13 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+const root=fileURLToPath(new URL('../',import.meta.url));
+const to=path.join(root,'plugin-delivery/runtime');
+await fs.mkdir(to,{recursive:true});
+await fs.cp(path.join(root,'plugin-site/inc'),path.join(to,'inc'),{recursive:true});
+await fs.cp(path.join(root,'plugin-site/assets'),path.join(to,'assets'),{recursive:true});
+await fs.cp(path.join(root,'theme-customer-base'),path.join(to,'base'),{recursive:true});
+const helpers=(await fs.readFile(path.join(root,'plugin/inc/helpers.php'),'utf8')).replaceAll('\r\n','\n');
+const end=helpers.indexOf('/**\n * The site templates');if(end<0)throw new Error('Cannot locate customer helper boundary');
+await fs.writeFile(path.join(to,'helpers.php'),helpers.slice(0,end));
+console.log('Built delivery manager runtime.');

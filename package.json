@@ -9,7 +9,7 @@
     "lint:php": "node scripts/lint-php.mjs",
     "test:blocks": "node scripts/validate-blocks.test.mjs",
     "validate:blocks": "node scripts/validate-blocks.mjs",
-    "build": "npm run clean && npm run lint:php && npm run test:blocks && npm run validate:blocks && npm run build:theme && npm run build:login && npm run build:editor && npm run build:frontend && npm run build:errors",
+    "build": "npm run clean && npm run lint:php && npm run test:blocks && npm run validate:blocks && npm run build:theme && npm run build:login && npm run build:editor && npm run build:frontend && npm run build:errors && npm run build:delivery",
     "build:theme": "vite build --mode theme",
     "build:login": "vite build --mode login",
     "build:editor": "vite build --mode editor",
@@ -18,9 +18,14 @@
     "watch:theme": "vite build --mode theme --watch",
     "watch:editor": "vite build --mode editor --watch",
     "watch:frontend": "vite build --mode frontend --watch",
-    "build:errors": "node scripts/build-error-pages.mjs"
+    "build:errors": "node scripts/build-error-pages.mjs",
+    "package": "node scripts/package.mjs",
+    "build:delivery": "node scripts/build-delivery.mjs",
+    "test:browser": "node scripts/test-site-browser.mjs",
+    "test:transition": "node scripts/test-transition-browser.mjs"
   },
   "devDependencies": {
+    "playwright": "1.60.0",
     "sass": "^1.83.0",
     "vite": "^6.0.7"
   },

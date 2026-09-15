@@ -122,11 +122,7 @@ function fm_settings_schema(): array
  */
 function fm_setting(string $key, mixed $fallback = null): mixed
 {
-    static $values = null;
-
-    if ($values === null) {
-        $values = (array) get_option(FM_SETTINGS_OPTION, []);
-    }
+    $values = (array) apply_filters('fm_site_settings_values', get_option(FM_SETTINGS_OPTION, []));
 
     if (array_key_exists($key, $values) && $values[$key] !== '' && $values[$key] !== []) {
         return $values[$key];

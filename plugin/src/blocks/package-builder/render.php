@@ -29,6 +29,8 @@ $base_price = max(0, (int) $attr('basePrice', 249));
 $base_label = (string) $attr('baseLabel', 'base build');
 $page_price = max(0, (int) $attr('extraPagePrice', 50));
 $product_id = (int) $attr('productId', 0);
+$product = $product_id > 0 && function_exists('wc_get_product') ? wc_get_product($product_id) : false;
+if ($product && $product->get_price() !== '') { $base_price = max(0, (float) $product->get_price()); }
 
 $included    = (array) $attr('included', []);
 $free_items  = (array) $attr('freeItems', []);
@@ -43,7 +45,7 @@ $template = fm_selected_template();
 $steps = [
     __('Preview', 'foundations'),
     __('Add extras', 'foundations'),
-    __('Review & pay', 'foundations'),
+    __('Review package', 'foundations'),
 ];
 
 $devices = [
@@ -53,7 +55,7 @@ $devices = [
 ];
 
 $action = fm_checkout_url();
-$money  = static fn (int $n): string => '&pound;' . number_format_i18n($n);
+$money  = static fn (float $n): string => function_exists('wc_price') ? wc_price($n) : '&pound;' . number_format_i18n($n, 2);
 ?>
 <div <?php echo fm_wrapper(['fm-builder']); ?> data-fm-builder data-step="1"
      data-base-price="<?php echo esc_attr((string) $base_price); ?>">
