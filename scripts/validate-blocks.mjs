@@ -18,7 +18,19 @@
  *   4. Unbalanced block comments.
  *   5. A malformed import token, or a token in a file that should have none.
  *
- * Every rule here has a case in validate-blocks.test.mjs. Add one when you add a rule —
+ * KNOWN LIMITS — read these before trusting a green run:
+ *
+ *   - The attribute checks (1 and 2) look ONLY at the first element after a block
+ *     comment. An undeclared class or a data- attribute on a NESTED element is not seen.
+ *     Extending to nested elements would mean modelling every class core generates inside
+ *     a block — wp-block-button__link, figcaption classes, and so on — which would produce
+ *     more false alarms than catches. The editor save/reload check covers what this does
+ *     not, which is why it is not optional.
+ *   - It does not know which block names exist, so a typo'd block name parses fine here
+ *     and fails in the editor.
+ *
+ * Every rule here has a case in validate-blocks.test.mjs, and so does every limit above,
+ * so the boundary is deliberate rather than discovered. Add a case when you add a rule —
  * an untested linter is worse than no linter, because it is believed.
  *
  * Run: npm run validate:blocks   ·   Test: npm run test:blocks
@@ -44,6 +56,8 @@ const GENERATED_CLASS = [
   /^wp-block-[a-z0-9-]+$/,
   /^wp-element-[a-z0-9-]+$/,
   /^wp-image-\d+$/,
+  // Authored form, before the importer substitutes: class="wp-image-{{media:x.png|id}}".
+  /^wp-image-\{\{media:[^|{}\s]+\|id\}\}$/,
   /^has-[a-z0-9-]+$/,
   /^is-[a-z0-9-]+$/,
   /^align(wide|full|left|right|center|none)$/,

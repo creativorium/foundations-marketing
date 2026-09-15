@@ -67,6 +67,22 @@ substitutes them after it has created the pages and sideloaded the files:
 The importer resolves these in a **second pass**, after every page exists — a page linked
 from the homepage has to have been created before the link can be resolved.
 
+**Inside a block comment's attribute JSON the token is quoted**, because a bare `{{…}}` is
+not valid JSON and the block would be unreadable to the editor, the parser and the lint:
+
+```
+<!-- wp:image {"id":"{{media:fixture-logo.png|id}}","sizeSlug":"large"} -->
+```
+
+The importer replaces the **quoted string including its quotes** with a bare integer.
+Substituting inside the quotes leaves `"id":"8"` — a string where the block expects an
+integer.
+
+The About page's image uses this canonical id-based form deliberately. An earlier version
+carried only a URL: it rendered, and it validated, and it exercised **none** of the
+attachment-id remapping that the importer has to get right. A fixture that passes without
+testing the risky path is worse than no fixture.
+
 **Status: the token format is defined here and consumed by nothing yet.** The importer is
 step 4. Until then these files are read by hand.
 

@@ -67,6 +67,28 @@ const CASES = [
     expect: null,
   },
 
+  {
+    name: 'id-based image, tokens in attribute JSON and in the class, passes',
+    file: PAGE,
+    text: `<!-- wp:image {"id":"{{media:logo.png|id}}","sizeSlug":"large","className":"fm-x"} -->
+<figure class="wp-block-image size-large fm-x"><img src="{{media:logo.png|url}}" alt="x" class="wp-image-{{media:logo.png|id}}"/></figure>
+<!-- /wp:image -->`,
+    expect: null,
+  },
+  {
+    // A LIMIT, pinned deliberately. The attribute checks look only at the first element
+    // after a block comment; nested elements are not examined. Modelling every class core
+    // generates inside a block would cause more false alarms than catches, so the editor
+    // save/reload check is what covers this. If this test ever starts failing, someone has
+    // extended the checker — update the header comment and the READMEs to match.
+    name: 'LIMIT: undeclared class on a nested element is NOT caught',
+    file: PAGE,
+    text: `<!-- wp:image {"sizeSlug":"large"} -->
+<figure class="wp-block-image size-large"><img src="x" class="totally-undeclared"/></figure>
+<!-- /wp:image -->`,
+    expect: null,
+  },
+
   // ------------------------------------------- the three original bugs ---
   {
     name: 'id without a declared anchor',
