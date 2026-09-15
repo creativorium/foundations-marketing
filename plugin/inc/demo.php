@@ -89,9 +89,30 @@ function fm_demo_templates(): array
 /**
  * `/templates/<slug>/demo/` — matched ahead of the CPT's own single, which would
  * otherwise swallow the /demo/ suffix as part of the post name and 404.
+ *
+ * The rule is registered ONLY when there is a legacy single-page template for it to
+ * serve, and that condition is the whole point of the guard.
+ *
+ * This route and `plugin-delivery/inc/preview.php` claim overlapping URLs: delivery
+ * matches `^templates/([^/]+)/demo(?:/([^/]+))?/?$`, which covers this one exactly. When
+ * both rules were registered, a MULTI-PAGE design resolved its interior pages through
+ * delivery (200) while its homepage fell through to this route, which finds templates by
+ * a root `content.blocks.txt` a multi-page design does not have — and answered 404. So
+ * `/demo/treatments/` worked and `/demo/` did not, which reads like a broken template
+ * rather than like two routes disagreeing.
+ *
+ * Registering nothing when there is nothing to serve leaves the URL space to delivery,
+ * which is the route that understands the current template shape (customer-runtime.md
+ * §2.3). A genuine legacy template puts the rule back, and because its own handler runs
+ * at template_redirect priority 10 — after delivery's priority 1, which returns when the
+ * slug is not one of its designs — the two can still coexist.
  */
 function fm_demo_rewrite(): void
 {
+    if (fm_demo_templates() === []) {
+        return;
+    }
+
     add_rewrite_rule(
         '^templates/([^/]+)/demo/?$',
         'index.php?fm_demo=$matches[1]',
