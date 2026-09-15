@@ -1,0 +1,108 @@
+// foundations/onyx-hero — front-end styles.
+// Tokens only. Shared primitives (.fm-onyx-display, .fm-onyx-plate) come from the
+// template's own style.scss.
+
+.fm-onyx-hero {
+  padding-inline: var(--fm-onyx-gutter);
+  padding-block-start: var(--fm-space-5);
+  background: var(--fm-canvas);
+
+  &__top {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: var(--fm-space-4);
+    align-items: end;
+    padding-block-end: var(--fm-space-4);
+    border-block-end: 1px solid var(--fm-line);
+  }
+
+  &__heading {
+    // Scales from a readable 3.5rem on a 375px screen to the drawn size at 1440px.
+    font-size: clamp(3.5rem, 9.5vw, 10.75rem);
+    line-height: 0.86;
+    letter-spacing: -0.045em;
+  }
+
+  &__highlight { color: var(--fm-accent); }
+
+  &__aside {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fm-space-2);
+    max-width: 20rem;
+    padding-block-end: 0.625rem;
+  }
+
+  &__lead {
+    margin: 0;
+    font-size: var(--fm-text-lg);
+    line-height: 1.6;
+    color: var(--fm-muted);
+  }
+
+  // The figures row. A description list, because each figure genuinely labels a value —
+  // and the DOM order is key-then-value so it reads correctly, with the visual order
+  // flipped in CSS rather than in the markup.
+  &__stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    margin: 0;
+    background: var(--fm-line);
+    border-block-end: 1px solid var(--fm-line);
+  }
+
+  &__stat {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 0.375rem;
+    padding: var(--fm-space-3) 0.25rem var(--fm-space-3) 0;
+    background: var(--fm-canvas);
+  }
+
+  &__stat-value {
+    margin: 0;
+    font-family: var(--fm-font-display);
+    font-size: clamp(1.5rem, 2.6vw, 2.125rem);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+
+  &__stat-key {
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fm-muted);
+  }
+
+  &__media { padding-block-start: var(--fm-space-3); }
+
+  &__plate {
+    block-size: 62vh;
+    min-block-size: 27.5rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .fm-onyx-hero__stats { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 820px) {
+  .fm-onyx-hero {
+    padding-block-start: var(--fm-space-4);
+
+    &__top {
+      grid-template-columns: 1fr;
+      align-items: start;
+    }
+
+    &__aside { max-width: none; }
+
+    &__plate {
+      block-size: auto;
+      min-block-size: 15rem;
+      aspect-ratio: 4 / 3;
+    }
+  }
+}

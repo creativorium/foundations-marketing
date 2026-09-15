@@ -25,3 +25,4 @@
 <!-- /wp:image -->
 </section>
 <!-- /wp:group -->
+<!-- wp:foundations/base-three-page-probe {"label":"Editable runtime check","imageId":"{{media:fixture-logo.png|id}}","targetPageId":"{{page:contact|id}}"} /-->

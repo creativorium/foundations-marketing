@@ -13,9 +13,10 @@ builds against it. Confidential client material stays in `/doc/`, which is gitig
 
 ## Status — planned vs implemented
 
-**Read this first. Almost everything below is a specification, not a description.**
-Nothing in §2–§6 exists in the repository yet. Do not read a present-tense sentence as a
-claim that the code is there.
+The shared base, customer runtime, packager and internal delivery manager are implemented.
+Local acceptance evidence is recorded in delivery-verification.md. A passing fixture
+proves the pipeline; each real design still needs its own acceptance checks.
+See [delivery-operations.md](delivery-operations.md) for the current installation workflow.
 
 | Piece | State | Where |
 |---|---|---|
@@ -23,16 +24,18 @@ claim that the code is there.
 | Standalone demo route, single page from `content.blocks.txt` | **Implemented** | `plugin/inc/demo.php` |
 | Per-template block categories in the inserter | **Implemented** | `plugin/inc/register.php` |
 | `fm_image()`, `fm_url()` and the block helpers | **Implemented** | `plugin/inc/helpers.php` |
-| Multi-page template folder (§2) | **Planned** | — |
-| Multi-page demo routing (§2.3) | **Planned** — current route serves one page only | — |
+| Multi-page template folder (§2) | **Specified and exercised by fixture** | `fixtures/base-three-page/` |
+| Multi-page demo routing (§2.3) | **Built for compiled designs** | `plugin-delivery/inc/preview.php` |
 | Customer theme base — shell, tokens, parts (§3) | **Built** | `theme-customer-base/` |
 | Site Settings **contract** — schema, defaults, read helpers | **Built** | `theme-customer-base/inc/settings-contract.php` |
 | Shell blocks — `foundations/site-header`, `site-footer` (§5.1) | **Built** | `theme-customer-base/blocks/` |
 | Internal three-page fixture | **Built** | `fixtures/base-three-page/` |
-| Customer blocks plugin output (§4) | **Planned** | — |
-| Site Settings **screen**, Site Owner role, capabilities (§5) | **Planned** | — |
-| Starter-site import (§6a) — **milestone 1** | **Planned** | — |
-| Customised-site export (§6b) — **milestone 2** | **Planned** | — |
+| Customer blocks plugin output (§4) | **Built** | `plugin-site/`, `scripts/package.mjs` |
+| Site Settings **screen**, Site Owner role, capabilities (§5) | **Built** | `plugin-site/inc/settings.php` |
+| Starter-site import (§6a) — **milestone 1** | **Built** | `plugin-site/inc/bundle.php` |
+| Customised-site export (§6b) — **milestone 2** | **Built for explicit pages/media/settings** | `plugin-site/inc/bundle.php` |
+| Customer projects, releases and manual installation records | **Built** | `plugin-delivery/` |
+| Always-active keycard | **Built; no remote heartbeat** | `plugin-site/inc/tools.php` |
 | Maintenance reporting (§8) | **Deferred**, after milestone 2 | — |
 | Templates in the catalogue | **Zero.** `plugin/src/templates/` does not exist | — |
 
@@ -96,7 +99,8 @@ Everything in `how-to-work.md` §2.1b still holds and is not reopened:
 - Namespace every template block `foundations/<slug>-<name>`.
 - Blocks are server-rendered, `save: () => null`.
 - A page file is **Gutenberg block markup** — block comments and attributes, nothing else.
-  If it contains a `<div>`, a `<section>`, an `<h1>` or a `style=`, it is wrong.
+  Do not put arbitrary markup outside block delimiters. Core blocks may contain their
+  own saved HTML; custom dynamic blocks store attributes and save no HTML.
 - Tokens only. No hardcoded hex.
 
 ### 2.2 What changed
@@ -111,9 +115,11 @@ Everything in `how-to-work.md` §2.1b still holds and is not reopened:
 - Two new required files a template did not previously have: `theme.json` and
   `content/manifest.json`.
 
-### 2.3 Demo routing must change — planned
+### 2.3 Demo routing
 
-`plugin/inc/demo.php` currently serves **one page**: it scans for `content.blocks.txt`,
+`plugin-delivery/inc/preview.php` serves compiled multi-page designs and isolated customer previews.
+It reads parts from the packaged theme and applies that design?s tokens. The older
+`plugin/inc/demo.php` remains a **single-page compatibility route**: it scans for `content.blocks.txt`,
 matches `^templates/([^/]+)/demo/?$`, and renders that file with no header or footer,
 "because the template supplies its own". Multi-page templates and part-based headers break
 three assumptions in it. All three need work before template #1 can be previewed:
@@ -254,11 +260,10 @@ The escape hatch is deliberately more work than the variant, because a forked he
 receiving base fixes. Use it when the design genuinely differs, not to avoid writing a
 selector. Record which designs have forked, so a base fix can be applied by hand to them.
 
-**Staff previewing the shell in the Site Editor.** The two shell blocks are registered in
-PHP only, which gives them no editor UI: opened in the Site Editor they show as an
-unsupported block, not as rendered output. That is harmless for customers, who cannot reach
-that screen — but it makes the parts awkward for *us* to preview. Giving them a minimal
-`edit` using `ServerSideRender` is **step 2 work**, tracked with the runtime plugin.
+**Staff previewing the shell in the Site Editor.** The shell blocks have PHP registration
+and an editor registration using `ServerSideRender` in
+`theme-customer-base/assets/editor.js`. Customers edit their business details through
+Site Settings; the Site Owner role cannot access the Site Editor.
 
 **Describe the product accurately, internally and to the customer:**
 
@@ -338,7 +343,7 @@ and a support call when they answer it differently.
 
 The read side already behaves this way: `fm_setting('site_name')` falls back to
 `get_bloginfo('name')`, so the shell is correct before the screen exists. **The write-through
-is step 2 work**, and belongs to the settings screen — nothing else may write `blogname`.
+is implemented in the customer settings screen**, which also updates `blogname`.
 
 Verified on the installed fixture: with a separate `blogname`, the header said one thing
 and the document title another. That is the drift this closes.
@@ -489,7 +494,7 @@ those sections now point here:
 |---|---|
 | §2.1a | Template folder is multi-page; adds `theme.json`, `parts/`, `content/` |
 | §6a | Build order includes the pages, the parts and the manifest |
-| §6b | Demo routing is multi-page — **planned, not built** (§2.3) |
+| §6b | Demo routing is multi-page through the delivery manager (§2.3) |
 | §13 | The packaging pipeline is specified here rather than only named as missing |
 
 Nothing in §0.1 is reopened. Native Gutenberg blocks, server-rendered, one folder per

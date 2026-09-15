@@ -31,6 +31,8 @@ require_once FM_BLOCKS_DIR . 'inc/demo.php';
 // The WooCommerce side of the package builder. Loaded only when WooCommerce is
 // active: every hook in it is a WooCommerce hook, and on a site without the plugin
 // the file is dead weight that also type-hints classes that do not exist.
-if (class_exists('WooCommerce')) {
-    require_once FM_BLOCKS_DIR . 'inc/checkout.php';
-}
+add_action('plugins_loaded', static function (): void {
+    if (class_exists('WooCommerce')) {
+        require_once FM_BLOCKS_DIR . 'inc/checkout.php';
+    }
+});

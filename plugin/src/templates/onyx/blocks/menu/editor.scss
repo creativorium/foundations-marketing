@@ -1,0 +1,7 @@
+// Editor-only styles for foundations/onyx-menu.
+// The preview is ServerSideRender, so the front-end styles already apply. This only stops
+// the editor canvas fighting a band that draws its own full-width gutter.
+
+.wp-block[data-type="foundations/onyx-menu"] > * {
+  max-inline-size: 100%;
+}

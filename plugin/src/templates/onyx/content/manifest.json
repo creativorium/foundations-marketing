@@ -1,0 +1,19 @@
+{
+  "$comment": "What the importer reads first. Page order is creation order; tokens are resolved in a second pass once every page exists, so a page linked from another does not have to come first.",
+  "versions": {
+    "base": "1.0.0",
+    "template": "0.1.0",
+    "blocksRuntime": "0.1.0"
+  },
+  "homepage": "home",
+  "pages": [
+    { "slug": "home",       "title": "Home",           "file": "pages/home.blocks.txt" },
+    { "slug": "treatments", "title": "Treatments",     "file": "pages/treatments.blocks.txt" },
+    { "slug": "about",      "title": "About",          "file": "pages/about.blocks.txt" },
+    { "slug": "contact",    "title": "Contact",        "file": "pages/contact.blocks.txt" },
+    { "slug": "privacy",    "title": "Privacy policy", "file": "pages/privacy.blocks.txt" }
+  ],
+  "settings": "settings.json",
+  "navigation": "navigation.json",
+  "media": "media.json"
+}

@@ -2,7 +2,7 @@
 
 The minimal block theme every customer site theme is generated from.
 
-**This theme is never shipped as-is.** `scripts/package.mjs` (step 3, not built) assembles a
+**This theme is never shipped as-is.** `scripts/package.mjs` assembles a
 per-design theme — `foundations-<slug>` — from this base plus one template's `theme.json`,
 `parts/` and styles. See [customer-runtime.md](../customer-runtime.md) §3.
 
@@ -20,7 +20,7 @@ foundationsmarketing.co.uk and runs WooCommerce. Two themes, two sites.
 | Header/footer integration points — `blocks/site-*` | **Built**, reading Site Settings |
 | Front-end stylesheet enqueue | **Built** — was broken in the first version, see `inc/assets.php` |
 | Site Settings **contract** — schema, defaults, read helpers | **Built** |
-| Site Settings **screen**, Site Owner role, capabilities | **Not built — step 2** |
+| Site Settings **screen**, Site Owner role, capabilities | **Built** in `plugin-site/` |
 | Packager | **Not built — step 3** |
 | Importer | **Not built — step 4** |
 
@@ -149,9 +149,9 @@ switch and back.
 | Item | Where it goes |
 |---|---|
 | PageSpeed 85+ — never measured, and local rendering is not a performance score | needs a deployed site |
-| Site Owner capabilities, Site Settings screen | step 2 |
-| Shell blocks in the Site Editor — no client-side registration, so staff see unsupported blocks | step 2 |
-| Packager, importer, exporter | steps 3–5 |
+| Site Owner capabilities, Site Settings screen | Implemented and tested; see `delivery-verification.md` |
+| Shell blocks in the Site Editor | Editor registration implemented; full staff workflow remains a manual design check |
+| Packager, importer, exporter | Implemented and round-trip tested; see `delivery-verification.md` |
 | Full a11y audit, all header variants, nested nav, archive templates, WP/PHP version matrix | not scheduled |
 
 ### The tap-target fix, and what it says about checking only what was reported
@@ -186,9 +186,9 @@ Install on a clean WordPress with the fixture — the manual path is in
 **Editor validation** — the lint is not a substitute
 - [ ] Open each fixture page in the editor, **save, reload**: no "this block contains
       unexpected content" and no recovery prompt on any block.
-- [ ] Open `parts/header.html` and `parts/footer.html` in the Site Editor. They currently
-      show as unsupported blocks — PHP-only registration gives no editor UI. **Expected on
-      this branch**; giving them a `ServerSideRender` edit is step 2.
+- [ ] As an administrator, open the header and footer parts in the Site Editor and
+      confirm their server-rendered previews. Editor registration now exists; an
+      unsupported-block message is a failure, not expected behavior.
 - [ ] `npm run validate:blocks` passes.
 
 **Shell**

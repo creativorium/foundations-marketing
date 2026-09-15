@@ -1,0 +1,91 @@
+// foundations/onyx-feature — front-end styles.
+
+.fm-onyx-feature {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: var(--fm-space-5);
+  align-items: center;
+  padding-inline: var(--fm-onyx-gutter);
+  padding-block: var(--fm-space-6);
+  background: var(--fm-inverse);
+  color: var(--fm-on-inverse);
+
+  &__plate {
+    aspect-ratio: 1;
+    background-color: var(--fm-inverse-line);
+    background-image: repeating-linear-gradient(
+      135deg,
+      rgb(247 248 248 / 5%) 0 10px,
+      transparent 10px 20px
+    );
+
+    .fm-onyx-plate__label { color: var(--fm-inverse-muted); }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--fm-space-2);
+  }
+
+  // The canvas eyebrow tone is too dark to read here.
+  &__eyebrow { color: var(--fm-accent-soft); }
+
+  &__heading {
+    font-size: clamp(2rem, 3.8vw, 3.5rem);
+    line-height: 1.02;
+  }
+
+  &__para {
+    margin: 0;
+    max-width: 54ch;
+    font-size: var(--fm-text-lg);
+    line-height: 1.7;
+    color: var(--fm-inverse-muted);
+  }
+
+  &__creds {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.625rem;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__cred {
+    padding: 0.5625rem 1rem;
+    border: 1px solid var(--fm-inverse-line);
+    border-radius: 999px;
+    font-size: var(--fm-text-sm);
+    color: var(--fm-on-inverse);
+  }
+
+  &__link {
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    padding-block: 0.6875rem;
+    font-weight: 500;
+    color: var(--fm-accent-soft);
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible { color: var(--fm-on-inverse); text-decoration: underline; }
+  }
+}
+
+@media (max-width: 1024px) {
+  .fm-onyx-feature {
+    grid-template-columns: 1fr;
+    gap: var(--fm-space-4);
+
+    &__plate { aspect-ratio: 4 / 3; }
+  }
+}
+
+@media (max-width: 560px) {
+  .fm-onyx-feature { padding-block: var(--fm-space-5); }
+}

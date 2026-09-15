@@ -1,0 +1,146 @@
+// foundations/onyx-menu — front-end styles.
+
+.fm-onyx-menu {
+  padding-inline: var(--fm-onyx-gutter);
+  padding-block: var(--fm-space-3) var(--fm-space-6);
+  background: var(--fm-canvas);
+
+  &__group { padding-block: var(--fm-space-4) 0.625rem; }
+
+  &__group-head {
+    display: flex;
+    align-items: baseline;
+    gap: 1.125rem;
+    margin-block-end: 0.875rem;
+  }
+
+  &__num {
+    font-size: 0.75rem;
+    letter-spacing: 0.16em;
+    color: var(--fm-accent);
+  }
+
+  &__group-name {
+    margin: 0;
+    font-family: var(--fm-font-display);
+    font-weight: 500;
+    font-size: clamp(1.5rem, 2.4vw, 1.875rem);
+    letter-spacing: -0.02em;
+  }
+
+  // The table can be wider than a phone. It scrolls inside its own container so the
+  // page body never scrolls sideways (how-to-work.md §8).
+  &__scroller { overflow-x: auto; }
+
+  &__table {
+    inline-size: 100%;
+    border-collapse: collapse;
+    text-align: start;
+  }
+
+  // The column labels and caption exist for assistive technology; the design does not
+  // draw them. Hidden, not removed — removing them is what makes a data table unreadable.
+  &__caption,
+  &__table thead {
+    position: absolute;
+    inline-size: 1px;
+    block-size: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  &__row > * {
+    padding-block: 1.375rem;
+    border-block-start: 1px solid var(--fm-line);
+    vertical-align: baseline;
+    text-align: start;
+  }
+
+  &__name {
+    inline-size: 22%;
+    padding-inline-end: 1.875rem;
+    font-family: var(--fm-font-display);
+    font-weight: 500;
+    font-size: 1.1875rem;
+    line-height: 1.25;
+  }
+
+  &__desc {
+    inline-size: 46%;
+    padding-inline-end: 1.875rem;
+    color: var(--fm-muted);
+    line-height: 1.6;
+  }
+
+  &__time {
+    inline-size: 14%;
+    font-size: var(--fm-text-sm);
+    color: var(--fm-muted);
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  &__price {
+    inline-size: 18%;
+    padding-inline-start: 1.875rem;
+    font-family: var(--fm-font-display);
+    font-size: 1.1875rem;
+    color: var(--fm-accent);
+    text-align: end;
+    white-space: nowrap;
+  }
+
+  &__foot {
+    display: flex;
+    align-items: center;
+    gap: var(--fm-space-3);
+    flex-wrap: wrap;
+    margin-block-start: var(--fm-space-3);
+    padding-block-start: var(--fm-space-4);
+    border-block-start: 1px solid var(--fm-line);
+  }
+
+  &__foot-note {
+    margin: 0;
+    color: var(--fm-muted);
+  }
+}
+
+// Under 820px the four columns stop fitting side by side, so each row becomes a stacked
+// card. The table semantics are untouched — only the display changes.
+@media (max-width: 820px) {
+  .fm-onyx-menu {
+    &__table,
+    &__table tbody,
+    &__row { display: block; }
+
+    &__row {
+      padding-block: 1.25rem;
+      border-block-start: 1px solid var(--fm-line);
+    }
+
+    &__row > * {
+      display: block;
+      inline-size: auto;
+      padding-block: 0;
+      padding-inline: 0;
+      border-block-start: 0;
+      text-align: start;
+    }
+
+    &__desc { margin-block-start: 0.375rem; }
+
+    &__time,
+    &__price {
+      display: inline-block;
+      margin-block-start: 0.5rem;
+      text-align: start;
+    }
+
+    &__time { margin-inline-end: 1rem; }
+  }
+}

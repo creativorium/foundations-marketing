@@ -1,35 +1,13 @@
 @use 'sass:math';
 @use 'tokens' as *;
 
-// =============================================================================
-// The page transition — a pixel curtain
-//
-// Modelled on Codrops' PixelTransition demo 6: a grid of solid cells that scale
-// horizontally, staggered across the grid so the wipe sweeps left to right.
-//
-// Two deliberate departures from that demo:
-//
-// 1. No GSAP. The stagger is generated at build time as one `animation-delay` per
-//    cell, so the whole effect is declarative CSS and ships 0 bytes of script.
-//
-// 2. Only the second half — the uncover. The demo covers the old page, waits, then
-//    uncovers the new one, which costs roughly two seconds and puts an animation
-//    between the reader and the thing they clicked. Here the curtain is simply the
-//    state every page starts in, and it leaves. The swap itself happens behind it,
-//    so nothing is lost, and no navigation is ever held up waiting for a tween.
-//
-// Grid is 10 x 18 = 180 cells. Finer than it started (6 x 11): at eleven columns
-// across a laptop each cell was ~116px wide, which reads as a shutter rather than
-// as pixels. The step time comes down with the cell size so the extra columns do
-// not buy a longer animation — more cells, same budget.
-//
-// Total run: (10-1 + 18-1) x 8ms stagger + 180ms cell = 388ms.
-// =============================================================================
+// Pixel curtain: 10 x 18 cells, a 494ms diagonal reveal. A deliberate navigation
+// uses a short cover; reduced-motion users keep normal browser navigation.
 
 $fm-px-rows: 10;
 $fm-px-cols: 18;
-$fm-px-step: 8ms;   // per step of (row + column)
-$fm-px-cell: 180ms;  // one cell's own wipe
+$fm-px-step: 9ms;
+$fm-px-cell: 260ms;
 
 @media (prefers-reduced-motion: no-preference) {
 
@@ -38,7 +16,7 @@ $fm-px-cell: 180ms;  // one cell's own wipe
     inset: 0;
     z-index: 9999;
     // The curtain is scenery. It must never be able to take a click, not even
-    // during the 410ms it is on screen.
+    // during the reveal it is on screen.
     pointer-events: none;
 
     display: grid;
@@ -82,7 +60,7 @@ $fm-px-cell: 180ms;  // one cell's own wipe
 
   // A phone is portrait, so eleven columns across it would be 34px wide against a
   // 120px row — bars, not pixels. Turning the grid on its side keeps the cells
-  // roughly square, which is the whole point of the effect. 66 cells factorises
+  // roughly square, which is the whole point of the effect. 180 cells factorise
   // either way, so the markup does not change.
   @media (max-width: 820px) {
     .fm-px {
@@ -92,6 +70,23 @@ $fm-px-cell: 180ms;  // one cell's own wipe
       @include fm-px-stagger($fm-px-rows);
     }
   }
+}
+
+// A short cover on deliberate navigation makes fast cached pages feel continuous.
+// JS caps the cover at 160ms; the reveal does not wait for images or network idle.
+@media (prefers-reduced-motion: no-preference) {
+  .fm-px[data-leaving] {
+    visibility: visible;
+    animation: none;
+    .fm-px__cell {
+      animation: fm-px-cover 150ms cubic-bezier(.2,.7,.3,1) both;
+      animation-delay: 0ms;
+    }
+  }
+}
+@keyframes fm-px-cover {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
 @keyframes fm-px-wipe {

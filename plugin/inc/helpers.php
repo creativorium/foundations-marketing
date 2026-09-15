@@ -89,7 +89,7 @@ function fm_url(string $url): string
 function fm_get_templates(int $limit = 9): array
 {
     if (!post_type_exists('site_template')) {
-        return [];
+        return (array) apply_filters('fm_catalogue_templates', [], $limit);
     }
 
     $query = new WP_Query([
@@ -142,7 +142,7 @@ function fm_get_templates(int $limit = 9): array
 
     wp_reset_postdata();
 
-    return $templates;
+    return (array) apply_filters('fm_catalogue_templates', $templates, $limit);
 }
 
 /**

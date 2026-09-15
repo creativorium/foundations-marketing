@@ -1,5 +1,10 @@
 # Contributing
 
+For master designs and customer deliveries, also read
+[team-template-workflow.md](team-template-workflow.md). Every template PR needs an
+actual browser preview, Gutenberg save/reload evidence, and a clean-install result.
+Local URLs alone are not a preview the reviewer can open remotely.
+
 **All working rules live in [how-to-work.md](how-to-work.md).** Read that first — it
 covers start-up checks, branching, push/merge permissions, how to build a component,
 previewing in Local, responsiveness, speed, SEO, and the pre-commit checklist.

@@ -10,7 +10,7 @@
  * attributes (plugin/inc/checkout.php) — nothing here is trusted with money.
  */
 
-const NEXT_LABELS = ['Add extras', 'Review order', 'Pay and start'];
+const NEXT_LABELS = ['Add extras', 'Review order', 'Continue to checkout'];
 
 export default function initPackageBuilder() {
   const root = document.querySelector('[data-fm-builder]');

@@ -1,0 +1,73 @@
+// foundations/onyx-steps — front-end styles.
+
+.fm-onyx-steps {
+  padding-inline: var(--fm-onyx-gutter);
+  padding-block: var(--fm-space-6);
+  background: var(--fm-canvas);
+
+  &__intro {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    margin-block-end: var(--fm-space-4);
+  }
+
+  &__heading { font-size: clamp(2rem, 3.6vw, 3.25rem); }
+
+  // The hairlines are the 1px grid gap showing through a tinted background, which is
+  // how the design draws them — no per-cell borders to collapse or double up.
+  &__list {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: var(--fm-line);
+    border-block-start: 1px solid var(--fm-line);
+  }
+
+  &__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: var(--fm-space-3) var(--fm-space-3) var(--fm-space-4) 0;
+    background: var(--fm-canvas);
+  }
+
+  &__num {
+    font-family: var(--fm-font-display);
+    font-size: var(--fm-text-sm);
+    letter-spacing: 0.16em;
+    color: var(--fm-accent);
+  }
+
+  &__name {
+    margin: 0;
+    font-family: var(--fm-font-display);
+    font-weight: 500;
+    font-size: 1.3125rem;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+  }
+
+  &__desc {
+    margin: 0;
+    font-size: var(--fm-text-sm);
+    line-height: 1.65;
+    color: var(--fm-muted);
+  }
+}
+
+@media (max-width: 1024px) {
+  .fm-onyx-steps__list { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .fm-onyx-steps {
+    padding-block: var(--fm-space-5);
+
+    &__list { grid-template-columns: 1fr; }
+    &__item { padding-inline-end: 0; }
+  }
+}

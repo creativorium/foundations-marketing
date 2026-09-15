@@ -55,3 +55,8 @@ function fm_base_skip_link(): void
     );
 }
 add_action('wp_body_open', 'fm_base_skip_link');
+
+/** Staff preview shell parts; customers retain their restricted role. */
+add_action('enqueue_block_editor_assets', function (): void {
+    wp_enqueue_script('fm-shell-editor', FM_BASE_URI . '/assets/editor.js', ['wp-blocks','wp-element','wp-block-editor','wp-server-side-render'], FM_BASE_VERSION, true);
+});

@@ -1,5 +1,14 @@
 # how-to-work.md
 
+Template and delivery work also follows [team-template-workflow.md](team-template-workflow.md).
+The owner-authorized delivery implementation uses `plugin-site/`, `plugin-delivery/`,
+`scripts/package.mjs`, and the existing contact plugin now tracked in `plugin-contact/`.
+These first-party components are part of this repository. Do not install them on a
+production site until its release has passed the documented acceptance checks.
+
+The contact plugin retains its existing jQuery dependency during migration. New
+template interactions remain vanilla JavaScript; editor code uses WordPress packages.
+
 **Read this first, every time, before touching anything.**
 
 This is the single source of truth for working on the Foundations Marketing website —
@@ -40,7 +49,7 @@ raise it with the owner as its own conversation. Do not act on it.
 | **Blocks are server-rendered** — `save: () => null`, output from `render.php`. | The database stores attributes only, never markup, so `render.php` can change with no content migration. It is also what makes a template a few KB of portable text. |
 | **Each sold template carries its own blocks** (`templates/<slug>/blocks/`). The 19 blocks in `plugin/src/blocks/` are for **our marketing site**, not for the templates we sell. | A template has to be liftable — one folder, installable on a client's hosting, without dragging the rest of the catalogue with it. **Accepted cost:** there is no shared block to fix once, so the same bug in three templates is three fixes. Chosen deliberately for independence; see §2.1b. |
 | **No new plugin dependency**, for the site or for a client build. | Every plugin is another thing to license, update, and have compromised. We have already had a backdoor on this site once. |
-| **No JS framework, no jQuery, no layout JavaScript.** | The target is 85+ mobile PageSpeed on shared hosting (§9). JSX compiles to `wp.element.createElement`; **no React ships to the browser**. Ship vanilla JS only for real interaction, from the block's own folder. |
+| **New templates use vanilla frontend JavaScript.** | Editor JSX uses WordPress packages; no React is shipped to customer frontends. The existing marketing contact plugin retains jQuery during its tested migration. |
 | **Elementor is being removed, not extended.** | The live site was built in it; we are rebuilding page by page as blocks. Everything new is blocks. Do not half-convert a page (§13). |
 | **Two palettes, driven by `--fm-*` tokens.** | Steel and Nari both have to work. A hardcoded hex passes under one and breaks the other, so it will be caught. |
 | **Customer sites get a generated BLOCK theme, from one shared base.** Our marketing site stays on the classic theme in `theme/`. | Header and footer must be editable site-wide, not repeated on every page — that needs template parts, which classic themes do not have. Two themes for two different sites; the customer one is still native Gutenberg, no page builder, no ACF, so §0.1 is not reopened. Specified in [customer-runtime.md](customer-runtime.md) §3. |
@@ -152,7 +161,7 @@ every page must meet are all written down. Read them, then build.
 | Read | Why |
 |---|---|
 | **`how-to-work.md`** (this file) | The working rules. §0 is what the business actually sells, §5 is the file layout and how the build works, §8–§10 are the constraints every change must meet. |
-| **`customer-runtime.md`** | What a buyer actually *receives*, and the shape a template must have to become it. **Required reading for lane C.** Its status table says plainly which parts are built and which are specified but not yet written — most are not yet written. |
+| **`customer-runtime.md`** | What a buyer receives and the shape a template needs. Required reading for lane C; see `delivery-verification.md` for tested scope. |
 | **`CONTRIBUTING.md`** | The short version of the gate and the workflow. |
 | **`DEPLOYMENT.md`** | Only if you touch deployment — that is owner work. |
 
@@ -1074,35 +1083,15 @@ Then stop and tell the owner. Do not merge your own PR.
   sell — homepage, services, templates, checkout. Each sold template gets its own blocks
   under `plugin/src/templates/<slug>/blocks/` (§2.1b). Do not confuse the two.
 
-> ### ⚠️ Still missing — owner work, specified but not built
->
-> These live in `plugin/inc/` and `scripts/`, which contributors may not edit. All of them
-> are now **specified** in [customer-runtime.md](customer-runtime.md) — read its status
-> table, which is the authoritative list of what exists versus what is only written down.
-> Specified is not built. None of the following exists:
->
-> - **The customer theme base.** `theme-customer-base/` — a new, minimal block theme, the
->   thing every generated customer theme is assembled from (customer-runtime.md §3).
-> - **The packaging pipeline.** `scripts/package.mjs`, driven by `npm run package <slug>`.
->   Nothing turns a template folder into the theme, plugin and content bundle a client is
->   installed with. `DEPLOYMENT.md` covers only rsync to the dev site. Until this exists, a
->   finished template cannot actually be delivered to a buyer (§1, §4).
-> - **The starter-site importer** — milestone 1. Recreates pages, sideloads media and
->   remaps attachment IDs, builds navigation and settings, sets the homepage (§6a).
-> - **The customised-site exporter** — milestone 2. Reads a client's edited site back out
->   into a bundle. Without it, customer edits exist only in their database (§6b).
-> - **Site Settings, the Site Owner role and its capabilities** (§5).
-> - **Multi-page demo routing.** `plugin/inc/demo.php` still assumes one page with its
->   header in the content — see the warning in §6b.
-> - **The catalogue link.** Nothing connects a merged `template.json` to the
->   `site_template` CPT, which lives in the separate `foundation-packages` plugin. So a
->   merged template does not appear in the catalogue by itself.
->
-> **Done, so no longer a blocker:** block discovery scans
-> `src/templates/*/blocks/*/block.json`, per-template block categories appear in the
-> inserter, and `/templates/<slug>/demo/` renders a single-page template standalone. If a
-> template block renders blank, work through the checklist in §7 — it is no longer "the
-> owner has not wired this up".
+### Delivery pipeline
+
+The customer base, Site Settings/role, compiled packager, content import/export,
+customer projects and compiled-design demo routes now exist. Follow
+[delivery-operations.md](delivery-operations.md) and check
+[delivery-verification.md](delivery-verification.md) for tested scope and remaining limits.
+Merging a design does not publish it automatically: compile it, upload it under Delivery,
+review its draft preview, and then explicitly publish the demo.
+
 - **The design source** is four client canvas pages (Homepage, Services, Templates,
   Checkout), decoded to plain HTML in `doc/client-html/extracted/`.
 - **Elementor is being removed.** The live site was built in Elementor; we are rebuilding

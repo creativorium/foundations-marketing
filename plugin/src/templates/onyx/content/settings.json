@@ -1,0 +1,25 @@
+{
+  "$comment": "Default Site Settings. Every key must exist in fm_settings_core() (theme-customer-base/inc/settings-contract.php) or in this template's `settings` extensions in template.json — the importer drops anything else rather than storing a value no screen can edit.",
+
+  "site_name": "Onyx Aesthetics",
+  "tagline": "Single-practitioner aesthetic medicine in Manchester",
+  "logo_id": 0,
+
+  "phone": "0161 496 0000",
+  "email": "hello@onyxaesthetics.co.uk",
+  "address": "2 Booth Street\nManchester\nM2 4AW",
+
+  "cta_label": "Book now",
+  "cta_url": "{{page:contact|url}}",
+
+  "footer_text": "Single-practitioner aesthetic medicine in Manchester. Evidence first, always.",
+
+  "social": [
+    { "network": "Instagram", "url": "https://example.com/onyxaesthetics" }
+  ],
+
+  "$extensions": "Declared in template.json.",
+  "opening_hours": "Tuesday to Friday, 9–7\nSaturday, 9–4",
+  "booking_url": "{{page:contact|url}}",
+  "practitioner_name": "Dr Elena Vasquez"
+}

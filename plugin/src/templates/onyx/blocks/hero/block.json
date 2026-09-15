@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/onyx-hero",
+  "title": "Onyx — Hero",
+  "category": "foundations-onyx",
+  "icon": "align-full-width",
+  "description": "The homepage opening: the display H1, a short standfirst, one link, a row of figures and the full-bleed image beneath.",
+  "textdomain": "foundations",
+  "supports": {
+    "html": false,
+    "anchor": true,
+    "multiple": false
+  },
+  "attributes": {
+    "heading":     { "type": "string", "default": "" },
+    "highlight":   { "type": "string", "default": "" },
+    "lead":        { "type": "string", "default": "" },
+    "ctaLabel":    { "type": "string", "default": "" },
+    "ctaUrl":      { "type": "string", "default": "" },
+    "stats":       { "type": "array",  "default": [] },
+    "imageId":     { "type": "number", "default": 0 },
+    "imageAlt":    { "type": "string", "default": "" },
+    "imageNote":   { "type": "string", "default": "" }
+  },
+  "render": "file:./render.php"
+}

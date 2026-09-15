@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/onyx-reviews",
+  "title": "Onyx — Patient reviews",
+  "category": "foundations-onyx",
+  "icon": "format-quote",
+  "description": "Three quote cards with an aggregate line beside the heading.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "meta":    { "type": "string", "default": "" },
+    "items":   { "type": "array",  "default": [] }
+  },
+  "render": "file:./render.php"
+}
