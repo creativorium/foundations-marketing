@@ -1,0 +1,20 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/onyx-pillars",
+  "title": "Onyx — Treatment pillars",
+  "category": "foundations-onyx",
+  "icon": "screenoptions",
+  "description": "A sticky section intro beside a grid of linked treatment cards, each with a number, a description and a from-price.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "eyebrow":  { "type": "string", "default": "" },
+    "heading":  { "type": "string", "default": "" },
+    "lead":     { "type": "string", "default": "" },
+    "linkLabel":{ "type": "string", "default": "" },
+    "linkUrl":  { "type": "string", "default": "" },
+    "items":    { "type": "array",  "default": [] }
+  },
+  "render": "file:./render.php"
+}

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/onyx-policy",
+  "title": "Onyx — Policy sections",
+  "category": "foundations-onyx",
+  "icon": "text-page",
+  "description": "Numbered policy sections with a sticky contents list built from them. Used for the privacy policy.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "contentsLabel": { "type": "string", "default": "" },
+    "sections":      { "type": "array",  "default": [] }
+  },
+  "render": "file:./render.php"
+}

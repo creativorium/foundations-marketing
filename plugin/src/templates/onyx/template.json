@@ -1,0 +1,43 @@
+{
+  "$comment": "Onyx Aesthetics — a single-practitioner aesthetics clinic. Built from doc/client-html/theme/Onyx Template (standalone).html, decoded to doc/client-html/extracted/Onyx.html. Shape per customer-runtime.md §2.",
+
+  "name": "Onyx Aesthetics",
+  "slug": "onyx",
+  "version": "0.1.0",
+
+  "niche": "Aesthetics clinic / injectables / medical skin",
+  "category": "Clinical",
+  "description": "A restrained, editorial design for a single-practitioner aesthetics clinic. Large display type, a full-bleed hero, a priced treatment menu and a UK GDPR privacy policy built in.",
+
+  "targetPhrase": "aesthetics clinic website design UK",
+  "demoSlug": "aesthetics-clinic-website-design",
+
+  "$seo": "Halo owns 'skincare clinic website design UK' in doc/SEO-AND-PERFORMANCE.md §Per-page targets; that row reads 'skincare clinic / aesthetics website design UK' — two phrases on one line. Onyx takes the aesthetics half so the two designs never compete for one phrase (how-to-work.md §6a). If the owner would rather keep them merged, this is a rename of demoSlug plus the row in doc/SEO-AND-PERFORMANCE.md — nothing in the blocks depends on it.",
+
+  "pages": ["home", "treatments", "about", "contact", "privacy"],
+
+  "settings": {
+    "$comment": "Extensions beyond the shared core in theme-customer-base/inc/settings-contract.php. Only fields this design's shell and blocks actually read (customer-runtime.md §5.3).",
+    "opening_hours": {
+      "type": "textarea",
+      "label": "Opening hours",
+      "default": ""
+    },
+    "booking_url": {
+      "type": "url",
+      "label": "Booking link",
+      "default": ""
+    },
+    "practitioner_name": {
+      "type": "text",
+      "label": "Lead practitioner",
+      "default": ""
+    }
+  },
+
+  "shell": {
+    "$comment": "This design uses the shared header and footer with the inline/columns variants, restyled from style.scss. No forked part — see customer-runtime.md §5.1.",
+    "header": { "variant": "inline", "showCta": true },
+    "footer": { "variant": "columns", "showContact": true }
+  }
+}

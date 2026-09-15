@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/onyx-cta",
+  "title": "Onyx — Closing call to action",
+  "category": "foundations-onyx",
+  "icon": "megaphone",
+  "description": "The dark rounded panel that closes the homepage: a heading, one line of reassurance and a single button.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "heading":  { "type": "string", "default": "" },
+    "lead":     { "type": "string", "default": "" },
+    "ctaLabel": { "type": "string", "default": "" },
+    "ctaUrl":   { "type": "string", "default": "" }
+  },
+  "render": "file:./render.php"
+}
