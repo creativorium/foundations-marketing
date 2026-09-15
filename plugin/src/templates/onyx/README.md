@@ -96,7 +96,6 @@ a separate, deliberate step and should wait until the unfinished items above are
   overflow, no broken images, no unresolved import tokens, no console errors, every tap
   target at least 44×44px.
 
-**Not run:** opening each page in Gutenberg and saving/reloading by hand (how-to-work.md
-§11). The round-trip check above is strong evidence — every block here is
-`save: () => null`, so there is no saved markup for the editor to disagree with — but it
-is not the same thing as the editor check, and the editor check has not been done.
+**Verified 16 September 2026:** all five existing master pages opened in Gutenberg, saved, and reloaded with every block valid. All 15 responsive preview checks passed with no browser JavaScript errors. No duplicate master or customer project was created.
+
+**Still pending:** an Onyx installation on the customer fixture and its customer-side editor checks. The fixture database was unavailable during this follow-up. Packaging passes, but that does not replace an installation test. Launch items above remain open.

@@ -42,6 +42,12 @@ access. Assign that role deliberately; activation does not downgrade existing us
 
 ## Later edits
 
+Routine checks reuse the existing fixture and Onyx records. Superseded local acceptance
+records may be marked with `_fm_delivery_archived`; Delivery hides these by default and
+offers **Show archived test records**. Archiving preserves pages, media and releases.
+Remove that metadata to restore a record to the default list. Never archive customer
+work merely because its design name matches a fixture.
+
 Staff can export edited content on a customer site and import it into its internal
 project, then build another release. Code updates do not automatically merge with
 customer content. Existing releases stay immutable. Test a fresh import before handover.

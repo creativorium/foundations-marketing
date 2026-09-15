@@ -90,8 +90,7 @@ carried only a URL: it rendered, and it validated, and it exercised **none** of 
 attachment-id remapping that the importer has to get right. A fixture that passes without
 testing the risky path is worse than no fixture.
 
-**Status: the token format is defined here and consumed by nothing yet.** The importer is
-step 4. Until then these files are read by hand.
+**Status:** the importer consumes these tokens. Use the generated content ZIP through Tools > Foundations Delivery; do not substitute IDs by hand.
 
 ## Checking it by hand, before the importer exists
 

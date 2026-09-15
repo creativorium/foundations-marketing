@@ -20,7 +20,10 @@ add_action('init', function (): void {
 add_filter('fm_settings_extensions', function (array $fields): array {
     $file = FM_SITE_DIR . 'template.json';
     $data = is_file($file) ? json_decode((string) file_get_contents($file), true) : [];
-    return array_merge($fields, (array) ($data['settings'] ?? []));
+    $extensions = array_filter((array) ($data['settings'] ?? []),
+        static fn($value, $key) => is_array($value) && !str_starts_with((string) $key, '$'),
+        ARRAY_FILTER_USE_BOTH);
+    return array_merge($fields, $extensions);
 });
 add_action('enqueue_block_editor_assets', function (): void {
     if (is_file(FM_SITE_DIR . 'build/editor.js')) {
