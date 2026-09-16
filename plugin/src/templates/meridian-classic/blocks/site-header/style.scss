@@ -373,3 +373,36 @@ html:has(.meridian) { scroll-behavior: smooth; }
   .meridian-header__bar { min-height: 4.375rem; }
 }
 @media(prefers-reduced-motion:reduce){ html:has(.meridian) { scroll-behavior: auto; } }
+
+/* Final element-level parity with the supplied Classic composition. */
+.meridian-header__bar { justify-content: space-between; }
+.meridian-header .meridian-nav { margin-left: auto; }
+.meridian-header .meridian-nav ul { align-items: center; gap: 2rem; }
+.meridian-nav__desktop-cta a { min-height: 44px; border-bottom: 1.5px solid var(--fm-accent); font-weight: 600; }
+.meridian-story h2 { font-size: clamp(2rem,4vw,3.25rem); line-height: 1.15; }
+.meridian-conditions h2,.meridian-process h2,.meridian-faq-wrap h2 { font-size: clamp(1.875rem,3.6vw,2.875rem); line-height: 1.2; }
+.meridian-booking h2 { font-size: clamp(1.875rem,3.6vw,2.75rem); line-height: 1.2; }
+.meridian-booking select {
+  appearance: none;
+  padding-right: 1.75rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m3.5 6 4.5 4 4.5-4' fill='none' stroke='%232F2E29' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .125rem center;
+  background-size: 1rem 1rem;
+}
+.meridian-footer a,.meridian-footer nav button { min-height: 0; line-height: 1.4; }
+.meridian-footer nav { align-items: center; }
+.meridian-faq__icon { width: 18px; height: 18px; flex: 0 0 18px; color: var(--fm-accent); transition: transform .2s ease; }
+.meridian-faq__icon path,.meridian-review__nav svg path,.meridian-menu-close svg path,.meridian-overlay__close svg path { fill: none; stroke: currentColor; stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
+.meridian-faq details[open] .meridian-faq__icon { transform: rotate(45deg); }
+.meridian-review__nav button { display: inline-flex; align-items: center; justify-content: center; gap: .3rem; }
+.meridian-review__nav svg { width: 16px; height: 16px; }
+.meridian-menu-close svg,.meridian-overlay__close svg { width: 24px; height: 24px; }
+
+@media(max-width:820px){
+  .meridian-header .meridian-nav { margin-left: 0; }
+  .meridian-header[data-open] .meridian-nav__desktop-cta { display: none; }
+  .meridian-header[data-open] .meridian-nav ul { gap: 1rem; }
+  .meridian-header[data-open] .meridian-nav a { font-family: var(--fm-font-display); font-size: 2.125rem; font-weight: 400; }
+  .meridian-header[data-open] .meridian-nav__mobile-cta a { font-style: italic; }
+}

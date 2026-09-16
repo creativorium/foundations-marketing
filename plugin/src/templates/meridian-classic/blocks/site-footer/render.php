@@ -29,7 +29,7 @@ $address = str_replace(["\r\n", "\r", "\n"], ' · ', $setting('address'));
   </div>
 
   <div class="meridian-overlay meridian-overlay--contact" data-overlay="contact" id="contact" hidden aria-hidden="true">
-    <button type="button" class="meridian-overlay__close" data-overlay-close aria-label="Close contact details">×</button>
+    <button type="button" class="meridian-overlay__close" data-overlay-close aria-label="Close contact details"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
     <div class="meridian-overlay__inner" role="dialog" aria-modal="true" aria-labelledby="meridian-contact-title">
       <p class="meridian-eyebrow">Contact</p><h2 id="meridian-contact-title">Come and find us</h2>
       <dl class="meridian-overlay__contact">
@@ -41,7 +41,7 @@ $address = str_replace(["\r\n", "\r", "\n"], ' · ', $setting('address'));
   </div>
 
   <div class="meridian-overlay meridian-overlay--privacy" data-overlay="privacy" id="privacy" hidden aria-hidden="true">
-    <button type="button" class="meridian-overlay__close" data-overlay-close aria-label="Close privacy policy">×</button>
+    <button type="button" class="meridian-overlay__close" data-overlay-close aria-label="Close privacy policy"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
     <div class="meridian-overlay__inner meridian-overlay__inner--privacy" role="dialog" aria-modal="true" aria-labelledby="meridian-privacy-title">
       <p class="meridian-eyebrow">Legal</p><h2 id="meridian-privacy-title">Privacy policy</h2><p class="meridian-overlay__date">Last updated 1 January 2026</p>
       <div class="meridian-overlay__policy"><?php foreach ($privacy as [$title, $body]) : ?><section><h3><?php echo esc_html($title); ?></h3><p><?php echo esc_html($body); ?></p></section><?php endforeach; ?></div>
