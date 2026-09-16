@@ -8,7 +8,7 @@ The template contains Home, About, Conditions, Contact and Privacy pages. Thirte
 
 The custom header, mobile menu, footer, Contact overlay and Privacy overlay live in the header/footer template parts. Same-page navigation and booking CTAs use the shared smooth-scroll behavior and respect reduced-motion preferences. FAQ uses native details elements, and testimonials do not auto-rotate.
 
-The design uses the supplied cream, charcoal and sage palette with a restrained editorial layout. Archivo and Instrument Serif replace the reference's external Google fonts to follow the project's self-hosted two-font rule. The three local WebP assets are sourced from the Unsplash URLs in the supplied HTML.
+The design uses the supplied cream, charcoal and sage palette with a restrained editorial layout. Cormorant Garamond and Manrope are self-hosted to match the supplied reference without a third-party font request. The three local WebP assets are sourced from the Unsplash URLs in the supplied HTML.
 
 The enquiry form opens an email draft using the address in Site Settings and never claims that a request was sent.
 

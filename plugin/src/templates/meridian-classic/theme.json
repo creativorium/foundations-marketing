@@ -64,13 +64,13 @@
       "fontFamilies": [
         {
           "slug": "display",
-          "name": "Instrument Serif",
-          "fontFamily": "'Instrument Serif', Georgia, serif"
+          "name": "Cormorant Garamond",
+          "fontFamily": "'Cormorant Garamond', Georgia, serif"
         },
         {
           "slug": "body",
-          "name": "Archivo",
-          "fontFamily": "Archivo, system-ui, sans-serif"
+          "name": "Manrope",
+          "fontFamily": "Manrope, system-ui, sans-serif"
         }
       ],
       "fontSizes": [
@@ -191,8 +191,8 @@
       },
       "heading": {
         "typography": {
-          "fontFamily": "var(--wp--preset--font-family--body)",
-          "fontWeight": "600",
+          "fontFamily": "var(--wp--preset--font-family--display)",
+          "fontWeight": "500",
           "lineHeight": "1.15"
         }
       },

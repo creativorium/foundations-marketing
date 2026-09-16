@@ -1,11 +1,5 @@
 <?php
 if (!defined('ABSPATH')) { exit; }
-$a = $attributes;
-$text = static fn($key) => esc_html((string)($a[$key] ?? ''));
-$items = array_values(array_filter((array)($a['items'] ?? []), 'is_array'));
-$anchor = sanitize_title((string)($a['anchor'] ?? ''));
-?>
-<?php
 $setting = static fn($key) => function_exists('fm_setting') ? (string) fm_setting($key) : '';
 $name = $setting('site_name') ?: 'Alder & Fern';
 $nav = function_exists('fm_nav') ? fm_nav('nav_primary') : [];
@@ -16,16 +10,19 @@ $privacy = [
   ['How long we keep it', 'Treatment records are kept for seven years from your last visit. Other enquiries are deleted after twelve months.'],
   ['Your rights', 'You can request a copy of your records or ask for corrections at any time. Complaints can be raised with the ICO at ico.org.uk.'],
 ];
+$address = str_replace(["\r\n", "\r", "\n"], ' · ', $setting('address'));
 ?>
 <div class="meridian meridian-footer" data-meridian-footer>
   <div class="meridian-container">
     <div class="meridian-footer__row">
-      <div><p class="meridian-brand"><?php echo esc_html($name); ?></p><p><?php echo nl2br(esc_html($setting('address'))); ?><br><a href="<?php echo esc_url('mailto:' . $setting('email')); ?>"><?php echo esc_html($setting('email')); ?></a></p></div>
+      <div>
+        <p class="meridian-brand"><?php echo esc_html($name); ?></p>
+        <p><?php echo esc_html($address); ?> · <a href="<?php echo esc_url('mailto:' . $setting('email')); ?>"><?php echo esc_html($setting('email')); ?></a></p>
+      </div>
       <nav aria-label="Footer navigation">
         <?php foreach ($nav as $item) : ?><a href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['label']); ?></a><?php endforeach; ?>
         <button type="button" data-overlay-open="contact">Contact</button>
         <button type="button" data-overlay-open="privacy">Privacy policy</button>
-        <a href="<?php echo esc_url($setting('cta_url')); ?>">Book a session</a>
       </nav>
     </div>
     <p class="meridian-footer__credit">© <?php echo esc_html(wp_date('Y')); ?> <?php echo esc_html($name); ?> — Meridian template by <a href="https://foundationsmarketing.co.uk/">Foundations Marketing</a></p>

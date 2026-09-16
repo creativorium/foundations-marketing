@@ -182,7 +182,7 @@ a.meridian-brand { min-height: 44px; display: flex; align-items: center; }
 @media(prefers-reduced-motion:reduce) { .meridian *, .meridian *::before,.meridian *::after { scroll-behavior: auto; transition: none; animation: none; } }
 
 /* Meridian Classic: restrained, editorial shell from the supplied design. */
-.meridian { --fm-font-display: 'Instrument Serif', Georgia, serif; --fm-accent: #63715A; --fm-canvas: #EFEAE0; --fm-surface: #F7F3EA; --fm-ink: #2F2E29; --fm-muted: #57544A; --fm-line: rgba(47,46,41,.18); }
+.meridian { --fm-font-display: 'Cormorant Garamond', Georgia, serif; --fm-font-body: 'Manrope', system-ui, sans-serif; --fm-accent: #63715A; --fm-canvas: #EFEAE0; --fm-surface: #F7F3EA; --fm-ink: #2F2E29; --fm-muted: #57544A; --fm-line: rgba(47,46,41,.18); }
 .meridian h1,.meridian h2,.meridian h3 { font-family: var(--fm-font-display); font-weight: 500; letter-spacing: 0; }
 .meridian-header { position: relative; padding: 0 2.5rem; background: var(--fm-canvas); }
 .meridian-header__inner { max-width: 67.5rem; min-height: 5rem; margin: auto; padding: 0; border-radius: 0; border: 0; border-bottom: 1px solid var(--fm-line); box-shadow: none; }
@@ -324,3 +324,52 @@ a.meridian-brand { min-height: 44px; display: flex; align-items: center; }
   .meridian-pills li small { text-align: left; }
   .meridian-hero-intro .meridian-actions { gap: 1rem; }
 }
+
+/* Exact type, navigation and form details from Meridian-Classic.html. */
+html:has(.meridian) { scroll-behavior: smooth; }
+.meridian {
+  --fm-font-display: 'Cormorant Garamond', Georgia, serif;
+  --fm-font-body: 'Manrope', system-ui, sans-serif;
+  font-family: var(--fm-font-body);
+  font-weight: 300;
+}
+.meridian button,.meridian input,.meridian select,.meridian textarea { font-family: var(--fm-font-body); }
+.meridian-header { padding-inline: 2.5rem; }
+.meridian-header__bar { width: 100%; max-width: none; min-height: 4.375rem; }
+.meridian-nav ul { gap: 2rem; }
+.meridian-brand { font: 500 1.375rem/1 var(--fm-font-display); letter-spacing: .06em; }
+.meridian-header__nav a,.meridian-nav a { font-size: .8125rem; font-weight: 500; }
+.meridian .meridian-header__cta { min-height: 44px; font-weight: 600; }
+.meridian-hero-intro p,
+.meridian-story .meridian-body,
+.meridian-steps p,
+.meridian-faq details p,
+.meridian-booking__content > p:not(.meridian-eyebrow) { font-weight: 300; }
+.meridian-pills li small { font-weight: 300; }
+.meridian-step-number { color: var(--fm-accent); font: italic 400 1.875rem/1 var(--fm-font-display); }
+.meridian-booking input,.meridian-booking select,.meridian-booking textarea {
+  width: 100%;
+  min-width: 0;
+  padding: .625rem 0;
+  border: 0;
+  border-bottom: 1px solid rgba(47,46,41,.3);
+  border-radius: 0;
+  outline: 1px solid transparent;
+  background: transparent;
+  color: var(--fm-ink);
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.4;
+  transition: border-color .2s ease;
+}
+.meridian-booking select { appearance: auto; cursor: pointer; }
+.meridian-booking input:hover,.meridian-booking select:hover,.meridian-booking textarea:hover,
+.meridian-booking input:focus,.meridian-booking select:focus,.meridian-booking textarea:focus { border-bottom-color: var(--fm-ink); background: transparent; }
+.meridian-booking .meridian-form-note { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.meridian-footer__row p + p { font-weight: 300; }
+
+@media(max-width:900px){
+  .meridian-header { padding-inline: 1.5rem; }
+  .meridian-header__bar { min-height: 4.375rem; }
+}
+@media(prefers-reduced-motion:reduce){ html:has(.meridian) { scroll-behavior: auto; } }
