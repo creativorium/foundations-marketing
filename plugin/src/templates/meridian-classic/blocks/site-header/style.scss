@@ -398,6 +398,24 @@ html:has(.meridian) { scroll-behavior: smooth; }
 .meridian-review__nav button { display: inline-flex; align-items: center; justify-content: center; gap: .3rem; }
 .meridian-review__nav svg { width: 16px; height: 16px; }
 .meridian-menu-close svg,.meridian-overlay__close svg { width: 24px; height: 24px; }
+.meridian-conditions h2 { width: fit-content; max-width: 100%; margin-inline: auto; text-align: center; }
+.meridian-nav__desktop-cta a,
+.meridian-hero-intro .meridian-actions a {
+  position: relative;
+  border-bottom: 0;
+}
+.meridian-nav__desktop-cta a::after,
+.meridian-hero-intro .meridian-actions a::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 9px;
+  left: 0;
+  height: 1.5px;
+  background: var(--fm-line);
+}
+.meridian-nav__desktop-cta a::after,
+.meridian-hero-intro .meridian-actions a:first-child::after { background: var(--fm-accent); }
 
 @media(max-width:820px){
   .meridian-header .meridian-nav { margin-left: 0; }
