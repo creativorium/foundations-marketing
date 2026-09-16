@@ -14,3 +14,37 @@ document.querySelectorAll('[data-meridian-header]').forEach(header => {
   document.addEventListener('click', event => { if (!header.contains(event.target)) close(); });
   matchMedia('(min-width: 821px)').addEventListener('change', close);
 });
+
+if (!document.documentElement.hasAttribute('data-meridian-smooth-scroll')) {
+  document.documentElement.setAttribute('data-meridian-smooth-scroll', '');
+  const duration = 550;
+  const ease = progress => progress < .5 ? 4 * progress ** 3 : 1 - ((-2 * progress + 2) ** 3) / 2;
+
+  document.addEventListener('click', event => {
+    const link = event.target.closest('a[href*="#"]');
+    if (!link) return;
+    const url = new URL(link.href, window.location.href);
+    if (!url.hash || url.origin !== window.location.origin || url.pathname !== window.location.pathname) return;
+    const target = document.getElementById(decodeURIComponent(url.hash.slice(1)));
+    if (!target) return;
+
+    event.preventDefault();
+    const start = window.scrollY;
+    const headerOffset = 96;
+    const end = Math.max(0, target.getBoundingClientRect().top + start - headerOffset);
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      window.scrollTo(0, end);
+      history.replaceState(null, '', url.hash);
+      return;
+    }
+
+    const started = performance.now();
+    const step = now => {
+      const progress = Math.min(1, (now - started) / duration);
+      window.scrollTo(0, start + (end - start) * ease(progress));
+      if (progress < 1) requestAnimationFrame(step);
+      else history.replaceState(null, '', url.hash);
+    };
+    requestAnimationFrame(step);
+  });
+}
