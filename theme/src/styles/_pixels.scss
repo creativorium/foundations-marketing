@@ -1,13 +1,19 @@
 @use 'sass:math';
 @use 'tokens' as *;
 
-// Pixel curtain: 10 x 18 cells, a 494ms diagonal reveal. A deliberate navigation
-// uses a short cover; reduced-motion users keep normal browser navigation.
+// Pixel curtain: 10 x 18 cells, a diagonal reveal on arrival and a short cover on the
+// way out. Reduced-motion users keep normal browser navigation.
+//
+// The reveal is kept under ~370ms on purpose. It runs while the incoming page is still
+// settling — decoding images, laying out, running whatever the page's own scripts do —
+// so it is the animation most likely to drop frames, and every millisecond of it is a
+// millisecond the reader is looking at a black screen instead of the page they asked
+// for. Shorter is both smoother and faster.
 
 $fm-px-rows: 10;
 $fm-px-cols: 18;
-$fm-px-step: 9ms;
-$fm-px-cell: 260ms;
+$fm-px-step: 6ms;
+$fm-px-cell: 200ms;
 
 @media (prefers-reduced-motion: no-preference) {
 
@@ -18,6 +24,9 @@ $fm-px-cell: 260ms;
     // The curtain is scenery. It must never be able to take a click, not even
     // during the reveal it is on screen.
     pointer-events: none;
+    // 180 cells over the whole viewport, animating while the page below is still
+    // laying out. Containment keeps their work off the rest of the document.
+    contain: layout paint;
 
     display: grid;
     grid-template-columns: repeat(#{$fm-px-cols}, 1fr);
@@ -72,14 +81,17 @@ $fm-px-cell: 260ms;
   }
 }
 
-// A short cover on deliberate navigation makes fast cached pages feel continuous.
-// JS caps the cover at 160ms; the reveal does not wait for images or network idle.
+// The cover, on the way out. It plays over the wait the navigation already has rather
+// than holding the navigation back — main.js starts it and does not touch the click —
+// so on a prerendered page it barely appears, which is the correct amount of animation
+// for a page that is already there.
 @media (prefers-reduced-motion: no-preference) {
   .fm-px[data-leaving] {
     visibility: visible;
     animation: none;
     .fm-px__cell {
-      animation: fm-px-cover 150ms cubic-bezier(.2,.7,.3,1) both;
+      // `both` holds it covered for as long as the new document takes to paint.
+      animation: fm-px-cover 130ms cubic-bezier(.2,.7,.3,1) both;
       animation-delay: 0ms;
     }
   }

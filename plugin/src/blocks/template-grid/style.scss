@@ -97,6 +97,10 @@
 }
 
 .fm-template-card {
+  // The card is no longer one anchor — it holds two links, and an anchor cannot
+  // contain another. `position: relative` is what lets the name's stretched ::after
+  // cover the card instead.
+  position: relative;
   display: block;
   border: var(--fm-rule) solid var(--fm-ink);
   background: var(--fm-card-tint, var(--fm-bg));
@@ -104,9 +108,9 @@
   height: 100%;
   transition: transform 0.18s ease, box-shadow 0.18s ease;
 
+  // Both links lift the card, so the whole thing still reads as one target.
   &:hover,
-  &:focus-visible {
-    text-decoration: none;
+  &:focus-within {
     transform: translateY(-3px);
     box-shadow: 6px 6px 0 var(--fm-ink);
   }
@@ -119,7 +123,10 @@
     background: var(--fm-bezel);
     border-radius: var(--fm-radius-card);
     padding: 17px 9px;
-    max-width: 210px;
+    // Landscape, because the screenshot is. Preview images are 1200x900 (§6a), so a
+    // portrait screen could only show them by cropping a third off each side — which
+    // is what it did, cutting the headline in half on every card.
+    max-width: 300px;
     margin: 0 auto;
   }
 
@@ -136,7 +143,7 @@
 
   &__screen {
     display: block;
-    aspect-ratio: 3 / 4;
+    aspect-ratio: 4 / 3;
     border-radius: 4px;
     overflow: hidden;
     background: var(--fm-card-screen, var(--fm-hero-screen));
@@ -148,6 +155,9 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
+    // Anything taller than 4:3 loses its footer rather than its masthead — the top of
+    // a page is the part that identifies the design.
+    object-position: top center;
   }
 
   &__body { display: block; padding: 0 24px 22px; }
@@ -171,6 +181,32 @@
     margin-bottom: 8px;
   }
 
+  // The primary link: into the builder with this template chosen. Its ::after is the
+  // card's click target, so the reader can hit anywhere — but the accessible name is
+  // still just the template name, not the whole card read aloud.
+  &__link {
+    color: inherit;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+
+    &:hover { text-decoration: none; }
+
+    // The outline belongs on the card, not on a word in the middle of it.
+    &:focus-visible {
+      outline: none;
+
+      &::after {
+        outline: var(--fm-rule) solid var(--fm-accent-deep);
+        outline-offset: 3px;
+      }
+    }
+  }
+
   &__desc {
     display: block;
     font-size: 14px;
@@ -183,8 +219,10 @@
 
   &__meta {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
+    gap: 10px;
     padding-top: 14px;
     border-top: var(--fm-rule) solid var(--fm-ink);
     font-size: 12px;
@@ -192,13 +230,37 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
+
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  // Sits above the stretched link, or it could never be clicked.
+  &__demo {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    // 44px of height on a 12px label, without moving the rule above it.
+    padding: 12px 0;
+    margin-block: -12px;
+    color: var(--fm-muted);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+
+    &:hover,
+    &:focus-visible { color: var(--fm-ink); }
+  }
 }
 
 // The lift on hover is decorative.
 @media (prefers-reduced-motion: reduce) {
   .fm-template-card {
     transition: none;
-    &:hover, &:focus-visible { transform: none; }
+    &:hover, &:focus-within { transform: none; }
   }
 }
 
