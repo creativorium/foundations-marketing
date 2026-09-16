@@ -1,0 +1,30 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/meridian-modern-faq",
+  "title": "Meridian Faq",
+  "category": "foundations-meridian-modern",
+  "icon": "admin-site-alt3",
+  "attributes": {
+    "anchor": {
+      "type": "string",
+      "default": ""
+    },
+    "eyebrow": {
+      "type": "string",
+      "default": ""
+    },
+    "heading": {
+      "type": "string",
+      "default": ""
+    },
+    "items": {
+      "type": "array",
+      "default": []
+    }
+  },
+  "supports": {
+    "html": false,
+    "multiple": true
+  },
+  "render": "file:./render.php"
+}

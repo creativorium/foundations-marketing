@@ -1,0 +1,26 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/meridian-modern-page-hero",
+  "title": "Meridian Page Hero",
+  "category": "foundations-meridian-modern",
+  "icon": "admin-site-alt3",
+  "attributes": {
+    "heading": {
+      "type": "string",
+      "default": ""
+    },
+    "body": {
+      "type": "string",
+      "default": ""
+    },
+    "eyebrow": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "supports": {
+    "html": false,
+    "multiple": false
+  },
+  "render": "file:./render.php"
+}

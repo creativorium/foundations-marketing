@@ -1,0 +1,18 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/meridian-modern-policy",
+  "title": "Meridian Policy",
+  "category": "foundations-meridian-modern",
+  "icon": "admin-site-alt3",
+  "attributes": {
+    "items": {
+      "type": "array",
+      "default": []
+    }
+  },
+  "supports": {
+    "html": false,
+    "multiple": true
+  },
+  "render": "file:./render.php"
+}

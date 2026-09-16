@@ -1,0 +1,9 @@
+<!-- wp:foundations/meridian-modern-page-hero {"heading":"One person at a time.","body":"An unhurried approach to acupuncture in Brighton.","eyebrow":"Wren Acupuncture · Brighton"} /-->
+
+<!-- wp:foundations/meridian-modern-story {"anchor":"about","eyebrow":"The practitioner","heading":"I'm Nora — I treat one person at a time, not a waiting room.","body":"I trained in Chinese medicine after a decade of migraines that nothing conventional touched. What changed things wasn't one treatment, it was someone finally looking at the whole picture.","body2":"That's how I work now: long first appointments, a plan we build together, and honesty if something isn't working.","signature":"Nora Wren, MSc, MBAcC","imageId":"{{media:meridian-practitioner.webp|id}}"} /-->
+
+<!-- wp:foundations/meridian-modern-credentials {"items":[{"title":"BAcC Registered"},{"title":"MSc Acupuncture"},{"title":"Insured & DBS checked"},{"title":"12 years in practice"}]} /-->
+
+<!-- wp:foundations/meridian-modern-steps {"anchor":"process","eyebrow":"The process","heading":"Three steps, then we reassess together.","items":[{"title":"A long first visit","body":"Ninety minutes: history, diagnosis and your first treatment. You leave with a written plan."},{"title":"A short course","body":"Usually four to six weekly sessions. If nothing changes by the third, I'll say so and refer you on."},{"title":"Spacing out","body":"We stretch the gaps until you're on maintenance, or don't need me at all."}]} /-->
+
+<!-- wp:foundations/meridian-modern-booking {"anchor":"book","eyebrow":"Book","heading":"Start with a free fifteen minute call.","body":"Tell me what's going on. If I'm not the right person, I'll point you to someone who is."} /-->

@@ -1,0 +1,43 @@
+{
+  "name": "Meridian Modern",
+  "slug": "meridian-modern",
+  "version": "0.1.0",
+  "niche": "Acupuncture",
+  "category": "Wellness",
+  "description": "Warm, modern acupuncture clinic design with a floating capsule navigation and editable multi-page content.",
+  "targetPhrase": "acupuncture website design UK",
+  "demoSlug": "acupuncture-website-design",
+  "pages": [
+    "home",
+    "about",
+    "conditions",
+    "contact",
+    "privacy"
+  ],
+  "settings": {
+    "opening_hours": {
+      "type": "textarea",
+      "label": "Opening hours"
+    },
+    "home_url": {
+      "type": "url",
+      "label": "Homepage link"
+    },
+    "privacy_url": {
+      "type": "url",
+      "label": "Privacy page"
+    },
+    "booking_url": {
+      "type": "url",
+      "label": "External booking link (optional)"
+    }
+  },
+  "shell": {
+    "header": {
+      "custom": true
+    },
+    "footer": {
+      "custom": true
+    }
+  }
+}

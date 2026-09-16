@@ -1,0 +1,34 @@
+{
+  "nav_primary": [
+    {
+      "label": "About",
+      "page": "about"
+    },
+    {
+      "label": "Conditions",
+      "page": "conditions"
+    },
+    {
+      "label": "Process",
+      "url": "{{page:home|url}}#process"
+    },
+    {
+      "label": "FAQ",
+      "url": "{{page:home|url}}#faq"
+    }
+  ],
+  "nav_footer": [
+    {
+      "label": "Contact",
+      "page": "contact"
+    },
+    {
+      "label": "Privacy policy",
+      "page": "privacy"
+    },
+    {
+      "label": "Book a session",
+      "url": "{{page:contact|url}}#book"
+    }
+  ]
+}

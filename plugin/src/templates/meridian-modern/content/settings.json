@@ -1,0 +1,16 @@
+{
+  "site_name": "Wren Acupuncture",
+  "tagline": "Brighton · Traditional acupuncture",
+  "logo_id": 0,
+  "phone": "+44 1273 555 201",
+  "email": "hello@wrenacupuncture.co.uk",
+  "address": "14 Ship Street\nBrighton BN1 1AD",
+  "cta_label": "Book a session",
+  "cta_url": "{{page:contact|url}}#book",
+  "home_url": "{{page:home|url}}",
+  "privacy_url": "{{page:privacy|url}}",
+  "footer_text": "Unhurried sessions, one person at a time.",
+  "opening_hours": "Tue–Fri 9–6, Sat 9–1",
+  "booking_url": "",
+  "social": []
+}

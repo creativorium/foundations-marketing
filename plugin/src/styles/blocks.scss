@@ -46,3 +46,17 @@
 @use '../templates/onyx/blocks/reviews/style' as onyx-reviews;
 @use '../templates/onyx/blocks/steps/style' as onyx-steps;
 @use '../templates/onyx/blocks/story/style' as onyx-story;
+
+@use '../templates/meridian-modern/blocks/hero/style' as meridian-hero;
+@use '../templates/meridian-modern/blocks/credentials/style' as meridian-credentials;
+@use '../templates/meridian-modern/blocks/story/style' as meridian-story;
+@use '../templates/meridian-modern/blocks/conditions/style' as meridian-conditions;
+@use '../templates/meridian-modern/blocks/steps/style' as meridian-steps;
+@use '../templates/meridian-modern/blocks/reviews/style' as meridian-reviews;
+@use '../templates/meridian-modern/blocks/faq/style' as meridian-faq;
+@use '../templates/meridian-modern/blocks/booking/style' as meridian-booking;
+@use '../templates/meridian-modern/blocks/policy/style' as meridian-policy;
+@use '../templates/meridian-modern/blocks/page-hero/style' as meridian-page-hero;
+@use '../templates/meridian-modern/blocks/contact/style' as meridian-contact;
+@use '../templates/meridian-modern/blocks/site-header/style' as meridian-site-header;
+@use '../templates/meridian-modern/blocks/site-footer/style' as meridian-site-footer;

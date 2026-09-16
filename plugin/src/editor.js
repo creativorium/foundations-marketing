@@ -42,3 +42,17 @@ import './templates/onyx/blocks/policy';
 import './templates/onyx/blocks/reviews';
 import './templates/onyx/blocks/steps';
 import './templates/onyx/blocks/story';
+
+import './templates/meridian-modern/blocks/hero';
+import './templates/meridian-modern/blocks/credentials';
+import './templates/meridian-modern/blocks/story';
+import './templates/meridian-modern/blocks/conditions';
+import './templates/meridian-modern/blocks/steps';
+import './templates/meridian-modern/blocks/reviews';
+import './templates/meridian-modern/blocks/faq';
+import './templates/meridian-modern/blocks/booking';
+import './templates/meridian-modern/blocks/policy';
+import './templates/meridian-modern/blocks/page-hero';
+import './templates/meridian-modern/blocks/contact';
+import './templates/meridian-modern/blocks/site-header';
+import './templates/meridian-modern/blocks/site-footer';
