@@ -187,6 +187,10 @@ function fm_selected_template(): array
  * One place decides this, because it is asked in two blocks — template-grid and
  * template-library — and they must never disagree about where a card goes.
  *
+ * The card leads to the builder, not to the demo: choosing a template is the step the
+ * catalogue exists to produce, and the demo is offered beside it as its own link
+ * (fm_template_demo_url()) so looking around never costs the buyer their place.
+ *
  * Filterable so the destination can go back to the demo without editing a block:
  * `add_filter('fm_template_card_url', fn($url, $t) => $t['url']);`
  *
@@ -208,6 +212,27 @@ function fm_template_card_url(array $template): string
      * @param array<string, mixed> $template The template row.
      */
     return (string) apply_filters('fm_template_card_url', $url, $template);
+}
+
+/**
+ * The standalone demo for a template, or '' when it has none.
+ *
+ * The card's demo link and the builder's preview both ask this, and both must stay
+ * pointed at the same mini site — the buyer compares the two side by side.
+ *
+ * @param array<string, mixed> $template
+ */
+function fm_template_demo_url(array $template): string
+{
+    $url = (string) ($template['url'] ?? '');
+
+    /**
+     * Filters a template's demo URL.
+     *
+     * @param string               $url      The demo destination, '' when there is none.
+     * @param array<string, mixed> $template The template row.
+     */
+    return (string) apply_filters('fm_template_demo_url', $url, $template);
 }
 
 /**

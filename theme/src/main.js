@@ -4,25 +4,51 @@
  */
 import './styles/main.scss';
 
+// -----------------------------------------------------------------------------
+// Page transition — the outgoing half.
+//
+// The cover is started and the navigation is left alone: the browser holds this
+// document on screen until the next one is ready to paint, so the cover plays over
+// exactly the wait there is and adds nothing to it.
+//
+// It used to preventDefault and navigate on a 160ms timer instead. That charged every
+// internal link a fixed 160ms — including the ones the speculation rules had already
+// prerendered, which would otherwise have been instant — and it had two ways to look
+// broken: a navigation slower than the recovery timer uncovered the page halfway
+// through, and a navigation that never happened left the reader behind a black screen.
+// Both read exactly as "the transition lagged, or stopped".
+// -----------------------------------------------------------------------------
 const curtain = document.querySelector('.fm-px');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-let leaving = false;
+let recover = 0;
+
 if (curtain) {
+  const cover = () => {
+    curtain.dataset.leaving = '';
+    // Only reached when the navigation does not happen after all — a download, a
+    // cancelled unload, an extension swallowing the click. The page is never left
+    // covered, and because nothing waits on this timer it can afford to be patient.
+    window.clearTimeout(recover);
+    recover = window.setTimeout(() => delete curtain.dataset.leaving, 4000);
+  };
+
   document.addEventListener('click', event => {
-    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || reducedMotion.matches || leaving) return;
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || reducedMotion.matches) return;
     const link = event.target.closest('a[href]');
     if (!link || link.hasAttribute('download') || (link.target && link.target !== '_self')) return;
     const url = new URL(link.href, location.href);
     if (url.origin !== location.origin || !/^https?:$/.test(url.protocol) || url.pathname.startsWith('/wp-admin') || url.searchParams.has('add-to-cart')) return;
+    // Same document: an in-page anchor is not a navigation and must not be covered.
     if (url.pathname === location.pathname && url.search === location.search) return;
-    event.preventDefault();
-    leaving = true;
-    curtain.dataset.leaving = '';
-    window.setTimeout(() => location.assign(url.href), 160);
-    // Recover when a download or cancelled navigation leaves this document open.
-    window.setTimeout(() => { delete curtain.dataset.leaving; leaving = false; }, 2500);
+    cover();
   });
-  window.addEventListener('pageshow', () => { delete curtain.dataset.leaving; leaving = false; });
+
+  // Back from the bfcache: the reveal animation has already finished on this document
+  // and will not run again, so the cover has to be taken off by hand.
+  window.addEventListener('pageshow', () => {
+    window.clearTimeout(recover);
+    delete curtain.dataset.leaving;
+  });
 }
 
 // -----------------------------------------------------------------------------

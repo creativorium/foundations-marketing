@@ -96,7 +96,13 @@ $show_filters = (bool) ($attributes['showFilters'] ?? true) && count($categories
                 class="fm-library__item"
                 style="--fm-card-tint: <?php echo esc_attr($tint); ?>"
                 data-fm-category="<?php echo esc_attr($template['category']); ?>">
-                <a class="fm-template-card" href="<?php echo fm_url(fm_template_card_url($template)); ?>">
+                <?php
+                // Same two-link card as template-grid, and for the same reason: the name
+                // leads into the builder and stretches over the card, the demo opens in
+                // its own tab. See that block's render.php for the full note.
+                $demo = fm_template_demo_url($template);
+                ?>
+                <div class="fm-template-card">
                     <span class="fm-template-card__frame">
                         <span class="fm-template-card__device">
                             <span class="fm-template-card__dot" aria-hidden="true"></span>
@@ -128,7 +134,11 @@ $show_filters = (bool) ($attributes['showFilters'] ?? true) && count($categories
                             <span class="fm-template-card__niche"><?php echo esc_html($template['niche']); ?></span>
                         <?php endif; ?>
 
-                        <span class="fm-template-card__name"><?php echo esc_html($template['name']); ?></span>
+                        <span class="fm-template-card__name">
+                            <a class="fm-template-card__link" href="<?php echo fm_url(fm_template_card_url($template)); ?>">
+                                <?php echo esc_html($template['name']); ?>
+                            </a>
+                        </span>
 
                         <?php if ($template['description'] !== '') : ?>
                             <span class="fm-template-card__desc"><?php echo esc_html($template['description']); ?></span>
@@ -144,13 +154,23 @@ $show_filters = (bool) ($attributes['showFilters'] ?? true) && count($categories
 
                         <span class="fm-template-card__meta">
                             <span><?php echo esc_html($price_from); ?></span>
-                            <span class="fm-template-card__view">
-                                <?php esc_html_e('View demo', 'foundations'); ?>
-                                <span aria-hidden="true">&#8599;</span>
+                            <span class="fm-template-card__actions">
+                                <?php if ($demo !== '') : ?>
+                                    <a class="fm-template-card__demo" href="<?php echo fm_url($demo); ?>"
+                                       target="_blank" rel="noopener">
+                                        <?php esc_html_e('View demo', 'foundations'); ?>
+                                        <span aria-hidden="true">&#8599;</span>
+                                        <span class="fm-sr-only"><?php esc_html_e('(opens in a new tab)', 'foundations'); ?></span>
+                                    </a>
+                                <?php endif; ?>
+                                <span class="fm-template-card__view">
+                                    <?php esc_html_e('Build this site', 'foundations'); ?>
+                                    <span aria-hidden="true">&rarr;</span>
+                                </span>
                             </span>
                         </span>
                     </span>
-                </a>
+                </div>
             </li>
         <?php endforeach; ?>
     </ul>
