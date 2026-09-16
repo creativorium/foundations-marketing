@@ -75,7 +75,7 @@ a.meridian-brand { min-height: 44px; display: flex; align-items: center; }
 .meridian-review blockquote { padding: 0; border: 0; font: italic clamp(1.375rem,2.6vw,2rem)/1.4 var(--fm-font-display); }
 .meridian-review figcaption { margin-top: 1.375rem; color: var(--fm-muted); font-size: .8125rem; }
 .meridian-dots { display: flex; justify-content: center; gap: 0; margin-top: .375rem; }
-.meridian-dots button { display: grid; place-items: center; width: 44px; height: 44px; border: 0; background: transparent; cursor: pointer; }
+.meridian-dots button { display: grid; place-items: center; width: 44px; height: 44px; margin-inline: -10px; border: 0; background: transparent; cursor: pointer; }
 .meridian-dots span { width: 8px; height: 8px; border-radius: 999px; background: rgba(42,33,24,.2); transition: background-color .2s ease; }
 .meridian-dots [aria-pressed=true] span { background: var(--fm-accent); }
 .meridian-faq { max-width: 51.25rem; margin: auto; }
