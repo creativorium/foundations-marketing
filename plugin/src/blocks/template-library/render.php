@@ -156,8 +156,9 @@ $show_filters = (bool) ($attributes['showFilters'] ?? true) && count($categories
                             <span><?php echo esc_html($price_from); ?></span>
                             <span class="fm-template-card__actions">
                                 <?php if ($demo !== '') : ?>
+                                    <?php // data-fm-demo: see template-grid — the tab is script-opened so it can close itself. ?>
                                     <a class="fm-template-card__demo" href="<?php echo fm_url($demo); ?>"
-                                       target="_blank" rel="noopener">
+                                       target="_blank" rel="noopener" data-fm-demo>
                                         <?php esc_html_e('View demo', 'foundations'); ?>
                                         <span aria-hidden="true">&#8599;</span>
                                         <span class="fm-sr-only"><?php esc_html_e('(opens in a new tab)', 'foundations'); ?></span>
