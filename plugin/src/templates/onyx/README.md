@@ -12,7 +12,7 @@ advanced skin and laser. Built from the client canvas file
 | Pages | home, treatments, about, contact, privacy |
 | Target phrase | aesthetics clinic website design UK |
 | Demo slug | `aesthetics-clinic-website-design` |
-| Shell | shared `site-header` / `site-footer`, `inline` + `columns` variants, restyled from `style.scss` — **not forked** |
+| Shell | Onyx-specific header/footer blocks reading Site Settings; the template owns their structure and future fixes |
 
 ## The SEO phrase is a split, and the owner should confirm it
 
@@ -40,19 +40,14 @@ Stated plainly so none of it is mistaken for done:
   (`team-template-workflow.md`, "Testing external integrations"). With `action` empty the
   submit button renders disabled and says why, rather than looking like it works and
   dropping every enquiry. Set the endpoint in the block's settings before launch.
-- **No webfont files ship.** `theme.json` asks for Archivo and Instrument Sans and falls
-  back to a real system stack, so the design is legible with nothing downloaded, but it is
-  not yet the drawn typography. Self-host the two woff2 files per `doc/FONTS.md`; never
-  point the families at a third-party CDN — `theme-customer-base/inc/assets.php` forbids
-  that on a customer site.
+- **Typography now matches the supplied HTML.** Archivo and Instrument Sans latin fonts are extracted from that supplied asset and bundled locally; no external font request is needed.
 - **No `/templates/aesthetics-clinic-website-design/` detail page exists**, so the design
   cannot be published to the catalogue yet — a card would point at a 404
   (`doc/TEMPLATES.md`).
 
 ## Blocks
 
-Eleven, all namespaced to this design. Header and footer are **not** among them: they are
-the shared shell, rendered from `parts/` and Site Settings.
+Thirteen, all namespaced to this design, including the header and footer rendered from `parts/` and Site Settings.
 
 | Block | Used on | Notes |
 |---|---|---|
@@ -88,7 +83,7 @@ a separate, deliberate step and should wait until the unfinished items above are
 
 ## Checks run
 
-- `npm run build` — `lint:php` 87 files, `validate:blocks` 16 files, all four Vite targets.
+- `npm run build` — `lint:php` 90 files, `validate:blocks` 16 files, all four Vite targets.
 - All five pages parse into registered blocks, contain no raw HTML outside block
   delimiters, and **re-serialise byte-identical**, so the editor does not rewrite them on
   save.
@@ -96,7 +91,19 @@ a separate, deliberate step and should wait until the unfinished items above are
   overflow, no broken images, no unresolved import tokens, no console errors, every tap
   target at least 44×44px.
 
-**Not run:** opening each page in Gutenberg and saving/reloading by hand (how-to-work.md
-§11). The round-trip check above is strong evidence — every block here is
-`save: () => null`, so there is no saved markup for the editor to disagree with — but it
-is not the same thing as the editor check, and the editor check has not been done.
+**Verified 16 September 2026:** all five existing master pages opened in Gutenberg, saved, and reloaded with every block valid. All 15 responsive preview checks passed with no browser JavaScript errors. No duplicate master or customer project was created.
+
+**Customer installation verified:** the generated Onyx package was installed on the existing customer fixture. All five pages passed responsive checks and Gutenberg save/reload; edited content exported successfully. The shared runtime URL regression now covers permalink changes and homepage anchors. Launch content and enquiry-endpoint items above remain open.
+
+## Visual comparison with the supplied standalone HTML
+
+The reference is rendered directly from the supplied standalone HTML. Corrections cover
+the wordmark/descriptor and translucent fixed desktop header; four-column footer;
+Archivo and Instrument Sans; full-width bands; headline line breaks; CTA proportions;
+and light/dark image placeholders. Mobile keeps wrapping navigation and 44px tap targets,
+which intentionally improve on the fixed-width canvas. Placeholder mode is an editable
+block option: turn it off after choosing a real photograph.
+
+The existing draft was refreshed in place with a local backup. No new master or sample
+project was created. Marketing bundles no longer include Onyx code/styles; Delivery
+loads the compiled design for preview and Gutenberg editing.

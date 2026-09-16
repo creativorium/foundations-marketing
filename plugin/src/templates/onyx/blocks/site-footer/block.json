@@ -1,0 +1,11 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/onyx-site-footer",
+  "title": "Onyx footer",
+  "category": "theme",
+  "supports": {
+    "html": false,
+    "multiple": false
+  },
+  "render": "file:./render.php"
+}

@@ -21,13 +21,10 @@ foundationsmarketing.co.uk and runs WooCommerce. Two themes, two sites.
 | Front-end stylesheet enqueue | **Built** — was broken in the first version, see `inc/assets.php` |
 | Site Settings **contract** — schema, defaults, read helpers | **Built** |
 | Site Settings **screen**, Site Owner role, capabilities | **Built** in `plugin-site/` |
-| Packager | **Not built — step 3** |
-| Importer | **Not built — step 4** |
+| Packager | **Built** in `scripts/package.mjs` |
+| Importer | **Built** in `plugin-site/` |
 
-So on this branch settings come from defaults or from whatever wrote the option row by
-hand. That is enough to prove the shell renders real data, which is what this branch is
-for — and it is why the acceptance checks below are run as an administrator *and* the
-capability checks are explicitly deferred to step 2.
+Settings are edited through Site Settings. Generated releases include the customer runtime. See [delivery-verification.md](../delivery-verification.md) for the completed fixture checks and remaining design-specific acceptance.
 
 ---
 
@@ -120,7 +117,7 @@ Each of these is a decision, not an oversight:
 - **No classic nav menu locations.** Registering one puts `Appearance → Menus` back in play
   and reopens the capability conflict — it shares `edit_theme_options` with the Site Editor
   (customer-runtime.md §5.2). Navigation is a Site Settings field instead.
-- **No JavaScript at all**, including a burger menu. The nav is a list that wraps. A toggle
+- **No custom frontend JavaScript in the shared shell**, including a burger menu. The nav is a list that wraps. A toggle
   is layout JS and the budget is 85+ mobile PageSpeed on shared hosting (§9). A design that
   truly needs one builds it as its own block, with its own script.
 - **No hover-only submenus.** One level, always visible — a hover submenu is unreachable by
@@ -144,7 +141,7 @@ switch and back.
 
 **Fixed since that audit:** tap targets (see below).
 
-**Still open, and not to be counted as passed:**
+**Follow-up status:**
 
 | Item | Where it goes |
 |---|---|
@@ -224,7 +221,4 @@ Install on a clean WordPress with the fixture — the manual path is in
 - [ ] An unknown URL renders `404.html` inside the same shell.
 - [ ] Deactivating and reactivating the theme loses no content.
 
-**Explicitly NOT checked on this branch** — these need the runtime plugin and move to
-step 2: that a Site Owner can edit settings, that `Appearance → Editor` is unreachable by
-that role, and that capabilities are enforced rather than hidden. Testing as an
-administrator proves nothing about either.
+Site Owner settings access and denial of Site Editor/plugin management are now tested with the runtime plugin. See [delivery-verification.md](../delivery-verification.md). The checklist above remains required for each real design.
