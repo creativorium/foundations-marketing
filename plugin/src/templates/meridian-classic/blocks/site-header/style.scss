@@ -214,6 +214,7 @@ a.meridian-brand { min-height: 44px; display: flex; align-items: center; }
 .meridian .meridian-header__cta { padding: .75rem 0; border: 0; border-bottom: 1.5px solid var(--fm-accent); border-radius: 0; background: transparent; color: var(--fm-ink); }
 .meridian .meridian-header__cta:hover { background: transparent; opacity: .6; }
 .meridian-story__image { aspect-ratio: 4/5; border-radius: 0; }
+.meridian-story__media figcaption { margin-top: .875rem; color: #8B8574; font: italic 400 .75rem/1.5 var(--fm-font-display); }
 .meridian-conditions { background: var(--fm-canvas); color: var(--fm-ink); }
 .meridian-conditions .meridian-eyebrow { color: var(--fm-muted); }
 .meridian-conditions .meridian-body { color: var(--fm-muted); opacity: 1; }
@@ -423,4 +424,10 @@ html:has(.meridian) { scroll-behavior: smooth; }
   .meridian-header[data-open] .meridian-nav ul { gap: 1rem; }
   .meridian-header[data-open] .meridian-nav a { font-family: var(--fm-font-display); font-size: 2.125rem; font-weight: 400; }
   .meridian-header[data-open] .meridian-nav__mobile-cta a { font-style: italic; }
+}
+
+@media(max-width:560px){
+  .meridian-pills li,.meridian-pills li:nth-child(3n+1) { flex-direction: row; align-items: baseline; gap: 1.25rem; padding: 1.375rem 0; }
+  .meridian-pills li span { flex: 0 1 42%; font-size: 1.5rem; }
+  .meridian-pills li small { flex: 1 1 58%; max-width: 20rem; text-align: right; }
 }
