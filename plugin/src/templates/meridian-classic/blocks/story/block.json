@@ -1,0 +1,42 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/meridian-classic-story",
+  "title": "Meridian Story",
+  "category": "foundations-meridian-classic",
+  "icon": "admin-site-alt3",
+  "attributes": {
+    "anchor": {
+      "type": "string",
+      "default": ""
+    },
+    "eyebrow": {
+      "type": "string",
+      "default": ""
+    },
+    "heading": {
+      "type": "string",
+      "default": ""
+    },
+    "body": {
+      "type": "string",
+      "default": ""
+    },
+    "body2": {
+      "type": "string",
+      "default": ""
+    },
+    "signature": {
+      "type": "string",
+      "default": ""
+    },
+    "imageId": {
+      "type": "integer",
+      "default": 0
+    }
+  },
+  "supports": {
+    "html": false,
+    "multiple": true
+  },
+  "render": "file:./render.php"
+}

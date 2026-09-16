@@ -1,0 +1,10 @@
+<?php
+if (!defined('ABSPATH')) { exit; }
+$a = $attributes;
+$text = static fn($key) => esc_html((string)($a[$key] ?? ''));
+$anchor = sanitize_title((string)($a['anchor'] ?? ''));
+$uid = wp_unique_id('meridian-enquiry-');
+$email = function_exists('fm_setting') ? (string)fm_setting('email') : '';
+$booking = function_exists('fm_setting') ? (string)fm_setting('booking_url') : '';
+?>
+<section class="meridian meridian-section meridian-booking-wrap" id="<?php echo esc_attr($anchor); ?>"><div class="meridian-booking"><div class="meridian-booking__image"><?php echo wp_get_attachment_image((int)($a['imageId'] ?? 0), 'large', false, ['loading' => 'lazy']); ?></div><div class="meridian-booking__content"><p class="meridian-eyebrow"><?php echo $text('eyebrow'); ?></p><h2><?php echo $text('heading'); ?></h2><p><?php echo $text('body'); ?></p><?php if ($booking) : ?><a class="meridian-button" href="<?php echo esc_url($booking); ?>">Book online</a><?php endif; ?><?php if (is_email($email)) : ?><form data-meridian-enquiry data-email="<?php echo esc_attr($email); ?>"><label for="<?php echo esc_attr($uid); ?>name">Name</label><input id="<?php echo esc_attr($uid); ?>name" name="name" autocomplete="name" required maxlength="120" placeholder="Name"><label for="<?php echo esc_attr($uid); ?>email">Email</label><input id="<?php echo esc_attr($uid); ?>email" name="email" type="email" autocomplete="email" required maxlength="254" placeholder="Email"><label for="<?php echo esc_attr($uid); ?>message">Anything I should know</label><textarea id="<?php echo esc_attr($uid); ?>message" name="message" rows="2" maxlength="2000" placeholder="Anything I should know"></textarea><button class="meridian-button" type="submit">Send request</button><p class="meridian-form-note" role="status">Opens a draft in your email app. Nothing is sent by this website.</p><noscript><a href="<?php echo esc_url('mailto:' . $email); ?>">Email the clinic</a></noscript></form><?php else : ?><p>Please configure the clinic email in Site Settings to accept enquiries.</p><?php endif; ?></div></div></section>

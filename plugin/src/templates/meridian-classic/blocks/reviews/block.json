@@ -1,0 +1,22 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/meridian-classic-reviews",
+  "title": "Meridian Reviews",
+  "category": "foundations-meridian-classic",
+  "icon": "admin-site-alt3",
+  "attributes": {
+    "imageId": {
+      "type": "integer",
+      "default": 0
+    },
+    "items": {
+      "type": "array",
+      "default": []
+    }
+  },
+  "supports": {
+    "html": false,
+    "multiple": true
+  },
+  "render": "file:./render.php"
+}
