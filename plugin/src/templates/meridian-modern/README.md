@@ -1,6 +1,6 @@
 # Meridian Modern
 
-Reusable acupuncture clinic template based on the supplied Meridian-Modern HTML. The sample business is Wren Acupuncture. `meridian-modern` is a separate design slug because an older `meridian` already exists in the development Delivery catalogue.
+Reusable acupuncture clinic template based on the supplied Meridian-Modern HTML. The sample business is Wren. `meridian-modern` is a separate design slug because an older `meridian` already exists in the development Delivery catalogue.
 
 ## Structure and editing
 

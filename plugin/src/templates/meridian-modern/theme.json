@@ -38,12 +38,12 @@
         {
           "slug": "line",
           "name": "Line",
-          "color": "#D5CABA"
+          "color": "rgba(42,33,24,.14)"
         },
         {
           "slug": "accent",
           "name": "Accent",
-          "color": "#A94D24"
+          "color": "#C1602F"
         },
         {
           "slug": "on-accent",

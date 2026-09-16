@@ -1,4 +1,4 @@
-<!-- wp:foundations/meridian-modern-page-hero {"heading":"A whole-picture approach.","body":"Start with a conversation about what brings you here.","eyebrow":"Wren Acupuncture · Brighton"} /-->
+<!-- wp:foundations/meridian-modern-page-hero {"heading":"A whole-picture approach.","body":"Start with a conversation about what brings you here.","eyebrow":"Wren · Brighton"} /-->
 
 <!-- wp:foundations/meridian-modern-conditions {"anchor":"conditions","eyebrow":"What I treat","heading":"Most people arrive with one of these.","body":"Not listed? Send a note and I'll tell you honestly whether acupuncture is the right route.","items":[{"title":"Chronic pain"},{"title":"Migraine & headaches"},{"title":"Insomnia"},{"title":"Anxiety & burnout"},{"title":"Fertility support"},{"title":"Perimenopause"},{"title":"Digestive issues"},{"title":"Low back & sciatica"},{"title":"Fatigue"},{"title":"Sports injury"}]} /-->
 

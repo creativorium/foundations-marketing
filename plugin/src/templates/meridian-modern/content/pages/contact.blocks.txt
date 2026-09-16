@@ -1,4 +1,4 @@
-<!-- wp:foundations/meridian-modern-page-hero {"heading":"Get in touch.","body":"Find the clinic, ask a question, or arrange your first conversation.","eyebrow":"Wren Acupuncture · Brighton"} /-->
+<!-- wp:foundations/meridian-modern-page-hero {"heading":"Get in touch.","body":"Find the clinic, ask a question, or arrange your first conversation.","eyebrow":"Wren · Brighton"} /-->
 
 <!-- wp:foundations/meridian-modern-contact /-->
 

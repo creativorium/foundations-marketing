@@ -1,4 +1,4 @@
-<!-- wp:foundations/meridian-modern-page-hero {"heading":"One person at a time.","body":"An unhurried approach to acupuncture in Brighton.","eyebrow":"Wren Acupuncture · Brighton"} /-->
+<!-- wp:foundations/meridian-modern-page-hero {"heading":"One person at a time.","body":"An unhurried approach to acupuncture in Brighton.","eyebrow":"Wren · Brighton"} /-->
 
 <!-- wp:foundations/meridian-modern-story {"anchor":"about","eyebrow":"The practitioner","heading":"I'm Nora — I treat one person at a time, not a waiting room.","body":"I trained in Chinese medicine after a decade of migraines that nothing conventional touched. What changed things wasn't one treatment, it was someone finally looking at the whole picture.","body2":"That's how I work now: long first appointments, a plan we build together, and honesty if something isn't working.","signature":"Nora Wren, MSc, MBAcC","imageId":"{{media:meridian-practitioner.webp|id}}"} /-->
 

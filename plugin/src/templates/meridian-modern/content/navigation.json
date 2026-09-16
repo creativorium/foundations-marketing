@@ -2,11 +2,11 @@
   "nav_primary": [
     {
       "label": "About",
-      "page": "about"
+      "url": "{{page:home|url}}#about"
     },
     {
       "label": "Conditions",
-      "page": "conditions"
+      "url": "{{page:home|url}}#conditions"
     },
     {
       "label": "Process",
@@ -20,15 +20,15 @@
   "nav_footer": [
     {
       "label": "Contact",
-      "page": "contact"
+      "url": "#contact"
     },
     {
       "label": "Privacy policy",
-      "page": "privacy"
+      "url": "#privacy"
     },
     {
       "label": "Book a session",
-      "url": "{{page:contact|url}}#book"
+      "url": "{{page:home|url}}#book"
     }
   ]
 }
