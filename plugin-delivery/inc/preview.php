@@ -98,17 +98,58 @@ add_action('template_redirect',function():void{
 $fm_embedded = !empty($_GET['fm_embed']);
 // FM_BRAND comes from our own theme, which is loaded here but need not be forever.
 $fm_brand = defined('FM_BRAND') ? (string) FM_BRAND : 'Foundations Marketing';
+
+/*
+ * The bar's colours are written as hex rather than as --fm-* tokens, which is the one
+ * place on this site that is correct: this document loads the packaged design's
+ * stylesheet, not ours, so our tokens do not exist here. They are still read from the
+ * active palette rather than fixed, so switching to Nari in the Customizer changes the
+ * bar with everything else.
+ *
+ * The deep accent, not the bright one. White on Steel's #EA631B is 3.3:1 and fails AA
+ * for 13px text; on the deep #C24E11 it is 4.8:1, and on Nari's #8C5733 it is 6.0:1.
+ */
+$fm_palette = function_exists('fm_palette') ? fm_palette() : 'steel';
+$fm_bar_bg  = $fm_palette === 'nari' ? '#8C5733' : '#C24E11';
+
+// Where "back" goes when the tab cannot close itself. Never a hardcoded /templates/ —
+// that page does not exist on every install, and a back link to a 404 is worse than
+// no back link at all.
+$fm_back_url = function_exists('fm_catalogue_url') ? fm_catalogue_url() : home_url('/');
 ?>
 <?php if(!$project && !$fm_embedded): ?><style>
-.fm-demo-bar{position:sticky;bottom:0;z-index:2147483647;display:flex;gap:12px 20px;align-items:center;justify-content:space-between;padding:12px 20px;background:#111;color:#fff;font:600 13px/1.4 system-ui,-apple-system,'Segoe UI',sans-serif}
+.fm-demo-bar{position:sticky;bottom:0;z-index:2147483647;display:flex;gap:12px 20px;align-items:center;justify-content:space-between;padding:12px 20px;background:<?php echo esc_attr($fm_bar_bg); ?>;color:#fff;font:600 13px/1.4 system-ui,-apple-system,'Segoe UI',sans-serif}
 .fm-demo-bar a{text-decoration:none}
 /* 44px tall on a phone without making the bar 44px taller. */
 .fm-demo-bar__back{color:#fff;display:inline-flex;align-items:center;gap:8px;padding:11px 0}
-.fm-demo-bar__what{opacity:.7;font-weight:500}
-.fm-demo-bar__cta{background:#fff;color:#111;border-radius:999px;padding:11px 20px;white-space:nowrap}
+.fm-demo-bar__back:focus-visible,.fm-demo-bar__cta:focus-visible{outline:2px solid #fff;outline-offset:3px}
+.fm-demo-bar__what{opacity:.85;font-weight:500}
+.fm-demo-bar__cta{background:#fff;color:<?php echo esc_attr($fm_bar_bg); ?>;border-radius:999px;padding:11px 20px;white-space:nowrap}
 /* Two things fit across a phone, not three: the design's own name is already on screen. */
 @media (max-width:560px){.fm-demo-bar{padding:10px 14px}.fm-demo-bar__what{display:none}.fm-demo-bar__back span{font-size:12px}}
-</style><nav class="fm-demo-bar" aria-label="Demo"><a class="fm-demo-bar__back" href="<?php echo esc_url(home_url('/templates/')); ?>">&#8592; <span>Back to <?php echo esc_html($fm_brand); ?></span></a><span class="fm-demo-bar__what">Demo &mdash; <?php echo esc_html($parent->post_title); ?></span><a class="fm-demo-bar__cta" href="<?php echo esc_url(add_query_arg('template',$parent->post_name,function_exists('fm_builder_url')&&fm_builder_url()?fm_builder_url():home_url('/build-your-site/'))); ?>">Build this site &rarr;</a></nav><?php endif; ?><?php if(is_file($design['plugin'].'/build/frontend.js')): ?><script src="<?php echo esc_url(fm_delivery_asset_url($designId,'plugin','build/frontend.js')); ?>"></script><?php endif; ?></body></html><?php exit;
+</style><nav class="fm-demo-bar" aria-label="Demo"><a class="fm-demo-bar__back" href="<?php echo esc_url($fm_back_url); ?>" data-fm-demo-back>&#8592; <span>Back to <?php echo esc_html($fm_brand); ?></span></a><span class="fm-demo-bar__what">Demo &mdash; <?php echo esc_html($parent->post_title); ?></span><a class="fm-demo-bar__cta" href="<?php echo esc_url(add_query_arg('template',$parent->post_name,function_exists('fm_builder_url')&&fm_builder_url()?fm_builder_url():home_url('/build-your-site/'))); ?>">Build this site &rarr;</a></nav><script>
+/*
+ * A demo is opened in its own tab, so "back" usually means "give me the catalogue tab
+ * I already have" — closing this one does that, and leaves the reader exactly where
+ * they were, scroll position and filter included. Only a tab that a script opened may
+ * close itself, which is why the catalogue opens demos through window.open().
+ *
+ * Everything else falls through to the link's own href, so this is an enhancement:
+ * with no JavaScript, a tab that cannot close, or a demo reached by typing the URL,
+ * the anchor still goes to a real page.
+ */
+document.querySelector('[data-fm-demo-back]').addEventListener('click', function (event) {
+  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  if (!window.opener || window.opener.closed) return;
+  // Read it now: currentTarget is null by the time the timer runs.
+  var fallback = this.href;
+  event.preventDefault();
+  window.close();
+  // close() is refused silently when the tab was not script-opened. If we are still
+  // here a moment later, take the link.
+  window.setTimeout(function () { location.href = fallback; }, 120);
+});
+</script><?php endif; ?><?php if(is_file($design['plugin'].'/build/frontend.js')): ?><script src="<?php echo esc_url(fm_delivery_asset_url($designId,'plugin','build/frontend.js')); ?>"></script><?php endif; ?></body></html><?php exit;
 },1);
 
 add_action('admin_enqueue_scripts',function():void{

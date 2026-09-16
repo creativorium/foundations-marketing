@@ -275,10 +275,54 @@ function fm_builder_url(): string
 }
 
 /**
- * Remember which page holds the builder.
+ * The page holding the catalogue — where "back" from a demo should land.
+ *
+ * Found the same way as the builder rather than assumed to be `/templates/`. That
+ * assumption was wrong on the dev site, which has no such page, so every demo's back
+ * link led to a 404 — and a hardcoded path is wrong again the moment the page is
+ * renamed. Falls back to the homepage, which always exists.
+ */
+function fm_catalogue_url(): string
+{
+    $page_id = (int) get_option('fm_catalogue_page_id', 0);
+
+    // The option is written when a page is saved, so a site whose catalogue page was
+    // published before this existed has nothing recorded yet. Look once, remember the
+    // answer, and never search again — re-saving every page to teach the site where
+    // its own catalogue is would be a silly thing to ask of anyone.
+    if ($page_id <= 0) {
+        $found = get_posts([
+            'post_type'        => 'page',
+            'post_status'      => 'publish',
+            'numberposts'      => 1,
+            's'                => 'wp:foundations/template-library',
+            'fields'           => 'ids',
+            'suppress_filters' => true,
+        ]);
+
+        if ($found !== []) {
+            $page_id = (int) $found[0];
+            update_option('fm_catalogue_page_id', $page_id, false);
+        }
+    }
+
+    if ($page_id > 0 && get_post_status($page_id) === 'publish') {
+        return (string) get_permalink($page_id);
+    }
+
+    return (string) home_url('/');
+}
+
+/**
+ * Remember which page holds the builder, and which holds the catalogue.
  *
  * Cheaper and more reliable than searching post content on the front end: the answer
  * changes only when a page is saved, so that is when it is worked out.
+ *
+ * The catalogue is the page carrying `template-library` — the full, filterable list.
+ * `template-grid` is deliberately not accepted: it appears as a short teaser on the
+ * homepage and the services page, and sending a reader "back to the catalogue" should
+ * not land them on a three-card excerpt of it.
  */
 function fm_track_builder_page(int $post_id, WP_Post $post): void
 {
@@ -286,17 +330,23 @@ function fm_track_builder_page(int $post_id, WP_Post $post): void
         return;
     }
 
-    $has    = has_block('foundations/package-builder', $post);
-    $stored = (int) get_option('fm_builder_page_id', 0);
+    $published = $post->post_status === 'publish';
 
-    if ($has && $post->post_status === 'publish') {
-        update_option('fm_builder_page_id', $post_id, false);
-        return;
-    }
+    foreach ([
+        'fm_builder_page_id'   => 'foundations/package-builder',
+        'fm_catalogue_page_id' => 'foundations/template-library',
+    ] as $option => $block) {
+        $stored = (int) get_option($option, 0);
 
-    // The block was removed, or the page was unpublished — stop pointing at it.
-    if ($stored === $post_id) {
-        delete_option('fm_builder_page_id');
+        if ($published && has_block($block, $post)) {
+            update_option($option, $post_id, false);
+            continue;
+        }
+
+        // The block was removed, or the page was unpublished — stop pointing at it.
+        if ($stored === $post_id) {
+            delete_option($option);
+        }
     }
 }
 add_action('save_post_page', 'fm_track_builder_page', 10, 2);

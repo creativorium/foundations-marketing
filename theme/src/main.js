@@ -5,6 +5,32 @@
 import './styles/main.scss';
 
 // -----------------------------------------------------------------------------
+// Template demos open in their own tab, and open it with a script.
+//
+// The markup already says target="_blank", so this changes nothing a reader can see.
+// What it changes is who opened the tab: a tab opened by a link may not close itself,
+// while one opened by window.open() may. That is what lets the demo's "Back to
+// Foundations Marketing" hand the reader back to the catalogue tab they still have
+// open — same scroll position, same filter — instead of loading the catalogue a
+// second time.
+//
+// Modified clicks are left alone, so "open in new window" and middle-click still mean
+// what they always meant, and with no JavaScript the anchor behaves as before.
+// -----------------------------------------------------------------------------
+document.addEventListener('click', event => {
+  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  const link = event.target.closest('a[target="_blank"][data-fm-demo]');
+  if (!link) return;
+  // Same origin only: window.open without noopener hands the new tab a reference back
+  // to this one, which is fine for our own demo and not fine for anywhere else.
+  if (new URL(link.href, location.href).origin !== location.origin) return;
+  const tab = window.open(link.href, '_blank');
+  // A blocked pop-up returns null. Let the anchor do its normal job rather than
+  // swallowing the click and opening nothing.
+  if (tab) event.preventDefault();
+});
+
+// -----------------------------------------------------------------------------
 // Page transition — the outgoing half.
 //
 // The cover is started and the navigation is left alone: the browser holds this

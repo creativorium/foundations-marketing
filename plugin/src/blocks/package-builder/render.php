@@ -130,7 +130,7 @@ $money  = static fn (float $n): string => function_exists('wc_price') ? wc_price
                             <?php if ($demo_url !== '') : ?>
                                 <?php // Its own tab: leaving the builder would drop the extras chosen so far. ?>
                                 <a class="fm-builder__live-link" href="<?php echo fm_url($demo_url); ?>"
-                                   target="_blank" rel="noopener">
+                                   target="_blank" rel="noopener" data-fm-demo>
                                     <?php esc_html_e('Open full demo', 'foundations'); ?> &#8599;
                                     <span class="fm-sr-only"><?php esc_html_e('(opens in a new tab)', 'foundations'); ?></span>
                                 </a>
