@@ -11,6 +11,15 @@ import './styles/main.scss';
 // document on screen until the next one is ready to paint, so the cover plays over
 // exactly the wait there is and adds nothing to it.
 //
+// It waits GRACE milliseconds before covering, because how long a navigation takes is
+// not knowable in advance and varies enormously on the same site: measured on dev, the
+// same link commits in ~50ms once the speculation rules have prerendered it and ~1100ms
+// cold. A cover that starts immediately is cut off part-way through by any navigation
+// faster than its own 130ms, which is seen as a black shape flashing across the page
+// and reads as a glitch rather than as a transition. Starting late means a navigation
+// that beats the grace period takes this document away before anything is drawn — no
+// wait, no motion — and only a navigation with a real wait is covered at all.
+//
 // It used to preventDefault and navigate on a 160ms timer instead. That charged every
 // internal link a fixed 160ms — including the ones the speculation rules had already
 // prerendered, which would otherwise have been instant — and it had two ways to look
@@ -20,16 +29,24 @@ import './styles/main.scss';
 // -----------------------------------------------------------------------------
 const curtain = document.querySelector('.fm-px');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+// Long enough that a prerendered or cached page is simply instant, short enough that a
+// wait the reader would notice is covered before they notice it.
+const GRACE = 90;
+
 let recover = 0;
+let pending = 0;
 
 if (curtain) {
   const cover = () => {
-    curtain.dataset.leaving = '';
-    // Only reached when the navigation does not happen after all — a download, a
-    // cancelled unload, an extension swallowing the click. The page is never left
-    // covered, and because nothing waits on this timer it can afford to be patient.
-    window.clearTimeout(recover);
-    recover = window.setTimeout(() => delete curtain.dataset.leaving, 4000);
+    window.clearTimeout(pending);
+    pending = window.setTimeout(() => {
+      curtain.dataset.leaving = '';
+      // Only reached when the navigation does not happen after all — a download, a
+      // cancelled unload, an extension swallowing the click. The page is never left
+      // covered, and because nothing waits on this timer it can afford to be patient.
+      window.clearTimeout(recover);
+      recover = window.setTimeout(() => delete curtain.dataset.leaving, 4000);
+    }, GRACE);
   };
 
   document.addEventListener('click', event => {
@@ -46,6 +63,7 @@ if (curtain) {
   // Back from the bfcache: the reveal animation has already finished on this document
   // and will not run again, so the cover has to be taken off by hand.
   window.addEventListener('pageshow', () => {
+    window.clearTimeout(pending);
     window.clearTimeout(recover);
     delete curtain.dataset.leaving;
   });
