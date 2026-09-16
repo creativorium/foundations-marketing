@@ -42,8 +42,11 @@ function fm_block_dirs(): array
 {
     $patterns = [
         FM_BLOCKS_DIR . 'src/blocks/*/block.json',
-        FM_BLOCKS_DIR . 'src/templates/*/blocks/*/block.json',
     ];
+    // Delivery registers the immutable compiled design, not the source working copy.
+    if (!defined('FM_DELIVERY_MANAGER')) {
+        $patterns[] = FM_BLOCKS_DIR . 'src/templates/*/blocks/*/block.json';
+    }
 
     $dirs = [];
 

@@ -1,3 +1,4 @@
+import { ToggleControl } from '@wordpress/components';
 /**
  * Editor UI for foundations/onyx-hero.
  *
@@ -27,7 +28,7 @@ export default function Edit({ attributes, setAttributes }) {
 
   return (
     <>
-      <InspectorControls>
+      <InspectorControls><PanelBody title="Image placeholder"><ToggleControl label="Show design placeholder" checked={!!attributes.placeholder} onChange={placeholder => setAttributes({placeholder})} help="Turn off after choosing the customer's photograph." /></PanelBody>
         <PanelBody title={__('Headline', 'foundations')}>
           <TextareaControl
             label={__('Heading', 'foundations')}

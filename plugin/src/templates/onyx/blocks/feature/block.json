@@ -7,17 +7,51 @@
   "icon": "id",
   "description": "The dark band: a portrait beside the clinic's position, two paragraphs of body copy and a row of credential pills.",
   "textdomain": "foundations",
-  "supports": { "html": false, "anchor": true },
+  "supports": {
+    "html": false,
+    "anchor": true
+  },
   "attributes": {
-    "eyebrow":    { "type": "string", "default": "" },
-    "heading":    { "type": "string", "default": "" },
-    "body":       { "type": "array",  "default": [] },
-    "credentials":{ "type": "array",  "default": [] },
-    "linkLabel":  { "type": "string", "default": "" },
-    "linkUrl":    { "type": "string", "default": "" },
-    "imageId":    { "type": "number", "default": 0 },
-    "imageAlt":   { "type": "string", "default": "" },
-    "imageNote":  { "type": "string", "default": "" }
+    "eyebrow": {
+      "type": "string",
+      "default": ""
+    },
+    "heading": {
+      "type": "string",
+      "default": ""
+    },
+    "body": {
+      "type": "array",
+      "default": []
+    },
+    "credentials": {
+      "type": "array",
+      "default": []
+    },
+    "linkLabel": {
+      "type": "string",
+      "default": ""
+    },
+    "linkUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "imageId": {
+      "type": "number",
+      "default": 0
+    },
+    "imageAlt": {
+      "type": "string",
+      "default": ""
+    },
+    "imageNote": {
+      "type": "string",
+      "default": ""
+    },
+    "placeholder": {
+      "type": "boolean",
+      "default": false
+    }
   },
   "render": "file:./render.php"
 }

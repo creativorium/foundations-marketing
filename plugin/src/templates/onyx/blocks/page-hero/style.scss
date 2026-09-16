@@ -2,7 +2,7 @@
 
 .fm-onyx-page-hero {
   padding-inline: var(--fm-onyx-gutter);
-  padding-block: var(--fm-space-5) var(--fm-space-4);
+  padding-block: 10rem 3.75rem;
   background: var(--fm-canvas);
   border-block-end: 1px solid var(--fm-line);
 
@@ -51,6 +51,7 @@
     align-items: end;
 
     .fm-onyx-page-hero__lead { margin-block-end: 0.75rem; }
+    .fm-onyx-page-hero__heading { font-size: clamp(2.75rem, 6.5vw, 7rem); }
   }
 }
 
@@ -65,3 +66,5 @@
     }
   }
 }
+
+.fm-onyx-page-hero:has(+ .fm-onyx-policy) .fm-onyx-page-hero__heading { font-size: clamp(2.5rem, 5.5vw, 5.75rem); line-height: .92; }

@@ -89,13 +89,13 @@ $uid = wp_unique_id('fm-onyx-contact-');
         </label>
         <select
           class="fm-onyx-contact__input"
-          id="<?php echo esc_attr($uid); ?>-area"
-          name="area"
-        >
+            id="<?php echo esc_attr($uid); ?>-area"
+            name="area"
+          >
+            <option value="" disabled selected><?php esc_html_e('Which area are you interested in?', 'foundations'); ?></option>
           <?php foreach ($areas as $index => $area) : ?>
             <option
               value="<?php echo esc_attr($area); ?>"
-              <?php echo $index === 0 ? ' selected' : ''; ?>
             ><?php echo esc_html($area); ?></option>
           <?php endforeach; ?>
         </select>
