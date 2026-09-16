@@ -43,6 +43,13 @@ One coherent template PR can contain that template's private blocks, parts and c
 
 ## Releases and updates
 
+For an HTML delivery, render the supplied HTML and the WordPress preview at the same
+desktop viewport. Compare every page's header/footer, typography, widths, spacing,
+section layout and content; include side-by-side screenshots in review evidence.
+Passing overflow or block-validation checks does not prove visual parity. Record
+intentional mobile/accessibility differences. Use the supplied fonts/assets when
+available instead of quietly substituting system fonts or a different shared shell.
+
 A preview is not a delivered release. Release approval requires an independent clean install of the scoped code plus content/media/settings, verification that development domains are absent, and editable Gutenberg content after import. Customer customization additionally requires export and re-import of the edited project.
 
 Record source revision and base/design/runtime/content versions. Preserve existing customer content during code updates; test compatibility before deploying. Never silently replace customer content with new starter content. Keycard or reporting failures never disable a delivered site.

@@ -75,3 +75,31 @@ Onyx customer-site installation remains unverified: the fixture database did not
 on its configured Local port. Placeholder photography, missing font files, an unwired
 enquiry form and release-content review remain launch requirements. No live payment,
 external message or appointment was sent.
+
+## Onyx visual review
+
+The supplied standalone HTML was rendered directly and compared with all five
+WordPress pages. Corrected the header/wordmark, footer structure, embedded typography,
+full-width bands, heading breaks, placeholders and interior-page/form proportions.
+Mobile wrapping and touch-target minimums remain deliberate accessibility differences.
+The local side-by-side artifact is `doc/fixture-audit/onyx-comparison.html`.
+
+Onyx source assets are no longer imported into the marketing site's global CSS/editor
+bundle. Delivery owns registration of compiled customer blocks when active, so a source
+working copy cannot silently replace a packaged block renderer in preview.
+
+## Completed customer acceptance, 16 September 2026
+
+Onyx was installed from its package on the existing customer fixture. All 15
+page/viewport checks and five customer Gutenberg save/reload checks passed; edited
+content exported through the actual admin screen. Earlier notes about the unavailable
+fixture database are superseded by this result.
+
+`scripts/test-delivery-urls-wordpress.php` verifies old query-string permalinks,
+homepage aliases and anchors, unrelated-link boundaries, and homepage URL resolution
+after configuring a fresh import. It restores site options and removes its temporary
+page. This closes the shared-runtime issue identified in Meridian's review notes.
+
+The Local database's legacy Elementor code record 2201 also needed a null guard:
+`galleryImage && galleryImage.tagName !== 'IMG'`. That database edit is not deployed by
+Git; the previous snippet is backed up in the private local audit folder.

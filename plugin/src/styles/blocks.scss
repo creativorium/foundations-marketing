@@ -32,17 +32,4 @@
 // stylesheet, since a demo is the template's own site, not one of our pages.
 @use 'demo-bar';
 
-// Onyx Aesthetics — a sold template's own styles. Namespaced by its own class prefix
-// (.fm-onyx-*), so nothing here can reach our marketing site's blocks.
-@use '../templates/onyx/style' as onyx;
-@use '../templates/onyx/blocks/contact/style' as onyx-contact;
-@use '../templates/onyx/blocks/cta/style' as onyx-cta;
-@use '../templates/onyx/blocks/feature/style' as onyx-feature;
-@use '../templates/onyx/blocks/hero/style' as onyx-hero;
-@use '../templates/onyx/blocks/menu/style' as onyx-menu;
-@use '../templates/onyx/blocks/page-hero/style' as onyx-page-hero;
-@use '../templates/onyx/blocks/pillars/style' as onyx-pillars;
-@use '../templates/onyx/blocks/policy/style' as onyx-policy;
-@use '../templates/onyx/blocks/reviews/style' as onyx-reviews;
-@use '../templates/onyx/blocks/steps/style' as onyx-steps;
-@use '../templates/onyx/blocks/story/style' as onyx-story;
+// Customer designs compile independently through scripts/package.mjs.

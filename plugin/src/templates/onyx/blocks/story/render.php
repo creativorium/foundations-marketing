@@ -42,7 +42,7 @@ if ($standfirst === '' && $body === [] && $timeline === []) {
 <section <?php echo fm_wrapper(['fm-onyx-story']); ?>>
   <div class="fm-onyx-story__media">
     <div class="fm-onyx-plate fm-onyx-story__plate">
-      <?php if ($image_id > 0) : ?>
+      <?php if ($image_id > 0 && empty($attributes['placeholder'])) : ?>
         <?php echo fm_image($image_id, 'large', ['alt' => esc_attr($image_alt)]); ?>
       <?php elseif ($note !== '') : ?>
         <span class="fm-onyx-plate__label"><?php echo esc_html($note); ?></span>

@@ -44,7 +44,7 @@ if ($heading === '') {
 <section <?php echo fm_wrapper(['fm-onyx-hero']); ?>>
   <div class="fm-onyx-hero__top">
     <h1 class="fm-onyx-hero__heading fm-onyx-display">
-      <?php echo esc_html($heading); ?>
+      <?php echo nl2br(esc_html($heading), false); ?>
       <?php if ($highlight !== '') : ?>
         <span class="fm-onyx-hero__highlight"><?php echo esc_html($highlight); ?></span>
       <?php endif; ?>
@@ -83,7 +83,7 @@ if ($heading === '') {
 
   <div class="fm-onyx-hero__media">
     <div class="fm-onyx-plate fm-onyx-hero__plate">
-      <?php if ($image_id > 0) : ?>
+      <?php if ($image_id > 0 && empty($attributes['placeholder'])) : ?>
         <?php echo fm_image($image_id, 'full', ['alt' => esc_attr($image_alt)], true); ?>
       <?php elseif ($note !== '') : ?>
         <span class="fm-onyx-plate__label"><?php echo esc_html($note); ?></span>

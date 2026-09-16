@@ -28,7 +28,7 @@ add_action('admin_post_fm_site_import',function ():void {
         if(get_option('fm_delivery_content')){throw new RuntimeException('This site already has imported content. Use a fresh site to avoid overwriting customer edits.');}
         if(empty($_FILES['bundle']['tmp_name'])||!is_uploaded_file($_FILES['bundle']['tmp_name'])){throw new RuntimeException('Choose a content ZIP.');}
         $root=FM_Delivery_Bundle::unzip($_FILES['bundle']['tmp_name']);
-        $result=FM_Delivery_Bundle::import($root);
+        $result=FM_Delivery_Bundle::import($root, 'page', 0, true);
         update_option('fm_site_settings',fm_site_sanitize_settings($result['settings']));
         update_option('fm_delivery_content',$result,false);
         if(!empty($result['settings']['site_name'])){update_option('blogname',$result['settings']['site_name']);}

@@ -24,7 +24,7 @@ if ($heading === '') {
 <section <?php echo fm_wrapper(['fm-onyx-cta']); ?>>
   <div class="fm-onyx-cta__panel">
     <div class="fm-onyx-cta__copy">
-      <h2 class="fm-onyx-cta__heading fm-onyx-display"><?php echo esc_html($heading); ?></h2>
+      <h2 class="fm-onyx-cta__heading fm-onyx-display"><?php echo nl2br(esc_html($heading), false); ?></h2>
 
       <?php if ($lead !== '') : ?>
         <p class="fm-onyx-cta__lead"><?php echo esc_html($lead); ?></p>

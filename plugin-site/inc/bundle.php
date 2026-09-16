@@ -105,7 +105,7 @@ final class FM_Delivery_Bundle
     }
 
     /** New pages only. Caller owns project isolation and stores returned IDs. */
-    public static function import(string $root, string $type = 'page', int $parent = 0): array
+    public static function import(string $root, string $type = 'page', int $parent = 0, bool $configureSite = false): array
     {
         $manifest=self::json($root.'/manifest.json');
         $specs=$manifest['pages']??[];
@@ -139,7 +139,7 @@ final class FM_Delivery_Bundle
             }
         }
         require_once ABSPATH.'wp-admin/includes/file.php';require_once ABSPATH.'wp-admin/includes/media.php';require_once ABSPATH.'wp-admin/includes/image.php';
-        $pages=[];$media=[];
+        $pages=[];$media=[];$previousOptions=[];
         try {
             foreach($mediaFiles as $file) {
                 $ext=strtolower(pathinfo($file,PATHINFO_EXTENSION));
@@ -160,6 +160,12 @@ final class FM_Delivery_Bundle
                 $pages[$spec['slug']]=$id;
                 update_post_meta($id,'_fm_content_slug',$spec['slug']);
             }
+            if ($configureSite && $type === 'page') {
+                foreach (['permalink_structure'=>'/%postname%/','show_on_front'=>'page','page_on_front'=>$pages[$manifest['homepage']]] as $key=>$value) {
+                    $previousOptions[$key]=get_option($key);
+                    update_option($key,$value);
+                }
+            }
             foreach($sources as $slug=>$source) {
                 $content=self::resolve_content($source,$pages,$media);
                 $updated=wp_update_post(wp_slash(['ID'=>$pages[$slug],'post_content'=>$content]),true);
@@ -173,7 +179,7 @@ final class FM_Delivery_Bundle
                 $settings[$key]=$map((array)($nav[$key]??[]));
             }
             return ['pages'=>$pages,'media'=>$media,'settings'=>$settings,'manifest'=>$manifest,'homepage'=>$pages[$manifest['homepage']]];
-        } catch(Throwable $e) {foreach($pages as $id){wp_delete_post($id,true);}foreach($media as $id){wp_delete_attachment($id,true);}throw $e;}
+        } catch(Throwable $e) {foreach($previousOptions as $key=>$value){update_option($key,$value);}foreach($pages as $id){wp_delete_post($id,true);}foreach($media as $id){wp_delete_attachment($id,true);}throw $e;}
     }
 
     /** Export only explicit pages, referenced uploads and whitelisted site settings. */
@@ -184,7 +190,7 @@ final class FM_Delivery_Bundle
         foreach(array_keys($pages) as $slug){if(!is_string($slug)||sanitize_title($slug)!==$slug){throw new RuntimeException('Invalid export page slug.');}}
         if(!$pages||count($pages)>50){throw new RuntimeException('Select 1–50 pages to export.');}
         $pageTokens=[];$urlTokens=[];$mediaTokens=[];$specs=[];$mediaDetails=[];
-        foreach($pages as $slug=>$id){$post=get_post($id);if(!$post){throw new RuntimeException('Missing project page.');}$pageTokens[(int)$id]='{{page:'.$slug.'|id}}';$urlTokens[get_permalink($id)]='{{page:'.$slug.'|url}}';$specs[]=['slug'=>$slug,'title'=>$post->post_title,'status'=>$post->post_status,'file'=>'pages/'.$slug.'.blocks.txt'];}
+        foreach($pages as $slug=>$id){$post=get_post($id);if(!$post){throw new RuntimeException('Missing project page.');}$pageTokens[(int)$id]='{{page:'.$slug.'|id}}';$urlTokens[get_permalink($id)]='{{page:'.$slug.'|url}}';if($post->post_type==='page'){$urlTokens[add_query_arg('page_id',$id,home_url('/'))]='{{page:'.$slug.'|url}}';$urlTokens[home_url('/'.get_page_uri($id).'/')]='{{page:'.$slug.'|url}}';}$specs[]=['slug'=>$slug,'title'=>$post->post_title,'status'=>$post->post_status,'file'=>'pages/'.$slug.'.blocks.txt'];}
         $media=function(int $id)use(&$mediaTokens,&$urlTokens,&$mediaDetails,$root):void {
             if(isset($mediaTokens[$id]) || get_post_type($id)!=='attachment'){return;}
             $file=get_attached_file($id);$uploads=wp_get_upload_dir();
@@ -204,11 +210,18 @@ final class FM_Delivery_Bundle
         $collect($settings);
         foreach($urlTokens as $url=>$token){$urlTokens[esc_url($url)]=$token;$urlTokens[esc_attr($url)]=$token;}
         uksort($urlTokens,fn($a,$b)=>strlen($b)<=>strlen($a));
-        $replace=function(mixed $v,string $key='')use(&$replace,$pageTokens,$mediaTokens,$urlTokens):mixed {
+        $patterns=[];
+        foreach($urlTokens as $url=>$token){
+            // The homepage must not match the prefix of an unrelated site URL.
+            $tail=$url===home_url('/')?'(?=$|[\\s\\x22\\x27<>#])':'(?![A-Za-z0-9/_%.-])';
+            $patterns[]=preg_quote($url,'~').$tail;
+        }
+        $urlPattern='~'.implode('|',$patterns).'~';
+        $replace=function(mixed $v,string $key='')use(&$replace,$pageTokens,$mediaTokens,$urlTokens,$urlPattern):mixed {
             if(is_array($v)){foreach($v as $k=>$item){$v[$k]=$replace($item,(string)$k);}return $v;}
             if(is_numeric($v)){if(($key==='page'||preg_match('/(^id$|Id$|_id$)/',$key)) && isset($pageTokens[(int)$v])){return $pageTokens[(int)$v];}if(preg_match('/(^id$|Id$|_id$)/',$key)&&isset($mediaTokens[(int)$v])){return $mediaTokens[(int)$v];}}
             if(!is_string($v)){return $v;}
-            $v=strtr($v,$urlTokens);
+            $v=preg_replace_callback($urlPattern,fn($match)=>$urlTokens[$match[0]],$v);
             return preg_replace_callback('/wp-image-(\d+)/',fn($m)=>isset($mediaTokens[(int)$m[1]])?'wp-image-'.$mediaTokens[(int)$m[1]]:$m[0],$v);
         };
         foreach($blocks as $slug=>$data){file_put_contents($root.'/pages/'.$slug.'.blocks.txt',serialize_blocks($replace($data)));}
