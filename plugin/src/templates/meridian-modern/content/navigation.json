@@ -20,11 +20,11 @@
   "nav_footer": [
     {
       "label": "Contact",
-      "url": "#contact"
+      "page": "contact"
     },
     {
       "label": "Privacy policy",
-      "url": "#privacy"
+      "page": "privacy"
     },
     {
       "label": "Book a session",
