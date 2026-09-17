@@ -39,12 +39,20 @@
     border: var(--fm-rule) solid var(--fm-ink);
     background: var(--fm-addon-tint, var(--fm-bg-2));
     padding: 32px 32px 34px;
+    // The card, not the viewport, is what the title has to fit inside. Four cards
+    // across a 1440 screen are ~320px each; one card on a phone is wider than that.
+    // Sizing the head from the card means the same rule works in both, and in the
+    // three-across row in between, without a breakpoint for each.
+    container-type: inline-size;
   }
 
   &__head {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
+    display: grid;
+    // The price column is `auto`, so it is measured first and always gets the room
+    // it needs; the title takes what is left. `minmax(0, …)` is what lets the title
+    // column actually shrink — with a bare `1fr` it keeps its max-content width and
+    // pushes the price out of the card.
+    grid-template-columns: minmax(0, 1fr) auto;
     align-items: baseline;
     gap: 8px 16px;
     padding-bottom: 16px;
@@ -53,17 +61,36 @@
   }
 
   &__name {
-    font-size: clamp(22px, 2.6vw, 28px);
+    // Scaled to the card so the longest add-on name stays on one line at every
+    // width. It used to be `white-space: nowrap` at a viewport-based size, which is
+    // the one combination that cannot work: nowrap does not shrink text, it just
+    // paints it outside the column — which is why "Booking integration" ran straight
+    // under its own price on a four-across row.
+    //
+    // 6.5cqi is measured, not guessed: it is the largest value at which the longest
+    // name in the catalogue ("Booking integration", 19 characters) still sets on one
+    // line in the narrowest card, which is the ~320px one in the four-across row at
+    // 1440. At 7cqi it wraps there.
+    font-size: clamp(16px, 6.5cqi, 26px);
     font-weight: 800;
     letter-spacing: -0.03em;
     text-transform: uppercase;
+    line-height: 1.1;
+    // The safety net, and the reason nowrap is gone: a name longer than anything in
+    // the catalogue today wraps onto a second line instead of colliding with a price.
+    overflow-wrap: anywhere;
+    min-width: 0;
   }
 
   &__price {
-    font-size: clamp(22px, 2.4vw, 26px);
+    // Scales with the card on the same curve as the name, so the two halves of the
+    // head keep their relationship instead of the price growing while the name
+    // shrinks away from it. It never wraps: it is short, and its column is `auto`.
+    font-size: clamp(16px, 6.5cqi, 26px);
     font-weight: 800;
     letter-spacing: -0.03em;
     color: var(--fm-accent-deep);
+    line-height: 1.1;
     white-space: nowrap;
   }
 
