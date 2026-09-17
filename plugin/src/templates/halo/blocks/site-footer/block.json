@@ -1,0 +1,13 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/halo-site-footer",
+  "title": "Halo — Site footer",
+  "category": "foundations-halo",
+  "icon": "align-wide",
+  "description": "The dark closing band: wordmark, studio address, contact details and the legal row. Rendered site-wide from the footer template part.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "multiple": false, "inserter": false },
+  "attributes": {},
+  "render": "file:./render.php"
+}

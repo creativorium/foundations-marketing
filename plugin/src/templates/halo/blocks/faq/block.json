@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/halo-faq",
+  "title": "Halo — Questions",
+  "category": "foundations-halo",
+  "icon": "editor-help",
+  "description": "The questions people ask before booking, each one opening to its answer.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "items": { "type": "array", "default": [] }
+  },
+  "render": "file:./render.php"
+}

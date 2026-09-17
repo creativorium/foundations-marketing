@@ -1,0 +1,66 @@
+// foundations/halo-concerns
+
+.fm-halo-concerns {
+  background: var(--fm-canvas);
+
+  &__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: var(--fm-space-5);
+    align-items: start;
+  }
+
+  &__heading {
+    font-size: var(--fm-text-2xl);
+    margin-bottom: var(--fm-space-3);
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item { margin: 0; }
+
+  // A chip. 44px tall so it is a real target on a phone (how-to-work.md §8).
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+    padding: 0.7rem 1.4rem;
+    border: 1px solid var(--fm-line);
+    border-radius: 999px;
+    background: var(--fm-surface);
+    font-size: 0.9375rem;
+    font-weight: 300;
+    color: var(--fm-ink);
+    text-decoration: none;
+    transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+
+    &:hover,
+    &:focus-visible {
+      background: var(--fm-ink);
+      border-color: var(--fm-ink);
+      color: var(--fm-on-inverse);
+    }
+  }
+
+  // Not a link, so it must not offer a link's hover.
+  &__link--static {
+    cursor: default;
+
+    &:hover { background: var(--fm-surface); border-color: var(--fm-line); color: var(--fm-ink); }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fm-halo-concerns__link { transition: none; }
+}
+
+@media (max-width: 900px) {
+  .fm-halo-concerns__grid { grid-template-columns: minmax(0, 1fr); gap: var(--fm-space-4); }
+}

@@ -1,0 +1,123 @@
+// foundations/halo-policy
+
+.fm-halo-policy {
+  background: var(--fm-canvas);
+  padding-top: var(--fm-space-4);
+
+  &__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.55fr) minmax(0, 1.45fr);
+    gap: var(--fm-space-5);
+    align-items: start;
+  }
+
+  // The contents list follows the reader down a long document.
+  &__contents {
+    position: sticky;
+    top: calc(var(--fm-halo-header) + 1.5rem);
+  }
+
+  &__contents-label {
+    margin: 0 0 1rem;
+    font-family: var(--fm-font-body);
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fm-soft);
+  }
+
+  &__contents-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: fm-halo-policy;
+
+    li { counter-increment: fm-halo-policy; }
+
+    a {
+      display: flex;
+      gap: 0.75rem;
+      align-items: baseline;
+      padding: 0.45rem 0;
+      font-size: 0.9375rem;
+      font-weight: 300;
+      color: var(--fm-muted);
+      text-decoration: none;
+
+      &::before {
+        content: counter(fm-halo-policy);
+        flex: none;
+        width: 1.25rem;
+        font-size: 0.75rem;
+        color: var(--fm-accent);
+      }
+
+      &:hover,
+      &:focus-visible { color: var(--fm-ink); }
+    }
+  }
+
+  &__section {
+    padding-bottom: var(--fm-space-4);
+
+    // The contents list jumps here, so leave room for the fixed header to not cover
+    // the heading it just jumped to.
+    scroll-margin-top: calc(var(--fm-halo-header) + 1.5rem);
+  }
+
+  &__title {
+    margin: 0 0 1rem;
+    font-family: var(--fm-font-display);
+    font-size: 1.875rem;
+    font-weight: 400;
+    line-height: 1.15;
+    color: var(--fm-ink);
+  }
+
+  &__text {
+    margin: 0 0 1rem;
+    max-width: 70ch;
+    font-size: 1rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--fm-muted);
+    text-wrap: pretty;
+  }
+
+  &__list {
+    margin: 0 0 1rem;
+    padding: 0;
+    max-width: 70ch;
+    list-style: none;
+
+    li {
+      position: relative;
+      padding: 0.4rem 0 0.4rem 1.5rem;
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.8;
+      color: var(--fm-muted);
+
+      // The em dash the canvas uses for bullets, drawn so it is never read aloud.
+      &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 1.15rem;
+        width: 0.75rem;
+        height: 1px;
+        background: var(--fm-accent-deep);
+      }
+    }
+  }
+}
+
+@media (max-width: 900px) {
+  .fm-halo-policy {
+    &__grid { grid-template-columns: minmax(0, 1fr); gap: var(--fm-space-4); }
+    // Sticky contents above a document on a phone would eat the screen.
+    &__contents { position: static; }
+    &__title { font-size: 1.5rem; }
+  }
+}

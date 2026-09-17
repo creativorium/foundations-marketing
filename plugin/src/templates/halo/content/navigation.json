@@ -1,0 +1,12 @@
+{
+  "$comment": "Menus link by page SLUG, never by URL: the importer resolves each to the page id it just created, because an absolute URL would still point at our dev site after install (theme-customer-base/inc/settings-contract.php, fm_nav_url()).",
+  "$sections": "This design is a one-page site plus its policy, so the header's About, Treatments and Packages are in-page anchors rather than pages. They are written as `url` entries for that reason — when the customer grows into separate pages, each becomes a `page` entry instead.",
+  "nav_primary": [
+    { "label": "About", "url": "#about" },
+    { "label": "Treatments", "url": "#menu" },
+    { "label": "Packages", "url": "#packages" }
+  ],
+  "nav_footer": [
+    { "label": "Privacy policy", "page": "privacy" }
+  ]
+}

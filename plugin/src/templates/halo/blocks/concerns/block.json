@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/halo-concerns",
+  "title": "Halo — Concerns",
+  "category": "foundations-halo",
+  "icon": "tag",
+  "description": "\"What is your skin asking for?\" — a heading beside a grid of skin concerns, each one a link into the treatment the studio answers it with.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "lead": { "type": "string", "default": "" },
+    "items": { "type": "array", "default": [] }
+  },
+  "render": "file:./render.php"
+}

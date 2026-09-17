@@ -1,0 +1,68 @@
+// foundations/halo-results
+
+.fm-halo-results {
+  // The recessed band the canvas puts this section on.
+  background: var(--fm-band);
+
+  &__heading {
+    font-size: var(--fm-text-2xl);
+    max-width: 22ch;
+    margin-bottom: var(--fm-space-4);
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+    gap: var(--fm-space-4);
+  }
+
+  &__item { margin: 0; }
+
+  // Before and after, side by side and equal — the comparison only works if neither
+  // half is given more room than the other.
+  &__pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  &__shot {
+    aspect-ratio: 3 / 4;
+    min-height: 0;
+    padding: 0.75rem;
+    border-radius: 0.75rem;
+    background-color: var(--fm-canvas);
+  }
+
+  &__caption {
+    display: block;
+    padding-top: 1rem;
+  }
+
+  &__label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--fm-accent);
+  }
+
+  &__text {
+    display: block;
+    margin-top: 0.4rem;
+    font-size: 0.9375rem;
+    font-weight: 300;
+    color: var(--fm-muted);
+  }
+
+  &__consent {
+    margin: var(--fm-space-4) 0 0;
+    max-width: 60ch;
+    font-size: 0.8125rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--fm-soft);
+    text-wrap: pretty;
+  }
+}

@@ -1,0 +1,58 @@
+// foundations/halo-reviews
+
+.fm-halo-reviews {
+  background: var(--fm-canvas);
+
+  &__head {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: var(--fm-space-4);
+    align-items: end;
+    padding-bottom: var(--fm-space-4);
+  }
+
+  &__heading { font-size: var(--fm-text-2xl); }
+
+  &__grid {
+    // A wall of cards at their natural height: quotes are different lengths, and
+    // stretching them to match would put a hole under the short ones.
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    align-items: start;
+    gap: 1.25rem;
+  }
+
+  &__item {
+    margin: 0;
+    padding: 1.75rem;
+    border: 1px solid var(--fm-line);
+    border-radius: var(--fm-halo-radius);
+    background: var(--fm-surface);
+  }
+
+  &__quote {
+    margin: 0;
+
+    p {
+      margin: 0;
+      font-family: var(--fm-font-display);
+      font-size: 1.3125rem;
+      line-height: 1.35;
+      color: var(--fm-ink);
+      text-wrap: pretty;
+    }
+  }
+
+  &__by {
+    margin-top: 1.25rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--fm-accent);
+  }
+}
+
+@media (max-width: 900px) {
+  .fm-halo-reviews__head { grid-template-columns: minmax(0, 1fr); gap: var(--fm-space-3); }
+}
