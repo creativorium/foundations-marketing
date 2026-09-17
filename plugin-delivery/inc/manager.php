@@ -25,6 +25,103 @@ function fm_delivery_design(int $id): array
     return $data;
 }
 
+/**
+ * The customer projects built from one master design.
+ *
+ * A project is an independent copy — its own pages, media and settings — but it records
+ * which design it came from, and its releases are what a customer has installed. That
+ * link is the reason a master cannot simply be thrown away.
+ *
+ * @return array<int, WP_Post>
+ */
+function fm_delivery_design_projects(int $id): array
+{
+    return array_values(array_filter(
+        get_posts(['post_type' => 'fm_project', 'post_status' => 'any', 'numberposts' => -1]),
+        static function (WP_Post $project) use ($id): bool {
+            $meta = (array) get_post_meta($project->ID, '_fm_project', true);
+
+            return (int) ($meta['design'] ?? 0) === $id;
+        }
+    ));
+}
+
+/**
+ * Delete a master design: its imported pages and media, its preview image, its unpacked
+ * release files, and the record itself.
+ *
+ * WHY THIS EXISTS. Uploads are refused when the slug is already taken, because a release
+ * a customer may have installed must never change under them. That rule is right for a
+ * release that has been used and wrong for one that has not: re-uploading the same slug
+ * while building a design is the ordinary case, and without this the only way through it
+ * was to invent a version suffix for every attempt and leave the failures behind for ever.
+ *
+ * So the check moves from "does this slug exist" to "is anything depending on it":
+ *
+ *   - a design with customer projects is refused outright — deleting it would orphan work
+ *     someone has been delivered, and that is the immutability that actually matters;
+ *   - a published design is refused until it is hidden from the catalogue, so removing
+ *     something the public can see is never one click.
+ *
+ * Deliberately NOT reversible, and it says so in the button. The teardown is the same one
+ * fm_delivery_add_design() runs when an import fails half-way, which is the only teardown
+ * in this plugin known to leave nothing behind.
+ */
+function fm_delivery_delete_design(int $id): void
+{
+    $design = get_post($id);
+
+    if (!$design || $design->post_type !== 'fm_design') {
+        throw new RuntimeException('Unknown design.');
+    }
+
+    if ($design->post_status === 'publish') {
+        throw new RuntimeException('Hide this design from the catalogue first. Deleting a published demo would break the links to it.');
+    }
+
+    $projects = fm_delivery_design_projects($id);
+
+    if ($projects !== []) {
+        throw new RuntimeException(sprintf(
+            'This design has %d customer project(s) built from it: %s. Delete those first, or keep this master and upload the new release under a versioned slug.',
+            count($projects),
+            implode(', ', array_map(static fn (WP_Post $p): string => $p->post_title, array_slice($projects, 0, 5)))
+        ));
+    }
+
+    // Imported content first: the pages and media belong to this design and nothing else
+    // refers to them.
+    $content = (array) get_post_meta($id, '_fm_content', true);
+
+    foreach ((array) ($content['pages'] ?? []) as $page) {
+        wp_delete_post((int) $page, true);
+    }
+
+    foreach ((array) ($content['media'] ?? []) as $media) {
+        wp_delete_attachment((int) $media, true);
+    }
+
+    $preview = (int) get_post_meta($id, '_fm_preview_image', true);
+
+    if ($preview > 0) {
+        wp_delete_attachment($preview, true);
+    }
+
+    // Then the unpacked release in private storage. Read before the post goes, because
+    // the paths are in its meta; a design whose files are already missing still deletes.
+    $data = (array) get_post_meta($id, '_fm_design', true);
+
+    foreach ((array) ($data['nested'] ?? []) as $dir) {
+        FM_Delivery_Bundle::remove((string) $dir);
+    }
+
+    if (!empty($data['root'])) {
+        FM_Delivery_Bundle::remove((string) $data['root']);
+    }
+
+    wp_delete_post($id, true);
+}
+
 function fm_delivery_register_design(array $design): void
 {
     foreach(glob($design['plugin'].'/blocks/*/block.json')?:[] as $file){$meta=FM_Delivery_Bundle::json($file);if(!WP_Block_Type_Registry::get_instance()->is_registered($meta['name'])){register_block_type(dirname($file));}}
@@ -143,7 +240,34 @@ function fm_delivery_screen(): void
     echo '<p><a href="'.esc_url(admin_url('admin.php?page=fm-delivery'.($archived?'':'&show_archived=1'))).'">'.($archived?'Hide archived test records':'Show archived test records').'</a></p>';
     echo '<table class="widefat striped"><thead><tr><th>Design</th><th>Version</th><th>Demo</th><th>Visibility</th></tr></thead><tbody>';
     $designs=get_posts(['post_type'=>'fm_design','post_status'=>'any','numberposts'=>-1,'meta_query'=>$archive_filter]);
-    foreach($designs as $d){$data=fm_delivery_design($d->ID);echo '<tr><td>'.'<a href="'.esc_url(admin_url('admin.php?page=fm-delivery&design='.$d->ID)).'">'.esc_html($d->post_title).'</a></td><td>'.esc_html($data['release']['version']).'</td><td><a target="_blank" href="'.esc_url(home_url('/templates/'.$d->post_name.'/demo/')).'">Preview</a></td><td>';fm_delivery_form('publish',$d->ID);echo '<button class="button">'.($d->post_status==='publish'?'Hide from catalogue':'Publish demo').'</button></form></td></tr>';}
+    foreach($designs as $d){
+        $data=fm_delivery_design($d->ID);
+        echo '<tr><td>'.'<a href="'.esc_url(admin_url('admin.php?page=fm-delivery&design='.$d->ID)).'">'.esc_html($d->post_title).'</a></td><td>'.esc_html($data['release']['version']).'</td><td><a target="_blank" href="'.esc_url(home_url('/templates/'.$d->post_name.'/demo/')).'">Preview</a></td><td>';
+        fm_delivery_form('publish',$d->ID);
+        echo '<button class="button">'.($d->post_status==='publish'?'Hide from catalogue':'Publish demo').'</button></form>';
+
+        /*
+         * Delete, next to publish, because the two are the ends of the same decision:
+         * this design is going out to buyers, or it is going away.
+         *
+         * Offered only when it is safe to take — hidden from the catalogue, and with no
+         * customer project built from it. When it is not, the row says which of the two
+         * is in the way rather than presenting a button that only fails.
+         */
+        $projects = fm_delivery_design_projects($d->ID);
+
+        if ($d->post_status === 'publish') {
+            echo ' <span class="description">Hide it to delete</span>';
+        } elseif ($projects !== []) {
+            echo ' <span class="description">'.esc_html(sprintf('In use by %d project(s)', count($projects))).'</span>';
+        } else {
+            fm_delivery_form('delete-master',$d->ID);
+            echo '<input type="text" name="confirm" size="8" placeholder="DELETE" aria-label="Type DELETE to confirm" required pattern="DELETE" title="Type DELETE in capitals"> <button class="button button-link-delete">Delete</button>';
+            echo '<p class="description">Removes the design, its imported pages and its release files. Cannot be undone.</p></form>';
+        }
+
+        echo '</td></tr>';
+    }
     echo '</tbody></table><h2>Create customer project</h2>';fm_delivery_form('create');echo '<p><label>Design <select name="design">';foreach($designs as $d){echo '<option value="'.$d->ID.'">'.esc_html($d->post_title).'</option>';}echo '</select></label></p><p><input name="name" class="regular-text" placeholder="Project name" required></p><p><input name="customer" class="regular-text" placeholder="Customer name / reference" required></p><p><input type="number" name="order" placeholder="Order ID (optional)"></p><p><textarea name="brief" class="large-text" placeholder="Requested edits"></textarea></p>';submit_button('Create isolated customer project');echo '</form><h2>Customer projects</h2><table class="widefat striped"><tr><th>Project</th><th>Customer</th><th>Order</th><th>Status</th><th>Keycard</th></tr>';
     foreach(get_posts(['post_type'=>'fm_project','post_status'=>'any','numberposts'=>-1,'meta_query'=>$archive_filter]) as $p){$m=get_post_meta($p->ID,'_fm_project',true);echo '<tr><td><a href="'.esc_url(admin_url('admin.php?page=fm-delivery&project='.$p->ID)).'">'.esc_html($p->post_title).'</a></td><td>'.esc_html($m['customer']).'</td><td>'.absint($m['order']).'</td><td>'.esc_html($m['status']).'</td><td><code>'.esc_html($m['keycard']).'</code></td></tr>';}
     echo '</table></div>';
@@ -160,6 +284,13 @@ add_action('admin_post_fm_delivery',function():void{
         elseif($task==='save-master'){fm_delivery_design($id);$GLOBALS['fm_delivery_context']=$id;$c=(array)get_post_meta($id,'_fm_content',true);$c['settings']=fm_site_sanitize_settings((array)wp_unslash($_POST['settings']??[]));update_post_meta($id,'_fm_content',wp_slash($c));wp_safe_redirect(admin_url('admin.php?page=fm-delivery&design='.$id));exit;}
         elseif($task==='create'){$id=fm_delivery_create_project(absint($_POST['design']),sanitize_text_field(wp_unslash($_POST['name'])),sanitize_text_field(wp_unslash($_POST['customer'])),sanitize_textarea_field(wp_unslash($_POST['brief']??'')),absint($_POST['order']??0));}
         elseif($task==='publish'){$d=fm_delivery_design($id);if(!empty($d['release']['fixture'])){throw new RuntimeException('Fixtures cannot be published.');}wp_update_post(['ID'=>$id,'post_status'=>get_post_status($id)==='publish'?'draft':'publish']);$id=0;}
+        elseif($task==='delete-master'){
+            // Same permission as the upload it undoes: removing installed design code is
+            // not a content edit.
+            if(!current_user_can('install_plugins')){throw new RuntimeException('Deleting a design requires plugin installation permission.');}
+            if(sanitize_text_field(wp_unslash($_POST['confirm']??''))!=='DELETE'){throw new RuntimeException('Type DELETE to confirm. This removes the design, its imported pages and its release files, and cannot be undone.');}
+            fm_delivery_delete_design($id);$id=0;
+        }
         else{
             if(get_post_type($id)!=='fm_project'){throw new RuntimeException('Unknown project.');}
             $GLOBALS['fm_delivery_context']=$id;
