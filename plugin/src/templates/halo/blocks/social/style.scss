@@ -1,0 +1,64 @@
+// foundations/halo-social
+
+.fm-halo-social {
+  background: var(--fm-canvas);
+  padding-block: var(--fm-space-5);
+
+  &__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-bottom: var(--fm-space-3);
+  }
+
+  &__handle {
+    font-size: 2.125rem;
+    color: var(--fm-ink);
+  }
+
+  &__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 44px;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fm-soft);
+    text-decoration: none;
+
+    &:hover,
+    &:focus-visible { color: var(--fm-ink); }
+  }
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0.75rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__cell {
+    aspect-ratio: 1 / 1;
+    min-height: 0;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+  }
+}
+
+@media (max-width: 900px) {
+  // Three then two: five squares across a phone are thumbnails of nothing.
+  .fm-halo-social__grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+
+@media (max-width: 560px) {
+  .fm-halo-social {
+    &__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    &__handle { font-size: 1.75rem; }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/halo-site-header",
+  "title": "Halo — Site header",
+  "category": "foundations-halo",
+  "icon": "align-wide",
+  "description": "The fixed translucent bar: wordmark, primary links and the booking pill. Rendered site-wide from the header template part, never placed in page content.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "multiple": false, "inserter": false },
+  "attributes": {},
+  "render": "file:./render.php"
+}

@@ -1,0 +1,170 @@
+// foundations/halo-hero
+
+.fm-halo-hero {
+  // Pulled up under the fixed header, then padded back down by its height, so the
+  // canvas colour runs behind the translucent bar as the design draws it.
+  padding: calc(var(--fm-halo-header) + var(--fm-space-5)) 0 0;
+  background: var(--fm-canvas);
+
+  &__grid {
+    display: grid;
+    // The photograph is the taller half and bleeds to the right edge; the copy keeps
+    // the gutter. `minmax(0, …)` so a long unbroken word cannot widen the column.
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+    align-items: center;
+    gap: var(--fm-space-5);
+  }
+
+  &__copy {
+    padding-inline: var(--fm-halo-gutter) 0;
+    // Stops the copy column running to a punishing measure on a wide screen.
+    max-width: 38rem;
+  }
+
+  &__heading {
+    font-size: var(--wp--preset--font-size--display);
+    margin-bottom: var(--fm-space-3);
+  }
+
+  &__lead { margin-bottom: var(--fm-space-4); }
+
+  &__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: var(--fm-space-5);
+  }
+
+  // --- the figures row -------------------------------------------------------
+  &__stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2.5rem;
+    margin: 0;
+    padding-top: var(--fm-space-3);
+    border-top: 1px solid var(--fm-line);
+  }
+
+  &__stat { margin: 0; }
+
+  &__stat-value {
+    display: block;
+    margin: 0;
+    font-family: var(--fm-font-display);
+    font-size: 1.875rem;
+    line-height: 1.1;
+    color: var(--fm-ink);
+  }
+
+  &__stat-key {
+    display: block;
+    margin-top: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fm-soft);
+  }
+
+  // --- the photograph --------------------------------------------------------
+  &__media {
+    position: relative;
+    align-self: stretch;
+  }
+
+  &__plate {
+    height: 100%;
+    min-height: 32rem;
+    // Square to the right edge of the viewport, rounded on the corners that face in.
+    border-radius: var(--fm-halo-radius) 0 0 var(--fm-halo-radius);
+  }
+
+  // The booking note, sitting over the bottom-left corner of the photograph.
+  &__badge {
+    position: absolute;
+    left: -1.5rem;
+    bottom: 2.5rem;
+    max-width: 17rem;
+    margin: 0;
+    padding: 1rem 1.25rem;
+    border-radius: 0.75rem;
+    background: var(--fm-canvas);
+    box-shadow: 0 10px 30px color-mix(in srgb, var(--fm-ink) 12%, transparent);
+  }
+
+  &__badge-label {
+    display: block;
+    font-size: 0.6875rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fm-accent);
+  }
+
+  &__badge-text {
+    display: block;
+    margin-top: 0.35rem;
+    font-family: var(--fm-font-display);
+    font-size: 1.4375rem;
+    line-height: 1.15;
+    color: var(--fm-ink);
+  }
+
+  // --- the credentials strip -------------------------------------------------
+  &__credentials {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem 3.5rem;
+    margin: var(--fm-space-5) 0 0;
+    padding: var(--fm-space-3) var(--fm-halo-gutter);
+    list-style: none;
+    border-top: 1px solid var(--fm-line);
+    border-bottom: 1px solid var(--fm-line);
+
+    li {
+      font-family: var(--fm-font-display);
+      font-style: italic;
+      font-size: 1.1875rem;
+      color: var(--fm-soft);
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .fm-halo-hero {
+    &__grid { gap: var(--fm-space-4); }
+    &__plate { min-height: 26rem; }
+    &__badge { left: -1rem; bottom: 1.5rem; }
+  }
+}
+
+@media (max-width: 900px) {
+  .fm-halo-hero {
+    padding-top: calc(var(--fm-halo-header) + var(--fm-space-4));
+
+    &__grid { grid-template-columns: minmax(0, 1fr); }
+
+    &__copy {
+      max-width: none;
+      padding-inline: var(--fm-halo-gutter);
+    }
+
+    &__media { margin-inline: var(--fm-halo-gutter) 0; }
+    &__plate { min-height: 20rem; }
+
+    // Inside the frame on a phone: hanging off the left edge would push the body
+    // sideways, and nothing may do that (how-to-work.md §8).
+    &__badge { left: 1rem; right: 1rem; bottom: 1rem; max-width: none; }
+
+    &__stats { gap: 1.5rem 2rem; }
+    &__credentials { gap: 0.75rem 2rem; }
+  }
+}
+
+@media (max-width: 560px) {
+  .fm-halo-hero {
+    &__stat-value { font-size: 1.5rem; }
+    &__credentials li { font-size: 1.0625rem; }
+  }
+}

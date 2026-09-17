@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/halo-packages",
+  "title": "Halo — Packages",
+  "category": "foundations-halo",
+  "icon": "star-filled",
+  "description": "The membership plans: three cards with a tier, a price, what each includes and a link, one of them marked as the one most people choose.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "lead": { "type": "string", "default": "" },
+    "plans": { "type": "array", "default": [] }
+  },
+  "render": "file:./render.php"
+}

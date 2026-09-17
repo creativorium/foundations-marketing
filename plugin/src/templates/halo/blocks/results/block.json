@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/halo-results",
+  "title": "Halo — Results",
+  "category": "foundations-halo",
+  "icon": "images-alt2",
+  "description": "\"Real skin, honest timelines\" — before-and-after pairs, each with the concern, the time it took and what was done.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "consentNote": { "type": "string", "default": "" },
+    "items": { "type": "array", "default": [] }
+  },
+  "render": "file:./render.php"
+}

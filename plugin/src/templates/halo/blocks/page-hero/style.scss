@@ -1,0 +1,28 @@
+// foundations/halo-page-hero
+
+.fm-halo-page-hero {
+  padding: calc(var(--fm-halo-header) + var(--fm-space-5)) var(--fm-halo-gutter) var(--fm-space-4);
+  background: var(--fm-canvas);
+
+  &__heading {
+    max-width: 18ch;
+    font-size: var(--wp--preset--font-size--xx-large);
+    margin-bottom: var(--fm-space-3);
+  }
+
+  &__lead { max-width: 62ch; }
+
+  // An instruction to the person editing the page, not part of the page's own text.
+  &__note {
+    margin-top: var(--fm-space-3);
+    padding: 1.25rem 1.5rem;
+    max-width: 62ch;
+    border-radius: var(--fm-halo-radius);
+    background: var(--fm-band);
+    font-size: 0.875rem;
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--fm-muted);
+    text-wrap: pretty;
+  }
+}
