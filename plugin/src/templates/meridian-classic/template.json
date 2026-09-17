@@ -1,0 +1,43 @@
+{
+    "name":  "Meridian Classic",
+    "slug":  "meridian-classic",
+    "version":  "0.1.0",
+    "niche":  "Massage therapy",
+    "category":  "Wellness",
+    "description":  "Quiet, classic editorial massage studio design with editable multi-page content.",
+    "targetPhrase":  "massage therapist website design UK",
+    "demoSlug":  "massage-therapy-website-design",
+    "pages":  [
+                  "home",
+                  "about",
+                  "conditions",
+                  "contact",
+                  "privacy"
+              ],
+    "settings":  {
+                     "opening_hours":  {
+                                           "type":  "textarea",
+                                           "label":  "Opening hours"
+                                       },
+                     "home_url":  {
+                                      "type":  "url",
+                                      "label":  "Homepage link"
+                                  },
+                     "privacy_url":  {
+                                         "type":  "url",
+                                         "label":  "Privacy page"
+                                     },
+                     "booking_url":  {
+                                         "type":  "url",
+                                         "label":  "External booking link (optional)"
+                                     }
+                 },
+    "shell":  {
+                  "header":  {
+                                 "custom":  true
+                             },
+                  "footer":  {
+                                 "custom":  true
+                             }
+              }
+}
