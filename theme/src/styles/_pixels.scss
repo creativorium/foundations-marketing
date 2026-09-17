@@ -101,58 +101,6 @@ $fm-px-cell: 200ms;
   to { transform: scaleX(1); }
 }
 
-// --- "still going" --------------------------------------------------------------
-// Three dots over the curtain, delayed by 1.2s. Below that delay a reader does not
-// think anything is wrong, so showing a spinner would invent a wait rather than
-// explain one; past it, a plain black screen starts to read as a dead page.
-//
-// The delay is the whole mechanism: it is an animation-delay, so a navigation that
-// completes first takes this document away before a pixel of it is drawn. Nothing
-// runs, nothing is timed in script, and a prerendered page never shows it at all.
-//
-// Logged in — on Local, or in wp-admin — the speculation rules are switched off
-// (theme/inc/performance.php), so every navigation is a cold render and this is the
-// state you will actually see. That is the environment, not a fault.
-.fm-px-wait {
-  position: fixed;
-  inset: auto 0 14%;
-  z-index: 10000;
-  display: flex;
-  justify-content: center;
-  gap: 0.5rem;
-  pointer-events: none;
-  visibility: hidden;
-
-  i {
-    width: 0.5rem;
-    height: 0.5rem;
-    border-radius: 50%;
-    background: var(--fm-bg);
-    opacity: 0.2;
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .fm-px[data-leaving] ~ .fm-px-wait {
-    visibility: visible;
-    animation: fm-px-wait-in 260ms ease 1200ms both;
-
-    i { animation: fm-px-wait-pulse 1200ms ease-in-out 1200ms infinite both; }
-    i:nth-child(2) { animation-delay: 1360ms; }
-    i:nth-child(3) { animation-delay: 1520ms; }
-  }
-}
-
-@keyframes fm-px-wait-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-
-@keyframes fm-px-wait-pulse {
-  0%, 100% { opacity: 0.2; }
-  50%      { opacity: 1; }
-}
-
 @keyframes fm-px-wipe {
   from { transform: scaleX(1); }
   to   { transform: scaleX(0); }
