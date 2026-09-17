@@ -22,7 +22,8 @@
   }
 
   &__heading {
-    font-size: var(--wp--preset--font-size--display);
+    font-size: clamp(3.25rem, 6vw, 5.75rem);
+    line-height: 0.98;
     margin-bottom: var(--fm-space-3);
   }
 

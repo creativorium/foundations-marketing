@@ -11,7 +11,7 @@
     padding-bottom: var(--fm-space-4);
   }
 
-  &__heading { font-size: var(--fm-text-2xl); }
+  &__heading { font-size: clamp(2.125rem, 3.4vw, 3.125rem); }
 
   &__grid {
     // A wall of cards at their natural height: quotes are different lengths, and

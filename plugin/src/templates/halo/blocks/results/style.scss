@@ -5,7 +5,7 @@
   background: var(--fm-band);
 
   &__heading {
-    font-size: var(--fm-text-2xl);
+    font-size: clamp(2.125rem, 3.4vw, 3.25rem);
     max-width: 22ch;
     margin-bottom: var(--fm-space-4);
   }

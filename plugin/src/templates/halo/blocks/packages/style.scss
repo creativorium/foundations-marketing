@@ -10,7 +10,7 @@
   }
 
   &__heading {
-    font-size: var(--wp--preset--font-size--xx-large);
+    font-size: clamp(2.375rem, 4vw, 3.75rem);
     margin-bottom: var(--fm-space-3);
   }
 

@@ -17,7 +17,7 @@
   }
 
   &__heading {
-    font-size: var(--wp--preset--font-size--xx-large);
+    font-size: clamp(2.375rem, 4vw, 3.875rem);
     color: var(--fm-on-inverse);
   }
 
