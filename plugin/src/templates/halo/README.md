@@ -18,9 +18,9 @@ never compete for a phrase.
 
 ## What is NOT here, and must be before release
 
-- **Photography.** `content/media/` holds two drawn placeholders, not pictures. The
-  before-and-after slots ship empty on purpose: client photographs are special category
-  data, and each needs written consent before it is published.
+- **Customer before-and-after photography.** The supplied hero and practitioner images
+  are included. The before-and-after slots stay empty on purpose: client photographs are
+  special category data, and each needs written consent before it is published.
 - **A form endpoint.** `halo-contact` posts nowhere until one is set, and says so with the
   submit button disabled. Form adapters are out of a template's scope
   (team-template-workflow.md).

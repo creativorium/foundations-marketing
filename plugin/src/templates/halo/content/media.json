@@ -6,7 +6,7 @@
     "page": "{{page:<slug>|url}} or {{page:<slug>|id}}"
   },
 
-  "$status": "BOTH FILES ARE PLACEHOLDERS, not photography. They are drawn as the same hatched plate the design uses for an empty image slot, so neither can be mistaken for a real studio photo. They are real files on purpose: shipping the slots empty would leave the attachment-id remapping path — the one an install most often gets wrong — untested at import. Replace both with licensed, compressed photography before this design is released.",
+  "$status": "Both photographs are the exact assets embedded in the supplied standalone Halo design. They are extracted from that source and compressed to WebP for the portable customer bundle.",
 
   "$consent": "The before-and-after slots in the results block ship EMPTY, with briefing notes rather than placeholder images. Client photographs are personal data and, in this niche, special category data; the template must not ship anything that could be mistaken for a real client's face, and the customer must add each one only with written consent. See the privacy policy this design ships with.",
 
@@ -16,14 +16,14 @@
       "title": "Halo studio",
       "alt": "Skincare clinic website design UK by Foundations Marketing, showing a facial treatment in a single-room skin studio",
       "usedBy": ["content/pages/home.blocks.txt"],
-      "placeholder": true
+      "placeholder": false
     },
     {
       "file": "halo-practitioner.webp",
       "title": "Halo practitioner",
       "alt": "The practitioner at a skincare clinic — skincare clinic website design UK by Foundations Marketing",
       "usedBy": ["content/pages/home.blocks.txt"],
-      "placeholder": true
+      "placeholder": false
     }
   ]
 }

@@ -10,7 +10,7 @@
     align-items: start;
   }
 
-  &__heading { font-size: var(--fm-text-2xl); }
+  &__heading { font-size: clamp(2rem, 3.2vw, 3rem); }
 
   &__item {
     border-top: 1px solid var(--fm-line);
