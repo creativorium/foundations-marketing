@@ -37,7 +37,7 @@ if ($heading === '') {
       <span class="fm-onyx-eyebrow"><?php echo esc_html($eyebrow); ?></span>
     <?php endif; ?>
 
-    <h1 class="fm-onyx-page-hero__heading fm-onyx-display"><?php echo esc_html($heading); ?></h1>
+    <h1 class="fm-onyx-page-hero__heading fm-onyx-display"><?php echo nl2br(esc_html($heading), false); ?></h1>
   </div>
 
   <?php if ($lead !== '' || $note !== '') : ?>

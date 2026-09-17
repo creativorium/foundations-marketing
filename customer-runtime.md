@@ -118,13 +118,13 @@ Everything in `how-to-work.md` §2.1b still holds and is not reopened:
 ### 2.3 Demo routing
 
 `plugin-delivery/inc/preview.php` serves compiled multi-page designs and isolated customer previews.
-It reads parts from the packaged theme and applies that design?s tokens. The older
+It reads parts from the packaged theme and applies that design's tokens. The older
 `plugin/inc/demo.php` remains a **single-page compatibility route**: it scans for `content.blocks.txt`,
 matches `^templates/([^/]+)/demo/?$`, and renders that file with no header or footer,
 "because the template supplies its own". Multi-page templates and part-based headers break
-three assumptions in it. All three need work before template #1 can be previewed:
+three assumptions in it. The delivery manager implements their replacements:
 
-| Assumption today | What it must become |
+| Legacy route | Delivery manager |
 |---|---|
 | A template is discovered by a readable `content.blocks.txt` | Discovered by `content/pages/home.blocks.txt` |
 | One route, `/templates/<slug>/demo/` | `/templates/<slug>/demo/` for the homepage, `/templates/<slug>/demo/<page>/` for the rest |

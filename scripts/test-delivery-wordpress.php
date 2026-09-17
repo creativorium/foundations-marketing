@@ -3,6 +3,10 @@
  * php -d mysqli.default_port=PORT scripts/test-delivery-wordpress.php /path/to/wp-load.php /path/to/release.zip
  */
 if (PHP_SAPI !== 'cli' || count($argv) !== 3) { exit("CLI: provide wp-load.php and release ZIP\n"); }
+if (getenv('FM_CREATE_ACCEPTANCE_FIXTURE') !== '1') {
+    fwrite(STDERR, "This mutation test creates a fixture project. Use existing browser checks for routine validation. Set FM_CREATE_ACCEPTANCE_FIXTURE=1 only when a new acceptance project is explicitly needed.\n");
+    exit(1);
+}
 define('WP_HTTP_BLOCK_EXTERNAL', true);
 define('DISABLE_WP_CRON', true);
 require $argv[1];

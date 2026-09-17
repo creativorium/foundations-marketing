@@ -1,0 +1,11 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/onyx-site-header",
+  "title": "Onyx header",
+  "category": "theme",
+  "supports": {
+    "html": false,
+    "multiple": false
+  },
+  "render": "file:./render.php"
+}

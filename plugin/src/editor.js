@@ -25,33 +25,5 @@ import './blocks/steps';
 import './blocks/template-grid';
 import './blocks/template-library';
 
-/*
- * Onyx Aesthetics — a SOLD TEMPLATE's own blocks, not this website's (how-to-work.md
- * §2.1b). They are imported here only so the template can be built and previewed on our
- * catalogue site; the packager compiles them into the customer's own plugin from
- * plugin/src/templates/onyx/ and never ships this bundle.
- */
-import './templates/onyx/blocks/contact';
-import './templates/onyx/blocks/cta';
-import './templates/onyx/blocks/feature';
-import './templates/onyx/blocks/hero';
-import './templates/onyx/blocks/menu';
-import './templates/onyx/blocks/page-hero';
-import './templates/onyx/blocks/pillars';
-import './templates/onyx/blocks/policy';
-import './templates/onyx/blocks/reviews';
-import './templates/onyx/blocks/steps';
-import './templates/onyx/blocks/story';
-import './templates/meridian-classic/blocks/hero';
-import './templates/meridian-classic/blocks/credentials';
-import './templates/meridian-classic/blocks/story';
-import './templates/meridian-classic/blocks/conditions';
-import './templates/meridian-classic/blocks/steps';
-import './templates/meridian-classic/blocks/reviews';
-import './templates/meridian-classic/blocks/faq';
-import './templates/meridian-classic/blocks/booking';
-import './templates/meridian-classic/blocks/policy';
-import './templates/meridian-classic/blocks/page-hero';
-import './templates/meridian-classic/blocks/contact';
-import './templates/meridian-classic/blocks/site-header';
-import './templates/meridian-classic/blocks/site-footer';
+
+// Delivery loads the selected compiled design editor bundle for project pages.

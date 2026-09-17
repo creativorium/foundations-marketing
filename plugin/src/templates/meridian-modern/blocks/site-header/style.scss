@@ -1,0 +1,182 @@
+@use '../../fonts';
+// The palette lives in theme.json; all components use the customer token contract.
+.meridian {
+  --fm-warm: var(--wp--preset--color--warm);
+  box-sizing: border-box; font-family: var(--fm-font-body); color: var(--fm-ink);
+  font-size: 1rem; font-weight: 400; line-height: 1.7; letter-spacing: 0; overflow-wrap: anywhere;
+  *, *::before, *::after { box-sizing: border-box; }
+  h1,h2,h3,p,figure,blockquote,ul,ol,dl,dd { margin: 0; }
+  h1,h2,h3 { font-family: var(--fm-font-body); font-weight: 600; color: inherit; }
+  h1 { font-size: clamp(2.875rem,6vw,4.875rem); line-height: 1.02; letter-spacing: -.035em; }
+  h2 { font-size: clamp(2rem,3.8vw,3.125rem); line-height: 1.12; letter-spacing: -.025em; }
+  h3 { font-size: 1.3125rem; line-height: 1.3; }
+  em { font-family: var(--fm-font-display); color: var(--fm-accent); font-weight: 400; }
+  a { color: inherit; text-decoration: none; transition: opacity .2s ease; }
+  a:hover { opacity: .65; text-decoration: none; }
+  button,input,textarea { font: inherit; }
+  a,button,input,textarea,summary { &:focus-visible { outline: 3px solid currentColor; outline-offset: 4px; } }
+  img { display: block; max-width: 100%; }
+  [hidden] { display: none !important; }
+}
+.wp-site-blocks:has(.meridian) { padding: 0; background: var(--fm-canvas); }
+.fm-main:has(.meridian), .entry-content:has(.meridian) { padding: 0; margin: 0; max-width: none; }
+.is-layout-constrained > .meridian, .is-layout-constrained > .wp-block-post-content:has(.meridian) { max-width: none; margin-block: 0; }
+.meridian-container { width: 100%; max-width: 74rem; margin-inline: auto; }
+.meridian-section { padding: 6.875rem 2.5rem; scroll-margin-top: 7rem; background: var(--fm-canvas); }
+.meridian .meridian-eyebrow { font-size: .8125rem; font-weight: 600; letter-spacing: .04em; color: var(--fm-accent); margin-bottom: 1.25rem; }
+.meridian .meridian-body { margin-top: 1.5rem; font-size: 1.0625rem; line-height: 1.8; color: var(--fm-muted); max-width: 34rem; }
+.meridian-actions { display: flex; flex-wrap: wrap; gap: .875rem; margin-top: 2.375rem; }
+.meridian .meridian-button { display: inline-flex; justify-content: center; align-items: center; min-height: 3rem; padding: 1rem 1.875rem; border-radius: 999px; background: var(--fm-ink); color: var(--fm-canvas); border: 1.5px solid transparent; font-size: .875rem; font-weight: 600; text-align: center; line-height: 1.35; cursor: pointer; transition: opacity .2s ease; }
+.meridian .meridian-button:hover { opacity: .65; text-decoration: none; }
+.meridian .meridian-button--outline { background: transparent; border-color: var(--fm-line); color: var(--fm-ink); }
+.meridian-header { position: fixed; z-index: 100; top: 0; left: 0; right: 0; padding: 1.125rem 1.5rem; }
+.admin-bar .meridian-header { top: 32px; }
+.meridian-header__bar { max-width: 67.5rem; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 1.75rem; padding: .75rem .75rem .75rem 1.5rem; border-radius: 999px; background: var(--fm-ink); color: var(--fm-canvas); box-shadow: 0 .4rem 2rem color-mix(in srgb,var(--fm-ink) 10%,transparent); }
+.meridian-brand { font-size: 1.1875rem; font-weight: 600; letter-spacing: -.01em; line-height: 1.2; }
+a.meridian-brand { min-height: 44px; display: flex; align-items: center; }
+.meridian-brand img { max-width: 10rem; max-height: 44px; width: auto; }
+.meridian-nav ul { list-style: none; padding: 0; display: flex; gap: 1.5rem; }
+.meridian-nav li { position: relative; }
+.meridian-nav a { font-size: .8125rem; font-weight: 500; display: flex; align-items: center; min-height: 44px; }
+.meridian-nav li > ul { display: none; position: absolute; padding: 1rem; background: var(--fm-ink); min-width: 10rem; }
+.meridian-nav li:hover > ul,.meridian-nav li:focus-within > ul { display: grid; }
+.meridian .meridian-header__cta { background: var(--fm-accent); color: var(--fm-on-accent); font-size: .8125rem; padding: .6875rem 1.375rem; white-space: nowrap; }
+.meridian-menu-toggle { display: none; }
+.meridian-menu-close,.meridian-nav__mobile-cta { display: none; }
+.meridian-hero { display: grid; grid-template-columns: 1.05fr .95fr; min-height: 94vh; background: var(--fm-canvas); }
+.meridian-hero__text { display: flex; flex-direction: column; justify-content: center; padding: 9.375rem 3.5rem 3.75rem 2.5rem; }
+.meridian-hero__text .meridian-body { max-width: 26.25rem; }
+.meridian-hero__image { position: relative; min-width: 0; }
+.meridian-hero__image > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.meridian-badge { position: absolute; left: 1.75rem; bottom: 2.25rem; padding: 1rem 1.25rem; background: var(--fm-accent); color: var(--fm-on-accent); border-radius: 1.25rem; transform: rotate(-6deg); box-shadow: 0 .75rem 1.5rem color-mix(in srgb,var(--fm-ink) 25%,transparent); }
+.meridian-badge strong { display: block; font-size: 1.375rem; line-height: 1.1; }
+.meridian-badge span { display: block; font-size: .625rem; text-transform: uppercase; letter-spacing: .06em; }
+.meridian-credentials { padding: 1.625rem 2.5rem; background: var(--fm-canvas); }
+.meridian-credentials ul { display: flex; flex-wrap: wrap; gap: .875rem 2.5rem; justify-content: center; padding: 0; list-style: none; font-size: .75rem; font-weight: 600; letter-spacing: .04em; color: var(--fm-muted); }
+.meridian-story { display: grid; grid-template-columns: .85fr 1.15fr; gap: 4.375rem; align-items: center; }
+.meridian-story__image { border-radius: 46% 54% 58% 42%/48% 46% 54% 52%; overflow: hidden; aspect-ratio: 1; background: var(--fm-surface); }
+.meridian-story__image img { width: 100%; height: 100%; object-fit: cover; }
+.meridian .meridian-signature { margin-top: 1.75rem; font: italic 1.5rem var(--fm-font-display); color: var(--fm-accent); }
+.meridian-conditions { background: var(--fm-ink); color: var(--fm-canvas); }
+.meridian-conditions .meridian-eyebrow { color: var(--fm-warm); }
+.meridian-conditions h2 { max-width: 40rem; }
+.meridian-conditions .meridian-body { color: var(--fm-canvas); opacity: .8; max-width: 28rem; font-size: .9375rem; }
+.meridian-pills { display: flex; flex-wrap: wrap; gap: .875rem; list-style: none; padding: 0; margin-top: 3rem !important; }
+.meridian-pills li { background: color-mix(in srgb,var(--fm-canvas) 10%,transparent); padding: 1rem 1.625rem; border-radius: 999px; font-weight: 500; }
+.meridian-pills li:nth-child(3n+1) { background: var(--fm-accent); color: var(--fm-on-accent); }
+.meridian-centered { text-align: center; max-width: 40rem; margin: 0 auto 2.75rem; }
+.meridian-steps { display: flex; justify-content: center; gap: 1.375rem; overflow-x: auto; padding: .25rem .25rem 1.25rem !important; list-style: none; scroll-snap-type: x mandatory; }
+.meridian-steps li { flex: 0 0 18.75rem; background: var(--fm-surface); border: 1px solid var(--fm-line); border-radius: 1.75rem; padding: 2.125rem 1.75rem; scroll-snap-align: start; }
+.meridian-step-number { font: italic 2.75rem var(--fm-font-display); color: var(--fm-accent); }
+.meridian-steps h3 { margin: 1rem 0 .625rem; }
+.meridian-steps p { color: var(--fm-muted); font-size: .9375rem; line-height: 1.75; }
+.meridian-review { max-width: 47.5rem; margin: auto; background: var(--fm-surface); border: 1px solid var(--fm-line); border-radius: 2rem; padding: 4rem 3rem; text-align: center; }
+.meridian-review > img { width: 66px; height: 66px; object-fit: cover; border-radius: 50%; margin: 0 auto 1.5rem; }
+.meridian-review blockquote { padding: 0; border: 0; font: italic clamp(1.375rem,2.6vw,2rem)/1.4 var(--fm-font-display); }
+.meridian-review figcaption { margin-top: 1.375rem; color: var(--fm-muted); font-size: .8125rem; }
+.meridian-dots { display: flex; justify-content: center; gap: 0; margin-top: .375rem; }
+.meridian-dots button { display: grid; place-items: center; width: 44px; height: 44px; margin-inline: -10px; border: 0; background: transparent; cursor: pointer; }
+.meridian-dots span { width: 8px; height: 8px; border-radius: 999px; background: rgba(42,33,24,.2); transition: background-color .2s ease; }
+.meridian-dots [aria-pressed=true] span { background: var(--fm-accent); }
+.meridian-faq { max-width: 51.25rem; margin: auto; }
+.meridian-faq details { border-top: 1px solid var(--fm-line); }
+.meridian-faq details:last-child { border-bottom: 1px solid var(--fm-line); }
+.meridian-faq summary { display: flex; justify-content: space-between; gap: 1.25rem; padding: 1.5rem .25rem; font-size: 1.125rem; font-weight: 600; cursor: pointer; list-style: none; }
+.meridian-faq summary::-webkit-details-marker { display: none; }
+.meridian-faq summary span { color: var(--fm-accent); }
+.meridian-faq details[open] summary span { transform: rotate(45deg); }
+.meridian-faq details p { padding: 0 .25rem 1.5rem; max-width: 38rem; color: var(--fm-muted); font-size: .9375rem; }
+.meridian-booking-wrap { padding-top: 0; }
+.meridian-booking { max-width: 62.5rem; margin: auto; background: var(--fm-accent); color: var(--fm-on-accent); border-radius: 2.25rem; padding: 4.375rem 3.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 3.125rem; }
+.meridian-booking h2 { font-size: clamp(1.75rem,3.2vw,2.5rem); }
+.meridian-booking .meridian-eyebrow { color: inherit; }
+.meridian-booking p { margin-top: 1.125rem; font-size: .9375rem; }
+.meridian-booking form { display: grid; gap: 1rem; align-content: start; min-width: 0; }
+.meridian-booking label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.meridian-booking input,.meridian-booking textarea { width: 100%; min-width: 0; border: 0; outline: 1px solid transparent; background: rgba(247,239,226,.15); color: var(--fm-on-accent); border-radius: .875rem; padding: .9375rem 1.125rem; font-size: .9375rem; font-weight: 400; line-height: 1.4; transition: background-color .2s ease, outline-color .2s ease; }
+.meridian-booking input:hover,.meridian-booking textarea:hover { background: rgba(247,239,226,.2); }
+.meridian-booking input:focus,.meridian-booking textarea:focus { outline-color: rgba(247,239,226,.75); }
+.meridian-booking textarea { resize: vertical; }
+.meridian-booking ::placeholder { color: var(--fm-on-accent); opacity: .85; }
+.meridian-booking .meridian-form-note { font-size: .75rem; margin-top: .25rem; }
+.meridian-page-hero { padding: 10rem 2.5rem 4rem; background: var(--fm-canvas); }
+.meridian-page-hero h1 { max-width: 55rem; }
+.meridian-contact { display: grid; grid-template-columns: repeat(4,1fr); gap: 2rem; }
+.meridian-contact dt { text-transform: uppercase; letter-spacing: .06em; font-size: .75rem; color: var(--fm-accent); margin-bottom: .625rem; }
+.meridian-contact a { display: inline-flex; align-items: center; min-height: 44px; }
+.meridian-policy { max-width: 47.5rem; margin: auto; }
+.meridian-policy section+section { margin-top: 2.5rem; }
+.meridian-policy h2 { font-size: 1.5rem; margin-bottom: .75rem; }
+.meridian-policy p { color: var(--fm-muted); }
+.meridian-footer { padding: 0 2.5rem 2.5rem; background: var(--fm-canvas); }
+.meridian-footer__row { border-top: 1px solid var(--fm-line); padding-top: 2.5rem; display: flex; justify-content: space-between; gap: 2rem; }
+.meridian-footer__row p+p { font-size: .875rem; color: var(--fm-muted); margin-top: .625rem; }
+.meridian-footer nav { display: flex; flex-wrap: wrap; align-items: start; gap: 1.375rem; font-size: .8125rem; font-weight: 500; }
+.meridian-footer a,.meridian-footer nav button { display: inline-flex; min-height: 44px; align-items: center; }
+.meridian-footer nav button { padding: 0; border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; transition: opacity .2s ease; }
+.meridian-footer nav button:hover { opacity: .65; }
+.meridian .meridian-footer__credit { margin-top: 1.5rem; color: var(--fm-muted); font-size: .75rem; }
+.meridian-overlay-open { overflow: hidden; }
+.meridian-overlay { position: fixed; inset: 0; z-index: 980; overflow-y: auto; background: var(--fm-ink); color: var(--fm-canvas); animation: meridian-rise .3s ease both; }
+.meridian-overlay--privacy { background: var(--fm-canvas); color: var(--fm-ink); }
+.meridian-overlay__close { position: fixed; z-index: 2; top: 1.5rem; right: 2rem; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: inherit; font: 400 1.875rem/1 var(--fm-font-body); cursor: pointer; transition: opacity .2s ease; }
+.meridian-overlay__close:hover { opacity: .65; }
+.meridian-overlay__inner { max-width: 51.25rem; margin: auto; padding: 7.5rem 2.5rem 6.25rem; }
+.meridian-overlay__inner h2 { font-size: clamp(2.125rem,5vw,3.625rem); line-height: 1.1; }
+.meridian-overlay--contact .meridian-eyebrow { color: var(--fm-warm); }
+.meridian-overlay__contact { display: grid; grid-template-columns: repeat(auto-fit,minmax(13.75rem,1fr)); gap: 2rem; margin-top: 3rem !important; }
+.meridian-overlay__contact dt { margin-bottom: .625rem; color: rgba(247,239,226,.5); font-size: .6875rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.meridian-overlay__contact dd { font-size: 1rem; line-height: 1.75; }
+.meridian-overlay__contact a { display: inline-flex; min-height: 44px; align-items: center; }
+.meridian-overlay__inner--privacy { max-width: 47.5rem; }
+.meridian-overlay__date { margin-top: .75rem !important; color: var(--fm-muted); font-size: .8125rem; }
+.meridian-overlay__policy { display: grid; gap: 1.875rem; margin-top: 2.75rem; color: #3F392E; font-size: .9375rem; line-height: 1.8; }
+.meridian-overlay__policy h3 { margin-bottom: .5rem; font-size: 1.25rem; }
+@keyframes meridian-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@media(max-width:1024px) {
+  .meridian-header__bar { gap: .75rem; }
+  .meridian-brand { font-size: 1rem; }
+  .meridian-nav ul { gap: .75rem; }
+  .meridian-steps { justify-content: flex-start; }
+  .meridian-story { gap: 2.5rem; }
+}
+@media(max-width:820px) {
+  .meridian-section { padding: 4rem 1.375rem; }
+  .meridian-header { padding: .75rem 1.375rem; }
+  .meridian-header__bar { padding: .75rem 1rem; border-radius: 999px; }
+  .meridian-header .meridian-header__cta { padding: .75rem 1rem; font-size: .75rem; }
+  .meridian-header .meridian-brand { max-width: 9rem; }
+  .meridian-nav { display: none; }
+  .meridian-header[data-open] .meridian-nav { position: fixed; inset: 0; z-index: 950; display: flex; flex-direction: column; justify-content: center; padding: 2.5rem; background: var(--fm-ink); color: var(--fm-canvas); animation: meridian-rise .3s ease both; }
+  .meridian-header[data-open] .meridian-nav ul { display: flex; flex-direction: column; align-items: flex-start; gap: .625rem; }
+  .meridian-header[data-open] .meridian-nav a { min-height: 44px; font-size: clamp(2rem,10vw,2.375rem); font-weight: 600; line-height: 1.15; }
+  .meridian-header[data-open] .meridian-nav__mobile-cta { display: block; }
+  .meridian-header[data-open] .meridian-nav__mobile-cta a { color: var(--fm-accent); }
+  .meridian-header[data-open] .meridian-menu-close { position: absolute; top: 1.5rem; right: 1.75rem; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: inherit; font: 400 1.875rem/1 var(--fm-font-body); cursor: pointer; }
+  .meridian-header[data-enhanced] .meridian-menu-toggle { display: flex; flex-direction: column; justify-content: center; gap: 4px; flex-shrink: 0; width: 44px; height: 44px; padding: 12px; background: transparent; color: inherit; border: 0; cursor: pointer; }
+  .meridian-menu-toggle span { display: block; width: 20px; height: 1.5px; background: currentColor; }
+  .meridian-hero { grid-template-columns: 1fr; min-height: 0; }
+  .meridian-hero__text { padding: 9rem 1.5rem 3.125rem; }
+  .meridian-hero__image { height: 52vh; min-height: 19rem; }
+  .meridian-badge { display: none; }
+  .meridian-story { grid-template-columns: 1fr; }
+  .meridian-story__image { max-width: 32rem; width: 100%; margin: auto; }
+  .meridian-review { padding: 3rem 1.5rem; }
+  .meridian-booking-wrap { padding-top: 0; }
+  .meridian-booking { grid-template-columns: 1fr; padding: 2.75rem 1.5rem; gap: 2rem; }
+  .meridian-contact { grid-template-columns: repeat(2,1fr); }
+  .meridian-footer { padding-inline: 1.375rem; }
+  .meridian-footer__row { flex-direction: column; }
+  .meridian-page-hero { padding: 9rem 1.375rem 2rem; }
+  .meridian-overlay__inner { padding: 7.5rem 2.5rem 6.25rem; }
+}
+@media(max-width:560px) {
+  .meridian-header { padding-inline: .75rem; }
+  .meridian-header__bar { gap: .35rem; padding-inline: .875rem; }
+  .meridian-header .meridian-brand { max-width: 6rem; font-size: .875rem; }
+  .meridian-contact { grid-template-columns: 1fr; }
+  .meridian-pills { gap: .625rem; }
+  .meridian-pills li { padding: .75rem 1.125rem; font-size: .875rem; }
+  .meridian-overlay__inner { padding-inline: 1.5rem; }
+}
+@media(prefers-reduced-motion:reduce) { .meridian *, .meridian *::before,.meridian *::after { scroll-behavior: auto; transition: none; animation: none; } }

@@ -752,61 +752,22 @@ Rules specific to templates:
 
 ## 6b. Previewing a template on Local — getting a demo link
 
-**Before anything below:** the *Foundations Blocks* plugin must be **active** and you must
-have run `npm run build`. If the plugin is off, every block renders as **nothing at all**
-(§7) — a blank page means the plugin is inactive, not that your markup is broken.
+### Compiled delivery preview (required)
 
-> ### ⚠️ The demo route has not caught up with multi-page templates yet
->
-> `plugin/inc/demo.php` was written when a template was one page with its header and footer
-> inside the content. **As built today it will not preview a template in the §2.1a shape.**
-> Three things are known to need changing, and none of them is done:
->
-> | It does this now | It needs to do this |
-> |---|---|
-> | Finds templates by a readable `content.blocks.txt` | Find them by `content/pages/home.blocks.txt` |
-> | One route, `/templates/<slug>/demo/` | Add `/templates/<slug>/demo/<page>/` for interior pages |
-> | Renders page content alone, no header or footer | Render `parts/header.html` and `parts/footer.html` around it, populated from `content/settings.json` — the template's theme is not installed on our site, so the demo must read those files directly |
->
-> Internal links need rewriting too: a page file links to `/about/`, which on the demo has
-> to resolve to `/templates/<slug>/demo/about/`.
->
-> **This is owner work in `plugin/inc/`, which contributors may not edit (§2.1).** If you
-> are building template #1, expect to preview pages with Method 1 below until it lands, and
-> say so in your PR rather than working around it. Full spec:
-> [customer-runtime.md](customer-runtime.md) §2.3.
+Activate Foundations Delivery and run `npm run build`, then `npm run package -- <slug>`.
+Upload the archive under **Delivery**. Use the existing master if it is already imported;
+do not create another sample to repeat a browser check. Draft demos require administrator
+access. The route uses the imported design slug: `/templates/<slug>/demo/`, with
+`<page>/` appended for interior pages. The packaged theme supplies parts and tokens.
 
-### Method 0 — just open the demo URL (use this one)
+Master page edits update its preview and future customer projects. Source-code changes
+require a rebuilt release and the versioning workflow in [delivery-operations.md](delivery-operations.md).
+A refresh does not import changed source files. Include screenshots and a reviewer-accessible
+preview with the PR; a Local hostname alone is not remotely accessible.
 
-**`/templates/<demo-slug>/demo/`** on your Local site renders the template straight from
-`content/pages/home.blocks.txt` **on disk**. No page to create, nothing to paste, no WP-CLI. Save the
-file, refresh the browser.
-
-```
-http://foundationsmarketing.local/templates/pilates-website-design/demo/
-```
-
-The slug is `demoSlug` from your `template.json` — use the SEO phrase from
-`doc/SEO-AND-PERFORMANCE.md` §10. Without a `template.json` it falls back to your folder
-name, so a half-finished template is still previewable.
-
-This renders it **standalone** — the template's own header, hero and footer, with none of
-our site's chrome around it — because that is what the buyer is judging and what gets
-installed. It is the *same code path that serves buyers in production*, so what you sign
-off here is what ships. There is a fixed bar at the bottom to get back out; it is ours,
-not part of the template.
-
-**This is the URL to put in your PR.**
-
-> If you get a 404, the rewrite rules need flushing: visit
-> **Settings → Permalinks** in WP Admin and hit Save (changing nothing). That is the
-> usual cause of a route that "does not exist" right after pulling.
->
-> If the page loads but a section is **blank**, that section's block is not registered on
-> the server, or its render never ran — work through the checklist in §7.
-
-The two methods below are fallbacks. You want them when you are building the page *in the
-editor* and exporting it, rather than writing the markup by hand.
+The older `plugin/inc/demo.php` route supports legacy single-page templates only.
+The editor methods below are markup-development aids after blocks are registered and
+media/page tokens resolved; they do not replace the compiled preview or install test.
 
 ### Method 1 — paste it into the editor (when you built the page in the editor)
 

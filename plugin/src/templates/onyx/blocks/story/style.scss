@@ -3,7 +3,7 @@
 .fm-onyx-story {
   display: grid;
   grid-template-columns: 0.85fr 1.15fr;
-  gap: var(--fm-space-5);
+  gap: 3.75rem;
   align-items: start;
   padding-inline: var(--fm-onyx-gutter);
   padding-block: var(--fm-space-5) var(--fm-space-6);
@@ -30,11 +30,12 @@
   &__standfirst {
     margin: 0;
     max-width: 60ch;
-    font-size: clamp(1.0625rem, 1.6vw, 1.1875rem);
+    font-size: 1.25rem;
     line-height: 1.65;
   }
 
   &__para {
+    font-size: 1.0625rem;
     margin: 0;
     max-width: 60ch;
     line-height: 1.75;
