@@ -1,3 +1,29 @@
+// PARKED — this stylesheet is not compiled. `@use 'pixels'` is commented out in
+// main.scss, and the markup it styles is gone from theme/header.php.
+//
+// WHY. The curtain covered an outgoing navigation and revealed the incoming page from
+// black. Both halves worked, and two real faults were fixed along the way: a cover that
+// was cut off mid-wipe by a fast navigation (a black shape flashing across the page),
+// and a cover that uncovered itself while the reader was still waiting. What could not
+// be fixed from here is the premise — every arrival starts from a full black screen,
+// and the site's cold render is around two seconds.
+//
+// That is every navigation while you are logged in, because theme/inc/performance.php
+// switches the speculation rules off for logged-in users, so nothing prerenders. Logged
+// out on a warm server the same code is close to invisible. A decorative effect is not
+// worth being the slowest-feeling part of the site for the person who works on it.
+//
+// TO BRING IT BACK, two lines:
+//   1. theme/src/styles/main.scss — uncomment `@use 'pixels';`
+//   2. theme/header.php          — restore the `.fm-px` grid of 180 `.fm-px__cell` divs
+//      and the cover logic in theme/src/main.js (both are in the history of the commit
+//      that parked this).
+//
+// If it does come back, the thing to solve first is the reveal: it should not play at
+// all on a page that is already visible, which is the case the reader notices.
+//
+// ---------------------------------------------------------------------------------
+
 @use 'sass:math';
 @use 'tokens' as *;
 
