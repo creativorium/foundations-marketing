@@ -6,7 +6,7 @@ if (!defined('ABSPATH')) { exit; }
 function fm_pa_defaults(string $block): array {
     static $cache = [];
     if ($block !== 'pulse-atelier-section') { return []; }
-    return $cache[$block] ??= json_decode(file_get_contents(__DIR__ . '/../blocks/section/defaults.json'), true);
+    return $cache[$block] ??= json_decode(file_get_contents(__DIR__ . '/defaults.json'), true);
 }
 
 /** Preserve empty editor values, ignore unknown fields, and normalize malformed attributes. */

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 if (!defined('ABSPATH')) { exit; }
-require_once __DIR__ . '/../../components/helpers.php';
+require_once __DIR__ . '/helpers.php';
 $defaults = fm_pa_defaults('pulse-atelier-section');
 $variant = (string) ($attributes['variant'] ?? 'hero');
 if (!isset($defaults[$variant])) { $variant = 'hero'; }
