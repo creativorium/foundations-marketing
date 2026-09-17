@@ -39,6 +39,12 @@
     border: var(--fm-rule) solid var(--fm-ink);
     background: var(--fm-addon-tint, var(--fm-bg-2));
     padding: 32px 32px 34px;
+    // A column, so the verdict line at the foot can be pushed to the bottom of the
+    // card rather than sitting wherever the description happens to end. The cards are
+    // already equal height — they are grid items — so without this the only thing out
+    // of line across the row is the one line that is meant to be scanned across it.
+    display: flex;
+    flex-direction: column;
     // The card, not the viewport, is what the title has to fit inside. Four cards
     // across a 1440 screen are ~320px each; one card on a phone is wider than that.
     // Sizing the head from the card means the same rule works in both, and in the
@@ -109,7 +115,10 @@
     letter-spacing: 0.14em;
     text-transform: uppercase;
     color: var(--fm-accent-deep);
-    margin: 0;
+    // Pushed to the foot of the card. This line is a verdict — "worth it if…" — and
+    // four verdicts are read across the row, not down one card, so they have to start
+    // on the same line as each other however long each description is.
+    margin: auto 0 0;
   }
 
   &__note {
