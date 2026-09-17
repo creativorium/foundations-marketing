@@ -37,7 +37,15 @@
 
   &__list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    // Four across at most. `auto-fit` with a flat 280px minimum fits as many tracks as
+    // the width allows — five on a wide screen, which makes each card too narrow for
+    // its screenshot to read and stops the row scanning as a set.
+    //
+    // The `max()` raises the track's own minimum to a quarter of the row (less the
+    // three gaps), so a fifth track can never fit. Below that the 280px floor takes
+    // over again and the row steps down to three, two and one on its own — same rule,
+    // no breakpoints to keep in step with the card's.
+    grid-template-columns: repeat(auto-fit, minmax(max(280px, (100% - 3 * 24px) / 4), 1fr));
     gap: 24px;
   }
 

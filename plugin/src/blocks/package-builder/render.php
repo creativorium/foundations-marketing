@@ -171,13 +171,34 @@ $money  = static fn (float $n): string => function_exists('wc_price') ? wc_price
                  * nobody can navigate a page they cannot see the address bar of.
                  */
                 ?>
-                <div class="fm-builder__stage">
+                <div class="fm-builder__stage"<?php echo $preview_url !== '' ? ' data-fm-stage="loading"' : ''; ?>>
                     <div class="fm-builder__frame" data-fm-frame data-device="desktop"
                          data-fm-widths="<?php echo esc_attr((string) wp_json_encode($device_widths)); ?>">
                         <div class="fm-builder__bezel">
                             <span class="fm-builder__camera" aria-hidden="true"></span>
                             <div class="fm-builder__screen" data-fm-screen>
                                 <?php if ($preview_url !== '') : ?>
+                                    <?php
+                                    /*
+                                     * The preview is a whole second WordPress page, so it takes as long
+                                     * as a page load — about two seconds on a cold render. Until it
+                                     * arrives the bezel says so, because an empty bezel on the step the
+                                     * buyer lands on reads as a design that failed rather than one that
+                                     * is coming.
+                                     *
+                                     * `role="status"` rather than `alert`: it is progress, announced
+                                     * politely when a screen reader is between things, not an
+                                     * interruption.
+                                     */
+                                    ?>
+                                    <p class="fm-builder__loading" data-fm-preview-status role="status">
+                                        <span class="fm-builder__loading-dots" aria-hidden="true"><i></i><i></i><i></i></span>
+                                        <span class="fm-builder__loading-text"><?php esc_html_e('Loading the preview…', 'foundations'); ?></span>
+                                        <span class="fm-builder__loading-failed">
+                                            <?php esc_html_e('The preview did not load. Everything else on this page still works — open the full demo to see this template.', 'foundations'); ?>
+                                        </span>
+                                    </p>
+
                                     <iframe
                                         class="fm-builder__live"
                                         data-fm-preview
@@ -189,7 +210,17 @@ $money  = static fn (float $n): string => function_exists('wc_price') ? wc_price
                                                 (string) ($template['name'] ?? '')
                                             ));
                                         ?>"
-                                        loading="lazy"
+                                        <?php
+                                        /*
+                                         * Eager, deliberately. This sits at the top of step one — the
+                                         * first thing the buyer looks at — and `lazy` told the browser
+                                         * to put it off until layout said it was near the viewport,
+                                         * which on a slow page meant the request did not even start
+                                         * until seconds in. Measured on Local: first byte of the demo
+                                         * at 4.7s with lazy, against a page that was interactive at 3.2s.
+                                         */
+                                        ?>
+                                        loading="eager"
                                         scrolling="no"
                                         tabindex="-1"></iframe>
                                 <?php elseif ($preview_shot > 0) : ?>
