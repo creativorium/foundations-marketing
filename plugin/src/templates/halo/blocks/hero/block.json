@@ -1,0 +1,31 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/halo-hero",
+  "title": "Halo — Hero",
+  "category": "foundations-halo",
+  "icon": "align-full-width",
+  "description": "The homepage opening: the display H1 with its italic phrase, a standfirst, two actions, a row of figures, the studio photograph with its booking note, and the credentials strip beneath.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true, "multiple": false },
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "highlight": { "type": "string", "default": "" },
+    "headingTail": { "type": "string", "default": "" },
+    "lead": { "type": "string", "default": "" },
+    "ctaLabel": { "type": "string", "default": "" },
+    "ctaUrl": { "type": "string", "default": "" },
+    "altLabel": { "type": "string", "default": "" },
+    "altUrl": { "type": "string", "default": "" },
+    "stats": { "type": "array", "default": [] },
+    "imageId": { "type": "number", "default": 0 },
+    "imageAlt": { "type": "string", "default": "" },
+    "imageNote": { "type": "string", "default": "" },
+    "placeholder": { "type": "boolean", "default": false },
+    "badgeLabel": { "type": "string", "default": "" },
+    "badgeText": { "type": "string", "default": "" },
+    "credentials": { "type": "array", "default": [] }
+  },
+  "render": "file:./render.php"
+}

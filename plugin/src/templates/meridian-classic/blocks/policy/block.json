@@ -1,0 +1,18 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/meridian-classic-policy",
+  "title": "Meridian Policy",
+  "category": "foundations-meridian-classic",
+  "icon": "admin-site-alt3",
+  "attributes": {
+    "items": {
+      "type": "array",
+      "default": []
+    }
+  },
+  "supports": {
+    "html": false,
+    "multiple": true
+  },
+  "render": "file:./render.php"
+}

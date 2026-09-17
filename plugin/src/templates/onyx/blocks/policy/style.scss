@@ -1,0 +1,123 @@
+// foundations/onyx-policy — front-end styles.
+
+.fm-onyx-policy {
+  display: grid;
+  grid-template-columns: 0.38fr 1fr;
+  gap: var(--fm-space-5);
+  align-items: start;
+  padding-inline: var(--fm-onyx-gutter);
+  padding-block: var(--fm-space-4) var(--fm-space-6);
+  background: var(--fm-canvas);
+
+  &__contents {
+    position: sticky;
+    top: 6.875rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  &__contents-label {
+    margin: 0 0 0.375rem;
+    font-family: var(--fm-font-body);
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--fm-muted);
+  }
+
+  &__contents-list {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+
+    a {
+      display: block;
+      // 44px tap target. The list is dense by design, so the target comes from padding
+      // rather than from font size (how-to-work.md §8).
+      min-block-size: 44px;
+      padding-block: 0.6875rem;
+      font-size: var(--fm-text-sm);
+      color: var(--fm-muted);
+      text-decoration: none;
+
+      &:hover,
+      &:focus-visible { color: var(--fm-accent); text-decoration: underline; }
+    }
+  }
+
+  &__sections {
+    display: flex;
+    flex-direction: column;
+    // As on the About timeline, each section draws its own top rule and the container
+    // closes the last one.
+    border-block-end: 1px solid var(--fm-line);
+  }
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+    padding-block: var(--fm-space-4);
+    border-block-start: 1px solid var(--fm-line);
+    // Clears the sticky header when jumped to from the contents list.
+    scroll-margin-top: 6.875rem;
+  }
+
+  &__title {
+    margin: 0;
+    font-family: var(--fm-font-display);
+    font-weight: 500;
+    font-size: 1.5625rem;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+
+  &__para {
+    margin: 0;
+    max-width: 68ch;
+    line-height: 1.75;
+    color: var(--fm-muted);
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5625rem;
+    margin: 0.25rem 0 0;
+    padding: 0;
+    list-style: none;
+
+    li {
+      display: grid;
+      grid-template-columns: 1rem 1fr;
+      gap: 0.75rem;
+      align-items: baseline;
+      max-width: 68ch;
+      line-height: 1.7;
+      color: var(--fm-muted);
+    }
+
+    // The em dash bullet is decoration, so it is generated rather than marked up.
+    li::before {
+      content: "\2014";
+      color: var(--fm-accent);
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  .fm-onyx-policy {
+    grid-template-columns: 1fr;
+    gap: var(--fm-space-3);
+
+    &__contents { position: static; }
+  }
+}
+
+@media (max-width: 560px) {
+  .fm-onyx-policy { padding-block: var(--fm-space-3) var(--fm-space-5); }
+}

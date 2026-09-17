@@ -1,0 +1,10 @@
+{
+  "files":[
+    {"file":"hero.webp","title":"Pulse Pilates hero","alt":"Pilates reformer studio in Brighton"},
+    {"file":"practice-wide.webp","title":"Pulse Pilates practice","alt":"A small Pilates class"},
+    {"file":"practice-detail.webp","title":"Pilates movement detail","alt":"Controlled Pilates movement"},
+    {"file":"teacher.webp","title":"Pulse Pilates teacher","alt":"Elena, Pulse Pilates teacher"},
+    {"file":"audience.webp","title":"Pilates client","alt":"Pilates practice for every body"},
+    {"file":"booking.webp","title":"Pulse Pilates booking","alt":"Book a Pilates class in Brighton"}
+  ]
+}

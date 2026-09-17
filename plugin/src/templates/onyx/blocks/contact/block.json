@@ -1,0 +1,24 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/onyx-contact",
+  "title": "Onyx — Enquiry form",
+  "category": "foundations-onyx",
+  "icon": "email",
+  "description": "The enquiry form beside the clinic's contact cards and a map slot. The form needs an endpoint before it can send anything.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "action":       { "type": "string", "default": "" },
+    "areaLabel":    { "type": "string", "default": "" },
+    "areas":        { "type": "array",  "default": [] },
+    "messageLabel": { "type": "string", "default": "" },
+    "consentText":  { "type": "string", "default": "" },
+    "consentUrl":   { "type": "string", "default": "" },
+    "consentLink":  { "type": "string", "default": "" },
+    "submitLabel":  { "type": "string", "default": "" },
+    "cards":        { "type": "array",  "default": [] },
+    "mapNote":      { "type": "string", "default": "" }
+  },
+  "render": "file:./render.php"
+}

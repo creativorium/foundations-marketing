@@ -1,0 +1,27 @@
+{
+  "$comment": "Default Site Settings. Every key must exist in fm_settings_core() (theme-customer-base/inc/settings-contract.php) or in this template's `settings` extensions in template.json — the importer drops anything else rather than storing a value no screen can edit.",
+
+  "site_name": "Halo Skin Studio",
+  "tagline": "A one-room skin studio in east London",
+  "logo_id": 0,
+
+  "phone": "+44 20 7946 0000",
+  "email": "hello@halostudio.co.uk",
+  "address": "14 Chalk Row\nLondon\nE8 3RT",
+
+  "cta_label": "Book",
+  "cta_url": "#enquiry",
+
+  "footer_text": "A small skin studio for people who'd rather be looked after than sold to.",
+
+  "social": [
+    { "network": "Instagram", "url": "https://example.com/halo.skin" }
+  ],
+
+  "$extensions": "Declared in template.json.",
+  "brand_label": "Halo",
+  "opening_hours": "Tue–Sat, 9–6",
+  "booking_url": "#enquiry",
+  "practitioner_name": "Amara",
+  "instagram_handle": "@halo.skin"
+}

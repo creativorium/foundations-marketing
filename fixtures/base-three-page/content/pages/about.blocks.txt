@@ -1,0 +1,28 @@
+<!-- wp:group {"tagName":"section","layout":{"type":"constrained"}} -->
+<section class="wp-block-group">
+<!-- wp:heading {"level":1,"fontSize":"xx-large"} -->
+<h1 class="wp-block-heading has-xx-large-font-size">About</h1>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph {"fontSize":"large"} -->
+<p class="has-large-font-size">An interior page. Its only job is to prove that a second page renders through the same shell, with the header and footer coming from one place rather than repeating in the content.</p>
+<!-- /wp:paragraph -->
+</section>
+<!-- /wp:group -->
+
+<!-- wp:group {"tagName":"section","layout":{"type":"constrained"}} -->
+<section class="wp-block-group">
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Why a fixture and not a template</h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>A sellable template needs its own blocks, its own palette and a real SEO phrase. This has none of those on purpose — it is the smallest thing that can fail if the base is wrong.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:image {"id":"{{media:fixture-logo.png|id}}","sizeSlug":"large","linkDestination":"none","className":"fm-fixture-image"} -->
+<figure class="wp-block-image size-large fm-fixture-image"><img src="{{media:fixture-logo.png|url}}" alt="Placeholder image used by the base fixture" class="wp-image-{{media:fixture-logo.png|id}}"/></figure>
+<!-- /wp:image -->
+</section>
+<!-- /wp:group -->
+<!-- wp:foundations/base-three-page-probe {"label":"Editable runtime check","imageId":"{{media:fixture-logo.png|id}}","targetPageId":"{{page:contact|id}}"} /-->

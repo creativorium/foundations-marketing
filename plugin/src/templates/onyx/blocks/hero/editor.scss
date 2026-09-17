@@ -1,0 +1,7 @@
+// Editor-only styles for foundations/onyx-hero.
+// The preview is ServerSideRender, so the front-end styles already apply. All this does
+// is stop the editor's own canvas padding fighting the block's full-bleed gutter.
+
+.wp-block[data-type="foundations/onyx-hero"] .fm-onyx-hero {
+  max-inline-size: 100%;
+}

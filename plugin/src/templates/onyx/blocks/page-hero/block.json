@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/onyx-page-hero",
+  "title": "Onyx — Page opening",
+  "category": "foundations-onyx",
+  "icon": "editor-textcolor",
+  "description": "The opening of an interior page: a kicker, the page H1 and an optional standfirst, over a hairline.",
+  "textdomain": "foundations",
+  "supports": {
+    "html": false,
+    "anchor": true,
+    "multiple": false
+  },
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "lead":    { "type": "string", "default": "" },
+    "note":    { "type": "string", "default": "" },
+    "layout":  { "type": "string", "default": "stacked", "enum": ["stacked", "split"] }
+  },
+  "render": "file:./render.php"
+}

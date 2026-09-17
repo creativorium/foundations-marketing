@@ -1,0 +1,13 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/meridian-classic-contact",
+  "title": "Meridian Contact",
+  "category": "foundations-meridian-classic",
+  "icon": "admin-site-alt3",
+  "attributes": {},
+  "supports": {
+    "html": false,
+    "multiple": true
+  },
+  "render": "file:./render.php"
+}

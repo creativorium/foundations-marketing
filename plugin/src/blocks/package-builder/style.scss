@@ -205,7 +205,7 @@
     line-height: 1;
   }
 
-  &__live {
+  &__live-link {
     font-size: 12px;
     font-weight: 700;
     letter-spacing: 0.1em;
@@ -287,14 +287,51 @@
   }
 
   &__screen {
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    background: var(--fm-hero-screen);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  // --- The live preview ------------------------------------------------------
+  // The demo is loaded at the device's real viewport width and then scaled to the
+  // bezel, so what is on screen is the template's own layout at that width — not a
+  // desktop screenshot squashed into a phone. builder.js writes the three custom
+  // properties; without it the iframe still renders, just unscaled and clipped.
+  &__live {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 0;
+    width: calc(var(--fm-preview-w, 1280) * 1px);
+    height: calc(var(--fm-preview-h, 800) * 1px);
+    transform: scale(var(--fm-preview-scale, 1));
+    transform-origin: top left;
+    // Inert scenery. A click belongs to the builder, and a page nobody can see the
+    // address of must not be navigable from inside a 300px box.
+    pointer-events: none;
+    background: var(--fm-bg);
+  }
+
+  &__shot {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    // The masthead identifies the design; the footer does not.
+    object-position: top center;
+  }
+
+  // The drawn fallback keeps the spacing the wireframe was built with.
+  &__wire {
     flex: 1;
     min-height: 0;
     display: flex;
     flex-direction: column;
     gap: 6px;
-    background: var(--fm-hero-screen);
-    border-radius: 3px;
-    overflow: hidden;
   }
 
   &__screen-bar {

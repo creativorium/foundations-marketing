@@ -122,6 +122,19 @@
   }
 }
 
+// Keep the complete wordmark and menu control inside narrow phone viewports.
+@media (max-width: 480px) {
+  .fm-header { gap: 12px; }
+  .fm-header > .fm-logo {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+    min-height: 44px;
+    line-height: 1.1;
+  }
+}
+
 // --- The drawer backdrop -----------------------------------------------------
 // display:none above the drawer breakpoint, so it can never intercept a click on
 // the desktop layout.

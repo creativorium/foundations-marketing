@@ -1,0 +1,16 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/halo-policy",
+  "title": "Halo — Policy",
+  "category": "foundations-halo",
+  "icon": "text-page",
+  "description": "A long legal page: a contents list beside numbered sections, each with paragraphs and an optional bulleted list.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true, "multiple": false },
+  "attributes": {
+    "contentsLabel": { "type": "string", "default": "" },
+    "sections": { "type": "array", "default": [] }
+  },
+  "render": "file:./render.php"
+}

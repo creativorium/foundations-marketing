@@ -1,0 +1,190 @@
+// Onyx — template-level styles.
+//
+// Two jobs, and nothing else:
+//
+//   1. Alias the presets this design adds to its theme.json into --fm-* names, so the
+//      blocks in this folder never name a hex (theme-customer-base/style.css §"the
+//      --fm-* bridge" is the contract; this is its documented extension point).
+//   2. Style the Onyx-specific header and footer. Their structure differs from the
+//      shared shell, so the template owns both blocks and parts.
+//
+// Section-level styling belongs in each block's own style.scss, not here.
+
+:root {
+  // Palette this design adds beyond the shared seven.
+  --fm-accent-soft:   var(--wp--preset--color--accent-soft);
+  --fm-inverse:       var(--wp--preset--color--inverse);
+  --fm-on-inverse:    var(--wp--preset--color--on-inverse);
+  --fm-inverse-muted: var(--wp--preset--color--inverse-muted);
+  --fm-inverse-line:  var(--wp--preset--color--inverse-line);
+  --fm-placeholder:   var(--wp--preset--color--placeholder);
+
+  --fm-font-mono: var(--wp--preset--font-family--mono);
+
+  // The gutter every Onyx band uses. Shrinks on small screens so a full-bleed band
+  // still has air without the body scrolling sideways (how-to-work.md §8).
+  --fm-onyx-gutter: 2.5rem;
+
+  // The design draws hairlines at ~10% ink. A solid preset keeps theme.json the single
+  // source of truth; colour-mix would fork the palette into CSS.
+  --fm-onyx-radius: 0.625rem;
+}
+
+@media (max-width: 820px) {
+  :root { --fm-onyx-gutter: 1.25rem; }
+}
+
+// ---------------------------------------------------------------------------
+// Shared primitives used by several Onyx blocks.
+// ---------------------------------------------------------------------------
+
+.fm-onyx-band {
+  padding-inline: var(--fm-onyx-gutter);
+  padding-block: var(--fm-space-6);
+  background: var(--fm-canvas);
+}
+
+// The "01 / Treatments" kicker above most headings.
+.fm-onyx-eyebrow {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--fm-accent);
+  margin: 0;
+}
+
+// Display headings. Blocks set the size; this keeps the face and tracking in one place.
+.fm-onyx-display {
+  font-family: var(--fm-font-display);
+  font-weight: 500;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  margin: 0;
+  text-wrap: balance;
+}
+
+// A standing-in image well. Real media replaces it; until then it must still describe
+// itself, so the label is real text rather than a background pattern alone.
+.fm-onyx-plate {
+  display: flex;
+  align-items: flex-end;
+  padding: 1.5rem;
+  background-color: var(--fm-placeholder);
+  background-image: repeating-linear-gradient(
+    135deg,
+    rgb(16 16 16 / 4.5%) 0 10px,
+    transparent 10px 20px
+  );
+  border-radius: var(--fm-onyx-radius);
+  overflow: hidden;
+
+  &__label {
+    font-family: var(--fm-font-mono);
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--fm-muted);
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  // With a real image in it the well is just a frame.
+  &:has(img) { padding: 0; background-image: none; }
+}
+
+// The one link style the design repeats — a rule under the label, arrow appended.
+.fm-onyx-textlink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  align-self: flex-start;
+  font-size: var(--fm-text-md);
+  font-weight: 500;
+  color: var(--fm-ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--fm-accent-soft);
+  // 44px tap target without pushing the rule away from the text (§8).
+  padding-block: 0.6875rem;
+  min-height: 44px;
+
+  &:hover,
+  &:focus-visible { border-bottom-color: var(--fm-ink); }
+}
+
+// Solid button used inside bands that already sit on canvas.
+.fm-onyx-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.875rem 1.625rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: var(--fm-accent);
+  color: var(--fm-on-accent);
+  font: inherit;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible { background: var(--fm-ink); color: var(--fm-on-inverse); }
+
+  &--light {
+    background: var(--fm-canvas);
+    color: var(--fm-ink);
+
+    &:hover,
+    &:focus-visible { background: var(--fm-accent-soft); color: var(--fm-on-accent); }
+  }
+}
+
+// ---------------------------------------------------------------------------
+
+@font-face { font-family: 'Archivo'; font-style: normal; font-weight: 400 600; font-display: swap; src: url('./assets/fonts/archivo-latin.woff2') format('woff2'); }
+@font-face { font-family: 'Instrument Sans'; font-style: normal; font-weight: 400 500; font-display: swap; src: url('./assets/fonts/instrument-sans-latin.woff2') format('woff2'); }
+
+// Onyx uses full-width bands; the shared page shell must not add a second gutter.
+.fm-main, .fm-main > .wp-block-post-content, .fm-main .wp-block-post-content > * { max-width: none; margin-block: 0; }
+.fm-onyx-display { text-wrap: initial; }
+.wp-site-blocks *, .wp-site-blocks *::before, .wp-site-blocks *::after { box-sizing: border-box; }
+.fm-onyx-feature .fm-onyx-feature__plate {
+  background-color: var(--fm-inverse-line);
+  background-image: repeating-linear-gradient(135deg, color-mix(in srgb, var(--fm-on-inverse) 5%, transparent) 0 10px, transparent 10px 20px);
+}
+.fm-onyx-hero__plate { border-radius: 0; }
+.fm-onyx-header { position: fixed; inset: 0 0 auto; z-index: 200; display: flex; align-items: center; justify-content: space-between; padding: 18px var(--fm-onyx-gutter); background: color-mix(in srgb, var(--fm-canvas) 82%, transparent); backdrop-filter: blur(14px); border-bottom: 1px solid var(--fm-line); }
+body.admin-bar .fm-onyx-header { top: 32px; }
+.fm-onyx-brand { display: flex; align-items: center; gap: 12px; color: var(--fm-ink); text-decoration: none; min-height: 44px; }
+.fm-onyx-brand__dot { width: 9px; height: 9px; border-radius: 50%; background: var(--fm-accent-soft); }
+.fm-onyx-brand__name { font: 600 20px var(--fm-font-display); letter-spacing: -.02em; }
+.fm-onyx-brand__descriptor { font-size: 11px; letter-spacing: .24em; text-transform: uppercase; color: var(--fm-muted); padding-left: 10px; border-left: 1px solid var(--fm-line); }
+.fm-onyx-brand__logo { width: auto; max-width: 180px; max-height: 44px; }
+.fm-onyx-header__nav { display: flex; gap: 8px; align-items: center; }
+.fm-onyx-header__nav a { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; font-size: 13px; letter-spacing: .04em; padding: 9px 16px; border-radius: 6px; color: var(--fm-ink); text-decoration: none; white-space: nowrap; }
+.fm-onyx-header__nav a:hover { background: var(--fm-line); }
+.fm-onyx-header__nav .fm-onyx-header__cta { margin-left: 10px; padding-inline: 22px; background: var(--fm-ink); color: var(--fm-on-inverse); }
+.fm-onyx-header__item { display: flex; flex-direction: column; }
+.fm-onyx-header__child { font-size: 12px; }
+.fm-onyx-footer { border-top: 1px solid var(--fm-line); padding: 70px var(--fm-onyx-gutter) 36px; display: flex; flex-direction: column; gap: 50px; }
+.fm-onyx-footer__grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr; gap: 40px; }
+.fm-onyx-footer__grid > div { display: flex; flex-direction: column; align-items: flex-start; }
+.fm-onyx-footer__brand { font: 600 22px var(--fm-font-display); letter-spacing: -.02em; margin-bottom: 14px; }
+.fm-onyx-footer p { font-size: 15px; line-height: 1.65; color: var(--fm-muted); margin: 0; max-width: 32ch; }
+.fm-onyx-footer h2 { font: 400 12px var(--fm-font-body); letter-spacing: .16em; text-transform: uppercase; color: var(--fm-muted); margin: 0 0 4px; }
+.fm-onyx-footer a { display: inline-flex; align-items: center; min-height: 44px; min-width: 44px; font-size: 15px; color: var(--fm-ink); text-decoration: none; }
+.fm-onyx-footer__legal { display: flex; justify-content: space-between; gap: 20px; padding-top: 22px; border-top: 1px solid var(--fm-line); font-size: 12px; letter-spacing: .06em; color: var(--fm-muted); flex-wrap: wrap; }
+@media (max-width: 820px) {
+ .fm-onyx-header { position: relative; flex-wrap: wrap; gap: 8px; padding-block: 12px; }
+ body.admin-bar .fm-onyx-header { top: 0; }
+ .fm-onyx-header__nav { flex-wrap: wrap; gap: 0; }
+ .fm-onyx-header__nav a { padding-inline: 10px; }
+ .fm-onyx-header__nav .fm-onyx-header__cta { margin-left: 0; }
+ .fm-onyx-footer__grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+}
+@media (max-width: 480px) { .fm-onyx-footer__grid { grid-template-columns: 1fr; } }

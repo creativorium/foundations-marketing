@@ -1,0 +1,30 @@
+{
+  "$comment": "Media the importer sideloads, and how the page files refer to it. Page files never carry a real attachment id or URL — those do not survive a move between sites — so they carry a token and the importer swaps it for the value it got on sideload. See fixtures/base-three-page/README.md, 'Import tokens'.",
+
+  "tokens": {
+    "media": "{{media:<filename>|url}} or {{media:<filename>|id}}",
+    "page": "{{page:<slug>|url}} or {{page:<slug>|id}}"
+  },
+
+  "$status": "BOTH FILES ARE PLACEHOLDERS, not photography. They are drawn as the same hatched plate the design uses for an empty image slot, so neither can be mistaken for a real clinic photo. They are real files on purpose: shipping the slots empty would leave the attachment-id remapping path — the one an install most often gets wrong — untested at import (fixtures/base-three-page/README.md). Replace both with licensed, compressed photography before this design is released.",
+
+  "files": [
+    {
+      "file": "onyx-hero.webp",
+      "title": "Onyx clinic hero",
+      "alt": "Aesthetics clinic website template by Foundations Marketing, showing the treatment room of a single-practitioner clinic",
+      "usedBy": ["content/pages/home.blocks.txt"],
+      "placeholder": true
+    },
+    {
+      "file": "onyx-practitioner.webp",
+      "title": "Onyx lead practitioner",
+      "alt": "Lead practitioner at the clinic — aesthetics clinic website template by Foundations Marketing",
+      "usedBy": [
+        "content/pages/home.blocks.txt",
+        "content/pages/about.blocks.txt"
+      ],
+      "placeholder": true
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "$comment": "Menus link by page SLUG. The importer resolves each to the page id it just created and stores ids, because an absolute URL would still point at our dev site after install (theme-customer-base/inc/settings-contract.php, fm_nav_url()).",
+  "nav_primary": [
+    {
+      "label": "Home",
+      "page": "home"
+    },
+    {
+      "label": "Treatments",
+      "page": "treatments"
+    },
+    {
+      "label": "About",
+      "page": "about"
+    },
+    {
+      "label": "Contact",
+      "page": "contact"
+    }
+  ],
+  "nav_footer": [
+    {
+      "label": "Privacy policy",
+      "page": "privacy"
+    },
+    {
+      "label": "Contact",
+      "page": "contact"
+    },
+    {
+      "label": "Complaints",
+      "page": "privacy"
+    }
+  ]
+}

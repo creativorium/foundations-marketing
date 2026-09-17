@@ -1,0 +1,433 @@
+@use '../../fonts';
+// The palette lives in theme.json; all components use the customer token contract.
+.meridian {
+  --fm-warm: var(--wp--preset--color--warm);
+  box-sizing: border-box; font-family: var(--fm-font-body); color: var(--fm-ink);
+  font-size: 1rem; font-weight: 400; line-height: 1.7; letter-spacing: 0; overflow-wrap: anywhere;
+  *, *::before, *::after { box-sizing: border-box; }
+  h1,h2,h3,p,figure,blockquote,ul,ol,dl,dd { margin: 0; }
+  h1,h2,h3 { font-family: var(--fm-font-body); font-weight: 600; color: inherit; }
+  h1 { font-size: clamp(2.875rem,6vw,4.875rem); line-height: 1.02; letter-spacing: -.035em; }
+  h2 { font-size: clamp(2rem,3.8vw,3.125rem); line-height: 1.12; letter-spacing: -.025em; }
+  h3 { font-size: 1.3125rem; line-height: 1.3; }
+  em { font-family: var(--fm-font-display); color: var(--fm-accent); font-weight: 400; }
+  a { color: inherit; text-decoration: none; transition: opacity .2s ease; }
+  a:hover { opacity: .65; text-decoration: none; }
+  button,input,textarea { font: inherit; }
+  a,button,input,textarea,summary { &:focus-visible { outline: 3px solid currentColor; outline-offset: 4px; } }
+  img { display: block; max-width: 100%; }
+  [hidden] { display: none !important; }
+}
+.wp-site-blocks:has(.meridian) { padding: 0; background: var(--fm-canvas); }
+.fm-main:has(.meridian), .entry-content:has(.meridian) { padding: 0; margin: 0; max-width: none; }
+.is-layout-constrained > .meridian, .is-layout-constrained > .wp-block-post-content:has(.meridian) { max-width: none; margin-block: 0; }
+.meridian-container { width: 100%; max-width: 74rem; margin-inline: auto; }
+.meridian-section { padding: 6.875rem 2.5rem; scroll-margin-top: 7rem; background: var(--fm-canvas); }
+.meridian .meridian-eyebrow { font-size: .8125rem; font-weight: 600; letter-spacing: .04em; color: var(--fm-accent); margin-bottom: 1.25rem; }
+.meridian .meridian-body { margin-top: 1.5rem; font-size: 1.0625rem; line-height: 1.8; color: var(--fm-muted); max-width: 34rem; }
+.meridian-actions { display: flex; flex-wrap: wrap; gap: .875rem; margin-top: 2.375rem; }
+.meridian .meridian-button { display: inline-flex; justify-content: center; align-items: center; min-height: 3rem; padding: 1rem 1.875rem; border-radius: 999px; background: var(--fm-ink); color: var(--fm-canvas); border: 1.5px solid transparent; font-size: .875rem; font-weight: 600; text-align: center; line-height: 1.35; cursor: pointer; transition: opacity .2s ease; }
+.meridian .meridian-button:hover { opacity: .65; text-decoration: none; }
+.meridian .meridian-button--outline { background: transparent; border-color: var(--fm-line); color: var(--fm-ink); }
+.meridian-header { position: fixed; z-index: 100; top: 0; left: 0; right: 0; padding: 1.125rem 1.5rem; }
+.admin-bar .meridian-header { top: 32px; }
+.meridian-header__bar { max-width: 67.5rem; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 1.75rem; padding: .75rem .75rem .75rem 1.5rem; border-radius: 999px; background: var(--fm-ink); color: var(--fm-canvas); box-shadow: 0 .4rem 2rem color-mix(in srgb,var(--fm-ink) 10%,transparent); }
+.meridian-brand { font-size: 1.1875rem; font-weight: 600; letter-spacing: -.01em; line-height: 1.2; }
+a.meridian-brand { min-height: 44px; display: flex; align-items: center; }
+.meridian-brand img { max-width: 10rem; max-height: 44px; width: auto; }
+.meridian-nav ul { list-style: none; padding: 0; display: flex; gap: 1.5rem; }
+.meridian-nav li { position: relative; }
+.meridian-nav a { font-size: .8125rem; font-weight: 500; display: flex; align-items: center; min-height: 44px; }
+.meridian-nav li > ul { display: none; position: absolute; padding: 1rem; background: var(--fm-ink); min-width: 10rem; }
+.meridian-nav li:hover > ul,.meridian-nav li:focus-within > ul { display: grid; }
+.meridian .meridian-header__cta { background: var(--fm-accent); color: var(--fm-on-accent); font-size: .8125rem; padding: .6875rem 1.375rem; white-space: nowrap; }
+.meridian-menu-toggle { display: none; }
+.meridian-menu-close,.meridian-nav__mobile-cta { display: none; }
+.meridian-hero { display: grid; grid-template-columns: 1.05fr .95fr; min-height: 94vh; background: var(--fm-canvas); }
+.meridian-hero__text { display: flex; flex-direction: column; justify-content: center; padding: 9.375rem 3.5rem 3.75rem 2.5rem; }
+.meridian-hero__text .meridian-body { max-width: 26.25rem; }
+.meridian-hero__image { position: relative; min-width: 0; }
+.meridian-hero__image > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.meridian-badge { position: absolute; left: 1.75rem; bottom: 2.25rem; padding: 1rem 1.25rem; background: var(--fm-accent); color: var(--fm-on-accent); border-radius: 1.25rem; transform: rotate(-6deg); box-shadow: 0 .75rem 1.5rem color-mix(in srgb,var(--fm-ink) 25%,transparent); }
+.meridian-badge strong { display: block; font-size: 1.375rem; line-height: 1.1; }
+.meridian-badge span { display: block; font-size: .625rem; text-transform: uppercase; letter-spacing: .06em; }
+.meridian-credentials { padding: 1.625rem 2.5rem; background: var(--fm-canvas); }
+.meridian-credentials ul { display: flex; flex-wrap: wrap; gap: .875rem 2.5rem; justify-content: center; padding: 0; list-style: none; font-size: .75rem; font-weight: 600; letter-spacing: .04em; color: var(--fm-muted); }
+.meridian-story { display: grid; grid-template-columns: .85fr 1.15fr; gap: 4.375rem; align-items: center; }
+.meridian-story__image { border-radius: 46% 54% 58% 42%/48% 46% 54% 52%; overflow: hidden; aspect-ratio: 1; background: var(--fm-surface); }
+.meridian-story__image img { width: 100%; height: 100%; object-fit: cover; }
+.meridian .meridian-signature { margin-top: 1.75rem; font: italic 1.5rem var(--fm-font-display); color: var(--fm-accent); }
+.meridian-conditions { background: var(--fm-ink); color: var(--fm-canvas); }
+.meridian-conditions .meridian-eyebrow { color: var(--fm-warm); }
+.meridian-conditions h2 { max-width: 40rem; }
+.meridian-conditions .meridian-body { color: var(--fm-canvas); opacity: .8; max-width: 28rem; font-size: .9375rem; }
+.meridian-pills { display: flex; flex-wrap: wrap; gap: .875rem; list-style: none; padding: 0; margin-top: 3rem !important; }
+.meridian-pills li { background: color-mix(in srgb,var(--fm-canvas) 10%,transparent); padding: 1rem 1.625rem; border-radius: 999px; font-weight: 500; }
+.meridian-pills li:nth-child(3n+1) { background: var(--fm-accent); color: var(--fm-on-accent); }
+.meridian-centered { text-align: center; max-width: 40rem; margin: 0 auto 2.75rem; }
+.meridian-steps { display: flex; justify-content: center; gap: 1.375rem; overflow-x: auto; padding: .25rem .25rem 1.25rem !important; list-style: none; scroll-snap-type: x mandatory; }
+.meridian-steps li { flex: 0 0 18.75rem; background: var(--fm-surface); border: 1px solid var(--fm-line); border-radius: 1.75rem; padding: 2.125rem 1.75rem; scroll-snap-align: start; }
+.meridian-step-number { font: italic 2.75rem var(--fm-font-display); color: var(--fm-accent); }
+.meridian-steps h3 { margin: 1rem 0 .625rem; }
+.meridian-steps p { color: var(--fm-muted); font-size: .9375rem; line-height: 1.75; }
+.meridian-review { max-width: 47.5rem; margin: auto; background: var(--fm-surface); border: 1px solid var(--fm-line); border-radius: 2rem; padding: 4rem 3rem; text-align: center; }
+.meridian-review > img { width: 66px; height: 66px; object-fit: cover; border-radius: 50%; margin: 0 auto 1.5rem; }
+.meridian-review blockquote { padding: 0; border: 0; font: italic clamp(1.375rem,2.6vw,2rem)/1.4 var(--fm-font-display); }
+.meridian-review figcaption { margin-top: 1.375rem; color: var(--fm-muted); font-size: .8125rem; }
+.meridian-dots { display: flex; justify-content: center; gap: 0; margin-top: .375rem; }
+.meridian-dots button { display: grid; place-items: center; width: 44px; height: 44px; margin-inline: -10px; border: 0; background: transparent; cursor: pointer; }
+.meridian-dots span { width: 8px; height: 8px; border-radius: 999px; background: rgba(42,33,24,.2); transition: background-color .2s ease; }
+.meridian-dots [aria-pressed=true] span { background: var(--fm-accent); }
+.meridian-faq { max-width: 51.25rem; margin: auto; }
+.meridian-faq details { border-top: 1px solid var(--fm-line); }
+.meridian-faq details:last-child { border-bottom: 1px solid var(--fm-line); }
+.meridian-faq summary { display: flex; justify-content: space-between; gap: 1.25rem; padding: 1.5rem .25rem; font-size: 1.125rem; font-weight: 600; cursor: pointer; list-style: none; }
+.meridian-faq summary::-webkit-details-marker { display: none; }
+.meridian-faq summary span { color: var(--fm-accent); }
+.meridian-faq details[open] summary span { transform: rotate(45deg); }
+.meridian-faq details p { padding: 0 .25rem 1.5rem; max-width: 38rem; color: var(--fm-muted); font-size: .9375rem; }
+.meridian-booking-wrap { padding-top: 0; }
+.meridian-booking { max-width: 62.5rem; margin: auto; background: var(--fm-accent); color: var(--fm-on-accent); border-radius: 2.25rem; padding: 4.375rem 3.5rem; display: grid; grid-template-columns: 1fr 1fr; gap: 3.125rem; }
+.meridian-booking h2 { font-size: clamp(1.75rem,3.2vw,2.5rem); }
+.meridian-booking .meridian-eyebrow { color: inherit; }
+.meridian-booking p { margin-top: 1.125rem; font-size: .9375rem; }
+.meridian-booking form { display: grid; gap: 1rem; align-content: start; min-width: 0; }
+.meridian-booking label { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.meridian-booking input,.meridian-booking textarea { width: 100%; min-width: 0; border: 0; outline: 1px solid transparent; background: rgba(247,239,226,.15); color: var(--fm-on-accent); border-radius: .875rem; padding: .9375rem 1.125rem; font-size: .9375rem; font-weight: 400; line-height: 1.4; transition: background-color .2s ease, outline-color .2s ease; }
+.meridian-booking input:hover,.meridian-booking textarea:hover { background: rgba(247,239,226,.2); }
+.meridian-booking input:focus,.meridian-booking textarea:focus { outline-color: rgba(247,239,226,.75); }
+.meridian-booking textarea { resize: vertical; }
+.meridian-booking ::placeholder { color: var(--fm-on-accent); opacity: .85; }
+.meridian-booking .meridian-form-note { font-size: .75rem; margin-top: .25rem; }
+.meridian-page-hero { padding: 10rem 2.5rem 4rem; background: var(--fm-canvas); }
+.meridian-page-hero h1 { max-width: 55rem; }
+.meridian-contact { display: grid; grid-template-columns: repeat(4,1fr); gap: 2rem; }
+.meridian-contact dt { text-transform: uppercase; letter-spacing: .06em; font-size: .75rem; color: var(--fm-accent); margin-bottom: .625rem; }
+.meridian-contact a { display: inline-flex; align-items: center; min-height: 44px; }
+.meridian-policy { max-width: 47.5rem; margin: auto; }
+.meridian-policy section+section { margin-top: 2.5rem; }
+.meridian-policy h2 { font-size: 1.5rem; margin-bottom: .75rem; }
+.meridian-policy p { color: var(--fm-muted); }
+.meridian-footer { padding: 0 2.5rem 2.5rem; background: var(--fm-canvas); }
+.meridian-footer__row { border-top: 1px solid var(--fm-line); padding-top: 2.5rem; display: flex; justify-content: space-between; gap: 2rem; }
+.meridian-footer__row p+p { font-size: .875rem; color: var(--fm-muted); margin-top: .625rem; }
+.meridian-footer nav { display: flex; flex-wrap: wrap; align-items: start; gap: 1.375rem; font-size: .8125rem; font-weight: 500; }
+.meridian-footer a,.meridian-footer nav button { display: inline-flex; min-height: 44px; align-items: center; }
+.meridian-footer nav button { padding: 0; border: 0; background: transparent; color: inherit; font: inherit; cursor: pointer; transition: opacity .2s ease; }
+.meridian-footer nav button:hover { opacity: .65; }
+.meridian .meridian-footer__credit { margin-top: 1.5rem; color: var(--fm-muted); font-size: .75rem; }
+.meridian-overlay-open { overflow: hidden; }
+.meridian-overlay { position: fixed; inset: 0; z-index: 980; overflow-y: auto; background: var(--fm-ink); color: var(--fm-canvas); animation: meridian-rise .3s ease both; }
+.meridian-overlay--privacy { background: var(--fm-canvas); color: var(--fm-ink); }
+.meridian-overlay__close { position: fixed; z-index: 2; top: 1.5rem; right: 2rem; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: inherit; font: 400 1.875rem/1 var(--fm-font-body); cursor: pointer; transition: opacity .2s ease; }
+.meridian-overlay__close:hover { opacity: .65; }
+.meridian-overlay__inner { max-width: 51.25rem; margin: auto; padding: 7.5rem 2.5rem 6.25rem; }
+.meridian-overlay__inner h2 { font-size: clamp(2.125rem,5vw,3.625rem); line-height: 1.1; }
+.meridian-overlay--contact .meridian-eyebrow { color: var(--fm-warm); }
+.meridian-overlay__contact { display: grid; grid-template-columns: repeat(auto-fit,minmax(13.75rem,1fr)); gap: 2rem; margin-top: 3rem !important; }
+.meridian-overlay__contact dt { margin-bottom: .625rem; color: rgba(247,239,226,.5); font-size: .6875rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
+.meridian-overlay__contact dd { font-size: 1rem; line-height: 1.75; }
+.meridian-overlay__contact a { display: inline-flex; min-height: 44px; align-items: center; }
+.meridian-overlay__inner--privacy { max-width: 47.5rem; }
+.meridian-overlay__date { margin-top: .75rem !important; color: var(--fm-muted); font-size: .8125rem; }
+.meridian-overlay__policy { display: grid; gap: 1.875rem; margin-top: 2.75rem; color: #3F392E; font-size: .9375rem; line-height: 1.8; }
+.meridian-overlay__policy h3 { margin-bottom: .5rem; font-size: 1.25rem; }
+@keyframes meridian-rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@media(max-width:1024px) {
+  .meridian-header__bar { gap: .75rem; }
+  .meridian-brand { font-size: 1rem; }
+  .meridian-nav ul { gap: .75rem; }
+  .meridian-steps { justify-content: flex-start; }
+  .meridian-story { gap: 2.5rem; }
+}
+@media(max-width:820px) {
+  .meridian-section { padding: 4rem 1.375rem; }
+  .meridian-header { padding: .75rem 1.375rem; }
+  .meridian-header__bar { padding: .75rem 1rem; border-radius: 999px; }
+  .meridian-header .meridian-header__cta { padding: .75rem 1rem; font-size: .75rem; }
+  .meridian-header .meridian-brand { max-width: 9rem; }
+  .meridian-nav { display: none; }
+  .meridian-header[data-open] .meridian-nav { position: fixed; inset: 0; z-index: 950; display: flex; flex-direction: column; justify-content: center; padding: 2.5rem; background: var(--fm-ink); color: var(--fm-canvas); animation: meridian-rise .3s ease both; }
+  .meridian-header[data-open] .meridian-nav ul { display: flex; flex-direction: column; align-items: flex-start; gap: .625rem; }
+  .meridian-header[data-open] .meridian-nav a { min-height: 44px; font-size: clamp(2rem,10vw,2.375rem); font-weight: 600; line-height: 1.15; }
+  .meridian-header[data-open] .meridian-nav__mobile-cta { display: block; }
+  .meridian-header[data-open] .meridian-nav__mobile-cta a { color: var(--fm-accent); }
+  .meridian-header[data-open] .meridian-menu-close { position: absolute; top: 1.5rem; right: 1.75rem; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: inherit; font: 400 1.875rem/1 var(--fm-font-body); cursor: pointer; }
+  .meridian-header[data-enhanced] .meridian-menu-toggle { display: flex; flex-direction: column; justify-content: center; gap: 4px; flex-shrink: 0; width: 44px; height: 44px; padding: 12px; background: transparent; color: inherit; border: 0; cursor: pointer; }
+  .meridian-menu-toggle span { display: block; width: 20px; height: 1.5px; background: currentColor; }
+  .meridian-hero { grid-template-columns: 1fr; min-height: 0; }
+  .meridian-hero__text { padding: 9rem 1.5rem 3.125rem; }
+  .meridian-hero__image { height: 52vh; min-height: 19rem; }
+  .meridian-badge { display: none; }
+  .meridian-story { grid-template-columns: 1fr; }
+  .meridian-story__image { max-width: 32rem; width: 100%; margin: auto; }
+  .meridian-review { padding: 3rem 1.5rem; }
+  .meridian-booking-wrap { padding-top: 0; }
+  .meridian-booking { grid-template-columns: 1fr; padding: 2.75rem 1.5rem; gap: 2rem; }
+  .meridian-contact { grid-template-columns: repeat(2,1fr); }
+  .meridian-footer { padding-inline: 1.375rem; }
+  .meridian-footer__row { flex-direction: column; }
+  .meridian-page-hero { padding: 9rem 1.375rem 2rem; }
+  .meridian-overlay__inner { padding: 7.5rem 2.5rem 6.25rem; }
+}
+@media(max-width:560px) {
+  .meridian-header { padding-inline: .75rem; }
+  .meridian-header__bar { gap: .35rem; padding-inline: .875rem; }
+  .meridian-header .meridian-brand { max-width: 6rem; font-size: .875rem; }
+  .meridian-contact { grid-template-columns: 1fr; }
+  .meridian-pills { gap: .625rem; }
+  .meridian-pills li { padding: .75rem 1.125rem; font-size: .875rem; }
+  .meridian-overlay__inner { padding-inline: 1.5rem; }
+}
+@media(prefers-reduced-motion:reduce) { .meridian *, .meridian *::before,.meridian *::after { scroll-behavior: auto; transition: none; animation: none; } }
+
+/* Meridian Classic: restrained, editorial shell from the supplied design. */
+.meridian { --fm-font-display: 'Cormorant Garamond', Georgia, serif; --fm-font-body: 'Manrope', system-ui, sans-serif; --fm-accent: #63715A; --fm-canvas: #EFEAE0; --fm-surface: #F7F3EA; --fm-ink: #2F2E29; --fm-muted: #57544A; --fm-line: rgba(47,46,41,.18); }
+.meridian h1,.meridian h2,.meridian h3 { font-family: var(--fm-font-display); font-weight: 500; letter-spacing: 0; }
+.meridian-header { position: relative; padding: 0 2.5rem; background: var(--fm-canvas); }
+.meridian-header__inner { max-width: 67.5rem; min-height: 5rem; margin: auto; padding: 0; border-radius: 0; border: 0; border-bottom: 1px solid var(--fm-line); box-shadow: none; }
+.meridian-header__brand { font: 500 1.375rem/1 var(--fm-font-display); letter-spacing: .06em; text-transform: uppercase; }
+.meridian-header__nav a { font-size: .8125rem; font-weight: 500; }
+.meridian-header__cta { color: inherit; border: 0; border-bottom: 1.5px solid var(--fm-accent); border-radius: 0; padding: .75rem 0; background: transparent; }
+.meridian-header__cta:hover { background: transparent; opacity: .6; }
+.meridian-hero { min-height: 35rem; border-radius: 0; }
+.meridian-hero__copy { max-width: 67.5rem; margin: 0 auto; padding: 0 3.5rem 3.5rem; align-self: end; }
+.meridian-hero__copy h1 { max-width: 51rem; font-size: clamp(2.5rem,6.4vw,5.375rem); color: #EFEAE0; }
+.meridian-hero__copy .meridian-eyebrow { color: #EFEAE0; }
+.meridian-credentials { padding: 3.125rem 2.5rem; font-size: .6875rem; letter-spacing: .14em; }
+.meridian-story,.meridian-booking { max-width: 67.5rem; border-radius: 0; }
+.meridian-story { gap: 5rem; }
+.meridian-conditions li { border-radius: 0; border-width: 0 0 1px; background: transparent; }
+.meridian-steps { display:grid; grid-template-columns:repeat(2,1fr); gap:2.5rem 3.75rem; overflow:visible; padding:0 !important; }
+.meridian-steps li { padding:0 0 0 1.75rem; border:0; border-left:1px solid var(--fm-accent); border-radius:0; background:transparent; }
+.meridian-review { border:0; border-radius:0; background:transparent; }
+.meridian-booking { background: transparent; color: var(--fm-ink); padding: 0; }
+.meridian-booking input,.meridian-booking textarea { color:var(--fm-ink); background:transparent; border:0; border-bottom:1px solid var(--fm-line); border-radius:0; padding:.625rem 0; }
+.meridian-booking ::placeholder { color:var(--fm-muted); }
+.meridian-booking button { background:var(--fm-ink); color:var(--fm-canvas); border-radius:0; }
+.meridian-footer { text-align:center; }
+@media(max-width:900px){ .meridian-header{padding:0 1.5rem}.meridian-hero__copy{padding:0 1.5rem 2.5rem}.meridian-steps{grid-template-columns:1fr}.meridian-story{gap:2.5rem} }
+
+.meridian-header { position: relative; padding: 0 2.5rem; background: var(--fm-canvas); }
+.meridian-header__bar { max-width: 67.5rem; min-height: 5rem; margin: auto; padding: 0; border: 0; border-bottom: 1px solid var(--fm-line); border-radius: 0; background: transparent; color: var(--fm-ink); box-shadow: none; }
+.meridian-brand { font: 500 1.375rem/1 var(--fm-font-display); letter-spacing: .06em; text-transform: uppercase; }
+.meridian .meridian-header__cta { padding: .75rem 0; border: 0; border-bottom: 1.5px solid var(--fm-accent); border-radius: 0; background: transparent; color: var(--fm-ink); }
+.meridian .meridian-header__cta:hover { background: transparent; opacity: .6; }
+.meridian-story__image { aspect-ratio: 4/5; border-radius: 0; }
+.meridian-story__media figcaption { margin-top: .875rem; color: #8B8574; font: italic 400 .75rem/1.5 var(--fm-font-display); }
+.meridian-conditions { background: var(--fm-canvas); color: var(--fm-ink); }
+.meridian-conditions .meridian-eyebrow { color: var(--fm-muted); }
+.meridian-conditions .meridian-body { color: var(--fm-muted); opacity: 1; }
+.meridian-pills { display: block; max-width: 51.25rem; margin-inline: auto; }
+.meridian-pills li,.meridian-pills li:nth-child(3n+1) { padding: 1.375rem 0; border-bottom: 1px solid var(--fm-line); border-radius: 0; background: transparent; color: var(--fm-ink); font: 500 1.5rem/1.3 var(--fm-font-display); }
+.meridian-review > img { display: none; }
+@media(max-width:820px){ .meridian-header{padding:0 1.5rem}.meridian-header__bar{min-height:4.5rem;border-radius:0;padding:0}.meridian-header[data-open] .meridian-nav{background:var(--fm-canvas);color:var(--fm-ink)} }
+
+/* Layout parity with the supplied Meridian Classic reference. */
+.meridian { font-weight: 400; }
+.meridian h1,.meridian h2,.meridian h3 { font-family: var(--fm-font-display); font-weight: 500; letter-spacing: 0; }
+.meridian .meridian-eyebrow { margin-bottom: .875rem; color: #8B8574; font-size: .6875rem; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; }
+.meridian-section { padding: 6.875rem 3.5rem; }
+.meridian-container { max-width: 67.5rem; }
+
+.meridian-hero { position: relative; display: block; height: 88vh; min-height: 35rem; overflow: hidden; }
+.meridian-hero__image { position: absolute; inset: 0; height: auto; }
+.meridian-hero__image > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+.meridian-hero__shade { position: absolute; inset: 0; background: linear-gradient(180deg,rgba(47,46,41,.05),rgba(47,46,41,.55)); }
+.meridian-hero__text { position: absolute; z-index: 1; inset: auto 0 0; display: block; padding: 0 3.5rem 3.5rem; color: var(--fm-canvas); }
+.meridian-hero__text .meridian-eyebrow { margin-bottom: 1.125rem; color: var(--fm-canvas); opacity: .85; font-size: .75rem; }
+.meridian-hero__text h1 { max-width: 51.25rem; color: var(--fm-canvas); font-size: clamp(2.5rem,6.4vw,5.375rem); line-height: 1.05; text-wrap: balance; }
+.meridian-hero__text em { color: inherit; }
+.meridian-hero-intro { padding: 3.75rem 3.5rem 0; text-align: center; }
+.meridian-hero-intro > div { max-width: 42.5rem; margin: auto; }
+.meridian-hero-intro p { color: var(--fm-muted); font-size: 1.0625rem; line-height: 1.85; }
+.meridian-hero-intro .meridian-actions { justify-content: center; gap: 1.75rem; margin-top: 1.875rem; }
+.meridian-hero-intro .meridian-actions a { min-height: 44px; display: inline-flex; align-items: center; border-bottom: 1.5px solid var(--fm-line); font-size: .875rem; font-weight: 600; }
+.meridian-hero-intro .meridian-actions a:first-child { border-color: var(--fm-accent); }
+.meridian-credentials { padding: 3.125rem 2.5rem; }
+.meridian-credentials ul { gap: .875rem 2.25rem; font-size: .6875rem; letter-spacing: .14em; text-transform: uppercase; color: #8B8574; }
+
+.meridian-story { grid-template-columns: .9fr 1.1fr; gap: 5rem; align-items: start; }
+.meridian-story .meridian-body { margin-top: 1.375rem; max-width: 32.5rem; font-size: 1rem; line-height: 1.9; }
+.meridian-story .meridian-body + .meridian-body { margin-top: .875rem; }
+.meridian .meridian-signature { margin-top: 1.625rem; font-size: 1.375rem; }
+
+.meridian-conditions { padding-top: 0; padding-bottom: 6.25rem; text-align: center; }
+.meridian-conditions .meridian-container { max-width: 51.25rem; }
+.meridian-conditions h2,.meridian-process h2,.meridian-faq-wrap h2 { font-size: clamp(1.875rem,3.6vw,2.875rem); line-height: 1.2; }
+.meridian-pills { margin-top: 3.125rem !important; text-align: left; border-top: 1px solid var(--fm-line); }
+.meridian-pills li,.meridian-pills li:nth-child(3n+1) { display: flex; align-items: baseline; justify-content: space-between; gap: 1.25rem; padding: 1.375rem 0; border-bottom: 1px solid var(--fm-line); }
+.meridian-pills li span { font: 500 1.5rem/1.3 var(--fm-font-display); }
+.meridian-pills li small { max-width: 20rem; color: #6B6759; font: 400 .875rem/1.6 var(--fm-font-body); text-align: right; }
+
+.meridian-process { background: #E4DDCC; }
+.meridian-process .meridian-container { max-width: 56.25rem; }
+.meridian-process .meridian-centered { margin-bottom: 3.75rem; }
+.meridian-steps { grid-template-columns: repeat(2,1fr); gap: 2.5rem 3.75rem; }
+.meridian-steps li { padding-left: 1.75rem; border-left: 1px solid var(--fm-accent); }
+.meridian-step-number { font-size: 1.875rem; }
+.meridian-steps h3 { margin: .5rem 0; font-size: 1.4375rem; }
+.meridian-steps p { font-size: .9375rem; line-height: 1.8; }
+
+.meridian-reviews { padding: 7.5rem 3.5rem; }
+.meridian-review { min-height: 13.75rem; max-width: 47.5rem; padding: 0; display: flex; flex-direction: column; justify-content: center; }
+.meridian-review__quote { color: var(--fm-accent); font: 400 4rem/.5 var(--fm-font-display); }
+.meridian-review blockquote { margin-top: 1.5rem; font-size: clamp(1.5rem,3vw,2.25rem); line-height: 1.4; }
+.meridian-review figcaption { margin-top: 1.375rem; color: #8B8574; font-size: .75rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; }
+.meridian-review__nav { display: flex; justify-content: center; align-items: center; gap: 1.5rem; margin-top: 1.875rem; color: #8B8574; font-size: .8125rem; font-weight: 600; }
+.meridian-review__nav button { min-width: 44px; min-height: 44px; padding: 0; border: 0; background: transparent; color: inherit; cursor: pointer; }
+.meridian-review__nav button:hover { color: var(--fm-ink); }
+
+.meridian-faq-wrap { background: #E4DDCC; }
+.meridian-faq { max-width: 47.5rem; }
+.meridian-faq .meridian-centered { margin-bottom: 3rem; }
+.meridian-faq summary { padding: 1.375rem 0; font: 500 1.3125rem/1.4 var(--fm-font-display); }
+.meridian-faq details p { padding: 0 0 1.375rem; font-size: .9375rem; line-height: 1.85; }
+
+.meridian-booking-wrap { padding: 6.875rem 3.5rem; }
+.meridian-booking { grid-template-columns: .9fr 1.1fr; gap: 4.375rem; max-width: 67.5rem; align-items: center; }
+.meridian-booking__image { aspect-ratio: 4/5; overflow: hidden; }
+.meridian-booking__image img { width: 100%; height: 100%; object-fit: cover; }
+.meridian-booking__content > p:not(.meridian-eyebrow) { margin-top: .875rem; max-width: 26.25rem; color: var(--fm-muted); font-size: 1rem; line-height: 1.85; }
+.meridian-booking form { margin-top: 2.25rem; gap: 1.125rem; }
+.meridian-booking input,.meridian-booking textarea { padding: .625rem 0; border-bottom: 1px solid rgba(47,46,41,.3); font-size: 1rem; }
+.meridian-booking .meridian-button { justify-self: start; margin-top: .5rem; padding: .9375rem 2rem; border-radius: 0; font-size: .8125rem; letter-spacing: .06em; text-transform: uppercase; }
+.meridian-booking .meridian-form-note { margin-top: 0; font-size: .75rem; }
+
+.meridian-footer { padding: 3.75rem 3.5rem 2rem; border-top: 1px solid var(--fm-line); text-align: center; }
+.meridian-footer__row { display: block; padding: 0; border: 0; }
+.meridian-footer .meridian-brand { font-size: 1.25rem; letter-spacing: .12em; }
+.meridian-footer__row p + p { margin-top: .875rem; color: #6B6759; font-size: .875rem; line-height: 1.9; }
+.meridian-footer nav { justify-content: center; gap: 1.375rem; margin-top: 1.625rem; font-size: .75rem; font-weight: 600; }
+.meridian .meridian-footer__credit { margin-top: 1.625rem; color: #8B8574; font-size: .6875rem; }
+.meridian-overlay { background: var(--fm-canvas); color: var(--fm-ink); }
+.meridian-overlay__inner { text-align: center; }
+.meridian-overlay__contact { text-align: left; }
+.meridian-overlay__contact dt { color: #8B8574; }
+
+@media(max-width:900px){
+  .meridian-section { padding: 4.5rem 1.5rem; }
+  .meridian-header { padding: 0 1.5rem; }
+  .meridian-hero__text { padding: 0 1.25rem 2.5rem; }
+  .meridian-hero-intro { padding: 3.75rem 1.5rem 0; }
+  .meridian-story,.meridian-booking { grid-template-columns: 1fr; gap: 2.5rem; }
+  .meridian-conditions { padding-top: 0; }
+  .meridian-steps { grid-template-columns: 1fr; }
+  .meridian-steps li { padding: 1.625rem 0 0; border-top: 1px solid var(--fm-line); border-left: 0; }
+  .meridian-footer { padding-inline: 1.5rem; }
+}
+@media(max-width:560px){
+  .meridian-header { padding-inline: 1.5rem; }
+  .meridian-header .meridian-brand { max-width: none; font-size: 1rem; }
+  .meridian-header .meridian-header__cta { display: none; }
+  .meridian-hero { height: 78vh; }
+  .meridian-pills li { align-items: flex-start; flex-direction: column; }
+  .meridian-pills li small { text-align: left; }
+  .meridian-hero-intro .meridian-actions { gap: 1rem; }
+}
+
+/* Exact type, navigation and form details from Meridian-Classic.html. */
+html:has(.meridian) { scroll-behavior: smooth; }
+.meridian {
+  --fm-font-display: 'Cormorant Garamond', Georgia, serif;
+  --fm-font-body: 'Manrope', system-ui, sans-serif;
+  font-family: var(--fm-font-body);
+  font-weight: 300;
+}
+.meridian button,.meridian input,.meridian select,.meridian textarea { font-family: var(--fm-font-body); }
+.meridian-header { padding-inline: 2.5rem; }
+.meridian-header__bar { width: 100%; max-width: none; min-height: 4.375rem; }
+.meridian-nav ul { gap: 2rem; }
+.meridian-brand { font: 500 1.375rem/1 var(--fm-font-display); letter-spacing: .06em; }
+.meridian-header__nav a,.meridian-nav a { font-size: .8125rem; font-weight: 500; }
+.meridian .meridian-header__cta { min-height: 44px; font-weight: 600; }
+.meridian-hero-intro p,
+.meridian-story .meridian-body,
+.meridian-steps p,
+.meridian-faq details p,
+.meridian-booking__content > p:not(.meridian-eyebrow) { font-weight: 300; }
+.meridian-pills li small { font-weight: 300; }
+.meridian-step-number { color: var(--fm-accent); font: italic 400 1.875rem/1 var(--fm-font-display); }
+.meridian-booking input,.meridian-booking select,.meridian-booking textarea {
+  width: 100%;
+  min-width: 0;
+  padding: .625rem 0;
+  border: 0;
+  border-bottom: 1px solid rgba(47,46,41,.3);
+  border-radius: 0;
+  outline: 1px solid transparent;
+  background: transparent;
+  color: var(--fm-ink);
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.4;
+  transition: border-color .2s ease;
+}
+.meridian-booking select { appearance: auto; cursor: pointer; }
+.meridian-booking input:hover,.meridian-booking select:hover,.meridian-booking textarea:hover,
+.meridian-booking input:focus,.meridian-booking select:focus,.meridian-booking textarea:focus { border-bottom-color: var(--fm-ink); background: transparent; }
+.meridian-booking .meridian-form-note { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.meridian-footer__row p + p { font-weight: 300; }
+
+@media(max-width:900px){
+  .meridian-header { padding-inline: 1.5rem; }
+  .meridian-header__bar { min-height: 4.375rem; }
+}
+@media(prefers-reduced-motion:reduce){ html:has(.meridian) { scroll-behavior: auto; } }
+
+/* Final element-level parity with the supplied Classic composition. */
+.meridian-header__bar { justify-content: space-between; }
+.meridian-header .meridian-nav { margin-left: auto; }
+.meridian-header .meridian-nav ul { align-items: center; gap: 2rem; }
+.meridian-nav__desktop-cta a { min-height: 44px; border-bottom: 1.5px solid var(--fm-accent); font-weight: 600; }
+.meridian-story h2 { font-size: clamp(2rem,4vw,3.25rem); line-height: 1.15; }
+.meridian-conditions h2,.meridian-process h2,.meridian-faq-wrap h2 { font-size: clamp(1.875rem,3.6vw,2.875rem); line-height: 1.2; }
+.meridian-booking h2 { font-size: clamp(1.875rem,3.6vw,2.75rem); line-height: 1.2; }
+.meridian-booking select {
+  appearance: none;
+  padding-right: 1.75rem;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='m3.5 6 4.5 4 4.5-4' fill='none' stroke='%232F2E29' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right .125rem center;
+  background-size: 1rem 1rem;
+}
+.meridian-footer a,.meridian-footer nav button { min-height: 0; line-height: 1.4; }
+.meridian-footer nav { align-items: center; }
+.meridian-faq__icon { width: 18px; height: 18px; flex: 0 0 18px; color: var(--fm-accent); transition: transform .2s ease; }
+.meridian-faq__icon path,.meridian-review__nav svg path,.meridian-menu-close svg path,.meridian-overlay__close svg path { fill: none; stroke: currentColor; stroke-width: 1.25; stroke-linecap: round; stroke-linejoin: round; }
+.meridian-faq details[open] .meridian-faq__icon { transform: rotate(45deg); }
+.meridian-review__nav button { display: inline-flex; align-items: center; justify-content: center; gap: .3rem; }
+.meridian-review__nav svg { width: 16px; height: 16px; }
+.meridian-menu-close svg,.meridian-overlay__close svg { width: 24px; height: 24px; }
+.meridian-conditions h2 { width: fit-content; max-width: 100%; margin-inline: auto; text-align: center; }
+.meridian-nav__desktop-cta a,
+.meridian-hero-intro .meridian-actions a {
+  position: relative;
+  border-bottom: 0;
+}
+.meridian-nav__desktop-cta a::after,
+.meridian-hero-intro .meridian-actions a::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 9px;
+  left: 0;
+  height: 1.5px;
+  background: var(--fm-line);
+}
+.meridian-nav__desktop-cta a::after,
+.meridian-hero-intro .meridian-actions a:first-child::after { background: var(--fm-accent); }
+
+@media(max-width:820px){
+  .meridian-header .meridian-nav { margin-left: 0; }
+  .meridian-header[data-open] .meridian-nav__desktop-cta { display: none; }
+  .meridian-header[data-open] .meridian-nav ul { gap: 1rem; }
+  .meridian-header[data-open] .meridian-nav a { font-family: var(--fm-font-display); font-size: 2.125rem; font-weight: 400; }
+  .meridian-header[data-open] .meridian-nav__mobile-cta a { font-style: italic; }
+}
+
+@media(max-width:560px){
+  .meridian-pills li,.meridian-pills li:nth-child(3n+1) { flex-direction: row; align-items: baseline; gap: 1.25rem; padding: 1.375rem 0; }
+  .meridian-pills li span { flex: 0 1 42%; font-size: 1.5rem; }
+  .meridian-pills li small { flex: 1 1 58%; max-width: 20rem; text-align: right; }
+}

@@ -5,9 +5,11 @@
  * Reads the published Site Templates through fm_get_templates() rather than querying
  * anything here, so this file stays inside the component boundary.
  *
- * SEO: each card links to that template's demo page. Those internal links are the
- * strategy's §4 "homepage to services to each template" requirement, and they are how
- * the nine niche demo pages get discovered and pass authority.
+ * SEO: the card's name is the link, and it leads to the package builder with this
+ * template chosen. The demo sits beside it as a second link that opens in its own tab,
+ * so a buyer can look at the mini site without losing the page they were choosing from.
+ * Those internal links are the strategy's §4 "homepage to services to each template"
+ * requirement, and they are how the niche demo pages get discovered.
  *
  * Performance: card screenshots are below the fold, so they stay lazy. Only the hero
  * image is eager.
@@ -82,7 +84,17 @@ if ($compact) {
             $screen = 'var(--fm-screen-' . (($i % 9) + 1) . ')';
             ?>
             <li class="fm-template-grid__item" style="--fm-card-tint: <?php echo esc_attr($tint); ?>">
-                <a class="fm-template-card" href="<?php echo fm_url(fm_template_card_url($template)); ?>">
+                <?php
+                /*
+                 * Two destinations, so the card cannot be one anchor: an anchor inside an
+                 * anchor is invalid and browsers unnest it. The name carries the primary
+                 * link and its ::after stretches over the whole card, which keeps the
+                 * whole card clickable while the demo link stays separately reachable —
+                 * by mouse, by keyboard and by a screen reader's link list.
+                 */
+                $demo = fm_template_demo_url($template);
+                ?>
+                <div class="fm-template-card">
                     <span class="fm-template-card__frame">
                         <span class="fm-template-card__device">
                             <span class="fm-template-card__dot" aria-hidden="true"></span>
@@ -114,7 +126,11 @@ if ($compact) {
                             <span class="fm-template-card__niche"><?php echo esc_html($template['niche']); ?></span>
                         <?php endif; ?>
 
-                        <span class="fm-template-card__name"><?php echo esc_html($template['name']); ?></span>
+                        <span class="fm-template-card__name">
+                            <a class="fm-template-card__link" href="<?php echo fm_url(fm_template_card_url($template)); ?>">
+                                <?php echo esc_html($template['name']); ?>
+                            </a>
+                        </span>
 
                         <?php if (!$compact) : ?>
                             <?php if ($template['description'] !== '') : ?>
@@ -123,14 +139,25 @@ if ($compact) {
 
                             <span class="fm-template-card__meta">
                                 <span><?php echo esc_html($price_from); ?></span>
-                                <span class="fm-template-card__view">
-                                    <?php esc_html_e('View demo', 'foundations'); ?>
-                                    <span aria-hidden="true">&#8599;</span>
+                                <span class="fm-template-card__actions">
+                                    <?php if ($demo !== '') : ?>
+                                        <?php // data-fm-demo: main.js opens these with a script, so the demo tab can close itself again. ?>
+                                        <a class="fm-template-card__demo" href="<?php echo fm_url($demo); ?>"
+                                           target="_blank" rel="noopener" data-fm-demo>
+                                            <?php esc_html_e('View demo', 'foundations'); ?>
+                                            <span aria-hidden="true">&#8599;</span>
+                                            <span class="fm-sr-only"><?php esc_html_e('(opens in a new tab)', 'foundations'); ?></span>
+                                        </a>
+                                    <?php endif; ?>
+                                    <span class="fm-template-card__view">
+                                        <?php esc_html_e('Build this site', 'foundations'); ?>
+                                        <span aria-hidden="true">&rarr;</span>
+                                    </span>
                                 </span>
                             </span>
                         <?php endif; ?>
                     </span>
-                </a>
+                </div>
             </li>
         <?php endforeach; ?>
     </ul>

@@ -10,7 +10,7 @@
  * attributes (plugin/inc/checkout.php) — nothing here is trusted with money.
  */
 
-const NEXT_LABELS = ['Add extras', 'Review order', 'Pay and start'];
+const NEXT_LABELS = ['Add extras', 'Review order', 'Continue to checkout'];
 
 export default function initPackageBuilder() {
   const root = document.querySelector('[data-fm-builder]');
@@ -139,7 +139,41 @@ export default function initPackageBuilder() {
     });
   });
 
-  // Preview size.
+  // Preview size. The bezel changes shape in CSS; what changes here is the width the
+  // demo is actually rendered at, so the template's own breakpoints do the work.
+  const preview = root.querySelector('[data-fm-preview]');
+  const screenEl = root.querySelector('[data-fm-screen]');
+
+  let widths = { desktop: 1280, tablet: 834, mobile: 390 };
+
+  try {
+    widths = { ...widths, ...JSON.parse(frame?.dataset.fmWidths || '{}') };
+  } catch {
+    // A malformed attribute is not worth a broken preview; the defaults above match
+    // the ones render.php ships.
+  }
+
+  const fitPreview = () => {
+    if (!preview || !screenEl) {
+      return;
+    }
+
+    const box = screenEl.getBoundingClientRect();
+
+    // Zero while the aside is still laying out, or while the panel is hidden — a
+    // scale of 0 would blank the preview, so leave the last good one in place.
+    if (!box.width || !box.height) {
+      return;
+    }
+
+    const width = widths[frame.dataset.device] || widths.desktop;
+    const scale = box.width / width;
+
+    preview.style.setProperty('--fm-preview-w', String(width));
+    preview.style.setProperty('--fm-preview-h', String(Math.round(box.height / scale)));
+    preview.style.setProperty('--fm-preview-scale', String(scale));
+  };
+
   root.querySelectorAll('[data-fm-device]').forEach((btn) => {
     btn.addEventListener('click', () => {
       root.querySelectorAll('[data-fm-device]').forEach((other) => {
@@ -147,9 +181,18 @@ export default function initPackageBuilder() {
       });
       if (frame) {
         frame.dataset.device = btn.dataset.fmDevice || 'desktop';
+        fitPreview();
       }
     });
   });
+
+  if (preview && screenEl && 'ResizeObserver' in window) {
+    // The bezel is a percentage of the column, so it also changes on rotate, on a
+    // window resize, and once the aside's own fonts have loaded.
+    new ResizeObserver(fitPreview).observe(screenEl);
+  }
+
+  fitPreview();
 
   // What actually gets posted. Hidden inputs are written at submit time rather than
   // kept in sync on every click — one place to be wrong instead of many.

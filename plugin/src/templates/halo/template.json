@@ -1,0 +1,54 @@
+{
+  "$comment": "Halo — a single-practitioner skin studio. Built from doc/client-html/theme/Halo Template (standalone) (2).html and Halo Privacy Policy (standalone).html, rendered to doc/client-html/extracted/Halo.html and Halo-privacy.html. Shape per customer-runtime.md §2.",
+  "name": "Halo Skin Studio",
+  "slug": "halo",
+  "version": "0.1.0",
+  "niche": "Skincare clinic / facials / skin studio",
+  "category": "Wellness",
+  "description": "A quiet, warm design for a one-room skin studio. Serif display type on a sage palette, a priced treatment menu, memberships, and a UK GDPR privacy policy built in.",
+  "targetPhrase": "skincare clinic website design UK",
+  "demoSlug": "skincare-clinic-website-design",
+  "$seo": "Halo owns 'skincare clinic website design UK' in doc/SEO-AND-PERFORMANCE.md §Per-page targets. Onyx holds the aesthetics half of what used to be one row, so the two clinical designs never compete for a phrase (how-to-work.md §6a).",
+  "$pages": "Two pages in this version: the homepage the client drew, and the privacy policy they drew with it. About, Treatments and Contact are sections of the homepage in this design, not separate pages — adding them later is content, not code.",
+  "pages": [
+    "home",
+    "privacy"
+  ],
+  "settings": {
+    "$comment": "Extensions beyond the shared core in theme-customer-base/inc/settings-contract.php. Only fields this design's shell and blocks actually read (customer-runtime.md §5.3).",
+    "brand_label": {
+      "type": "text",
+      "label": "Wordmark",
+      "default": "Halo"
+    },
+    "opening_hours": {
+      "type": "text",
+      "label": "Opening hours",
+      "default": ""
+    },
+    "booking_url": {
+      "type": "url",
+      "label": "Booking link",
+      "default": ""
+    },
+    "practitioner_name": {
+      "type": "text",
+      "label": "Practitioner",
+      "default": ""
+    },
+    "instagram_handle": {
+      "type": "text",
+      "label": "Instagram handle",
+      "default": ""
+    }
+  },
+  "shell": {
+    "$comment": "Halo owns namespaced site-header/site-footer blocks and parts: the header is a translucent bar with an inline booking pill and the footer is a dark four-column band, neither of which the shared shell draws.",
+    "header": {
+      "block": "foundations/halo-site-header"
+    },
+    "footer": {
+      "block": "foundations/halo-site-footer"
+    }
+  }
+}

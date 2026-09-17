@@ -1,0 +1,115 @@
+// foundations/halo-menu
+
+.fm-halo-menu {
+  background: var(--fm-inverse);
+  color: var(--fm-on-inverse);
+
+  // The eyebrow's sage is tuned for the light canvas; on ink the design warms it.
+  &__eyebrow { color: var(--fm-warm); }
+
+  &__head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.5rem;
+    padding-bottom: var(--fm-space-4);
+  }
+
+  &__heading {
+    font-size: var(--wp--preset--font-size--xx-large);
+    color: var(--fm-on-inverse);
+  }
+
+  &__note {
+    margin: 0;
+    max-width: 30ch;
+    font-size: 1rem;
+    font-weight: 300;
+    // Not --fm-muted: muted ink on this band fails AA (how-to-work.md §8).
+    color: var(--fm-inverse-muted);
+    text-wrap: pretty;
+  }
+
+  &__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    counter-reset: fm-halo-menu;
+  }
+
+  &__row {
+    counter-increment: fm-halo-menu;
+    display: grid;
+    // number · name · description · duration · price
+    grid-template-columns: 3rem minmax(10rem, 1.1fr) minmax(0, 2fr) 6rem 5rem;
+    align-items: baseline;
+    gap: 1.5rem;
+    padding: 1.6rem 0;
+    border-top: 1px solid var(--fm-inverse-line);
+
+    &:last-child { border-bottom: 1px solid var(--fm-inverse-line); }
+
+    // The counter is the design's numbering, not information — a screen reader is told
+    // the list is ordered already, so this must not be read out twice.
+    &::before {
+      content: counter(fm-halo-menu, decimal-leading-zero);
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: var(--fm-inverse-soft);
+    }
+  }
+
+  &__name {
+    font-family: var(--fm-font-display);
+    font-size: 1.875rem;
+    line-height: 1.1;
+    color: var(--fm-on-inverse);
+  }
+
+  &__body {
+    font-size: 0.9375rem;
+    font-weight: 300;
+    line-height: 1.6;
+    color: var(--fm-inverse-muted);
+    text-wrap: pretty;
+  }
+
+  &__duration {
+    font-size: 0.8125rem;
+    letter-spacing: 0.06em;
+    color: var(--fm-inverse-soft);
+  }
+
+  &__price {
+    justify-self: end;
+    font-family: var(--fm-font-display);
+    font-size: 1.75rem;
+    line-height: 1;
+    color: var(--fm-inverse-accent);
+  }
+}
+
+@media (max-width: 1024px) {
+  .fm-halo-menu__row {
+    grid-template-columns: 2.5rem minmax(0, 1fr) 5rem;
+    row-gap: 0.5rem;
+
+    // Description drops to its own line under the name rather than squeezing to a
+    // two-word column.
+    .fm-halo-menu__body { grid-column: 2 / -1; }
+    .fm-halo-menu__duration { grid-column: 2; }
+    .fm-halo-menu__price { grid-row: 1; grid-column: 3; }
+  }
+}
+
+@media (max-width: 560px) {
+  .fm-halo-menu {
+    &__row { grid-template-columns: minmax(0, 1fr) 4.5rem; gap: 0.75rem; }
+    &__row::before { display: none; }
+    &__name { font-size: 1.5rem; }
+    &__body,
+    &__duration { grid-column: 1 / -1; }
+    &__price { font-size: 1.5rem; }
+  }
+}

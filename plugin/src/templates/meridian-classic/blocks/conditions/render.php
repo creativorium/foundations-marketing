@@ -1,0 +1,8 @@
+<?php
+if (!defined('ABSPATH')) { exit; }
+$a = $attributes;
+$text = static fn($key) => esc_html((string)($a[$key] ?? ''));
+$items = array_values(array_filter((array)($a['items'] ?? []), 'is_array'));
+$anchor = sanitize_title((string)($a['anchor'] ?? ''));
+?>
+<section class="meridian meridian-section meridian-conditions" id="<?php echo esc_attr($anchor); ?>"><div class="meridian-container"><p class="meridian-eyebrow"><?php echo $text('eyebrow'); ?></p><h2><?php echo $text('heading'); ?></h2><ul class="meridian-pills"><?php foreach ($items as $item) : ?><li><span><?php echo esc_html($item['title'] ?? ''); ?></span><?php if (!empty($item['body'])) : ?><small><?php echo esc_html($item['body']); ?></small><?php endif; ?></li><?php endforeach; ?></ul><?php if (!empty($a['body'])) : ?><p class="meridian-body"><?php echo $text('body'); ?></p><?php endif; ?></div></section>

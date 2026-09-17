@@ -1,0 +1,13 @@
+{
+  "nav_primary":[
+    {"label":"Practice","url":"{{page:home|url}}#practice"},
+    {"label":"Teacher","url":"{{page:home|url}}#teacher"},
+    {"label":"Sessions","url":"{{page:home|url}}#sessions"},
+    {"label":"FAQ","url":"{{page:home|url}}#faq"}
+  ],
+  "nav_footer":[
+    {"label":"Home","page":"home"},
+    {"label":"Contact","page":"contact"},
+    {"label":"Privacy policy","page":"privacy"}
+  ]
+}

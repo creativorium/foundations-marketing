@@ -1,0 +1,5 @@
+<?php
+if (!defined('ABSPATH')) { exit; }
+$items = array_values(array_filter((array)($attributes['items'] ?? []), 'is_array'));
+?>
+<?php if ($items) : ?><section class="meridian meridian-section meridian-reviews" aria-label="Client experiences"><div class="meridian-review" data-meridian-reviews><span class="meridian-review__quote" aria-hidden="true">“</span><div aria-live="polite" aria-atomic="true"><?php foreach ($items as $i => $item) : ?><figure data-review <?php echo $i ? 'hidden' : ''; ?>><blockquote><?php echo esc_html($item['title'] ?? ''); ?></blockquote><figcaption><?php echo esc_html($item['body'] ?? ''); ?></figcaption></figure><?php endforeach; ?></div><div class="meridian-review__nav"><button type="button" data-review-prev><svg aria-hidden="true" viewBox="0 0 16 16"><path d="M13 8H3m4-4L3 8l4 4"/></svg>Prev</button><span data-review-counter>1 / <?php echo esc_html((string)count($items)); ?></span><button type="button" data-review-next>Next<svg aria-hidden="true" viewBox="0 0 16 16"><path d="M3 8h10M9 4l4 4-4 4"/></svg></button></div></div></section><?php endif; ?>

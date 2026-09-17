@@ -1,0 +1,9 @@
+<!-- wp:foundations/meridian-classic-page-hero {"heading":"One person at a time.","body":"An unhurried approach to massage in Bath.","eyebrow":"Alder & Fern · Bath"} /-->
+
+<!-- wp:foundations/meridian-classic-story {"anchor":"about","eyebrow":"The practitioner","heading":"I'm Tess — I treat one person at a time, not a waiting room.","body":"I trained in Chinese medicine after a decade of migraines that nothing conventional touched. What changed things wasn't one treatment, it was someone finally looking at the whole picture.","body2":"That's how I work now: long first appointments, a plan we build together, and honesty if something isn't working.","signature":"Tess Alder & Fern, ITEC L5, MCNHC","imageId":"{{media:meridian-practitioner.webp|id}}"} /-->
+
+<!-- wp:foundations/meridian-classic-credentials {"items":[{"title":"BAcC Registered"},{"title":"MSc Massage"},{"title":"Insured & DBS checked"},{"title":"12 years in practice"}]} /-->
+
+<!-- wp:foundations/meridian-classic-steps {"anchor":"process","eyebrow":"The process","heading":"Three steps, then we reassess together.","items":[{"title":"A long first visit","body":"Ninety minutes: history, diagnosis and your first treatment. You leave with a written plan."},{"title":"A short course","body":"Usually four to six weekly sessions. If nothing changes by the third, I'll say so and refer you on."},{"title":"Spacing out","body":"We stretch the gaps until you're on maintenance, or don't need me at all."}]} /-->
+
+<!-- wp:foundations/meridian-classic-booking {"anchor":"book","eyebrow":"Book","heading":"Start with a free fifteen minute call.","body":"Tell me what's going on. If I'm not the right person, I'll point you to someone who is."} /-->

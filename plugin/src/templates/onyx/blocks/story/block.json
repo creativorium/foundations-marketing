@@ -1,0 +1,45 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/onyx-story",
+  "title": "Onyx — Practitioner story",
+  "category": "foundations-onyx",
+  "icon": "welcome-write-blog",
+  "description": "The About page body: a sticky portrait beside first-person copy and a dated timeline.",
+  "textdomain": "foundations",
+  "supports": {
+    "html": false,
+    "anchor": true
+  },
+  "attributes": {
+    "standfirst": {
+      "type": "string",
+      "default": ""
+    },
+    "body": {
+      "type": "array",
+      "default": []
+    },
+    "timeline": {
+      "type": "array",
+      "default": []
+    },
+    "imageId": {
+      "type": "number",
+      "default": 0
+    },
+    "imageAlt": {
+      "type": "string",
+      "default": ""
+    },
+    "imageNote": {
+      "type": "string",
+      "default": ""
+    },
+    "placeholder": {
+      "type": "boolean",
+      "default": false
+    }
+  },
+  "render": "file:./render.php"
+}

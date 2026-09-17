@@ -1,0 +1,62 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/meridian-modern-hero",
+  "title": "Meridian Hero",
+  "category": "foundations-meridian-modern",
+  "icon": "admin-site-alt3",
+  "attributes": {
+    "eyebrow": {
+      "type": "string",
+      "default": ""
+    },
+    "heading": {
+      "type": "string",
+      "default": ""
+    },
+    "highlight": {
+      "type": "string",
+      "default": ""
+    },
+    "ending": {
+      "type": "string",
+      "default": ""
+    },
+    "body": {
+      "type": "string",
+      "default": ""
+    },
+    "imageId": {
+      "type": "integer",
+      "default": 0
+    },
+    "primaryLabel": {
+      "type": "string",
+      "default": ""
+    },
+    "primaryUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "secondaryLabel": {
+      "type": "string",
+      "default": ""
+    },
+    "secondaryUrl": {
+      "type": "string",
+      "default": ""
+    },
+    "badge": {
+      "type": "string",
+      "default": ""
+    },
+    "badgeLabel": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "supports": {
+    "html": false,
+    "multiple": false
+  },
+  "render": "file:./render.php"
+}

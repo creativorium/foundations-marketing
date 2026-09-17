@@ -1,5 +1,14 @@
 # how-to-work.md
 
+Template and delivery work also follows [team-template-workflow.md](team-template-workflow.md).
+The owner-authorized delivery implementation uses `plugin-site/`, `plugin-delivery/`,
+`scripts/package.mjs`, and the existing contact plugin now tracked in `plugin-contact/`.
+These first-party components are part of this repository. Do not install them on a
+production site until its release has passed the documented acceptance checks.
+
+The contact plugin retains its existing jQuery dependency during migration. New
+template interactions remain vanilla JavaScript; editor code uses WordPress packages.
+
 **Read this first, every time, before touching anything.**
 
 This is the single source of truth for working on the Foundations Marketing website —
@@ -27,6 +36,24 @@ Add-ons: Branding kit £199 · Advanced SEO £149 · Booking integration £75 ·
 **The stack:** WordPress, a classic PHP theme, and a plugin of server-rendered Gutenberg
 blocks, all built with **Vite**. The site ships as plain PHP/CSS/JS so it runs on Bluehost
 or any shared host. **Node never runs on the server** — it only builds on your machine.
+
+### 0.1 Settled decisions — do not relitigate these
+
+These are **closed**. They are written here so nobody — human or AI — spends a day
+proposing an alternative, or quietly introduces one mid-task. If you think one is wrong,
+raise it with the owner as its own conversation. Do not act on it.
+
+| Decision | Why it is closed |
+|---|---|
+| **Native Gutenberg blocks. Not ACF, not a page builder.** | ACF Blocks is a paid **ACF PRO** feature, so every client site we ship would need a licensed third-party plugin — a recurring cost and a licensing question against a £199 product. ACF's ownership and its plugin-directory listing have also changed hands recently, which is a dependency risk we will not take on dozens of client sites. Native blocks need **nothing but our own theme and plugin**. |
+| **Blocks are server-rendered** — `save: () => null`, output from `render.php`. | The database stores attributes only, never markup, so `render.php` can change with no content migration. It is also what makes a template a few KB of portable text. |
+| **Each sold template carries its own blocks** (`templates/<slug>/blocks/`). The 19 blocks in `plugin/src/blocks/` are for **our marketing site**, not for the templates we sell. | A template has to be liftable — one folder, installable on a client's hosting, without dragging the rest of the catalogue with it. **Accepted cost:** there is no shared block to fix once, so the same bug in three templates is three fixes. Chosen deliberately for independence; see §2.1b. |
+| **No new plugin dependency**, for the site or for a client build. | Every plugin is another thing to license, update, and have compromised. We have already had a backdoor on this site once. |
+| **New templates use vanilla frontend JavaScript.** | Editor JSX uses WordPress packages; no React is shipped to customer frontends. The existing marketing contact plugin retains jQuery during its tested migration. |
+| **Elementor is being removed, not extended.** | The live site was built in it; we are rebuilding page by page as blocks. Everything new is blocks. Do not half-convert a page (§13). |
+| **Two palettes, driven by `--fm-*` tokens.** | Steel and Nari both have to work. A hardcoded hex passes under one and breaks the other, so it will be caught. |
+| **Customer sites get a generated BLOCK theme, from one shared base.** Our marketing site stays on the classic theme in `theme/`. | Header and footer must be editable site-wide, not repeated on every page — that needs template parts, which classic themes do not have. Two themes for two different sites; the customer one is still native Gutenberg, no page builder, no ACF, so §0.1 is not reopened. Specified in [customer-runtime.md](customer-runtime.md) §3. |
+| **A customer never receives the Foundations Blocks plugin.** They get a generated `foundations-site` plugin carrying only their template's blocks. | Foundations Blocks carries `template-grid`, `template-library`, `package-builder` and `inc/checkout.php`, which hooks WooCommerce and reads prices off our own checkout page. None of that belongs on a client's site. See [customer-runtime.md](customer-runtime.md) §4. |
 
 ---
 
@@ -103,6 +130,25 @@ npm install      # first time only
 npm run build    # required — without it there is no CSS or JS at all
 ```
 
+`npm run build` now runs three checks before it compiles anything:
+
+| Step | What it catches |
+|---|---|
+| `lint:php` | a PHP syntax error, across theme, plugin **and** `theme-customer-base/` |
+| `test:blocks` | the block linter itself being wrong — it has been, twice |
+| `validate:blocks` | block-markup hazards: undeclared `anchor`/`className`, foreign `data-` attributes, bare `<li>`, unbalanced delimiters, malformed import tokens |
+
+**`lint:php` fails if PHP is not on your PATH.** That is deliberate — it used to skip with
+a warning, which meant a machine without PHP got a green build that had checked nothing.
+Local ships a PHP binary; its path is in `doc/LOCAL-SETUP.md`. If you genuinely cannot
+install it, opt out **explicitly**, and know that no PHP was checked:
+
+```bash
+FM_SKIP_PHP_LINT=1 npm run build
+```
+
+The opt-out is ignored in CI.
+
 ### 1.5 Read the documentation before you build anything
 
 **AI assistants: read these before you write a line.** You cannot build a block that fits
@@ -115,6 +161,7 @@ every page must meet are all written down. Read them, then build.
 | Read | Why |
 |---|---|
 | **`how-to-work.md`** (this file) | The working rules. §0 is what the business actually sells, §5 is the file layout and how the build works, §8–§10 are the constraints every change must meet. |
+| **`customer-runtime.md`** | What a buyer receives and the shape a template needs. Required reading for lane C; see `delivery-verification.md` for tested scope. |
 | **`CONTRIBUTING.md`** | The short version of the gate and the workflow. |
 | **`DEPLOYMENT.md`** | Only if you touch deployment — that is owner work. |
 
@@ -197,10 +244,10 @@ these places:
 
 | Allowed | What |
 |---|---|
-| `plugin/src/blocks/<block-name>/**` | the block's own folder — this is where component work lives |
-| `plugin/src/templates/<template-slug>/**` | the template's own folder — this is where template work lives (§2.1a) |
-| `plugin/src/editor.js` | **one** added `import './blocks/<name>';` line, nothing else |
-| `plugin/src/styles/blocks.scss` | **one** added `@use '../blocks/<name>/style';` line, nothing else |
+| `plugin/src/blocks/<block-name>/**` | a **main-website** block — the Foundations Marketing site itself (§2.1b) |
+| `plugin/src/templates/<template-slug>/**` | the template's whole folder, **including its own blocks** — this is where template work lives (§2.1a) |
+| `plugin/src/editor.js` | **one added `import` line per block**, nothing else — `'./blocks/<name>'` for a main-site block, `'./templates/<slug>/blocks/<name>'` for a template block |
+| `plugin/src/styles/blocks.scss` | **one added `@use` line per block**, nothing else — `'../blocks/<name>/style'` or `'../templates/<slug>/blocks/<name>/style'` |
 | `doc/COMPONENTS.md` | the index row for a new block (local only — `/doc/` is gitignored) |
 | `doc/TEMPLATES.md` | the index row for a new template (local only — `/doc/` is gitignored) |
 
@@ -223,29 +270,159 @@ and why, and hand it to the owner. Do not work around the limit — no editing t
 **`plugin/src/templates/<template-slug>/`** — one self-contained folder per template,
 sitting beside `blocks/`. This is now fixed; you no longer need to ask where it goes.
 
+**A template is a multi-page site, not one page.** A real customer site is four or five
+pages, so the folder holds a `content/pages/` directory with one file per page, plus the
+header and footer as template parts that render site-wide.
+
 ```
 plugin/src/templates/<template-slug>/
-  template.json     name, niche, category, target SEO phrase, demo URL slug
-  content.html      the page as block markup — this is the deliverable
-  screenshot.webp   catalogue image, 1200×900, compressed before it lands
-  style.scss        optional, template-only styles
+  template.json        name, niche, category, target SEO phrase, demo slug, page list,
+                       and this template's Site Settings extras
+  theme.json           this design's palette, typography and spacing
+  parts/
+    header.html        the header — one block, rendered site-wide from Site Settings
+    footer.html        the footer, same
+  blocks/              THIS TEMPLATE'S OWN BLOCKS — one folder each, same anatomy as §6
+    <block-name>/
+      block.json  index.js  edit.jsx  render.php  style.scss  editor.scss
+  content/
+    pages/
+      home.blocks.txt      the homepage as Gutenberg block markup. Required.
+      about.blocks.txt     every other page, one file each
+    media/             the real images, as files
+    media.json         filename → the block attribute that references it
+    navigation.json    menu structure, linking by page slug
+    settings.json      default Site Settings values (logo, phone, CTA, socials…)
+    manifest.json      versions, homepage slug, page order
+  screenshot.webp      catalogue image, 1200×900, compressed before it lands
+  style.scss           optional, template-level styles that are not a block
 ```
 
-**`content.html` is the whole point.** Blocks are server-rendered with `save: () => null`,
-so the database stores no markup — only a block comment and its attributes. A finished
-page is therefore a few KB of plain text, which means a template is a file we can zip,
-send to a client, and import into any site already running the Foundations theme and the
-Foundations Blocks plugin. That is exactly the install we perform when someone buys, so
-the format we build in and the format we hand over are the same thing. Do not invent a
-second format for delivery.
+> **Changed from the single-page shape.** `content.blocks.txt` at the template root is
+> gone — pages live in `content/pages/`. `palette.scss` is replaced by `theme.json`.
+> **Header and footer are no longer blocks in the page content**; a page file that starts
+> with a header block is wrong, because that header would repeat on every page.
+>
+> No template has ever been built, so **there is nothing to migrate** — this is the
+> starting shape, not a change to existing work. The reasoning, and what the packager does
+> with each file, is in [customer-runtime.md](customer-runtime.md) §2.
 
-**A template is assembled from existing blocks — it is not a new pile of HTML.** Build
-the page in the editor from the blocks already in `plugin/src/blocks/`, then export the
-block markup into `content.html`. If the design genuinely needs something no block can
-do, that is **lane A work first**: build the block, get it merged, then use it in the
-template. Never hardcode a section into a template that should have been a block, and
+### 2.1b Two kinds of block — know which you are building
+
+This trips people up, so be clear before you start:
+
+| Kind | Lives in | For | Who |
+|---|---|---|---|
+| **Main-website block** | `plugin/src/blocks/<name>/` | the Foundations Marketing site itself — homepage, services, templates, checkout | Shared by our own pages. Changing one affects **our** site. |
+| **Template block** | `plugin/src/templates/<slug>/blocks/<name>/` | one sold template, and only that one | Ships with that template to the client. Bespoke to it. |
+
+**Each sold template carries its own blocks.** A template is a self-contained mini site:
+its own blocks, its own palette, its own content. That is what lets us lift one folder out
+and install it on a client's hosting without dragging the rest of the catalogue with it.
+
+So **do not reach into `plugin/src/blocks/` while building a template.** Those are our
+marketing site's components. If your template needs a hero, it gets **its own** hero at
+`plugin/src/templates/<slug>/blocks/hero/`. Copy `plugin/src/blocks/section-heading/` as
+the starting pattern and then make it yours.
+
+**Naming — namespace every template block with its template slug**, or two templates will
+collide the moment both are installed on our catalogue site:
+
+```json
+{ "name": "foundations/pulse-hero",  "category": "foundations-pulse" }
+{ "name": "foundations/pulse-faq",   "category": "foundations-pulse" }
+```
+
+Never `foundations/hero` — that name belongs to the main site.
+
+**The trade-off you are accepting**, so nobody is surprised later: a fix to a template's
+block improves **that template only**. There is no shared block to fix once. If you find
+the same bug in three templates, it is three fixes. That is the cost of each template
+being independently shippable, and it was chosen deliberately (§0.1).
+
+#### A page file is Gutenberg block markup — NOT an HTML page
+
+**Read this twice. It is the single most common thing to get wrong, and a template that
+gets it wrong is worthless to us.**
+
+A template is **not a design file**. It is a **pre-assembled WordPress page made of
+Foundations blocks** — our blocks, in order, with their attributes filled with placeholder
+copy. We import it onto the client's site, swap in their words, logo, colours and photos,
+and ship. **The entire value is that it arrives editable in the WordPress editor.**
+
+Every block is registered with `save: () => null` and rendered on the server by its
+`render.php`. So WordPress stores **no HTML at all** for them — just a block comment and a
+JSON blob of attributes. A correct `content/pages/<page>.blocks.txt` looks like this, and
+almost nothing else:
+
+```html
+<!-- wp:foundations/hero {"heading":"Calm, clear pilates in Bristol","variant":"split"} /-->
+
+<!-- wp:foundations/steps {"heading":"How it works","items":[
+  {"title":"Book a class","body":"Pick a time that suits you."},
+  {"title":"Come along","body":"Mats, blocks and straps provided."}
+]} /-->
+
+<!-- wp:foundations/faq {"schema":true,"items":[
+  {"q":"Do I need experience?","a":"No — every class is mixed ability."}
+]} /-->
+
+<!-- wp:foundations/cta {"heading":"Book your first class"} /-->
+```
+
+**The test:**
+
+> Content must parse into supported blocks and survive **save and reload in the editor
+> with no validation error**. Raw HTML outside a block's own delimiters is never allowed.
+
+That is the rule. The old shorthand — "if it contains a `<div>` or a `<section>` it is
+wrong" — is a useful smell but is **not** the test, in either direction:
+
+- **A file can be full of markup and be correct.** Core blocks like `core/group` and
+  `core/list` save their own HTML inside their own delimiters. That is valid content.
+- **A file can contain no `<div>` at all and still be broken.** An attribute written into
+  the markup that the block comment never declared — an `id=` with no `"anchor"`, an extra
+  class with no `"className"` — is regenerated away or marked invalid on save. So is a
+  `data-*` attribute on a core block, or a bare `<li>` outside `wp:list-item`.
+
+**A template built from our own blocks still has no markup at all**, because every one of
+them is `save: () => null`. The rule above is what makes that a consequence rather than a
+separate thing to remember.
+
+**Two checks, and you need both:**
+
+```bash
+npm run validate:blocks    # catches the hazards above; NOT a validator
+```
+
+Then open the page in the editor, **save, and reload**. Only the editor can actually
+validate, because validation means running each block's `save()` and comparing. A green
+lint and an unopened page proves nothing.
+
+Writing raw HTML here fails for four reasons, all fatal:
+
+1. **It will not render.** Nothing in a hand-written HTML file connects to `render.php`.
+2. **It is not editable.** It imports as one inert lump, so we rebuild the page by hand
+   for every client — which destroys the margin the template existed to protect.
+3. **It is frozen.** Fix a block once and every site we have ever shipped improves.
+   Hardcoded HTML never receives that fix.
+4. **It breaks the Nari palette** and bypasses the SEO, accessibility and speed rules that
+   live *inside* the blocks — `fm_image()` setting width and height, `section-heading`
+   clamping the heading level.
+
+Because the file is plain text a few KB long, a template is something we can zip, send to
+a client, and import onto any site already running the Foundations theme and plugin. That
+is exactly the install we perform when someone buys, so the format we build in and the
+format we hand over are the same thing. **Do not invent a second format for delivery.**
+
+#### When there is no block for what the design needs
+
+This is the moment the temptation to write raw HTML appears. **Do not.** A missing block
+is **lane A work, and it comes first**: stop the template, branch, build the block, open
+its PR, get it merged — then come back and use it in the template (§2.3: they are two
+branches). Never hardcode a section into a template that should have been a block, and
 never hardcode a brand colour — templates use the `--fm-*` tokens like everything else,
-or they break under the Nari palette.
+or they break under Nari.
 
 `style.scss` is for the rare template-only tweak. It is **not** a place to restyle a
 shared block; if a block looks wrong, that is lane B. Keep it empty unless you need it.
@@ -521,29 +698,48 @@ Add a row to `doc/COMPONENTS.md` when you add a block.
 
 ## 6a. Building a site template (the thing we sell)
 
-A template is a **finished page assembled from blocks**, not a new pile of HTML. The
-folder layout and the reason `content.html` is the deliverable are in §2.1a — read that
-first. This is the order of work:
+A template is a **finished multi-page WordPress site assembled from Gutenberg blocks**, not
+a pile of HTML. The folder layout, the block-markup format and the `<div>` test are in
+§2.1a — **read that first, it is where people go wrong.** What the template eventually gets
+packaged into is [customer-runtime.md](customer-runtime.md); read its status table so you
+know which parts of that pipeline exist and which are still specification.
+
+This is the order of work:
 
 1. **Branch.** `Theme/<template-slug>` — see §2.3. Before anything else.
-2. **Check which blocks you are missing.** Lay the design against
-   `doc/COMPONENTS.md`. Anything the existing blocks cannot express is **lane A: build
-   the block first, on its own branch, and get it merged.** Do not fake a section inside
-   a template.
-3. **Build the page in the editor** on Local, from the Foundations block category.
-4. **Export the block markup** into `plugin/src/templates/<slug>/content.html` — in the
-   editor, Options (⋮) → **Copy all blocks**, then paste. It is plain text, a few KB.
-5. **Fill in `template.json`** — name, niche, category, the target SEO phrase from
-   `doc/SEO-AND-PERFORMANCE.md` §10, and the demo URL slug.
-6. **Add `screenshot.webp`**, compressed. Not a 4MB camera JPEG — see §9.
-7. **Check it at 375px, 820px and 1440px** (§8) and run the §11 checklist.
-8. **Add a row to `doc/TEMPLATES.md`.**
-9. **Commit, push, open the PR** (§2.4).
+2. **Break the design into sections**, and build **a block for each**, inside
+   `plugin/src/templates/<slug>/blocks/` (§2.1b). These are *this template's* blocks —
+   namespaced `foundations/<slug>-<name>`. Do not use or edit the main site's blocks in
+   `plugin/src/blocks/`; copy `section-heading/` as a starting pattern and make it yours.
+   Register each one with its `import` line in `editor.js` and its `@use` line in
+   `blocks.scss`.
+3. **Build the header and footer as template parts**, not as page content. One block each,
+   in `parts/header.html` and `parts/footer.html`, reading their content from Site Settings
+   (customer-runtime.md §5.1). Put the default values in `content/settings.json`. A header
+   block sitting at the top of a page file is wrong — it would repeat on every page.
+4. **Build each page** from your own blocks — either way round, see §6b. In the editor on
+   Local from your template's block category, or by writing the block markup and pasting
+   it in.
+5. **Save each page's block markup** to `plugin/src/templates/<slug>/content/pages/<page>.blocks.txt`
+   — in the editor, Options (⋮) → **Copy all blocks**, then paste into the file. The
+   homepage is `home.blocks.txt` and is required. Plain text, a few KB, no `<div>` anywhere
+   in any of them.
+6. **Fill in `template.json`** — name, niche, category, the target SEO phrase from
+   `doc/SEO-AND-PERFORMANCE.md` §10, the demo slug, the page list, and any Site Settings
+   extras this design needs beyond the shared core (customer-runtime.md §5.3).
+7. **Fill in the rest of `content/`** — `media/` with the real image files, `media.json`,
+   `navigation.json`, `settings.json` and `manifest.json`. Without these the template
+   cannot be installed on a customer's site, only looked at.
+8. **Add `theme.json`** — this design's palette, typography and spacing.
+9. **Add `screenshot.webp`**, compressed. Not a 4MB camera JPEG — see §9.
+10. **Check every page** at 375px, 820px and 1440px (§8) and run the §11 checklist.
+11. **Add a row to `doc/TEMPLATES.md`.**
+12. **Commit, push, open the PR** (§2.4) — include the demo URL so it can be reviewed.
 
 Rules specific to templates:
 
-- **Every template owns exactly one H1**, in its hero block. Every other section is H2 or
-  lower. Two templates must never target the same SEO phrase.
+- **Every page owns exactly one H1.** The homepage H1 carries the template's target phrase;
+  interior pages own their own. Two templates must never target the same SEO phrase.
 - **Alt text carries the phrase** — "Pilates studio website template by Foundations
   Marketing", never "template1" (§10).
 - **Tokens only.** A hardcoded hex survives Steel and breaks Nari. Use `--fm-*`.
@@ -551,6 +747,81 @@ Rules specific to templates:
 - The catalogue rules — which templates are published, and why the nine new ones are held
   as drafts until they have a screenshot and a demo page — are in `doc/COMPONENTS.md`.
   **Read that before publishing anything.**
+
+---
+
+## 6b. Previewing a template on Local — getting a demo link
+
+### Compiled delivery preview (required)
+
+Activate Foundations Delivery and run `npm run build`, then `npm run package -- <slug>`.
+Upload the archive under **Delivery**. Use the existing master if it is already imported;
+do not create another sample to repeat a browser check. Draft demos require administrator
+access. The route uses the imported design slug: `/templates/<slug>/demo/`, with
+`<page>/` appended for interior pages. The packaged theme supplies parts and tokens.
+
+Master page edits update its preview and future customer projects. Source-code changes
+require a rebuilt release and the versioning workflow in [delivery-operations.md](delivery-operations.md).
+A refresh does not import changed source files. Include screenshots and a reviewer-accessible
+preview with the PR; a Local hostname alone is not remotely accessible.
+
+The older `plugin/inc/demo.php` route supports legacy single-page templates only.
+The editor methods below are markup-development aids after blocks are registered and
+media/page tokens resolved; they do not replace the compiled preview or install test.
+
+### Method 1 — paste it into the editor (when you built the page in the editor)
+
+1. WP Admin → **Pages → Add New**
+2. Open the **Code editor**: `Ctrl+Shift+Alt+M` (or Options ⋮ → Code editor)
+3. Paste the whole contents of one `content/pages/<page>.blocks.txt`
+4. Switch back to **Visual** — WordPress parses the comments into real, editable blocks
+5. **Publish** (or Preview) → **that URL is your demo link**
+
+This doubles as a correctness check. If it comes back as one grey lump, or as a single
+"Classic" block, the markup is malformed — usually raw HTML that should have been blocks.
+Separate, selectable, editable blocks means you got it right.
+
+### Method 2 — WP-CLI, the loop an AI can drive itself
+
+Local ships WP-CLI: right-click the site in Local → **Open site shell**. Create the page
+once:
+
+```bash
+wp post create --post_type=page --post_title="Demo — Pulse" --post_status=publish \
+  --post_content="$(cat '/path/to/plugin/src/templates/pulse-pilates/content/pages/home.blocks.txt')"
+```
+
+It prints the new post ID. After that every edit is one command and a refresh:
+
+```bash
+wp post update 123 --post_content="$(cat '.../content/pages/home.blocks.txt')"
+wp post list --post_type=page --fields=ID,post_title,guid   # find the demo URL again
+```
+
+That is the tight iteration loop — edit the file, run one command, refresh the browser.
+No clicking, so an assistant can do it unattended.
+
+> Windows note: Local's shell and path quoting vary by machine. If the `$(cat …)` form
+> fights you, fall back to Method 1 — it always works.
+
+### Two URLs per template, and they do different jobs
+
+Do not confuse these — one is for Google, one is for looking at.
+
+| URL | What it is | Who it is for |
+|---|---|---|
+| `/templates/<keyword-slug>/` | Our **branded detail page** — screenshot, description, and the "choose this template" CTA into the builder. Owns the template's target phrase from the SEO table and is the page that ranks. | Buyers browsing, and Google |
+| `/templates/<keyword-slug>/demo/` | The **standalone mini site** — the template's own header, hero and footer, no chrome of ours. Rendered from `content/pages/` on disk. **`noindex`.** | Buyers clicking "Live Preview", and you |
+
+The demo is deliberately `noindex`: it is the same content with no branding, no
+description and no way to buy, so letting it compete with the detail page would split the
+signal for the phrase and land buyers somewhere they cannot act.
+
+Use the slug from `doc/SEO-AND-PERFORMANCE.md` §10 — never a random preview URL. A
+template with no detail page **cannot be published**: catalogue cards would point at a 404.
+See `doc/TEMPLATES.md` for the full checklist.
+
+**Put the demo URL in your PR** so it can be reviewed without being rebuilt.
 
 ---
 
@@ -570,10 +841,36 @@ If something looks stale or blank:
 
 | Symptom | Usual cause |
 |---|---|
-| Whole section renders as nothing | Foundations Blocks plugin is inactive |
+| **Every** section renders as nothing | Foundations Blocks plugin is inactive (§1.3) |
+| **One** section renders as nothing, the rest are fine | See "a single blank section" below |
 | Changes do nothing at all | junction missing (§1.2), or you forgot `npm run build` |
 | CSS is old | server cache — hard-refresh |
+| Demo URL 404s | rewrite rules need flushing — Settings → Permalinks → **Save** |
 | White screen | PHP fatal; check `wp-content/debug.log` or Local's log tab |
+
+### A single blank section
+
+The block works in the editor and renders nothing on the page. **This is almost never
+your markup** — blocks are `save: () => null`, so there is no saved HTML to fall back on,
+and anything that stops `render.php` running shows up as an empty space rather than an
+error. Work down this list:
+
+1. **Did you run `npm run build`** since adding the block? The editor half comes from
+   `build/editor.js`.
+2. **Is there an `import` line** for it in `plugin/src/editor.js`, and a `@use` line in
+   `plugin/src/styles/blocks.scss`? (§2.1)
+3. **Does the name in `block.json` match** the one you registered? PHP registers whatever
+   `block.json` says; the editor registers what `index.js` imports. If they disagree, the
+   editor shows one block and the server renders a different, non-existent one.
+4. **Is `"render": "file:./render.php"` present** in `block.json`, and does `render.php`
+   actually exist next to it?
+5. **Does `render.php` return early** when an attribute is empty? Several blocks do this
+   deliberately — fill the fields in the editor and look again.
+6. **Is the folder in a place that gets scanned?** `plugin/inc/register.php` scans
+   `src/blocks/*/block.json` and `src/templates/*/blocks/*/block.json`. A block nested any
+   deeper is never found.
+
+If none of those, say so and stop — do not start rewriting working markup.
 
 To see PHP errors, set in `wp-config.php`: `define('WP_DEBUG', true);` and
 `define('WP_DEBUG_LOG', true);`
@@ -669,15 +966,23 @@ image alt text and URL.
 
 ## 11. Before you commit
 
-- [ ] `npm run build` passes.
+- [ ] `npm run build` passes — it now runs `lint:php` and `validate:blocks` first, so a
+      PHP syntax error or a block-markup hazard fails the build rather than shipping.
 - [ ] Checked in the browser at your Local URL — **not just in the editor**.
 - [ ] Checked at 375px, 820px and 1440px.
 - [ ] Keyboard-navigable; focus is visible.
 - [ ] One H1 on the page; images have real alt text.
 - [ ] No hardcoded brand colour — tokens only.
 - [ ] You are **on a feature branch, not `main`** — `git branch --show-current` (§2.3).
-- [ ] Template work only: `content.html`, `template.json` and a compressed
+- [ ] Template work only: `content/pages/home.blocks.txt`, `template.json`, `theme.json`,
+      `parts/header.html`, `parts/footer.html`, the rest of `content/` (`media/`,
+      `media.json`, `navigation.json`, `settings.json`, `manifest.json`) and a compressed
       `screenshot.webp` are all present, and `doc/TEMPLATES.md` has its row (§6a).
+- [ ] Template work only: `npm run validate:blocks` passes, **and** every page has been
+      opened in the editor, saved and reloaded with no validation error (§2.1a). No page
+      file starts with a header block — the header is a template part (§6a step 3).
+- [ ] Template work only: each page renders as real editable blocks (§6b). Demo URL is in
+      the PR, or a note saying why the demo route cannot show it yet.
 - [ ] `git status` is clean of local notes, DB dumps, `.env`, client asset drops and
       scratch markdown. Those live in `/doc/`, which is gitignored.
 
@@ -727,10 +1032,27 @@ Then stop and tell the owner. Do not merge your own PR.
 - **Build:** all four Vite targets compile; every PHP file lints; site returns HTTP 200
   with no PHP warnings.
 - **Blocks built so far:** 19 — see `doc/COMPONENTS.md` for the index and what is left.
-- **Templates built so far:** none. `plugin/src/templates/` is the fixed home for them
-  (§2.1a) and is where contributors build the sellable catalogue; the index is
-  `doc/TEMPLATES.md`. The eight live templates predate the folder and have not been
-  migrated into it.
+- **Templates built so far: none — zero.** `plugin/src/templates/` does not exist yet. It
+  is the fixed home for them (§2.1a) and is where contributors build the sellable
+  catalogue; the index is `doc/TEMPLATES.md`. Because nothing has been built, the
+  multi-page shape in §2.1a is the **starting** shape — there is nothing to migrate. **Every catalogue entry that currently exists is a placeholder** —
+  the eight "live" ones (Aether, Birth Space, Bloom, Lumen, Nova, Sequoia, Solis,
+  Solstice) and the nine canvas drafts (Halo, Pulse, Meridian, Harvest, Haven, Compass,
+  Gloss, Canvas, Cadence) alike. None has real blocks, real content or a real demo page.
+  Treat the whole catalogue as empty and build from scratch.
+- **The 19 blocks in `plugin/src/blocks/` are for THIS website**, not for the templates we
+  sell — homepage, services, templates, checkout. Each sold template gets its own blocks
+  under `plugin/src/templates/<slug>/blocks/` (§2.1b). Do not confuse the two.
+
+### Delivery pipeline
+
+The customer base, Site Settings/role, compiled packager, content import/export,
+customer projects and compiled-design demo routes now exist. Follow
+[delivery-operations.md](delivery-operations.md) and check
+[delivery-verification.md](delivery-verification.md) for tested scope and remaining limits.
+Merging a design does not publish it automatically: compile it, upload it under Delivery,
+review its draft preview, and then explicitly publish the demo.
+
 - **The design source** is four client canvas pages (Homepage, Services, Templates,
   Checkout), decoded to plain HTML in `doc/client-html/extracted/`.
 - **Elementor is being removed.** The live site was built in Elementor; we are rebuilding

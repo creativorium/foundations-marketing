@@ -1,0 +1,22 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/meridian-modern-reviews",
+  "title": "Meridian Reviews",
+  "category": "foundations-meridian-modern",
+  "icon": "admin-site-alt3",
+  "attributes": {
+    "imageId": {
+      "type": "integer",
+      "default": 0
+    },
+    "items": {
+      "type": "array",
+      "default": []
+    }
+  },
+  "supports": {
+    "html": false,
+    "multiple": true
+  },
+  "render": "file:./render.php"
+}

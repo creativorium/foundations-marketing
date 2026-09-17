@@ -1,44 +1,18 @@
 {
   "name": "Pulse Atelier",
   "slug": "pulse-atelier",
+  "version": "0.2.0",
   "niche": "Boutique Pilates studios and independent movement teachers",
   "category": "Wellness & movement",
-  "targetSeoPhrase": "boutique pilates website template UK",
-  "demoUrlSlug": "pulse-atelier",
-  "demoUrl": "/templates/pulse-atelier/",
-  "content": "content.html",
-  "screenshot": "screenshot.webp",
-  "requires": {
-    "theme": "Foundations",
-    "plugin": "Foundations Blocks",
-    "blocks": [
-      "foundations/pulse-atelier",
-      "foundations/pulse-atelier-section"
-    ]
+  "description": "An olive and cream editorial Pilates design with editable sessions, timetable, testimonials, FAQ, contact and privacy pages.",
+  "targetPhrase": "boutique pilates website template UK",
+  "demoSlug": "pulse-atelier",
+  "pages": ["home", "contact", "privacy"],
+  "settings": {
+    "brand_label": {"type":"text","label":"Wordmark","default":"Pulse"}
   },
-  "catalogue": {
-    "postType": "site_template",
-    "postTitle": "Pulse Atelier",
-    "postName": "pulse-atelier",
-    "postStatus": "draft",
-    "featuredImage": "screenshot.webp",
-    "meta": {
-      "tpl_slug": "pulse-atelier",
-      "tpl_niche": "Boutique Pilates & movement",
-      "tpl_category": "Wellness & movement",
-      "tpl_description": "An olive and cream editorial website for boutique Pilates studios, with sessions, teacher biography, timetable and an introductory offer.",
-      "tpl_demo_url": "/templates/pulse-atelier/",
-      "tpl_sections": [
-        "Photo hero",
-        "Studio gallery",
-        "Teacher biography",
-        "Session prices",
-        "Weekly timetable",
-        "Testimonials",
-        "FAQ",
-        "Intro offer"
-      ]
-    }
-  },
-  "pageTemplate": "page-templates/pulse-atelier.php"
+  "shell": {
+    "header": {"block":"foundations/pulse-atelier-site-header"},
+    "footer": {"block":"foundations/pulse-atelier-site-footer"}
+  }
 }

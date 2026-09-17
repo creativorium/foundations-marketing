@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/halo-page-hero",
+  "title": "Halo — Page hero",
+  "category": "foundations-halo",
+  "icon": "heading",
+  "description": "The opening of an interior page: eyebrow, H1, a standfirst, and an optional note to whoever is editing the page.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true, "multiple": false },
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "lead": { "type": "string", "default": "" },
+    "note": { "type": "string", "default": "" }
+  },
+  "render": "file:./render.php"
+}

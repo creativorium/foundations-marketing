@@ -1,8 +1,77 @@
 # Contributing
 
+For master designs and customer deliveries, also read
+[team-template-workflow.md](team-template-workflow.md). Every template PR needs an
+actual browser preview, Gutenberg save/reload evidence, and a clean-install result.
+Local URLs alone are not a preview the reviewer can open remotely.
+
 **All working rules live in [how-to-work.md](how-to-work.md).** Read that first — it
 covers start-up checks, branching, push/merge permissions, how to build a component,
 previewing in Local, responsiveness, speed, SEO, and the pre-commit checklist.
+
+---
+
+## Start here
+
+### One-time setup
+
+Do these once. Skip any of them and nothing will render, and it will look like your work
+is broken when it is not.
+
+1. **Clone the repo** and open the folder in VS Code.
+2. **Set up Local** — create the junctions, start the site, and confirm both the
+   *Foundations* theme and the *Foundations Blocks* plugin are **active**. See §1.2–1.3.
+   An inactive plugin makes every block render as *nothing at all*.
+3. **`npm install`**, then **`npm run build`.** Without the build there is no CSS or JS.
+4. **Get the `/doc/` pack from the owner.** It is gitignored, so cloning does not include
+   it — and you cannot pick an SEO phrase or check the component index without it (§1.5).
+
+### Setiap kali mengerjakan tugas
+
+1. **`git pull origin main`** — jangan pernah mulai dari copy yang sudah basi.
+
+2. Ketik ke AI kamu:
+
+   ```
+   baca how-to-work.md dan ikuti isinya
+   ```
+
+   > File-nya bernama **`how-to-work.md`**. Bukan `how-to-read.md` — kalau salah ketik,
+   > AI tidak menemukan apa-apa dan akan menebak-nebak sendiri.
+
+3. **AI akan menanyakan dua hal.** Siapkan jawabannya:
+   - **Pakai akun GitHub yang mana?** — username kamu. Ini yang menentukan file apa saja
+     yang boleh kamu ubah.
+   - **Kerjaan yang mana?** — bikin template baru, bikin komponen baru, atau memperbaiki
+     komponen yang sudah ada.
+
+4. **Berikan yang dibutuhkan**, sesuai jenis kerjaannya:
+
+   | Kerjaan | Yang harus kamu kasih |
+   |---|---|
+   | **Template baru** | File HTML-nya, niche-nya, dan frasa SEO target dari `doc/SEO-AND-PERFORMANCE.md` §10 |
+   | **Komponen baru** | Nama komponennya, dipakai di halaman mana, dan file HTML-nya |
+   | **Perbaikan** | Nama block-nya, apa persisnya yang salah, screenshot, dan di breakpoint berapa |
+
+5. **AI membuat branch-nya sendiri** (§2.3) — kamu tidak perlu memintanya. Kalau AI
+   langsung mengedit file tanpa bikin branch dulu, **hentikan** dan suruh bikin branch.
+
+6. **Cek hasilnya di link preview:** `/templates/<slug>/demo/` di Local kamu.
+
+   Dua hal ini kelihatan seperti kerjaan kamu yang rusak, padahal bukan:
+
+   | Yang terjadi | Artinya |
+   |---|---|
+   | **404** | Rewrite rules perlu di-flush — WP Admin → Settings → Permalinks → **Save** (tanpa mengubah apa pun) |
+   | **Ada satu bagian yang kosong** | Hampir tidak pernah karena markup kamu. Telusuri checklist di §7 sebelum mengubah apa pun |
+
+7. **Kalau sudah benar, AI yang commit, push, dan membuka PR-nya sendiri** (§2.4). Kamu
+   tidak perlu buka GitHub manual. Cukup kabari owner kalau PR-nya sudah terbuka.
+
+> **Jangan pernah:** push ke `main`, merge PR sendiri, atau mengubah file di luar folder
+> block/template kamu. Batasnya ada di §2.1 dan §4.
+
+---
 
 ## First — read the docs (§1.5)
 
@@ -35,7 +104,7 @@ questions before it writes a line. It must ask you; it must not guess.
    |---|---|
    | **New component** | The name, where it appears, and **the HTML file**. No HTML? Then written details: structure, editable fields, states, and 375 / 820 / 1440px behaviour. |
    | **Fix an existing component** | Which block, exactly what is wrong (page on Local, breakpoint, browser, screenshot), and what it should do instead. |
-   | **Site template** | Which template, **the HTML file**, its target SEO phrase, and which blocks it needs that don't exist yet. Files go in `plugin/src/templates/<slug>/` — §2.1a. |
+   | **Site template** | Which template, **the design source**, its target SEO phrase, which pages it has, and which blocks it needs that don't exist yet. Files go in `plugin/src/templates/<slug>/` — §2.1a. |
 
    Work on the main website itself — pages, packages, checkout, account, anything
    server-side — is **owner-only**.
@@ -49,10 +118,24 @@ questions before it writes a line. It must ask you; it must not guess.
    branches. See §2.3.
 2. Components are self-contained folders in `plugin/src/blocks/<name>/`. Copy
    `section-heading/` as the pattern. Don't touch the backend.
-3. Templates are self-contained folders in `plugin/src/templates/<slug>/`, assembled from
-   existing blocks. The deliverable is `content.html` — the page's block markup, which we
-   import onto the client's site. See §2.1a and §6a.
-4. `npm run build`, check it in Local at 375px / 820px / 1440px.
-5. **Commit, push, and open the Pull Request yourself** — the work isn't done until the
+3. Templates are self-contained mini sites in `plugin/src/templates/<slug>/` — **each one
+   carries its own blocks** in `templates/<slug>/blocks/`, namespaced
+   `foundations/<slug>-<name>`. The 19 blocks in `plugin/src/blocks/` are for *our*
+   marketing site; don't use or edit them in a template (§2.1b).
+   A template is a **multi-page** site: one file per page in `content/pages/`, with
+   `home.blocks.txt` required. The deliverable is **Gutenberg block markup**, which we
+   import onto the client's site so it arrives editable. It is `<!-- wp:… /-->` comments,
+   **not an HTML page**: if a file has a `<div>` in it, it is wrong. Header and footer are
+   **template parts** in `parts/`, not blocks in the page content — put one in a page and
+   it repeats on every page. Missing a block you need? Build the block first (new
+   component), then use it. See §2.1a and §6a, and `customer-runtime.md` for what the
+   template is eventually packaged into.
+4. Preview it at **`/templates/<slug>/demo/`** on your Local — it renders straight from
+   disk, so save the file and refresh. See §6b. Put that URL in your PR.
+   **Note:** the demo route has not caught up with multi-page templates yet — it still
+   assumes one page with its header in the content. Until it does, preview interior pages
+   by pasting them into the editor (§6b Method 1) and say so in your PR.
+5. `npm run build`, check it in Local at 375px / 820px / 1440px.
+6. **Commit, push, and open the Pull Request yourself** — the work isn't done until the
    PR is open (§2.4). Then tell the owner. Only `nego94` / `creativorium` may push to
    `main` or merge; never merge your own PR.

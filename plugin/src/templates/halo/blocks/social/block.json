@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/halo-social",
+  "title": "Halo — Social strip",
+  "category": "foundations-halo",
+  "icon": "instagram",
+  "description": "The handle, a link to the feed, and a row of recent posts as images.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "handle": { "type": "string", "default": "" },
+    "linkLabel": { "type": "string", "default": "" },
+    "linkUrl": { "type": "string", "default": "" },
+    "posts": { "type": "array", "default": [] }
+  },
+  "render": "file:./render.php"
+}

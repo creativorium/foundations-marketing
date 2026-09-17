@@ -1,0 +1,22 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/halo-story",
+  "title": "Halo — Practitioner",
+  "category": "foundations-halo",
+  "icon": "admin-users",
+  "description": "The arched portrait beside the practitioner's own introduction, with two small facts underneath — consultation and studio.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "body": { "type": "string", "default": "" },
+    "facts": { "type": "array", "default": [] },
+    "imageId": { "type": "number", "default": 0 },
+    "imageAlt": { "type": "string", "default": "" },
+    "imageNote": { "type": "string", "default": "" },
+    "placeholder": { "type": "boolean", "default": false }
+  },
+  "render": "file:./render.php"
+}

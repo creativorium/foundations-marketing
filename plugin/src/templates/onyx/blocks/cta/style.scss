@@ -1,0 +1,45 @@
+// foundations/onyx-cta — front-end styles.
+
+.fm-onyx-cta {
+  padding-inline: var(--fm-onyx-gutter);
+  padding-block: 0 var(--fm-space-6);
+  background: var(--fm-canvas);
+
+  &__panel {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--fm-space-4);
+    flex-wrap: wrap;
+    padding: 4.875rem 3.75rem;
+    background: var(--fm-inverse);
+    color: var(--fm-on-inverse);
+    border-radius: 0.75rem;
+  }
+
+  &__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+
+  &__heading {
+    font-size: clamp(2rem, 4vw, 3.625rem);
+    line-height: 0.98;
+  }
+
+  &__lead {
+    margin: 0;
+    max-width: 44ch;
+    line-height: 1.6;
+    color: var(--fm-inverse-muted);
+  }
+}
+
+@media (max-width: 560px) {
+  .fm-onyx-cta {
+    padding-block-end: var(--fm-space-5);
+
+    &__panel { padding: var(--fm-space-4) var(--fm-space-3); }
+  }
+}

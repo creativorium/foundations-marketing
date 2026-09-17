@@ -1,0 +1,30 @@
+{
+  "$comment": "Fixture metadata. Same shape a real template uses (customer-runtime.md §2), minus the things only a sellable design needs: no niche, no target SEO phrase, no screenshot, no demo slug. It must never appear in the catalogue.",
+
+  "name": "Base Three Page",
+  "slug": "base-three-page",
+  "fixture": true,
+  "internal": true,
+
+  "pages": ["home", "about", "contact"],
+
+  "settings": {
+    "$comment": "EXTENSION POINT DEMO. These two are not core fields — they exist only to prove that a design can declare its own and have them appear in Site Settings beside the shared core, without editing fm_settings_core(). See theme-customer-base/inc/settings-contract.php.",
+    "opening_hours": {
+      "type": "textarea",
+      "label": "Opening hours",
+      "default": ""
+    },
+    "booking_url": {
+      "type": "url",
+      "label": "Booking link",
+      "default": ""
+    }
+  },
+
+  "shell": {
+    "$comment": "How this design configures the shared header and footer. A design varies the shell through these, not by forking blocks/site-header/.",
+    "header": { "variant": "inline", "showCta": true },
+    "footer": { "variant": "columns", "showContact": true }
+  }
+}

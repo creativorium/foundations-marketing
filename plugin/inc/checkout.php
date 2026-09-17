@@ -35,17 +35,21 @@ function fm_builder_config(): array
 
     $config = [];
 
-    $page_id = function_exists('wc_get_page_id') ? (int) wc_get_page_id('checkout') : 0;
+    $page_id = (int) get_option('fm_builder_page_id', 0);
 
     if ($page_id > 0) {
         $post = get_post($page_id);
 
         if ($post instanceof WP_Post && has_blocks($post->post_content)) {
-            foreach (parse_blocks($post->post_content) as $block) {
+            $queue = parse_blocks($post->post_content);
+            while ($queue) {
+                $block = array_shift($queue);
                 if (($block['blockName'] ?? '') === 'foundations/package-builder') {
-                    $config = (array) ($block['attrs'] ?? []);
+                    $type = WP_Block_Type_Registry::get_instance()->get_registered('foundations/package-builder');
+                    $config = $type ? $type->prepare_attributes_for_render((array) ($block['attrs'] ?? [])) : (array) ($block['attrs'] ?? []);
                     break;
                 }
+                array_push($queue, ...($block['innerBlocks'] ?? []));
             }
         }
     }
@@ -120,7 +124,7 @@ function fm_builder_cart_item_data(array $cart_item_data): array
     $chosen = [];
 
     foreach (['addons' => 'fm_addons', 'pages' => 'fm_pages'] as $group => $field) {
-        foreach ((array) ($_POST[$field] ?? []) as $raw) {
+        foreach (array_unique((array) ($_POST[$field] ?? [])) as $raw) {
             $id    = sanitize_key(wp_unslash((string) $raw));
             $price = fm_builder_price($group, $id);
 
@@ -159,6 +163,20 @@ function fm_builder_cart_item_data(array $cart_item_data): array
 }
 add_filter('woocommerce_add_cart_item_data', 'fm_builder_cart_item_data');
 
+add_filter('woocommerce_add_to_cart_validation', function (bool $valid, int $product_id): bool {
+    if (empty($_POST['fm_build'])) { return $valid; }
+    $nonce = sanitize_text_field(wp_unslash((string) ($_POST['fm_build_nonce'] ?? '')));
+    $slug = sanitize_title(wp_unslash((string) ($_POST['fm_template'] ?? '')));
+    $config = fm_builder_config();
+    if (!wp_verify_nonce($nonce, 'fm_build_order')
+        || $product_id !== (int) ($config['productId'] ?? 0)
+        || !in_array($slug, array_column(fm_get_templates(-1), 'slug'), true)) {
+        wc_add_notice('Please reopen the package builder and choose an available design.', 'error');
+        return false;
+    }
+    return $valid;
+}, 10, 2);
+
 /**
  * Add the extras to the line price.
  *
@@ -179,8 +197,9 @@ function fm_builder_apply_prices(WC_Cart $cart): void
 
         $extra = array_sum(array_column((array) $item['fm_extras'], 'price'));
 
-        if ($extra > 0) {
-            $item['data']->set_price((float) $item['data']->get_price() + (float) $extra);
+        $product = wc_get_product((int) ($item['variation_id'] ?: $item['product_id']));
+        if ($product) {
+            $item['data']->set_price((float) $product->get_price() + (float) $extra);
         }
     }
 }
@@ -222,6 +241,7 @@ function fm_builder_order_item_meta(WC_Order_Item_Product $item, string $cart_it
 {
     if (!empty($values['fm_template'])) {
         $item->add_meta_data(__('Template', 'foundations'), (string) $values['fm_template']);
+        $item->add_meta_data('_fm_template', (string) $values['fm_template']);
     }
 
     foreach ((array) ($values['fm_extras'] ?? []) as $extra) {

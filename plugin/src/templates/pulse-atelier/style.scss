@@ -1,0 +1,228 @@
+@font-face {
+  font-family: 'Pulse Atelier Hanken';
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+  src: url('./assets/fonts/hanken-grotesk-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Pulse Atelier Instrument';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./assets/fonts/instrument-serif-latin.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Pulse Atelier Instrument';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('./assets/fonts/instrument-serif-italic-latin.woff2') format('woff2');
+}
+
+
+// Dimensions and states transcribed from the decoded reference.
+.fm-pulse-atelier .fm-pa-hero__section-1 { display:grid; grid-template-columns:1.05fr 1fr; min-height:100vh; align-items:stretch; }
+.fm-pulse-atelier .fm-pa-hero__div-2 { display:flex; flex-direction:column; justify-content:center; padding:150px 60px 70px; }
+.fm-pulse-atelier .fm-pa-hero__div-3 { font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:#5A6046; margin-bottom:28px; }
+.fm-pulse-atelier .fm-pa-hero__h1-4 { font-family:'Pulse Atelier Instrument', serif; font-weight:400; font-size:clamp(52px, 6.4vw, 104px); line-height:0.98; letter-spacing:-0.02em; margin:0 0 26px; }
+.fm-pulse-atelier .fm-pa-hero__em-6 { color:#5A6046; }
+.fm-pulse-atelier .fm-pa-hero__p-7 { font-size:18px; line-height:1.65; max-width:440px; margin:0 0 40px; color:rgba(34,32,27,0.72); }
+.fm-pulse-atelier .fm-pa-hero__div-8 { display:flex; gap:14px; flex-wrap:wrap; align-items:center; }
+.fm-pulse-atelier .fm-pa-hero__a-9 { background:#22201B; color:#EFEAE0; padding:16px 30px; border-radius:100px; font-size:13px; letter-spacing:0.14em; text-transform:uppercase; }
+.fm-pulse-atelier .fm-pa-hero__a-9:hover { background:#5A6046; }
+.fm-pulse-atelier .fm-pa-hero__a-10 { padding:16px 8px; font-size:13px; letter-spacing:0.14em; text-transform:uppercase; border-bottom:1px solid rgba(34,32,27,0.3); }
+.fm-pulse-atelier .fm-pa-hero__div-11 { margin-top:54px; display:flex; align-items:center; gap:14px; font-size:13.5px; color:rgba(34,32,27,0.6); }
+.fm-pulse-atelier .fm-pa-hero__span-12 { width:34px; height:1px; background:#5A6046; }
+.fm-pulse-atelier .fm-pa-hero__div-13 {  background-size:cover; background-position:center; min-height:60vh; }
+.fm-pulse-atelier .fm-pa-credentials__section-1 { border-top:1px solid rgba(34,32,27,0.12); border-bottom:1px solid rgba(34,32,27,0.12); display:grid; grid-template-columns:repeat(4, 1fr); }
+.fm-pulse-atelier .fm-pa-credentials__div-2 { padding:30px 34px; border-right:1px solid rgba(34,32,27,0.12); font-size:12.5px; letter-spacing:0.12em; text-transform:uppercase; }
+.fm-pulse-atelier .fm-pa-credentials__div-3 { padding:30px 34px; border-right:1px solid rgba(34,32,27,0.12); font-size:12.5px; letter-spacing:0.12em; text-transform:uppercase; }
+.fm-pulse-atelier .fm-pa-credentials__div-4 { padding:30px 34px; border-right:1px solid rgba(34,32,27,0.12); font-size:12.5px; letter-spacing:0.12em; text-transform:uppercase; }
+.fm-pulse-atelier .fm-pa-credentials__div-5 { padding:30px 34px; font-size:12.5px; letter-spacing:0.12em; text-transform:uppercase; }
+.fm-pulse-atelier .fm-pa-practice__section-1 { padding:130px 60px; max-width:1240px; margin:0 auto; }
+.fm-pulse-atelier .fm-pa-practice__div-2 { display:grid; grid-template-columns:0.85fr 1fr; gap:80px; align-items:start; }
+.fm-pulse-atelier .fm-pa-practice__div-3 { font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:#5A6046; padding-top:14px; }
+.fm-pulse-atelier .fm-pa-practice__p-5 { font-family:'Pulse Atelier Instrument', serif; font-size:clamp(30px, 3.4vw, 46px); line-height:1.24; letter-spacing:-0.01em; margin:0 0 34px; }
+.fm-pulse-atelier .fm-pa-practice__div-6 { display:grid; grid-template-columns:1fr 1fr; gap:44px; font-size:16.5px; line-height:1.8; color:rgba(34,32,27,0.75); }
+.fm-pulse-atelier .fm-pa-practice__p-7 { margin:0; }
+.fm-pulse-atelier .fm-pa-practice__p-8 { margin:0; }
+.fm-pulse-atelier .fm-pa-practice__div-9 { display:grid; grid-template-columns:1.4fr 1fr; gap:22px; margin-top:80px; }
+.fm-pulse-atelier .fm-pa-practice__div-10 { height:440px;  background-size:cover; background-position:center; }
+.fm-pulse-atelier .fm-pa-practice__div-11 { height:440px;  background-size:cover; background-position:center; }
+.fm-pulse-atelier .fm-pa-teacher__section-1 { background:#E5DFD2; padding:130px 60px; }
+.fm-pulse-atelier .fm-pa-teacher__div-2 { max-width:1240px; margin:0 auto; display:grid; grid-template-columns:0.9fr 1.1fr; gap:80px; align-items:center; }
+.fm-pulse-atelier .fm-pa-teacher__div-3 { height:620px;  background-size:cover; background-position:center; }
+.fm-pulse-atelier .fm-pa-teacher__div-5 { font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:#5A6046; margin-bottom:26px; }
+.fm-pulse-atelier .fm-pa-teacher__h2-6 { font-family:'Pulse Atelier Instrument', serif; font-weight:400; font-size:clamp(38px, 4.4vw, 62px); line-height:1.06; letter-spacing:-0.02em; margin:0 0 28px; }
+.fm-pulse-atelier .fm-pa-teacher__p-7 { font-size:17px; line-height:1.85; color:rgba(34,32,27,0.78); margin:0 0 20px; }
+.fm-pulse-atelier .fm-pa-teacher__p-8 { font-size:17px; line-height:1.85; color:rgba(34,32,27,0.78); margin:0 0 34px; }
+.fm-pulse-atelier .fm-pa-teacher__div-9 { display:flex; gap:40px; padding-top:28px; border-top:1px solid rgba(34,32,27,0.18); }
+.fm-pulse-atelier .fm-pa-teacher__div-11 { font-family:'Pulse Atelier Instrument', serif; font-size:38px; line-height:1; }
+.fm-pulse-atelier .fm-pa-teacher__div-12 { font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(34,32,27,0.6); margin-top:6px; }
+.fm-pulse-atelier .fm-pa-teacher__div-14 { font-family:'Pulse Atelier Instrument', serif; font-size:38px; line-height:1; }
+.fm-pulse-atelier .fm-pa-teacher__div-15 { font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(34,32,27,0.6); margin-top:6px; }
+.fm-pulse-atelier .fm-pa-teacher__div-17 { font-family:'Pulse Atelier Instrument', serif; font-size:38px; line-height:1; }
+.fm-pulse-atelier .fm-pa-teacher__div-18 { font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(34,32,27,0.6); margin-top:6px; }
+.fm-pulse-atelier .fm-pa-sessions__section-1 { padding:130px 60px; max-width:1240px; margin:0 auto; }
+.fm-pulse-atelier .fm-pa-sessions__div-2 { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:60px; flex-wrap:wrap; gap:20px; }
+.fm-pulse-atelier .fm-pa-sessions__div-4 { font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:#5A6046; margin-bottom:20px; }
+.fm-pulse-atelier .fm-pa-sessions__h2-5 { font-family:'Pulse Atelier Instrument', serif; font-weight:400; font-size:clamp(38px, 4.4vw, 62px); line-height:1.06; letter-spacing:-0.02em; margin:0; }
+.fm-pulse-atelier .fm-pa-sessions__p-7 { font-size:15px; line-height:1.7; max-width:300px; color:rgba(34,32,27,0.65); margin:0; }
+.fm-pulse-atelier .fm-pa-sessions__a-8 { display:grid; grid-template-columns:0.9fr 1.4fr 0.5fr 0.4fr; gap:30px; align-items:center; padding:34px 10px; border-top:1px solid rgba(34,32,27,0.15); }
+.fm-pulse-atelier .fm-pa-sessions__a-8:hover { background:#E5DFD2; }
+.fm-pulse-atelier .fm-pa-sessions__div-9 { font-family:'Pulse Atelier Instrument', serif; font-size:30px; letter-spacing:-0.01em; }
+.fm-pulse-atelier .fm-pa-sessions__div-10 { font-size:15.5px; line-height:1.7; color:rgba(34,32,27,0.7); }
+.fm-pulse-atelier .fm-pa-sessions__div-11 { font-size:13px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(34,32,27,0.6); }
+.fm-pulse-atelier .fm-pa-sessions__div-12 { font-family:'Pulse Atelier Instrument', serif; font-size:28px; text-align:right; }
+.fm-pulse-atelier .fm-pa-sessions__div-13 { border-top:1px solid rgba(34,32,27,0.15); }
+.fm-pulse-atelier .fm-pa-process__section-1 { background:#22201B; color:#EFEAE0; padding:120px 60px; }
+.fm-pulse-atelier .fm-pa-process__div-2 { max-width:1240px; margin:0 auto; }
+.fm-pulse-atelier .fm-pa-process__div-3 { font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:#A8B08C; margin-bottom:26px; }
+.fm-pulse-atelier .fm-pa-process__h2-4 { font-family:'Pulse Atelier Instrument', serif; font-weight:400; font-size:clamp(34px, 3.8vw, 54px); line-height:1.1; margin:0 0 70px; max-width:640px; }
+.fm-pulse-atelier .fm-pa-process__div-5 { display:grid; grid-template-columns:repeat(3, 1fr); gap:50px; }
+.fm-pulse-atelier .fm-pa-process__div-6 { border-top:1px solid rgba(239,234,224,0.25); padding-top:26px; }
+.fm-pulse-atelier .fm-pa-process__div-7 { font-family:'Pulse Atelier Instrument', serif; font-size:44px; color:#A8B08C; line-height:1; margin-bottom:20px; }
+.fm-pulse-atelier .fm-pa-process__h3-8 { font-size:19px; font-weight:500; margin:0 0 12px; }
+.fm-pulse-atelier .fm-pa-process__p-9 { font-size:15.5px; line-height:1.8; color:rgba(239,234,224,0.68); margin:0; }
+.fm-pulse-atelier .fm-pa-process__div-10 { border-top:1px solid rgba(239,234,224,0.25); padding-top:26px; }
+.fm-pulse-atelier .fm-pa-process__div-11 { font-family:'Pulse Atelier Instrument', serif; font-size:44px; color:#A8B08C; line-height:1; margin-bottom:20px; }
+.fm-pulse-atelier .fm-pa-process__h3-12 { font-size:19px; font-weight:500; margin:0 0 12px; }
+.fm-pulse-atelier .fm-pa-process__p-13 { font-size:15.5px; line-height:1.8; color:rgba(239,234,224,0.68); margin:0; }
+.fm-pulse-atelier .fm-pa-process__div-14 { border-top:1px solid rgba(239,234,224,0.25); padding-top:26px; }
+.fm-pulse-atelier .fm-pa-process__div-15 { font-family:'Pulse Atelier Instrument', serif; font-size:44px; color:#A8B08C; line-height:1; margin-bottom:20px; }
+.fm-pulse-atelier .fm-pa-process__h3-16 { font-size:19px; font-weight:500; margin:0 0 12px; }
+.fm-pulse-atelier .fm-pa-process__p-17 { font-size:15.5px; line-height:1.8; color:rgba(239,234,224,0.68); margin:0; }
+.fm-pulse-atelier .fm-pa-audience__section-1 { padding:130px 60px; max-width:1240px; margin:0 auto; }
+.fm-pulse-atelier .fm-pa-audience__div-2 { display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; }
+.fm-pulse-atelier .fm-pa-audience__div-3 { height:540px;  background-size:cover; background-position:center; }
+.fm-pulse-atelier .fm-pa-audience__div-5 { font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:#5A6046; margin-bottom:26px; }
+.fm-pulse-atelier .fm-pa-audience__h2-6 { font-family:'Pulse Atelier Instrument', serif; font-weight:400; font-size:clamp(34px, 3.8vw, 54px); line-height:1.08; letter-spacing:-0.02em; margin:0 0 40px; }
+.fm-pulse-atelier .fm-pa-audience__div-7 { display:grid; grid-template-columns:24px 1fr; gap:18px; padding:20px 0; border-bottom:1px solid rgba(34,32,27,0.13); }
+.fm-pulse-atelier .fm-pa-audience__div-8 { width:9px; height:9px; border-radius:50%; background:#5A6046; margin-top:8px; }
+.fm-pulse-atelier .fm-pa-audience__div-10 { font-size:18px; font-weight:500; margin-bottom:7px; }
+.fm-pulse-atelier .fm-pa-audience__div-11 { font-size:15.5px; line-height:1.7; color:rgba(34,32,27,0.7); }
+.fm-pulse-atelier .fm-pa-timetable__section-1 { background:#E5DFD2; padding:120px 60px; }
+.fm-pulse-atelier .fm-pa-timetable__div-2 { max-width:1240px; margin:0 auto; }
+.fm-pulse-atelier .fm-pa-timetable__div-3 { font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:#5A6046; margin-bottom:26px; }
+.fm-pulse-atelier .fm-pa-timetable__div-4 { display:grid; grid-template-columns:repeat(5, 1fr); gap:16px; }
+.fm-pulse-atelier .fm-pa-timetable__div-5 { background:#EFEAE0; padding:26px 22px; min-height:250px; }
+.fm-pulse-atelier .fm-pa-timetable__div-6 { font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:#5A6046; padding-bottom:14px; border-bottom:1px solid rgba(34,32,27,0.15); margin-bottom:18px; }
+.fm-pulse-atelier .fm-pa-timetable__div-7 { margin-bottom:18px; }
+.fm-pulse-atelier .fm-pa-timetable__div-8 { font-family:'Pulse Atelier Instrument', serif; font-size:22px; line-height:1.2; }
+.fm-pulse-atelier .fm-pa-timetable__div-9 { font-size:14px; color:rgba(34,32,27,0.68); }
+.fm-pulse-atelier .fm-pa-timetable__div-10 { margin-top:34px; font-size:14.5px; color:rgba(34,32,27,0.65); }
+.fm-pulse-atelier .fm-pa-testimonials__section-1 { padding:130px 60px; max-width:1100px; margin:0 auto; text-align:center; }
+.fm-pulse-atelier .fm-pa-testimonials__div-2 { font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:#5A6046; margin-bottom:40px; }
+.fm-pulse-atelier .fm-pa-testimonials__p-3 { font-family:'Pulse Atelier Instrument', serif; font-style:italic; font-size:clamp(28px, 3.6vw, 46px); line-height:1.3; margin:0 0 34px; }
+.fm-pulse-atelier .fm-pa-testimonials__div-4 { font-size:12.5px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(34,32,27,0.6); }
+.fm-pulse-atelier .fm-pa-testimonials__div-5 { display:flex; gap:10px; justify-content:center; margin-top:44px; }
+.fm-pulse-atelier .fm-pa-testimonials__button-6[aria-pressed="true"] { background:#5A6046; }
+.fm-pulse-atelier .fm-pa-testimonials__button-6 { width:9px; height:9px; border-radius:50%; border:none; padding:0; cursor:pointer; background:rgba(34,32,27,0.22); }
+.fm-pulse-atelier .fm-pa-faq__section-1 { border-top:1px solid rgba(34,32,27,0.14); padding:120px 60px; }
+.fm-pulse-atelier .fm-pa-faq__div-2 { max-width:1000px; margin:0 auto; }
+.fm-pulse-atelier .fm-pa-faq__div-3 { font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:#5A6046; margin-bottom:26px; }
+.fm-pulse-atelier .fm-pa-faq__h2-4 { font-family:'Pulse Atelier Instrument', serif; font-weight:400; font-size:clamp(34px, 3.8vw, 54px); line-height:1.08; margin:0 0 54px; }
+.fm-pulse-atelier .fm-pa-faq__div-5 { border-top:1px solid rgba(34,32,27,0.15); }
+.fm-pulse-atelier .fm-pa-faq__button-6 { width:100%; display:flex; justify-content:space-between; align-items:center; gap:24px; background:none; border:none; padding:26px 4px; cursor:pointer; text-align:left; font-family:'Pulse Atelier Hanken', sans-serif; color:#22201B; }
+.fm-pulse-atelier .fm-pa-faq__span-7 { font-size:19px; font-weight:400; }
+.fm-pulse-atelier .fm-pa-faq__span-8 { font-family:'Pulse Atelier Instrument', serif; font-size:26px; color:#5A6046; }
+.fm-pulse-atelier .fm-pa-faq__p-9 { font-size:16px; line-height:1.8; color:rgba(34,32,27,0.72); margin:0; padding:0 60px 30px 4px; max-width:760px; }
+.fm-pulse-atelier .fm-pa-faq__div-10 { border-top:1px solid rgba(34,32,27,0.15); }
+.fm-pulse-atelier .fm-pa-newsletter__section-1 { background:#5A6046; color:#EFEAE0; padding:110px 60px; }
+.fm-pulse-atelier .fm-pa-newsletter__div-2 { max-width:900px; margin:0 auto; display:grid; grid-template-columns:1fr 1fr; gap:60px; align-items:center; }
+.fm-pulse-atelier .fm-pa-newsletter__h2-4 { font-family:'Pulse Atelier Instrument', serif; font-weight:400; font-size:clamp(30px, 3.4vw, 44px); line-height:1.12; margin:0 0 16px; }
+.fm-pulse-atelier .fm-pa-newsletter__p-6 { font-size:16px; line-height:1.75; color:rgba(239,234,224,0.8); margin:0; }
+.fm-pulse-atelier .fm-pa-newsletter__div-8 { display:flex; gap:0; border-bottom:1px solid rgba(239,234,224,0.4); padding-bottom:12px; }
+.fm-pulse-atelier .fm-pa-newsletter__input-9 { flex:1; background:none; border:none; outline:none; color:#EFEAE0; font-family:'Pulse Atelier Hanken', sans-serif; font-size:16px; }
+.fm-pulse-atelier .fm-pa-newsletter__button-10 { background:none; border:none; color:#EFEAE0; cursor:pointer; font-family:'Pulse Atelier Hanken', sans-serif; font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase; }
+.fm-pulse-atelier .fm-pa-newsletter__div-11 { font-size:13px; color:rgba(239,234,224,0.6); margin-top:14px; }
+.fm-pulse-atelier .fm-pa-newsletter__a-12 { text-decoration:underline; }
+.fm-pulse-atelier .fm-pa-booking__section-1 { position:relative; min-height:600px; display:flex; align-items:center; justify-content:center; text-align:center;  background-size:cover; background-position:center; }
+.fm-pulse-atelier .fm-pa-booking__div-2 { position:absolute; inset:0; background:rgba(34,32,27,0.55); }
+.fm-pulse-atelier .fm-pa-booking__div-3 { position:relative; padding:100px 40px; color:#EFEAE0; }
+.fm-pulse-atelier .fm-pa-booking__h2-4 { font-family:'Pulse Atelier Instrument', serif; font-weight:400; font-size:clamp(42px, 5.4vw, 84px); line-height:1.02; letter-spacing:-0.02em; margin:0 0 24px; }
+.fm-pulse-atelier .fm-pa-booking__p-6 { font-size:18px; margin:0 0 40px; color:rgba(239,234,224,0.85); }
+.fm-pulse-atelier .fm-pa-booking__a-7 { display:inline-block; background:#EFEAE0; color:#22201B; padding:18px 40px; border-radius:100px; font-size:13px; letter-spacing:0.14em; text-transform:uppercase; }
+.fm-pulse-atelier .fm-pa-booking__a-7:hover { background:#22201B; color:#EFEAE0; }
+.fm-pulse-atelier .fm-pa-header__div-1 { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:20px 40px; background:rgba(239,234,224,0.86); backdrop-filter:blur(10px); border-bottom:1px solid rgba(34,32,27,0.08); }
+.fm-pulse-atelier .fm-pa-header__a-2 { font-family:'Pulse Atelier Instrument', serif; font-size:27px; letter-spacing:0.02em; }
+.fm-pulse-atelier .fm-pa-header__span-3 { color:#5A6046; }
+.fm-pulse-atelier .fm-pa-header__div-4 { display:flex; align-items:center; gap:34px; font-size:12.5px; letter-spacing:0.14em; text-transform:uppercase; }
+.fm-pulse-atelier .fm-pa-header__a-9 { background:#22201B; color:#EFEAE0; padding:11px 20px; border-radius:100px; letter-spacing:0.12em; }
+.fm-pulse-atelier .fm-pa-header__a-9:hover { background:#5A6046; color:#EFEAE0; }
+.fm-pulse-atelier .fm-pa-contact__section-1 { padding:180px 60px 120px; max-width:1240px; margin:0 auto; }
+.fm-pulse-atelier .fm-pa-contact__div-2 { display:grid; grid-template-columns:1fr 1fr; gap:90px; }
+.fm-pulse-atelier .fm-pa-contact__div-4 { font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:#5A6046; margin-bottom:26px; }
+.fm-pulse-atelier .fm-pa-contact__h1-5 { font-family:'Pulse Atelier Instrument', serif; font-weight:400; font-size:clamp(44px, 5vw, 76px); line-height:1.02; letter-spacing:-0.02em; margin:0 0 28px; }
+.fm-pulse-atelier .fm-pa-contact__p-7 { font-size:17px; line-height:1.8; color:rgba(34,32,27,0.72); max-width:440px; margin:0 0 44px; }
+.fm-pulse-atelier .fm-pa-contact__div-8 { display:grid; gap:26px; max-width:420px; }
+.fm-pulse-atelier .fm-pa-contact__div-9 { border-top:1px solid rgba(34,32,27,0.15); padding-top:16px; }
+.fm-pulse-atelier .fm-pa-contact__div-10 { font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(34,32,27,0.55); margin-bottom:6px; }
+.fm-pulse-atelier .fm-pa-contact__div-11 { font-size:17px; }
+.fm-pulse-atelier .fm-pa-contact__div-13 { border-top:1px solid rgba(34,32,27,0.15); padding-top:16px; }
+.fm-pulse-atelier .fm-pa-contact__div-14 { font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(34,32,27,0.55); margin-bottom:6px; }
+.fm-pulse-atelier .fm-pa-contact__div-15 { font-size:17px; }
+.fm-pulse-atelier .fm-pa-contact__div-16 { border-top:1px solid rgba(34,32,27,0.15); padding-top:16px; }
+.fm-pulse-atelier .fm-pa-contact__div-17 { font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(34,32,27,0.55); margin-bottom:6px; }
+.fm-pulse-atelier .fm-pa-contact__div-18 { font-size:17px; }
+.fm-pulse-atelier .fm-pa-contact__div-19 { background:#E5DFD2; padding:48px; }
+.fm-pulse-atelier .fm-pa-contact__div-20 { display:grid; gap:26px; }
+.fm-pulse-atelier .fm-pa-contact__div-22 { font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(34,32,27,0.6); margin-bottom:10px; }
+.fm-pulse-atelier .fm-pa-contact__input-23 { width:100%; box-sizing:border-box; background:none; border:none; border-bottom:1px solid rgba(34,32,27,0.3); padding:8px 0; font-family:'Pulse Atelier Hanken', sans-serif; font-size:17px; color:#22201B; outline:none; }
+.fm-pulse-atelier .fm-pa-contact__div-25 { font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(34,32,27,0.6); margin-bottom:10px; }
+.fm-pulse-atelier .fm-pa-contact__input-26 { width:100%; box-sizing:border-box; background:none; border:none; border-bottom:1px solid rgba(34,32,27,0.3); padding:8px 0; font-family:'Pulse Atelier Hanken', sans-serif; font-size:17px; color:#22201B; outline:none; }
+.fm-pulse-atelier .fm-pa-contact__div-28 { font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(34,32,27,0.6); margin-bottom:10px; }
+.fm-pulse-atelier .fm-pa-contact__input-29 { width:100%; box-sizing:border-box; background:none; border:none; border-bottom:1px solid rgba(34,32,27,0.3); padding:8px 0; font-family:'Pulse Atelier Hanken', sans-serif; font-size:17px; color:#22201B; outline:none; }
+.fm-pulse-atelier .fm-pa-contact__div-31 { font-size:12px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(34,32,27,0.6); margin-bottom:10px; }
+.fm-pulse-atelier .fm-pa-contact__textarea-32 { width:100%; box-sizing:border-box; background:none; border:none; border-bottom:1px solid rgba(34,32,27,0.3); padding:8px 0; font-family:'Pulse Atelier Hanken', sans-serif; font-size:17px; color:#22201B; outline:none; resize:vertical; }
+.fm-pulse-atelier .fm-pa-contact__button-33 { background:#22201B; color:#EFEAE0; border:none; padding:17px 30px; border-radius:100px; font-family:'Pulse Atelier Hanken', sans-serif; font-size:13px; letter-spacing:0.14em; text-transform:uppercase; cursor:pointer; justify-self:start; }
+.fm-pulse-atelier .fm-pa-contact__button-33:hover { background:#5A6046; }
+.fm-pulse-atelier .fm-pa-privacy__section-1 { padding:180px 60px 120px; max-width:820px; margin:0 auto; }
+.fm-pulse-atelier .fm-pa-privacy__div-2 { font-size:12px; letter-spacing:0.2em; text-transform:uppercase; color:#5A6046; margin-bottom:26px; }
+.fm-pulse-atelier .fm-pa-privacy__h1-3 { font-family:'Pulse Atelier Instrument', serif; font-weight:400; font-size:clamp(42px, 5vw, 70px); line-height:1.04; letter-spacing:-0.02em; margin:0 0 16px; }
+.fm-pulse-atelier .fm-pa-privacy__p-4 { font-size:14px; color:rgba(34,32,27,0.55); margin:0 0 54px; }
+.fm-pulse-atelier .fm-pa-privacy__div-5 { border-top:1px solid rgba(34,32,27,0.15); padding:32px 0; }
+.fm-pulse-atelier .fm-pa-privacy__h2-6 { font-size:20px; font-weight:500; margin:0 0 14px; }
+.fm-pulse-atelier .fm-pa-privacy__p-7 { font-size:16.5px; line-height:1.85; color:rgba(34,32,27,0.75); margin:0; }
+.fm-pulse-atelier .fm-pa-privacy__div-8 { border-top:1px solid rgba(34,32,27,0.15); padding-top:32px; font-size:16.5px; line-height:1.85; color:rgba(34,32,27,0.75); }
+.fm-pulse-atelier .fm-pa-footer__footer-1 { background:#22201B; color:#EFEAE0; padding:90px 60px 34px; }
+.fm-pulse-atelier .fm-pa-footer__div-2 { max-width:1240px; margin:0 auto; display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:50px; }
+.fm-pulse-atelier .fm-pa-footer__div-4 { font-family:'Pulse Atelier Instrument', serif; font-size:34px; margin-bottom:18px; }
+.fm-pulse-atelier .fm-pa-footer__span-5 { color:#A8B08C; }
+.fm-pulse-atelier .fm-pa-footer__p-6 { font-size:15.5px; line-height:1.8; color:rgba(239,234,224,0.65); max-width:280px; margin:0; }
+.fm-pulse-atelier .fm-pa-footer__div-8 { font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:#A8B08C; margin-bottom:18px; }
+.fm-pulse-atelier .fm-pa-footer__div-9 { display:grid; gap:11px; font-size:15px; color:rgba(239,234,224,0.72); }
+.fm-pulse-atelier .fm-pa-footer__div-15 { font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:#A8B08C; margin-bottom:18px; }
+.fm-pulse-atelier .fm-pa-footer__div-16 { font-size:15px; line-height:1.9; color:rgba(239,234,224,0.72); }
+.fm-pulse-atelier .fm-pa-footer__div-20 { font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:#A8B08C; margin-bottom:18px; }
+.fm-pulse-atelier .fm-pa-footer__div-21 { display:grid; gap:11px; font-size:15px; color:rgba(239,234,224,0.72); }
+.fm-pulse-atelier .fm-pa-footer__div-25 { max-width:1240px; margin:60px auto 0; padding-top:26px; border-top:1px solid rgba(239,234,224,0.15); display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px; font-size:13.5px; color:rgba(239,234,224,0.5); }
+
+
+// The artifact uses browser defaults (including content-box), not theme defaults.
+// Keep the reset inside this template. Individual reference selectors win on specificity.
+.fm-pulse-atelier,
+.fm-pulse-atelier :where(*) { all: revert; }
+.fm-pulse-atelier {
+  display: block;
+  background: #EFEAE0;
+  color: #22201B;
+  font-family: 'Pulse Atelier Hanken', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: normal;
+  overflow-x: hidden;
+  text-align: start;
+  letter-spacing: normal;
+}
+.fm-pulse-atelier :where(a) { color: inherit; text-decoration: none; }
+.fm-pulse-atelier a { text-decoration: none; }
+.fm-pulse-atelier :where(a:hover) { color: #5A6046; }
+.fm-pulse-atelier ::selection { background: #5A6046; color: #EFEAE0; }
+.fm-pulse-atelier [hidden] { display: none !important; }
+html:has(.fm-pulse-atelier) { scroll-behavior: smooth; }
+body:has(.fm-pulse-atelier) { margin: 0; }
+body:has(.fm-pulse-atelier) { margin: 0; padding: 0; }
+body:has(.fm-pulse-atelier) > main { margin: 0; padding: 0; max-width: none; }
+

@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/onyx-steps",
+  "title": "Onyx — Process steps",
+  "category": "foundations-onyx",
+  "icon": "editor-ol",
+  "description": "The numbered appointment sequence, as hairline-separated columns.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "items":   { "type": "array",  "default": [] }
+  },
+  "render": "file:./render.php"
+}

@@ -1,0 +1,18 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/halo-menu",
+  "title": "Halo — Treatment menu",
+  "category": "foundations-halo",
+  "icon": "list-view",
+  "description": "The dark band: every treatment as a numbered row with its description, length and price.",
+  "textdomain": "foundations",
+  "supports": { "html": false, "anchor": true },
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "note": { "type": "string", "default": "" },
+    "items": { "type": "array", "default": [] }
+  },
+  "render": "file:./render.php"
+}

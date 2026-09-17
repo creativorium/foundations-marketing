@@ -5,6 +5,97 @@
 import './styles/main.scss';
 
 // -----------------------------------------------------------------------------
+// Template demos open in their own tab, and open it with a script.
+//
+// The markup already says target="_blank", so this changes nothing a reader can see.
+// What it changes is who opened the tab: a tab opened by a link may not close itself,
+// while one opened by window.open() may. That is what lets the demo's "Back to
+// Foundations Marketing" hand the reader back to the catalogue tab they still have
+// open — same scroll position, same filter — instead of loading the catalogue a
+// second time.
+//
+// Modified clicks are left alone, so "open in new window" and middle-click still mean
+// what they always meant, and with no JavaScript the anchor behaves as before.
+// -----------------------------------------------------------------------------
+document.addEventListener('click', event => {
+  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  const link = event.target.closest('a[target="_blank"][data-fm-demo]');
+  if (!link) return;
+  // Same origin only: window.open without noopener hands the new tab a reference back
+  // to this one, which is fine for our own demo and not fine for anywhere else.
+  if (new URL(link.href, location.href).origin !== location.origin) return;
+  const tab = window.open(link.href, '_blank');
+  // A blocked pop-up returns null. Let the anchor do its normal job rather than
+  // swallowing the click and opening nothing.
+  if (tab) event.preventDefault();
+});
+
+// -----------------------------------------------------------------------------
+// Page transition — the outgoing half.
+//
+// The cover is started and the navigation is left alone: the browser holds this
+// document on screen until the next one is ready to paint, so the cover plays over
+// exactly the wait there is and adds nothing to it.
+//
+// It waits GRACE milliseconds before covering, because how long a navigation takes is
+// not knowable in advance and varies enormously on the same site: measured on dev, the
+// same link commits in ~50ms once the speculation rules have prerendered it and ~1100ms
+// cold. A cover that starts immediately is cut off part-way through by any navigation
+// faster than its own 130ms, which is seen as a black shape flashing across the page
+// and reads as a glitch rather than as a transition. Starting late means a navigation
+// that beats the grace period takes this document away before anything is drawn — no
+// wait, no motion — and only a navigation with a real wait is covered at all.
+//
+// It used to preventDefault and navigate on a 160ms timer instead. That charged every
+// internal link a fixed 160ms — including the ones the speculation rules had already
+// prerendered, which would otherwise have been instant — and it had two ways to look
+// broken: a navigation slower than the recovery timer uncovered the page halfway
+// through, and a navigation that never happened left the reader behind a black screen.
+// Both read exactly as "the transition lagged, or stopped".
+// -----------------------------------------------------------------------------
+const curtain = document.querySelector('.fm-px');
+const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+// Long enough that a prerendered or cached page is simply instant, short enough that a
+// wait the reader would notice is covered before they notice it.
+const GRACE = 90;
+
+let recover = 0;
+let pending = 0;
+
+if (curtain) {
+  const cover = () => {
+    window.clearTimeout(pending);
+    pending = window.setTimeout(() => {
+      curtain.dataset.leaving = '';
+      // Only reached when the navigation does not happen after all — a download, a
+      // cancelled unload, an extension swallowing the click. The page is never left
+      // covered, and because nothing waits on this timer it can afford to be patient.
+      window.clearTimeout(recover);
+      recover = window.setTimeout(() => delete curtain.dataset.leaving, 4000);
+    }, GRACE);
+  };
+
+  document.addEventListener('click', event => {
+    if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || reducedMotion.matches) return;
+    const link = event.target.closest('a[href]');
+    if (!link || link.hasAttribute('download') || (link.target && link.target !== '_self')) return;
+    const url = new URL(link.href, location.href);
+    if (url.origin !== location.origin || !/^https?:$/.test(url.protocol) || url.pathname.startsWith('/wp-admin') || url.searchParams.has('add-to-cart')) return;
+    // Same document: an in-page anchor is not a navigation and must not be covered.
+    if (url.pathname === location.pathname && url.search === location.search) return;
+    cover();
+  });
+
+  // Back from the bfcache: the reveal animation has already finished on this document
+  // and will not run again, so the cover has to be taken off by hand.
+  window.addEventListener('pageshow', () => {
+    window.clearTimeout(pending);
+    window.clearTimeout(recover);
+    delete curtain.dataset.leaving;
+  });
+}
+
+// -----------------------------------------------------------------------------
 // Mobile nav — a right-hand drawer. Markup lives in theme/header.php, geometry and
 // motion in styles/_header.scss. This file owns state only: it flips `data-open`
 // and lets CSS decide what that looks like.

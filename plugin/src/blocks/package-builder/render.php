@@ -29,6 +29,8 @@ $base_price = max(0, (int) $attr('basePrice', 249));
 $base_label = (string) $attr('baseLabel', 'base build');
 $page_price = max(0, (int) $attr('extraPagePrice', 50));
 $product_id = (int) $attr('productId', 0);
+$product = $product_id > 0 && function_exists('wc_get_product') ? wc_get_product($product_id) : false;
+if ($product && $product->get_price() !== '') { $base_price = max(0, (float) $product->get_price()); }
 
 $included    = (array) $attr('included', []);
 $free_items  = (array) $attr('freeItems', []);
@@ -43,7 +45,7 @@ $template = fm_selected_template();
 $steps = [
     __('Preview', 'foundations'),
     __('Add extras', 'foundations'),
-    __('Review & pay', 'foundations'),
+    __('Review package', 'foundations'),
 ];
 
 $devices = [
@@ -52,8 +54,31 @@ $devices = [
     'mobile'  => __('Mobile', 'foundations'),
 ];
 
+/*
+ * The viewport each device previews at. The demo is loaded at this width and then
+ * scaled down to the bezel, so the buyer sees the template's real desktop, tablet and
+ * mobile layouts — its own breakpoints doing the work — rather than one screenshot
+ * squeezed into three frames.
+ */
+$device_widths = ['desktop' => 1280, 'tablet' => 834, 'mobile' => 390];
+
+// The standalone mini site, loaded without its own back-to-site bar: inside the bezel
+// that bar would be chrome about chrome.
+$demo_url = fm_template_demo_url($template);
+$preview_shot = (int) ($template['thumb_id'] ?? 0);
+
+/*
+ * The editor previews this block through the REST endpoint, where the front-end
+ * bundle never runs — so nothing would be there to scale the iframe to the bezel, and
+ * an unscaled 1280px demo would be shown cropped to its top-left corner. The editor
+ * gets the screenshot instead, which is also one fewer whole site to load while
+ * someone is editing a page.
+ */
+$in_editor   = defined('REST_REQUEST') && REST_REQUEST;
+$preview_url = (!$in_editor && $demo_url !== '') ? add_query_arg('fm_embed', '1', $demo_url) : '';
+
 $action = fm_checkout_url();
-$money  = static fn (int $n): string => '&pound;' . number_format_i18n($n);
+$money  = static fn (float $n): string => function_exists('wc_price') ? wc_price($n) : '&pound;' . number_format_i18n($n, 2);
 ?>
 <div <?php echo fm_wrapper(['fm-builder']); ?> data-fm-builder data-step="1"
      data-base-price="<?php echo esc_attr((string) $base_price); ?>">
@@ -102,9 +127,12 @@ $money  = static fn (int $n): string => '&pound;' . number_format_i18n($n);
                             <span class="fm-builder__template-name">
                                 <?php echo esc_html((string) ($template['name'] ?? __('No template chosen', 'foundations'))); ?>
                             </span>
-                            <?php if (!empty($template['url'])) : ?>
-                                <a class="fm-builder__live" href="<?php echo fm_url((string) $template['url']); ?>">
-                                    <?php esc_html_e('View live site', 'foundations'); ?> &#8599;
+                            <?php if ($demo_url !== '') : ?>
+                                <?php // Its own tab: leaving the builder would drop the extras chosen so far. ?>
+                                <a class="fm-builder__live-link" href="<?php echo fm_url($demo_url); ?>"
+                                   target="_blank" rel="noopener" data-fm-demo>
+                                    <?php esc_html_e('Open full demo', 'foundations'); ?> &#8599;
+                                    <span class="fm-sr-only"><?php esc_html_e('(opens in a new tab)', 'foundations'); ?></span>
                                 </a>
                             <?php endif; ?>
                         </p>
@@ -128,36 +156,77 @@ $money  = static fn (int $n): string => '&pound;' . number_format_i18n($n);
 
                 <?php
                 /*
-                 * The preview is drawn, not photographed. The canvas shows a wireframe
-                 * inside a device bezel, and drawing it means every template previews
-                 * identically at every size with no screenshot to commission, no image
-                 * to download, and nothing to shift the layout while it loads.
+                 * What sits in the bezel, best first:
                  *
-                 * Decorative to the last pixel, so the whole thing is aria-hidden — a
-                 * screen reader gets the caption underneath, which says what it is.
+                 * 1. the live demo in an iframe, rendered at the chosen device's real
+                 *    viewport width and scaled down — the buyer is looking at the site
+                 *    they are buying, at the size they asked for;
+                 * 2. its screenshot, when the template has one but no demo yet;
+                 * 3. the drawn wireframe from the client canvas, when it has neither.
+                 *    A template with no demo and no screenshot should not leave an empty
+                 *    grey rectangle where the product is meant to be.
+                 *
+                 * The iframe is inert — pointer-events:none in CSS and out of the tab
+                 * order — so a click lands on the builder, never inside the preview, and
+                 * nobody can navigate a page they cannot see the address bar of.
                  */
                 ?>
                 <div class="fm-builder__stage">
-                    <div class="fm-builder__frame" data-fm-frame data-device="desktop" aria-hidden="true">
+                    <div class="fm-builder__frame" data-fm-frame data-device="desktop"
+                         data-fm-widths="<?php echo esc_attr((string) wp_json_encode($device_widths)); ?>">
                         <div class="fm-builder__bezel">
-                            <span class="fm-builder__camera"></span>
-                            <div class="fm-builder__screen">
-                                <div class="fm-builder__screen-bar">
-                                    <i class="fm-builder__pip"></i>
-                                    <i class="fm-builder__pip fm-builder__pip--sm"></i>
-                                    <i class="fm-builder__pip fm-builder__pip--sm"></i>
-                                    <i class="fm-builder__pip fm-builder__pip--btn"></i>
-                                </div>
-                                <div class="fm-builder__screen-hero">
-                                    <i class="fm-builder__line fm-builder__line--w1"></i>
-                                    <i class="fm-builder__line fm-builder__line--w2"></i>
-                                    <i class="fm-builder__line fm-builder__line--w3"></i>
-                                    <i class="fm-builder__line fm-builder__line--btn"></i>
-                                </div>
-                                <div class="fm-builder__screen-block"></div>
-                                <div class="fm-builder__screen-cols">
-                                    <i></i><i></i>
-                                </div>
+                            <span class="fm-builder__camera" aria-hidden="true"></span>
+                            <div class="fm-builder__screen" data-fm-screen>
+                                <?php if ($preview_url !== '') : ?>
+                                    <iframe
+                                        class="fm-builder__live"
+                                        data-fm-preview
+                                        src="<?php echo esc_url($preview_url); ?>"
+                                        title="<?php
+                                            /* translators: %s: template name. */
+                                            echo esc_attr(sprintf(
+                                                __('Live preview of the %s template', 'foundations'),
+                                                (string) ($template['name'] ?? '')
+                                            ));
+                                        ?>"
+                                        loading="lazy"
+                                        scrolling="no"
+                                        tabindex="-1"></iframe>
+                                <?php elseif ($preview_shot > 0) : ?>
+                                    <?php
+                                    echo fm_image(
+                                        $preview_shot,
+                                        'large',
+                                        [
+                                            'class' => 'fm-builder__shot',
+                                            /* translators: %s: template name. */
+                                            'alt'   => sprintf(
+                                                __('%s website template by Foundations Marketing', 'foundations'),
+                                                (string) ($template['name'] ?? '')
+                                            ),
+                                        ]
+                                    );
+                                    ?>
+                                <?php else : ?>
+                                    <div class="fm-builder__wire" aria-hidden="true">
+                                        <div class="fm-builder__screen-bar">
+                                            <i class="fm-builder__pip"></i>
+                                            <i class="fm-builder__pip fm-builder__pip--sm"></i>
+                                            <i class="fm-builder__pip fm-builder__pip--sm"></i>
+                                            <i class="fm-builder__pip fm-builder__pip--btn"></i>
+                                        </div>
+                                        <div class="fm-builder__screen-hero">
+                                            <i class="fm-builder__line fm-builder__line--w1"></i>
+                                            <i class="fm-builder__line fm-builder__line--w2"></i>
+                                            <i class="fm-builder__line fm-builder__line--w3"></i>
+                                            <i class="fm-builder__line fm-builder__line--btn"></i>
+                                        </div>
+                                        <div class="fm-builder__screen-block"></div>
+                                        <div class="fm-builder__screen-cols">
+                                            <i></i><i></i>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

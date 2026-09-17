@@ -1,0 +1,21 @@
+{
+  "$schema":"https://schemas.wp.org/trunk/theme.json",
+  "version":2,
+  "settings":{
+    "appearanceTools":true,
+    "layout":{"contentSize":"50rem","wideSize":"77.5rem"},
+    "color":{"defaultPalette":false,"custom":false,"palette":[
+      {"slug":"canvas","name":"Canvas","color":"#efeae0"},
+      {"slug":"surface","name":"Surface","color":"#e5dfd2"},
+      {"slug":"ink","name":"Ink","color":"#22201b"},
+      {"slug":"accent","name":"Accent","color":"#5a6046"},
+      {"slug":"accent-soft","name":"Accent soft","color":"#a8b08c"}
+    ]},
+    "typography":{"defaultFontSizes":false,"customFontSize":false,"fontFamilies":[
+      {"slug":"display","name":"Display","fontFamily":"'Pulse Atelier Instrument', Georgia, serif"},
+      {"slug":"body","name":"Body","fontFamily":"'Pulse Atelier Hanken', system-ui, sans-serif"}
+    ]}
+  },
+  "styles":{"color":{"background":"var(--wp--preset--color--canvas)","text":"var(--wp--preset--color--ink)"},"typography":{"fontFamily":"var(--wp--preset--font-family--body)"},"spacing":{"blockGap":"0"}},
+  "templateParts":[{"name":"header","title":"Header","area":"header"},{"name":"footer","title":"Footer","area":"footer"}]
+}
