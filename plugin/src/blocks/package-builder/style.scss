@@ -317,6 +317,60 @@
     background: var(--fm-bg);
   }
 
+  // --- while the preview is on its way ---------------------------------------
+  // The stage carries the state (server-rendered as "loading"), so the bezel is never
+  // briefly empty before the script runs, and the states are one attribute rather than
+  // several classes to keep in step.
+  &__loading {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin: 0;
+    padding: 1rem;
+    background: var(--fm-hero-screen);
+    text-align: center;
+    // The no-JavaScript floor. builder.js takes this panel away the moment the frame
+    // fires `load`, which is normally a second or two; if the script never runs, this
+    // uncovers the preview anyway rather than hiding it behind a spinner for ever.
+    animation: fm-builder-loading-floor 1ms linear 8s both;
+  }
+
+  &__loading-dots {
+    display: flex;
+    gap: 6px;
+
+    i {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      opacity: 0.25;
+      animation: fm-builder-dot 1100ms ease-in-out infinite both;
+
+      &:nth-child(2) { animation-delay: 160ms; }
+      &:nth-child(3) { animation-delay: 320ms; }
+    }
+  }
+
+  &__loading-text {
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  // Ready: the panel goes and the preview is simply there. Failed: the panel stays,
+  // swaps the dots for a sentence, and points at the full demo instead.
+  &__stage[data-fm-stage='ready'] &__loading { display: none; }
+  &__stage[data-fm-stage='failed'] &__loading-dots,
+  &__stage[data-fm-stage='failed'] &__loading-text { display: none; }
+  &__loading-failed { display: none; }
+  &__stage[data-fm-stage='failed'] &__loading-failed { display: block; }
+
   &__shot {
     width: 100%;
     height: 100%;
@@ -795,4 +849,21 @@
   @media (prefers-reduced-motion: reduce) {
     &__frame, &__card, &__next, &__pay { transition: none; }
   }
+}
+
+// The preview's waiting state. Opacity only — it composites, and a dot that pulses
+// costs nothing next to the page being fetched behind it.
+@keyframes fm-builder-dot {
+  0%, 100% { opacity: 0.25; }
+  50%      { opacity: 1; }
+}
+
+// The floor described on .fm-builder__loading: uncover the preview even if no script
+// ever runs to do it properly.
+@keyframes fm-builder-loading-floor {
+  to { visibility: hidden; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fm-builder__loading-dots i { animation: none; opacity: 0.6; }
 }

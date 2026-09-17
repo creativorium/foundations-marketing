@@ -194,6 +194,63 @@ export default function initPackageBuilder() {
 
   fitPreview();
 
+  // --- the preview's own loading state ---------------------------------------
+  // The preview is a second WordPress page, so it arrives when a page arrives. The
+  // stage carries the state and CSS does the rest; this only says which state it is
+  // in. Server-rendered as "loading", so the bezel is never briefly empty before the
+  // script runs.
+  const stage = root.querySelector('[data-fm-stage]');
+
+  if (preview && stage) {
+    let settled = false;
+
+    const settle = (state) => {
+      if (settled) {
+        return;
+      }
+      settled = true;
+      stage.dataset.fmStage = state;
+      // Re-fit once the document inside is real: its height is what the scale was
+      // guessing at while the frame was still empty.
+      fitPreview();
+    };
+
+    /*
+     * Did a real page arrive, or is this the empty document every iframe starts life
+     * with? An iframe that has not navigated yet reports readyState "complete" on its
+     * blank document and fires `load` for a refused request, so "it loaded" is not the
+     * same question as "there is something in it". Both are answered by looking.
+     *
+     * The preview is same-origin by construction — render.php builds its URL from this
+     * site's own home_url() — so the document is always readable when it is ours.
+     * Being unable to read it means what is in the frame is NOT ours: the browser's own
+     * error page, which is exactly the case this is here to catch.
+     */
+    const hasContent = () => {
+      try {
+        const doc = preview.contentDocument;
+
+        return !!doc && doc.location.href !== 'about:blank' && (doc.body?.childElementCount ?? 0) > 0;
+      } catch {
+        return false;
+      }
+    };
+
+    preview.addEventListener('load', () => settle(hasContent() ? 'ready' : 'failed'));
+    preview.addEventListener('error', () => settle('failed'));
+
+    // A preview that has not arrived in fifteen seconds is not going to. Say so rather
+    // than spinning for ever — the buyer can still choose the template, and the
+    // "Open full demo" link beside the heading still works.
+    window.setTimeout(() => settle('failed'), 15000);
+
+    // A cached preview can beat the bundle to it, in which case there is no `load`
+    // event left to hear.
+    if (preview.contentDocument?.readyState === 'complete' && hasContent()) {
+      settle('ready');
+    }
+  }
+
   // What actually gets posted. Hidden inputs are written at submit time rather than
   // kept in sync on every click — one place to be wrong instead of many.
   form?.addEventListener('submit', () => {

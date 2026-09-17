@@ -35,6 +35,22 @@ $fm_px_cols = 18;
     echo str_repeat('<div class="fm-px__cell"></div>', $fm_px_rows * $fm_px_cols);
 ?></div>
 
+<?php
+/*
+ * Shown only when a navigation is genuinely slow: the curtain covers the wait, and
+ * after 1.2s of cover this fades in on top of it so a long wait reads as "loading"
+ * rather than as a page that has died. A fast or prerendered navigation never reaches
+ * the delay, so it is never seen — which is the point.
+ *
+ * A sibling of the curtain rather than a child: the curtain's cells are addressed by
+ * :nth-child(), so an extra child would take a grid cell and shift the stagger.
+ *
+ * Decorative, and aria-hidden for it. The browser already announces that a navigation
+ * is in progress; this is reassurance for the eye, not a second announcement.
+ */
+?>
+<div class="fm-px-wait" aria-hidden="true"><i></i><i></i><i></i></div>
+
 <a class="fm-skip-link" href="#fm-content"><?php esc_html_e('Skip to content', 'foundations-marketing'); ?></a>
 
 <header class="fm-header">
