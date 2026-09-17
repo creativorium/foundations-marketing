@@ -1,0 +1,33 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/editorial-quotes",
+  "title": "Editorial testimonials",
+  "category": "foundations",
+  "icon": "format-quote",
+  "description": "Editorial testimonials with editable content and token-based styling.",
+  "textdomain": "foundations",
+  "supports": {
+    "html": false,
+    "anchor": true
+  },
+  "attributes": {
+    "eyebrow": {
+      "type": "string",
+      "default": ""
+    },
+    "heading": {
+      "type": "string",
+      "default": ""
+    },
+    "intro": {
+      "type": "string",
+      "default": ""
+    },
+    "items": {
+      "type": "array",
+      "default": []
+    }
+  },
+  "render": "file:./render.php"
+}

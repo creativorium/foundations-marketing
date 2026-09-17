@@ -9,6 +9,13 @@
 @use '../blocks/benefits/style' as benefits;
 @use '../blocks/build-your-website/style' as build-your-website;
 @use '../blocks/cta/style' as cta;
+@use '../blocks/editorial-frame/style' as editorial-frame;
+@use '../blocks/editorial-hero/style' as editorial-hero;
+@use '../blocks/editorial-list/style' as editorial-list;
+@use '../blocks/editorial-quotes/style' as editorial-quotes;
+@use '../blocks/editorial-section/style' as editorial-section;
+@use '../blocks/editorial-story/style' as editorial-story;
+@use '../blocks/editorial-timetable/style' as editorial-timetable;
 @use '../blocks/faq/style' as faq;
 @use '../blocks/feature-cards/style' as feature-cards;
 @use '../blocks/hero/style' as hero;
@@ -27,3 +34,4 @@
 
 // Shared section furniture used by several blocks.
 @use 'shared';
+@use '../blocks/pulse-atelier/style';

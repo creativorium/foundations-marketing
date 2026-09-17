@@ -1,0 +1,120 @@
+{
+  "header": {
+    "fields": {
+      "href_top": "#top",
+      "pulse": "Pulse",
+      "text": ".",
+      "href_practice": "#practice",
+      "practice": "Practice",
+      "href_teacher": "#teacher",
+      "teacher": "Teacher",
+      "href_sessions": "#sessions",
+      "sessions": "Sessions",
+      "href_faq": "#faq",
+      "faq": "FAQ",
+      "href_book": "#book",
+      "book_a_class": "Book a class"
+    },
+    "lists": {},
+    "images": {}
+  },
+  "contact": {
+    "fields": {
+      "contact": "Contact",
+      "let_s_get_you": "Let's get you",
+      "on_a_mat": "on a mat.",
+      "tell_me_a_little_about_where_you_re_at_and_what_": "Tell me a little about where you're at and what you'd like to work on. I reply to everything myself, usually within a day.",
+      "studio": "Studio",
+      "unit_4_gladstone_mews": "Unit 4, Gladstone Mews",
+      "brighton_bn1_4ab": "Brighton BN1 4AB",
+      "email": "Email",
+      "hello_pulsepilates_co_uk": "hello@pulsepilates.co.uk",
+      "instagram": "Instagram",
+      "pulse_pilates": "@pulse.pilates",
+      "name": "Name",
+      "label_contact_23": "Name",
+      "email_2": "Email",
+      "label_contact_26": "Email",
+      "i_m_interested_in": "I'm interested in",
+      "placeholder_foundations_class_1_1_pre_natal": "Foundations class, 1:1, pre-natal…",
+      "label_foundations_class_1_1_pre_natal": "I'm interested in",
+      "anything_i_should_know": "Anything I should know",
+      "label_contact_32": "Anything I should know",
+      "send_message": "Send message"
+    },
+    "lists": {},
+    "images": {}
+  },
+  "privacy": {
+    "fields": {
+      "legal": "Legal",
+      "privacy_policy": "Privacy policy",
+      "last_updated_12_august_2026": "Last updated 12 August 2026",
+      "questions_about_any_of_this_email_hello_pulsepil": "Questions about any of this? Email hello@pulsepilates.co.uk and I'll answer personally."
+    },
+    "lists": {
+      "privacy": [
+        {
+          "h": "Who I am",
+          "b": "Pulse Pilates is a sole trader business based at Unit 4, Gladstone Mews, Brighton BN1 4AB. I am the data controller for any information you share through this website. You can reach me at hello@pulsepilates.co.uk."
+        },
+        {
+          "h": "What I collect",
+          "b": "Your name, email address, phone number and the health information you give on the pre-class form. If you join the mailing list, your email address only. If you book or pay online, the payment provider handles your card details and I never see them."
+        },
+        {
+          "h": "Why I collect it",
+          "b": "To take your booking, to teach you safely around any injury or condition, to send the class reminders you asked for, and to keep the accounting records the law requires. Health information is used for your safety in class and nothing else."
+        },
+        {
+          "h": "Who sees it",
+          "b": "Only me, plus the booking, email and payment services that run the studio. They act on my instructions and cannot use your details for their own purposes. Nothing is ever sold or shared for advertising."
+        },
+        {
+          "h": "How long I keep it",
+          "b": "Health and booking records are kept for seven years after your last class, as required for insurance and tax. Mailing list details are kept until you unsubscribe, which you can do from any email."
+        },
+        {
+          "h": "Your rights",
+          "b": "You can ask for a copy of what I hold, ask me to correct it, or ask me to delete it where I am not legally required to keep it. Email me and I will respond within thirty days. You can also complain to the Information Commissioner's Office at ico.org.uk."
+        },
+        {
+          "h": "Cookies",
+          "b": "This site uses essential cookies to keep the booking system working, and anonymous analytics to see which pages people read. No advertising or tracking cookies are set. You can block cookies in your browser, though booking may stop working if you do."
+        }
+      ]
+    },
+    "images": {}
+  },
+  "footer": {
+    "fields": {
+      "pulse": "Pulse",
+      "text": ".",
+      "reformer_and_mat_pilates_in_brighton_small_class": "Reformer and mat Pilates in Brighton. Small classes, careful teaching, room to progress.",
+      "explore": "Explore",
+      "href_practice": "#practice",
+      "the_practice": "The practice",
+      "href_sessions": "#sessions",
+      "sessions": "Sessions",
+      "href_faq": "#faq",
+      "faq": "FAQ",
+      "href_contact": "#contact",
+      "contact": "Contact",
+      "studio": "Studio",
+      "unit_4_gladstone_mews": "Unit 4, Gladstone Mews",
+      "brighton_bn1_4ab": "Brighton BN1 4AB",
+      "hello_pulsepilates_co_uk": "hello@pulsepilates.co.uk",
+      "legal": "Legal",
+      "href_privacy": "#privacy",
+      "privacy_policy": "Privacy policy",
+      "href_privacy_2": "#privacy",
+      "cookies": "Cookies",
+      "href_contact_2": "#contact",
+      "class_terms": "Class terms",
+      "2026_pulse_pilates": "© 2026 Pulse Pilates",
+      "template_by_foundations": "Template by Foundations"
+    },
+    "lists": {},
+    "images": {}
+  }
+}

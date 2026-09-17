@@ -1,0 +1,26 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/pulse-atelier-section",
+  "title": "Pulse Atelier section",
+  "category": "foundations",
+  "icon": "layout",
+  "textdomain": "foundations",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "settings": {
+      "type": "object",
+      "default": {}
+    },
+    "variant": {
+      "type": "string",
+      "default": "hero"
+    }
+  },
+  "render": "file:./render.php",
+  "parent": [
+    "foundations/pulse-atelier"
+  ]
+}

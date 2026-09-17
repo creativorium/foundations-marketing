@@ -1,0 +1,9 @@
+@use 'shared';
+
+.fm-editorial-frame {
+  @include shared.base;
+  --fm-editorial-muted: color-mix(in srgb, var(--fm-ink) 78%, var(--fm-bg));
+  --fm-editorial-line: color-mix(in srgb, var(--fm-ink) 20%, var(--fm-bg));
+  width: 100%;
+  > * { margin-block: 0; }
+}
