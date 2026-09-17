@@ -1,0 +1,13 @@
+{
+  "site_name":"Pulse Pilates",
+  "tagline":"Reformer and mat Pilates in Brighton",
+  "logo_id":0,
+  "phone":"+44 1273 000 000",
+  "email":"hello@pulsepilates.co.uk",
+  "address":"Unit 4, Gladstone Mews\nBrighton BN1 4AB",
+  "cta_label":"Book a class",
+  "cta_url":"{{page:contact|url}}",
+  "footer_text":"Reformer and mat Pilates in Brighton. Small classes, careful teaching, room to progress.",
+  "social":[],
+  "brand_label":"Pulse"
+}

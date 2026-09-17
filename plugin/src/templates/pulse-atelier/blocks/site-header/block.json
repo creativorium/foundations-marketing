@@ -1,0 +1,1 @@
+{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"foundations/pulse-atelier-site-header","title":"Pulse Atelier header","category":"foundations","supports":{"html":false,"inserter":false,"multiple":false},"render":"file:./render.php"}
