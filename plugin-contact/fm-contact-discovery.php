@@ -33,10 +33,10 @@ class FMCD_Plugin {
   }
 
   public function init() {
-    $this->maybe_install_native_form_pages();
+    $this->install_native_form_pages();
   }
 
-  private function maybe_install_native_form_pages() {
+  public function install_native_form_pages() {
     $native_pages_version = '2';
     if ((string) get_option('fmcd_native_pages_version', '') === $native_pages_version) return;
 
@@ -846,4 +846,4 @@ class FMCD_Plugin {
     }
   }
 }
-new FMCD_Plugin;
+$GLOBALS['fmcd_plugin'] = new FMCD_Plugin;
