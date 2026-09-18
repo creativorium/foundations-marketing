@@ -1,0 +1,190 @@
+{
+  "hero": {
+    "fields": {
+      "availability": "Now taking September clients",
+      "heading_line_1": "Move like",
+      "heading_line_2": "you mean it",
+      "intro": "Barre, mat Pilates and mobility in a bright Brighton studio. Twelve mats, one coach, and a week of unlimited classes to find out if it's yours.",
+      "primary_label": "Claim your free week",
+      "primary_url": "#book",
+      "secondary_label": "Watch a class",
+      "secondary_url": "#classes"
+    },
+    "lists": {
+      "marquee": [
+        {"text":"Barre"},
+        {"text":"Mat Pilates"},
+        {"text":"Mobility"},
+        {"text":"Small groups"},
+        {"text":"No contracts"}
+      ]
+    },
+    "images": {"hero-barre":"","hero-mat":"","hero-mobility":""}
+  },
+  "metrics": {
+    "fields": {
+      "heading": "Studio energy without the studio pressure",
+      "mats_value": "12",
+      "mats_title": "Mats per class",
+      "mats_body": "Enough for atmosphere, few enough that I correct your form by name.",
+      "duration_value": "45'",
+      "duration_body": "Sessions built for a lunch break or a school run.",
+      "fee_value": "£0",
+      "fee_body": "Joining fee, cancellation fee, and contract to get out of.",
+      "hours_value": "6AM–8PM",
+      "hours_title": "Classes that fit a working week",
+      "hours_body": "Early, lunchtime and after-work slots, six days a week."
+    },
+    "lists": {},
+    "images": {"studio-sunset":"","studio-stretch":""}
+  },
+  "classes": {
+    "fields": {
+      "heading": "The classes",
+      "intro": "Every class is scaled live — a beginner and a marathon runner can stand side by side.",
+      "book_label": "Book →",
+      "book_url": "#book"
+    },
+    "lists": {
+      "classes": [
+        {"name":"Barre Burn","level":"All levels","length":"45 min","desc":"Small pulses, high reps, a playlist that carries you. Legs and glutes shaking by track four, in the best way."},
+        {"name":"Mat Method","level":"Beginner friendly","length":"50 min","desc":"Classical Pilates sequencing with modern cueing. Deep core, spine mobility and the control that makes everything else easier."},
+        {"name":"Slow Mobility","level":"Recovery","length":"40 min","desc":"Hips, shoulders, ankles. Long holds and loaded stretching for desk bodies and heavy training weeks."}
+      ]
+    },
+    "images": {"class-barre":"","class-mat":"","class-mobility":""}
+  },
+  "free-week": {
+    "fields": {
+      "eyebrow": "Free week",
+      "heading_line_1": "Seven days.",
+      "heading_line_2": "Every class.",
+      "heading_line_3": "No card.",
+      "body": "Come as often as you like for a week. If it isn't for you, you've lost nothing but some stiffness."
+    },
+    "lists": {
+      "steps": [
+        {"number":"1","text":"Pick your start date and I'll text you the timetable."},
+        {"number":"2","text":"Fill in a two-minute form so I can plan around your body."},
+        {"number":"3","text":"Turn up in socks. Everything else is already here."}
+      ]
+    },
+    "images": {}
+  },
+  "coach": {
+    "fields": {
+      "eyebrow": "Your coach",
+      "first_name": "Nadia",
+      "last_name": "Okonkwo",
+      "body_1": "I trained as a dancer, blew out a knee at twenty-four, and spent the next decade learning how bodies actually rebuild. Barre and Pilates were what got me back on stage.",
+      "body_2": "Pulse is the studio I wanted then: loud enough to feel like a class, small enough that nobody gets lost in the back row."
+    },
+    "lists": {
+      "credentials": [
+        {"text":"BASI certified"},
+        {"text":"Barre Level 3"},
+        {"text":"Pre & postnatal"},
+        {"text":"Insured"}
+      ]
+    },
+    "images": {"coach":""}
+  },
+  "pricing": {
+    "fields": {"heading":"Pick your pace","book_url":"#book"},
+    "lists": {
+      "plans": [
+        {"name":"Drop in","tag":"One class","price":"£16","per":"","cta":"Book a class","items":[{"text":"Any class on the timetable"},{"text":"Book up to two weeks ahead"},{"text":"Nothing to cancel"},{"text":"Grip socks available at £8"}]},
+        {"name":"Ten pack","tag":"Most popular","price":"£140","per":"","cta":"Buy a pack","items":[{"text":"£14 a class, saving £20"},{"text":"Valid twelve months"},{"text":"Shareable with one friend"},{"text":"Priority booking window"}]},
+        {"name":"Unlimited","tag":"Monthly","price":"£89","per":"/mo","cta":"Go unlimited","items":[{"text":"Every class, every week"},{"text":"One free guest pass a month"},{"text":"10% off workshops"},{"text":"Pause or cancel any month"}]}
+      ]
+    },
+    "images": {}
+  },
+  "timetable": {
+    "fields": {"heading":"This week","link_label":"Full timetable →","link_url":"#book"},
+    "lists": {
+      "week": [
+        {"day":"Monday","slots":[{"text":"06:30 Barre Burn"},{"text":"12:15 Mat Method"},{"text":"18:00 Barre Burn"},{"text":"19:15 Slow Mobility"}]},
+        {"day":"Tuesday","slots":[{"text":"07:00 Mat Method"},{"text":"17:45 Barre Burn"},{"text":"19:00 Mat Method"},{"text":""}]},
+        {"day":"Wednesday","slots":[{"text":"06:30 Barre Burn"},{"text":"12:15 Slow Mobility"},{"text":"18:30 Mat Method"},{"text":""}]},
+        {"day":"Thursday","slots":[{"text":"07:00 Barre Burn"},{"text":"18:00 Mat Method"},{"text":"19:15 Slow Mobility"},{"text":""}]},
+        {"day":"Friday","slots":[{"text":"08:00 Mat Method"},{"text":"12:30 Barre Burn"},{"text":""},{"text":""}]},
+        {"day":"Saturday","slots":[{"text":"08:30 Barre Burn"},{"text":"10:00 Mat Method"},{"text":"11:15 Slow Mobility"},{"text":""}]}
+      ]
+    },
+    "images": {}
+  },
+  "testimonials": {
+    "fields": {"heading":"Said in the studio"},
+    "lists": {
+      "quotes": [
+        {"q":"I booked the free week to shut my sister up and I've been four times a week since March. The playlists alone are worth it.","author":"Tash, Preston Park"},
+        {"q":"Nadia clocked that my left hip was doing all the work in my first class. Nobody at my old gym noticed in two years.","author":"Sam, Brighton"},
+        {"q":"Twelve mats means you can't hide, which sounds terrifying and turns out to be the whole point.","author":"Lucy, Hove"}
+      ]
+    },
+    "images": {}
+  },
+  "faq": {
+    "fields": {"heading":"Good questions"},
+    "lists": {
+      "faqs": [
+        {"q":"I'm completely new. Will I be lost?","a":"No. Tell me when you book and I'll set you up before class starts. Every exercise is given three ways, and the beginner option is the one I demo."},
+        {"q":"What do I need to bring?","a":"Grip socks and water. Mats, bands, weights and barres are all here. Wear something that stays put when you bend over."},
+        {"q":"Can I use the free week and then leave?","a":"Yes, and some people do. No card is taken and nothing rolls over into a subscription."},
+        {"q":"Do you teach pregnant clients?","a":"Yes — I'm pre and postnatal trained. Message me before your first session so I can adapt the plan, especially in the first trimester."},
+        {"q":"What if I need to cancel?","a":"Cancel up to twelve hours before and the credit goes straight back to your account. Later than that and the class is counted, because the mat can't be refilled."}
+      ]
+    },
+    "images": {}
+  },
+  "booking": {
+    "fields": {
+      "heading_line_1":"Start",
+      "heading_line_2":"this week",
+      "body":"Tell me your name and when you're free. I'll come back with two class times that suit and hold you a mat.",
+      "studio_label":"Studio",
+      "email_label":"Email",
+      "name_placeholder":"Your name",
+      "contact_placeholder":"Email or mobile",
+      "availability_placeholder":"When are you usually free?",
+      "button_label":"Claim my free week",
+      "privacy_prefix":"No card needed. Details handled per the",
+      "privacy_label":"privacy policy",
+      "privacy_url":"{{page:privacy|url}}"
+    },
+    "lists": {},
+    "images": {}
+  },
+  "contact": {
+    "fields": {
+      "heading":"Say hello",
+      "name_placeholder":"Your name",
+      "email_placeholder":"Email",
+      "request_placeholder":"What are you after?",
+      "message_placeholder":"Injuries, goals, questions…",
+      "button_label":"Send",
+      "studio_heading":"Find the studio",
+      "studio_note":"Ten minutes from the station, buzzer 2, up the blue stairs.",
+      "reach_heading":"Reach me",
+      "hours_heading":"Opening hours"
+    },
+    "lists": {},
+    "images": {}
+  },
+  "privacy": {
+    "fields": {"heading":"Privacy policy","updated":"Last updated 12 August 2026"},
+    "lists": {
+      "sections": [
+        {"title":"Who I am","body":"Pulse Studio is a sole trader business at Unit 9, North Laine Yard, Brighton BN1 4GD, and is the data controller for information collected through this website. Contact hey@pulsestudio.co.uk with anything on this page."},
+        {"title":"What I collect","body":"Your name, contact details, the availability you share when booking, and the health information on the pre-class form. Card payments are processed by a third-party provider and card numbers never reach me."},
+        {"title":"Why I collect it","body":"To manage bookings, to keep you safe in class around injuries or pregnancy, to send the reminders and updates you have asked for, and to keep the financial records required by law."},
+        {"title":"Who it is shared with","body":"Only the booking, payment and email tools used to run the studio, which process data on my instructions. Your details are never sold, rented or used for third-party advertising."},
+        {"title":"How long it is kept","body":"Health and booking records for seven years after your final class, in line with insurance and tax requirements. Marketing consent until you withdraw it, which takes one click in any email."},
+        {"title":"Your rights","body":"You may request a copy of your data, ask for corrections, or ask for deletion where there is no legal reason to keep it. Requests are answered within thirty days. Complaints can go to the Information Commissioner's Office at ico.org.uk."},
+        {"title":"Cookies","body":"Essential cookies keep the booking system working. Anonymous analytics show which pages get read. No advertising or cross-site tracking cookies are used, and you can block cookies in your browser at any time."}
+      ]
+    },
+    "images": {}
+  }
+}

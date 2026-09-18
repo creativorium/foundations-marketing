@@ -1,0 +1,28 @@
+.fm-pulse-kinetic .fm-pk-header {
+  position: fixed;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(16,20,19,.92);
+  backdrop-filter: blur(12px);
+  padding: 8px 8px 8px 24px;
+  border-radius: 100px;
+  color: #F7F4EC;
+  white-space: nowrap;
+}
+
+.fm-pulse-kinetic .fm-pk-header__brand {
+  font-family: 'Pulse Kinetic Bricolage', sans-serif;
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -.02em;
+  margin-right: 16px;
+}
+
+.fm-pulse-kinetic .fm-pk-header nav { display: flex; align-items: center; gap: 22px; font-size: 13px; }
+.fm-pulse-kinetic .fm-pk-header__cta { background: #C6D96B; color: #101413; padding: 11px 22px; border-radius: 100px; font-family: 'Pulse Kinetic Bricolage', sans-serif; font-weight: 700; font-size: 13px; margin-left: 14px; flex-shrink: 0; }
+.fm-pulse-kinetic .fm-pk-header__cta:hover { background: #F3C9B6; color: #101413; }

@@ -1,0 +1,15 @@
+{
+  "nav_primary": [
+    {"label":"Classes","url":"{{page:home|url}}#classes"},
+    {"label":"Pricing","url":"{{page:home|url}}#pricing"},
+    {"label":"Coach","url":"{{page:home|url}}#coach"},
+    {"label":"FAQ","url":"{{page:home|url}}#faq"}
+  ],
+  "nav_footer": [
+    {"label":"Contact page","page":"contact"},
+    {"label":"Free week","url":"{{page:home|url}}#book"},
+    {"label":"Privacy policy","page":"privacy"},
+    {"label":"Cookies","page":"privacy"},
+    {"label":"Class terms","page":"contact"}
+  ]
+}
