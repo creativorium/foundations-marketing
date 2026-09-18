@@ -32,3 +32,23 @@ foreach (['fm-contact-discovery/fm-contact-discovery.php', 'foundations-delivery
 
     echo $plugin . " activated.\n";
 }
+
+if (!isset($GLOBALS['fmcd_plugin']) || !$GLOBALS['fmcd_plugin'] instanceof FMCD_Plugin) {
+    fwrite(STDERR, "The contact plugin did not initialize.\n");
+    exit(1);
+}
+
+$GLOBALS['fmcd_plugin']->install_native_form_pages();
+
+foreach ([
+    'contact-page' => '[fm_contact_page]',
+    'foundation-website-discovery-form' => '[fm_discovery_page]',
+] as $slug => $shortcode) {
+    $page = get_page_by_path($slug, OBJECT, 'page');
+    if (!$page instanceof WP_Post || $page->post_status !== 'publish' || !str_contains($page->post_content, $shortcode)) {
+        fwrite(STDERR, $slug . " is not a published native form page.\n");
+        exit(1);
+    }
+
+    echo $slug . " verified.\n";
+}
