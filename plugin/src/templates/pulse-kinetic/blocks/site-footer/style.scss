@@ -6,3 +6,13 @@
 .fm-pulse-kinetic .fm-pk-footer h2 { font: 400 12.5px/normal 'Pulse Kinetic Space', sans-serif; letter-spacing: .14em; text-transform: uppercase; color: #C6D96B; margin: 0 0 16px; }
 .fm-pulse-kinetic .fm-pk-footer nav { display: grid; gap: 10px; font-size: 15px; color: rgba(247,244,236,.72); }
 .fm-pulse-kinetic .fm-pk-footer__bottom { margin-top: 56px; padding-top: 24px; border-top: 1px solid rgba(247,244,236,.14); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 13.5px; color: rgba(247,244,236,.45); }
+
+@media (max-width: 800px) {
+  .fm-pulse-kinetic .fm-pk-footer { padding: 64px 24px 28px; }
+  .fm-pulse-kinetic .fm-pk-footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px 24px; }
+}
+
+@media (max-width: 520px) {
+  .fm-pulse-kinetic .fm-pk-footer__grid { grid-template-columns: 1fr; }
+  .fm-pulse-kinetic .fm-pk-footer__bottom { margin-top: 40px; }
+}

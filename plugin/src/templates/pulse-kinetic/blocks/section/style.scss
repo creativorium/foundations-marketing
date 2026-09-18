@@ -186,3 +186,67 @@
 @media (prefers-reduced-motion: reduce) {
   .fm-pulse-kinetic .fm-pk-marquee__track { animation: none; }
 }
+
+@media (max-width: 900px) {
+  .fm-pulse-kinetic .fm-pk-hero__section { min-height: auto; padding: 120px 24px 0; }
+  .fm-pulse-kinetic .fm-pk-hero__intro-row,
+  .fm-pulse-kinetic .fm-pk-free-week__panel,
+  .fm-pulse-kinetic .fm-pk-coach__grid,
+  .fm-pulse-kinetic .fm-pk-booking__grid,
+  .fm-pulse-kinetic .fm-pk-contact__grid { grid-template-columns: 1fr; }
+  .fm-pulse-kinetic .fm-pk-hero__intro-row { gap: 28px; }
+  .fm-pulse-kinetic .fm-pk-hero__media { margin-top: 48px; grid-template-columns: 1.2fr 1fr; }
+  .fm-pulse-kinetic .fm-pk-hero__image:last-child { display: none; }
+  .fm-pulse-kinetic .fm-pk-metrics,
+  .fm-pulse-kinetic .fm-pk-classes,
+  .fm-pulse-kinetic .fm-pk-coach,
+  .fm-pulse-kinetic .fm-pk-testimonials,
+  .fm-pulse-kinetic .fm-pk-booking { padding: 80px 24px; }
+  .fm-pulse-kinetic .fm-pk-free-week,
+  .fm-pulse-kinetic .fm-pk-faq,
+  .fm-pulse-kinetic .fm-pk-pricing { padding: 0 24px 80px; }
+  .fm-pulse-kinetic .fm-pk-timetable { padding: 80px 24px; }
+  .fm-pulse-kinetic .fm-pk-metrics__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fm-pulse-kinetic .fm-pk-classes__grid,
+  .fm-pulse-kinetic .fm-pk-pricing__grid,
+  .fm-pulse-kinetic .fm-pk-testimonials__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .fm-pulse-kinetic .fm-pk-classes__grid > :last-child,
+  .fm-pulse-kinetic .fm-pk-pricing__grid > :last-child,
+  .fm-pulse-kinetic .fm-pk-testimonials__grid > :last-child { grid-column: 1 / -1; }
+  .fm-pulse-kinetic .fm-pk-free-week__panel { gap: 36px; padding: 44px; }
+  .fm-pulse-kinetic .fm-pk-coach__grid,
+  .fm-pulse-kinetic .fm-pk-booking__grid { gap: 44px; }
+  .fm-pulse-kinetic .fm-pk-coach__image { height: min(660px, 90vw); }
+  .fm-pulse-kinetic .fm-pk-contact,
+  .fm-pulse-kinetic .fm-pk-privacy { padding: 130px 24px 80px; }
+}
+
+@media (max-width: 600px) {
+  .fm-pulse-kinetic .fm-pk-hero__section { padding-inline: 18px; }
+  .fm-pulse-kinetic .fm-pk-hero__availability { margin-bottom: 28px; }
+  .fm-pulse-kinetic .fm-pk-hero h1 { font-size: clamp(52px, 18vw, 82px); }
+  .fm-pulse-kinetic .fm-pk-hero__intro-row > p { font-size: 18px; }
+  .fm-pulse-kinetic .fm-pk-hero__actions { display: grid; }
+  .fm-pulse-kinetic .fm-pk-button { text-align: center; }
+  .fm-pulse-kinetic .fm-pk-hero__media { grid-template-columns: 1fr; }
+  .fm-pulse-kinetic .fm-pk-hero__image { height: 300px; }
+  .fm-pulse-kinetic .fm-pk-hero__image:not(:first-child) { display: none; }
+  .fm-pulse-kinetic .fm-pk-metrics__grid,
+  .fm-pulse-kinetic .fm-pk-classes__grid,
+  .fm-pulse-kinetic .fm-pk-pricing__grid,
+  .fm-pulse-kinetic .fm-pk-testimonials__grid { grid-template-columns: 1fr; }
+  .fm-pulse-kinetic .fm-pk-metric--mats,
+  .fm-pulse-kinetic .fm-pk-metric--hours,
+  .fm-pulse-kinetic .fm-pk-classes__grid > :last-child,
+  .fm-pulse-kinetic .fm-pk-pricing__grid > :last-child,
+  .fm-pulse-kinetic .fm-pk-testimonials__grid > :last-child { grid-column: auto; }
+  .fm-pulse-kinetic .fm-pk-metric { min-height: 220px; }
+  .fm-pulse-kinetic .fm-pk-free-week__panel { padding: 34px 22px; }
+  .fm-pulse-kinetic .fm-pk-free-week__steps { grid-template-columns: 1fr; }
+  .fm-pulse-kinetic .fm-pk-day { grid-template-columns: 1fr; padding: 22px; }
+  .fm-pulse-kinetic .fm-pk-form,
+  .fm-pulse-kinetic .fm-pk-contact__form,
+  .fm-pulse-kinetic .fm-pk-contact__card { padding: 28px 22px; }
+  .fm-pulse-kinetic .fm-pk-contact h1 { overflow-wrap: anywhere; }
+  .fm-pulse-kinetic .fm-pk-privacy article { padding: 28px 22px; }
+}

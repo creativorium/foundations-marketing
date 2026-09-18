@@ -12,6 +12,12 @@ $cta_url = (string) fm_setting('cta_url', home_url('/#book'));
     <nav aria-label="<?php esc_attr_e('Primary', 'foundations'); ?>">
       <?php foreach ($nav as $item) : ?><a href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['label']); ?></a><?php endforeach; ?>
     </nav>
+    <details class="fm-pk-header__menu">
+      <summary><?php esc_html_e('Menu', 'foundations'); ?></summary>
+      <nav aria-label="<?php esc_attr_e('Mobile primary', 'foundations'); ?>">
+        <?php foreach ($nav as $item) : ?><a href="<?php echo esc_url($item['url']); ?>"><?php echo esc_html($item['label']); ?></a><?php endforeach; ?>
+      </nav>
+    </details>
     <a class="fm-pk-header__cta" href="<?php echo esc_url($cta_url); ?>"><?php echo esc_html($cta_label); ?></a>
   </header>
 </div>
