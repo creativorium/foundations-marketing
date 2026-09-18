@@ -141,11 +141,6 @@
     &:hover { background: var(--fm-accent-deep); border-color: var(--fm-accent-deep); }
   }
 
-  &__quick-pay {
-    padding: 11px 20px;
-    font-size: 12px;
-  }
-
   // --- The split -------------------------------------------------------------
   // Two columns, stated explicitly. The canvas uses auto-fit/minmax(330px), which
   // only ever produced two tracks because it was drawn in a ~1200px frame — at
@@ -816,8 +811,7 @@
 
     &__step-btn { padding: 10px 4px; }
     &__running-total { font-size: 21px; }
-    &__next, &__pay { padding: 13px 20px; font-size: 12px; }
-    &__quick-pay { padding: 10px 16px; }
+    &__next, &__quick-pay, &__pay { padding: 13px 20px; font-size: 12px; }
     &__box { padding: 20px; }
     &__card { padding: 18px; }
   }

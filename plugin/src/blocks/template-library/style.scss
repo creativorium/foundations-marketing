@@ -1,4 +1,4 @@
-// foundations/template-library
+﻿// foundations/template-library
 
 .fm-library {
   padding: 96px var(--fm-gutter) 104px;
@@ -37,15 +37,8 @@
 
   &__list {
     display: grid;
-    // Four across at most. `auto-fit` with a flat 280px minimum fits as many tracks as
-    // the width allows — five on a wide screen, which makes each card too narrow for
-    // its screenshot to read and stops the row scanning as a set.
-    //
-    // The `max()` raises the track's own minimum to a quarter of the row (less the
-    // three gaps), so a fifth track can never fit. Below that the 280px floor takes
-    // over again and the row steps down to three, two and one on its own — same rule,
-    // no breakpoints to keep in step with the card's.
-    grid-template-columns: repeat(auto-fit, minmax(max(280px, (100% - 3 * 24px) / 4), 1fr));
+    // Fixed tracks stop a filtered result from stretching across empty columns.
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 24px;
   }
 
@@ -99,4 +92,12 @@
     &__filters { margin: 26px 0 28px; gap: 8px; }
     &__filter { padding: 10px 16px; font-size: 11px; }
   }
+}
+
+@media (max-width: 1180px) {
+  .fm-library__list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (max-width: 620px) {
+  .fm-library__list { grid-template-columns: 1fr; }
 }

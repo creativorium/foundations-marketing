@@ -155,6 +155,31 @@ function fm_contact_form_url(): string
         : home_url('/contact-page/');
 }
 
+/** The catalogue section used by every broad "start" or template-browsing CTA. */
+function fm_template_catalogue_url(): string
+{
+    $page = get_page_by_path('templates', OBJECT, 'page');
+    $url  = $page instanceof WP_Post && $page->post_status === 'publish'
+        ? (string) get_permalink($page)
+        : home_url('/templates/');
+
+    return rtrim($url, '/') . '/#templates';
+}
+
+/**
+ * Keep broad purchase-intent CTAs at the required first choice: the catalogue.
+ * A specific card still uses fm_template_card_url() and enters the builder directly.
+ */
+function fm_marketing_cta_url(string $text, string $configured_url): string
+{
+    $label = strtolower(trim(wp_strip_all_tags($text)));
+    $chooses_template = str_contains($label, 'template')
+        || preg_match('/\b(?:choose|browse|view|see|explore)\b.*\b(?:design|site)\b/', $label) === 1
+        || preg_match('/\b(?:start|create|launch)\b.*\b(?:site|website|build)\b/', $label) === 1;
+
+    return $chooses_template ? fm_template_catalogue_url() : $configured_url;
+}
+
 /**
  * The template the buyer arrived with, from `?template=<slug>`.
  *

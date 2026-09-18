@@ -28,6 +28,7 @@ $prefix     = (string) ($attributes['prefix'] ?? '');
 $lede       = (string) ($attributes['lede'] ?? '');
 $cta_text   = (string) ($attributes['ctaText'] ?? '');
 $cta_url    = (string) ($attributes['ctaUrl'] ?? '');
+$cta_url    = fm_marketing_cta_url($cta_text, $cta_url);
 $smallprint = (string) ($attributes['smallprint'] ?? '');
 
 $included_title = (string) ($attributes['includedTitle'] ?? '');

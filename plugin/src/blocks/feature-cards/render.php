@@ -35,6 +35,7 @@ $price_prefix = (string) ($attributes['pricePrefix'] ?? '');
 $price_note   = (string) ($attributes['priceNote'] ?? '');
 $cta_text     = (string) ($attributes['ctaText'] ?? '');
 $cta_url      = (string) ($attributes['ctaUrl'] ?? '');
+$cta_url      = fm_marketing_cta_url($cta_text, $cta_url);
 ?>
 <section <?php echo fm_wrapper(['fm-features', 'fm-features--' . sanitize_html_class($tone)]); ?>>
     <?php if ($number !== '' || $label !== '') : ?>
