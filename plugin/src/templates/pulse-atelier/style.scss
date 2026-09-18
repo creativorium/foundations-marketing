@@ -226,3 +226,57 @@ body:has(.fm-pulse-atelier) { margin: 0; }
 body:has(.fm-pulse-atelier) { margin: 0; padding: 0; }
 body:has(.fm-pulse-atelier) > main { margin: 0; padding: 0; max-width: none; }
 
+// The supplied desktop canvas has no responsive rules. These keep its hierarchy and
+// palette while turning every fixed multi-column composition into a readable phone
+// layout instead of clipping the second column behind overflow-x:hidden.
+@media (max-width: 900px) {
+  .fm-pulse-atelier,
+  .fm-pulse-atelier :where(*) { box-sizing: border-box; max-width: 100%; }
+
+  .fm-pulse-atelier .fm-pa-header__div-1 { padding: 16px 24px; }
+  .fm-pulse-atelier .fm-pa-header__div-4 { gap: 16px; }
+  .fm-pulse-atelier .fm-pa-header__a-5 { display: none; }
+
+  .fm-pulse-atelier .fm-pa-hero__section-1 { grid-template-columns: 1fr; min-height: 0; }
+  .fm-pulse-atelier .fm-pa-hero__div-2 { padding: 120px 24px 64px; }
+  .fm-pulse-atelier .fm-pa-hero__h1-4 { font-size: clamp(48px, 14vw, 72px); }
+  .fm-pulse-atelier .fm-pa-hero__div-13 { min-height: 56vh; }
+
+  .fm-pulse-atelier .fm-pa-credentials__section-1 { grid-template-columns: repeat(2, 1fr); }
+  .fm-pulse-atelier .fm-pa-credentials__div-2,
+  .fm-pulse-atelier .fm-pa-credentials__div-3,
+  .fm-pulse-atelier .fm-pa-credentials__div-4,
+  .fm-pulse-atelier .fm-pa-credentials__div-5 { padding: 22px 20px; }
+
+  .fm-pulse-atelier :is(.fm-pa-practice__section-1,.fm-pa-teacher__section-1,.fm-pa-sessions__section-1,.fm-pa-process__section-1,.fm-pa-audience__section-1,.fm-pa-timetable__section-1,.fm-pa-testimonials__section-1,.fm-pa-faq__section-1,.fm-pa-newsletter__section-1) { padding: 80px 24px; }
+  .fm-pulse-atelier :is(.fm-pa-practice__div-2,.fm-pa-teacher__div-2,.fm-pa-audience__div-2,.fm-pa-newsletter__div-2,.fm-pa-contact__div-2) { grid-template-columns: 1fr; gap: 44px; }
+  .fm-pulse-atelier .fm-pa-practice__div-6 { grid-template-columns: 1fr; gap: 18px; }
+  .fm-pulse-atelier .fm-pa-practice__div-9 { grid-template-columns: 1fr; margin-top: 48px; }
+  .fm-pulse-atelier :is(.fm-pa-practice__div-10,.fm-pa-practice__div-11) { height: 320px; }
+  .fm-pulse-atelier .fm-pa-teacher__div-3 { height: min(125vw, 520px); }
+
+  .fm-pulse-atelier .fm-pa-sessions__a-8 { grid-template-columns: 1fr auto; gap: 10px 18px; padding: 26px 4px; }
+  .fm-pulse-atelier .fm-pa-sessions__div-10 { grid-column: 1 / -1; }
+  .fm-pulse-atelier .fm-pa-sessions__div-12 { text-align: right; }
+  .fm-pulse-atelier .fm-pa-process__div-5 { grid-template-columns: 1fr; gap: 40px; }
+  .fm-pulse-atelier .fm-pa-timetable__div-4 { grid-template-columns: repeat(2, 1fr); }
+  .fm-pulse-atelier .fm-pa-audience__div-3 { height: min(120vw, 500px); }
+
+  .fm-pulse-atelier .fm-pa-contact__section-1,
+  .fm-pulse-atelier .fm-pa-privacy__section-1 { padding: 130px 24px 80px; }
+  .fm-pulse-atelier .fm-pa-contact__div-19 { padding: 32px 24px; }
+  .fm-pulse-atelier .fm-pa-footer__footer-1 { padding: 72px 24px 28px; }
+  .fm-pulse-atelier .fm-pa-footer__div-2 { grid-template-columns: repeat(2, 1fr); gap: 40px 28px; }
+}
+
+@media (max-width: 560px) {
+  .fm-pulse-atelier .fm-pa-header__a-2 { font-size: 23px; }
+  .fm-pulse-atelier .fm-pa-header__a-9 { padding: 10px 14px; font-size: 11px; }
+  .fm-pulse-atelier .fm-pa-hero__div-8 { align-items: stretch; flex-direction: column; }
+  .fm-pulse-atelier .fm-pa-hero__a-9,
+  .fm-pulse-atelier .fm-pa-hero__a-10 { text-align: center; }
+  .fm-pulse-atelier .fm-pa-credentials__section-1,
+  .fm-pulse-atelier .fm-pa-timetable__div-4,
+  .fm-pulse-atelier .fm-pa-footer__div-2 { grid-template-columns: 1fr; }
+  .fm-pulse-atelier .fm-pa-booking__div-3 { padding: 80px 24px; }
+}

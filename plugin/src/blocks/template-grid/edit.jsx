@@ -72,8 +72,8 @@ export default function Edit({ attributes, setAttributes }) {
             )}
             value={limit}
             min={1}
-            max={24}
-            onChange={(v) => setAttributes({ limit: v ?? 9 })}
+            max={8}
+            onChange={(v) => setAttributes({ limit: v ?? 8 })}
           />
           <SelectControl
             label={__('Background', 'foundations')}

@@ -115,3 +115,27 @@ function fm_strip_anchor_current_classes(array $classes, $item): array
     return $classes;
 }
 add_filter('nav_menu_css_class', 'fm_strip_anchor_current_classes', 10, 2);
+
+/** Point the primary booking CTA at the custom form instead of the old page anchor. */
+function fm_link_primary_booking_cta(array $items, $args): array
+{
+    if (($args->theme_location ?? '') !== 'primary') {
+        return $items;
+    }
+
+    $booking_url = function_exists('fm_contact_form_url')
+        ? fm_contact_form_url()
+        : home_url('/contact-page/');
+
+    foreach ($items as $item) {
+        $label = strtolower(trim(wp_strip_all_tags((string) ($item->title ?? ''))));
+        $url   = trim((string) ($item->url ?? ''));
+
+        if (str_contains($label, 'book') && in_array($url, ['#', '#cta', '/#cta', home_url('/#cta')], true)) {
+            $item->url = $booking_url;
+        }
+    }
+
+    return $items;
+}
+add_filter('wp_nav_menu_objects', 'fm_link_primary_booking_cta', 10, 2);

@@ -17,8 +17,8 @@ if (!defined('ABSPATH')) {
 
 <?php
 /*
- * The page-transition curtain used to sit here. It is PARKED, not deleted — see
- * theme/src/styles/_pixels.scss for what it was and the two lines that bring it back.
+ * The retired full-screen pixel curtain used to sit here. The active transition is
+ * rendered with CSS and needs no extra header markup.
  */
 ?>
 

@@ -27,6 +27,10 @@ $primary_url    = (string) ($attributes['primaryUrl'] ?? '');
 $secondary_text = (string) ($attributes['secondaryText'] ?? '');
 $secondary_url  = (string) ($attributes['secondaryUrl'] ?? '');
 
+if (stripos($secondary_text, 'book') !== false && in_array(trim($secondary_url), ['', '#', '#cta', '/#cta'], true)) {
+    $secondary_url = fm_contact_form_url();
+}
+
 // Never an H1 — the hero owns that (see how-to-work.md §10).
 $level = max(2, min(6, (int) ($attributes['level'] ?? 2)));
 $tag   = 'h' . $level;

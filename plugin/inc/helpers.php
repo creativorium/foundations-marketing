@@ -145,6 +145,16 @@ function fm_get_templates(int $limit = 9): array
     return (array) apply_filters('fm_catalogue_templates', $templates, $limit);
 }
 
+/** The marketing site's custom enquiry form, shared by header and CTA links. */
+function fm_contact_form_url(): string
+{
+    $page = get_page_by_path('contact-page', OBJECT, 'page');
+
+    return $page instanceof WP_Post && $page->post_status === 'publish'
+        ? (string) get_permalink($page)
+        : home_url('/contact-page/');
+}
+
 /**
  * The template the buyer arrived with, from `?template=<slug>`.
  *

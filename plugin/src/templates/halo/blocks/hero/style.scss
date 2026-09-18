@@ -3,46 +3,52 @@
 .fm-halo-hero {
   // Pulled up under the fixed header, then padded back down by its height, so the
   // canvas colour runs behind the translucent bar as the design draws it.
-  padding: calc(var(--fm-halo-header) + var(--fm-space-5)) 0 0;
+  padding: 0;
   background: var(--fm-canvas);
 
   &__grid {
     display: grid;
     // The photograph is the taller half and bleeds to the right edge; the copy keeps
     // the gutter. `minmax(0, …)` so a long unbroken word cannot widen the column.
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
-    align-items: center;
-    gap: var(--fm-space-5);
+    grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
+    align-items: stretch;
+    gap: 0;
+    min-height: 100vh;
   }
 
   &__copy {
-    padding-inline: var(--fm-halo-gutter) 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.875rem;
+    padding: 10rem var(--fm-halo-gutter) 6rem;
     // Stops the copy column running to a punishing measure on a wide screen.
-    max-width: 38rem;
+    max-width: none;
   }
 
-  &__heading {
+  & &__heading {
     font-size: clamp(3.25rem, 6vw, 5.75rem);
     line-height: 0.98;
-    margin-bottom: var(--fm-space-3);
+    margin-bottom: 0;
   }
 
-  &__lead { margin-bottom: var(--fm-space-4); }
+  &__copy > .fm-halo-eyebrow,
+  &__lead { margin: 0; }
 
   &__actions {
     display: flex;
     flex-wrap: wrap;
     gap: 0.75rem;
-    margin-bottom: var(--fm-space-5);
+    margin: 0.375rem 0 0;
   }
 
   // --- the figures row -------------------------------------------------------
   &__stats {
     display: flex;
     flex-wrap: wrap;
-    gap: 2.5rem;
-    margin: 0;
-    padding-top: var(--fm-space-3);
+    gap: 2.75rem;
+    margin: 0.25rem 0 0;
+    padding-top: 1.75rem;
     border-top: 1px solid var(--fm-line);
   }
 
@@ -75,20 +81,20 @@
 
   &__plate {
     height: 100%;
-    min-height: 32rem;
+    min-height: 100vh;
     // Square to the right edge of the viewport, rounded on the corners that face in.
-    border-radius: var(--fm-halo-radius) 0 0 var(--fm-halo-radius);
+    border-radius: 0;
   }
 
   // The booking note, sitting over the bottom-left corner of the photograph.
   &__badge {
     position: absolute;
-    left: -1.5rem;
-    bottom: 2.5rem;
-    max-width: 17rem;
+    left: -4.25rem;
+    bottom: 5.5rem;
+    max-width: 17.5rem;
     margin: 0;
-    padding: 1rem 1.25rem;
-    border-radius: 0.75rem;
+    padding: 1.625rem 1.875rem;
+    border-radius: 0;
     background: var(--fm-canvas);
     box-shadow: 0 10px 30px color-mix(in srgb, var(--fm-ink) 12%, transparent);
   }
@@ -117,8 +123,8 @@
     flex-wrap: wrap;
     justify-content: center;
     gap: 1rem 3.5rem;
-    margin: var(--fm-space-5) 0 0;
-    padding: var(--fm-space-3) var(--fm-halo-gutter);
+    margin: 0;
+    padding: 1.625rem var(--fm-halo-gutter);
     list-style: none;
     border-top: 1px solid var(--fm-line);
     border-bottom: 1px solid var(--fm-line);
@@ -144,11 +150,11 @@
   .fm-halo-hero {
     padding-top: calc(var(--fm-halo-header) + var(--fm-space-4));
 
-    &__grid { grid-template-columns: minmax(0, 1fr); }
+    &__grid { grid-template-columns: minmax(0, 1fr); min-height: 0; }
 
     &__copy {
       max-width: none;
-      padding-inline: var(--fm-halo-gutter);
+      padding: 0 var(--fm-halo-gutter);
     }
 
     &__media { margin-inline: var(--fm-halo-gutter) 0; }

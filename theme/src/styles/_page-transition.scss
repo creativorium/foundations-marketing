@@ -1,0 +1,33 @@
+// Outgoing navigation cue. It keeps the current page visible, so a slow request can
+// never become the frozen black screen caused by the retired pixel curtain.
+@media (prefers-reduced-motion: no-preference) {
+  body::after {
+    content: '';
+    position: fixed;
+    z-index: 10000;
+    inset: 0 0 auto;
+    height: 4px;
+    pointer-events: none;
+    background: var(--fm-accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    opacity: 0;
+  }
+
+  body.fm-page-leaving::after {
+    opacity: 1;
+    animation: fm-page-progress 900ms cubic-bezier(.2,.75,.25,1) both;
+  }
+
+  body.fm-page-leaving :is(.fm-header, .fm-main, .fm-footer) {
+    opacity: .82;
+    transform: translateY(-3px);
+    transition: opacity 140ms ease, transform 140ms ease;
+  }
+}
+
+@keyframes fm-page-progress {
+  0% { transform: scaleX(0); }
+  70% { transform: scaleX(.82); }
+  100% { transform: scaleX(1); }
+}
