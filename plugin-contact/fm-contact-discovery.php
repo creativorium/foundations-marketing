@@ -2,13 +2,13 @@
 /**
  * Plugin Name: FM Contact & Discovery Forms (with Appointment)
  * Description: Custom Form for Foundations Marketing. Shortcodes: [fm_contact_form], [fm_discovery_form]
- * Version: 1.9.3
+ * Version: 1.9.4
  * Author: Negolast
  */
 
 if (!defined('ABSPATH')) exit;
 
-define('FMCD_VER', '1.9.3');
+define('FMCD_VER', '1.9.4');
 define('FMCD_DIR', plugin_dir_path(__FILE__));
 define('FMCD_URL', plugin_dir_url(__FILE__));
 
@@ -23,14 +23,51 @@ class FMCD_Plugin {
     add_action('init', [$this, 'init']);
     add_action('wp_enqueue_scripts', [$this, 'assets']);
     add_shortcode('fm_contact_form', [$this, 'shortcode_contact']);
+    add_shortcode('fm_contact_page', [$this, 'shortcode_contact_page']);
     add_shortcode('fm_discovery_form', [$this, 'shortcode_discovery']);
+    add_shortcode('fm_discovery_page', [$this, 'shortcode_discovery_page']);
     new FMCD_Admin;
     new FMCD_CPT;
     new FMCD_REST;
     add_action('fmcd_mailchimp_sync', [$this, 'handle_mailchimp_sync'], 10, 2);
   }
 
-  public function init() {}
+  public function init() {
+    $this->maybe_install_native_form_pages();
+  }
+
+  private function maybe_install_native_form_pages() {
+    $native_pages_version = '1';
+    if ((string) get_option('fmcd_native_pages_version', '') === $native_pages_version) return;
+
+    $pages = [
+      'contact-page' => ['title' => 'Contact', 'shortcode' => '[fm_contact_page]', 'legacy' => '[fm_contact_form]'],
+      'foundation-website-discovery-form' => ['title' => 'Foundation Website Discovery Form', 'shortcode' => '[fm_discovery_page]', 'legacy' => '[fm_discovery_form]'],
+    ];
+
+    foreach ($pages as $slug => $config) {
+      $page = get_page_by_path($slug, OBJECT, 'page');
+
+      if (!$page instanceof WP_Post) {
+        wp_insert_post([
+          'post_type' => 'page', 'post_status' => 'publish', 'post_name' => $slug,
+          'post_title' => $config['title'], 'post_content' => $config['shortcode'],
+        ]);
+        continue;
+      }
+
+      $uses_elementor = get_post_meta($page->ID, '_elementor_edit_mode', true) === 'builder';
+      $uses_legacy_shortcode = str_contains((string) $page->post_content, $config['legacy']);
+      if (!$uses_elementor && !$uses_legacy_shortcode && !str_contains((string) $page->post_content, $config['shortcode'])) continue;
+
+      wp_update_post(['ID' => $page->ID, 'post_content' => $config['shortcode'], 'page_template' => 'default']);
+      foreach (['_elementor_data', '_elementor_edit_mode', '_elementor_page_settings', '_elementor_template_type', '_wp_page_template'] as $key) {
+        delete_post_meta($page->ID, $key);
+      }
+    }
+
+    update_option('fmcd_native_pages_version', $native_pages_version, false);
+  }
 
   public function assets() {
   wp_register_style('fmcd-form', FMCD_URL . 'assets/form.css', [], FMCD_VER);
@@ -322,6 +359,20 @@ class FMCD_Plugin {
     }
 
 
+  public function shortcode_contact_page() {
+    $email = sanitize_email((string) get_option('fmcd_to_email', get_option('admin_email')));
+
+    return '<section class="fmcd-page">'
+      . '<header class="fmcd-page__intro">'
+      . '<p class="fmcd-page__eyebrow">Start a conversation</p>'
+      . '<h1 class="fmcd-page__title">Tell us what you are building.</h1>'
+      . '<p class="fmcd-page__lede">Share where your business is now and what you need from the website. We will reply with the clearest next step.</p>'
+      . ($email !== '' ? '<p class="fmcd-page__email"><span>Email</span><a href="mailto:' . esc_attr($email) . '">' . esc_html($email) . '</a></p>' : '')
+      . '</header>'
+      . $this->shortcode_contact()
+      . '</section>';
+  }
+
   public function shortcode_contact() {
     wp_enqueue_style('fmcd-form'); wp_enqueue_script('fmcd-form');
     ob_start(); ?>
@@ -413,6 +464,17 @@ class FMCD_Plugin {
 
     <?php
     return ob_get_clean();
+  }
+
+  public function shortcode_discovery_page() {
+    return '<section class="fmdd-page">'
+      . '<header class="fmdd-page__intro">'
+      . '<p class="fmdd-page__eyebrow">Website discovery</p>'
+      . '<h1 class="fmdd-page__title">Tell us about your business.</h1>'
+      . '<p class="fmdd-page__lede">Share the content, style and setup details we need to turn your chosen template into your website. You can save complex answers elsewhere and paste them in when you are ready.</p>'
+      . '</header>'
+      . $this->shortcode_discovery()
+      . '</section>';
   }
 
   public function shortcode_discovery() {

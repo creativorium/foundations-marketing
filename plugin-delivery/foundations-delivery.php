@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Foundations Delivery
  * Description: Master designs, customer projects, previews, releases and always-active keycards.
- * Version: 0.1.0
+ * Version: 0.1.1
  * Requires PHP: 8.0
  * License: GPL-2.0-or-later
  */
