@@ -209,18 +209,41 @@ jobs:
               "$source/" "$SSH_USER@$SSH_HOST:$WP_PATH/wp-content/plugins/$destination/"
           done
 
+      - name: Activate first-party plugins
+        if: ${{ inputs.dry_run != true }}
+        env:
+          SSH_HOST: ${{ secrets.DEV_SSH_HOST }}
+          SSH_PORT: ${{ secrets.DEV_SSH_PORT }}
+          SSH_USER: ${{ secrets.DEV_SSH_USER }}
+          WP_PATH: ${{ secrets.DEV_WP_PATH }}
+        run: |
+          set -euo pipefail
+          ssh -i ~/.ssh/id_deploy -p "${SSH_PORT:-22}" \
+              -o BatchMode=yes -o StrictHostKeyChecking=yes \
+              "$SSH_USER@$SSH_HOST" \
+              "php '$WP_PATH/wp-content/plugins/fm-contact-discovery/activate-cli.php' '$WP_PATH/wp-load.php'"
+
       - name: Check the dev site still answers
         if: ${{ inputs.dry_run != true }}
         run: |
           set -euo pipefail
-          code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 30 \
-            https://dev.cularcreative.com/foundationmarketing/)
-          echo "dev site returned HTTP $code"
-          # A 5xx means we probably just broke it; anything else is the site's own
-          # business (a redirect or a 403 from Cloudflare is not our deploy failing).
-          case "$code" in
-            5*) echo "::error::dev site is returning $code after deploy"; exit 1 ;;
-          esac
+          base=https://dev.cularcreative.com/foundationmarketing
+          for check in "/:FOUNDATIONS" "/contact-page/:fmcd-form" "/foundation-website-discovery-form/:fmdd-form"; do
+            path="${check%%:*}"
+            marker="${check##*:}"
+            body=$(mktemp)
+            code=$(curl -sS -L -o "$body" -w '%{http_code}' --max-time 30 "$base$path")
+            echo "$path returned HTTP $code"
+            if [ "$code" != "200" ]; then
+              echo "::error::$path returned $code after deploy"
+              exit 1
+            fi
+            if ! grep -q "$marker" "$body"; then
+              echo "::error::$path did not contain its expected $marker marker"
+              exit 1
+            fi
+            rm -f "$body"
+          done
 
       - name: Clean up the key
         if: always()

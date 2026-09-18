@@ -37,7 +37,7 @@ class FMCD_Plugin {
   }
 
   private function maybe_install_native_form_pages() {
-    $native_pages_version = '1';
+    $native_pages_version = '2';
     if ((string) get_option('fmcd_native_pages_version', '') === $native_pages_version) return;
 
     $pages = [
@@ -60,7 +60,12 @@ class FMCD_Plugin {
       $uses_legacy_shortcode = str_contains((string) $page->post_content, $config['legacy']);
       if (!$uses_elementor && !$uses_legacy_shortcode && !str_contains((string) $page->post_content, $config['shortcode'])) continue;
 
-      wp_update_post(['ID' => $page->ID, 'post_content' => $config['shortcode'], 'page_template' => 'default']);
+      wp_update_post([
+        'ID' => $page->ID,
+        'post_content' => $config['shortcode'],
+        'post_status' => 'publish',
+        'page_template' => 'default',
+      ]);
       foreach (['_elementor_data', '_elementor_edit_mode', '_elementor_page_settings', '_elementor_template_type', '_wp_page_template'] as $key) {
         delete_post_meta($page->ID, $key);
       }
