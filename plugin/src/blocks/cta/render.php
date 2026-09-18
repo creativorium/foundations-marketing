@@ -27,6 +27,9 @@ $primary_url    = (string) ($attributes['primaryUrl'] ?? '');
 $secondary_text = (string) ($attributes['secondaryText'] ?? '');
 $secondary_url  = (string) ($attributes['secondaryUrl'] ?? '');
 
+$primary_url   = fm_marketing_cta_url($primary_text, $primary_url);
+$secondary_url = fm_marketing_cta_url($secondary_text, $secondary_url);
+
 if (stripos($secondary_text, 'book') !== false && in_array(trim($secondary_url), ['', '#', '#cta', '/#cta'], true)) {
     $secondary_url = fm_contact_form_url();
 }

@@ -33,6 +33,7 @@ $price_from = (string) ($attributes['priceFrom'] ?? '');
 $limit      = min(8, max(1, (int) ($attributes['limit'] ?? 8)));
 $more_text  = (string) ($attributes['moreText'] ?? '');
 $more_url   = (string) ($attributes['moreUrl'] ?? '');
+$more_url   = fm_marketing_cta_url($more_text, $more_url);
 $compact    = (bool) ($attributes['compact'] ?? false);
 $tone       = (string) ($attributes['tone'] ?? 'plain');
 

@@ -55,7 +55,7 @@ foreach ($templates as $template) {
 
 $show_filters = (bool) ($attributes['showFilters'] ?? true) && count($categories) > 1;
 ?>
-<section <?php echo fm_wrapper(['fm-library']); ?> data-fm-library>
+<section <?php echo fm_wrapper(['fm-library'], ['id' => 'templates']); ?> data-fm-library>
     <?php if ($number !== '' || $label !== '') : ?>
         <?php echo fm_section_rule($number, $label, $aside); ?>
     <?php endif; ?>

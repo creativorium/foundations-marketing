@@ -32,6 +32,7 @@ $lede       = (string) ($attributes['lede'] ?? '');
 $card_title = (string) ($attributes['cardTitle'] ?? '');
 $cta_text   = (string) ($attributes['ctaText'] ?? '');
 $cta_url    = (string) ($attributes['ctaUrl'] ?? '');
+$cta_url    = fm_marketing_cta_url($cta_text, $cta_url);
 $rows       = is_array($attributes['rows'] ?? null) ? $attributes['rows'] : [];
 ?>
 <section <?php echo fm_wrapper(['fm-page-hero']); ?>>
