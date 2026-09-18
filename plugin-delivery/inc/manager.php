@@ -203,6 +203,11 @@ function fm_delivery_release(int $id): array
 }
 
 add_action('admin_menu',function():void{add_menu_page('Foundations Delivery','Delivery','manage_options','fm-delivery','fm_delivery_screen','dashicons-portfolio',26);});
+add_action('admin_enqueue_scripts', function (string $hook): void {
+    if ($hook !== 'toplevel_page_fm-delivery') { return; }
+    $file = FM_DELIVERY_DIR . 'assets/admin.css';
+    wp_enqueue_style('fm-delivery-admin', plugins_url('../assets/admin.css', __FILE__), [], is_file($file) ? (string) filemtime($file) : '0.1.0');
+});
 function fm_delivery_form(string $task, int $id = 0): void
 {
     echo '<form method="post" enctype="multipart/form-data" action="'.esc_url(admin_url('admin-post.php')).'"><input type="hidden" name="action" value="fm_delivery"><input type="hidden" name="task" value="'.esc_attr($task).'"><input type="hidden" name="id" value="'.$id.'">';wp_nonce_field('fm_delivery');
@@ -211,6 +216,7 @@ function fm_delivery_screen(): void
 {
     if(!current_user_can('manage_options')){wp_die('Not allowed');}
     echo '<div class="wrap"><h1>Foundations Delivery</h1><p>Master designs stay separate from each customer’s content. Keycards record delivery; they never switch websites off.</p>';
+    echo '<nav class="fm-delivery__nav" aria-label="Delivery sections"><a href="#fm-master-designs">Master designs</a><a href="#fm-create-project">Create project</a><a href="#fm-customer-projects">Customer projects</a></nav>';
     $id=absint($_GET['project']??0);
     $masterId=absint($_GET['design']??0);
     if($masterId && get_post_type($masterId)==='fm_design') {
@@ -234,7 +240,7 @@ function fm_delivery_screen(): void
         echo '<h2>Installations</h2>';foreach($p['deployments'] as $d){echo '<p>'.esc_html($d['domain'].' — '.$d['date'].' — '.$d['release']).'</p>';}
         fm_delivery_form('deployment',$id);echo '<label>Installed domain <input type="url" name="domain" required placeholder="https://customer.example"></label> <label>Release <select name="release">';foreach($p['releases'] as $r){echo '<option value="'.esc_attr($r['id']).'">'.esc_html($r['created_at']).'</option>';}echo '</select></label>';submit_button('Record installation','secondary');echo '</form></div>';return;
     }
-    echo '<h2>Master designs</h2>';fm_delivery_form('upload');echo '<label>Compiled delivery ZIP <input type="file" name="bundle" accept=".zip" required></label>';submit_button('Add master design');echo '</form>';
+    echo '<h2 id="fm-master-designs">Master designs</h2>';fm_delivery_form('upload');echo '<label>Compiled delivery ZIP <input type="file" name="bundle" accept=".zip" required></label>';submit_button('Add master design');echo '</form>';
     $archived = !empty($_GET['show_archived']);
     $archive_filter = $archived ? [] : [['key'=>'_fm_delivery_archived','compare'=>'NOT EXISTS']];
     echo '<p><a href="'.esc_url(admin_url('admin.php?page=fm-delivery'.($archived?'':'&show_archived=1'))).'">'.($archived?'Hide archived test records':'Show archived test records').'</a></p>';
@@ -257,18 +263,18 @@ function fm_delivery_screen(): void
         $projects = fm_delivery_design_projects($d->ID);
 
         if ($d->post_status === 'publish') {
-            echo ' <span class="description">Hide it to delete</span>';
+            echo '<p class="fm-delivery__delete-note">Hide this design before deleting it.</p>';
         } elseif ($projects !== []) {
-            echo ' <span class="description">'.esc_html(sprintf('In use by %d project(s)', count($projects))).'</span>';
+            echo '<p class="fm-delivery__delete-note">'.esc_html(sprintf('Protected: used by %d customer project(s).', count($projects))).'</p>';
         } else {
+            echo '<details class="fm-delivery__danger"><summary>Delete design</summary><div class="fm-delivery__danger-panel"><strong>Delete '.esc_html($d->post_title).' permanently?</strong><p>Its imported pages, media and release files will also be removed. This cannot be undone.</p>';
             fm_delivery_form('delete-master',$d->ID);
-            echo '<input type="text" name="confirm" size="8" placeholder="DELETE" aria-label="Type DELETE to confirm" required pattern="DELETE" title="Type DELETE in capitals"> <button class="button button-link-delete">Delete</button>';
-            echo '<p class="description">Removes the design, its imported pages and its release files. Cannot be undone.</p></form>';
+            echo '<label>Type <code>DELETE</code> to confirm<input type="text" name="confirm" autocomplete="off" placeholder="DELETE" required pattern="DELETE" title="Type DELETE in capitals"></label><button class="button button-link-delete">Delete permanently</button></form></div></details>';
         }
 
         echo '</td></tr>';
     }
-    echo '</tbody></table><h2>Create customer project</h2>';fm_delivery_form('create');echo '<p><label>Design <select name="design">';foreach($designs as $d){echo '<option value="'.$d->ID.'">'.esc_html($d->post_title).'</option>';}echo '</select></label></p><p><input name="name" class="regular-text" placeholder="Project name" required></p><p><input name="customer" class="regular-text" placeholder="Customer name / reference" required></p><p><input type="number" name="order" placeholder="Order ID (optional)"></p><p><textarea name="brief" class="large-text" placeholder="Requested edits"></textarea></p>';submit_button('Create isolated customer project');echo '</form><h2>Customer projects</h2><table class="widefat striped"><tr><th>Project</th><th>Customer</th><th>Order</th><th>Status</th><th>Keycard</th></tr>';
+    echo '</tbody></table><h2 id="fm-create-project">Create customer project</h2>';fm_delivery_form('create');echo '<p><label>Design <select name="design">';foreach($designs as $d){echo '<option value="'.$d->ID.'">'.esc_html($d->post_title).'</option>';}echo '</select></label></p><p><input name="name" class="regular-text" placeholder="Project name" required></p><p><input name="customer" class="regular-text" placeholder="Customer name / reference" required></p><p><input type="number" name="order" placeholder="Order ID (optional)"></p><p><textarea name="brief" class="large-text" placeholder="Requested edits"></textarea></p>';submit_button('Create isolated customer project');echo '</form><h2 id="fm-customer-projects">Customer projects</h2><table class="widefat striped"><tr><th>Project</th><th>Customer</th><th>Order</th><th>Status</th><th>Keycard</th></tr>';
     foreach(get_posts(['post_type'=>'fm_project','post_status'=>'any','numberposts'=>-1,'meta_query'=>$archive_filter]) as $p){$m=get_post_meta($p->ID,'_fm_project',true);echo '<tr><td><a href="'.esc_url(admin_url('admin.php?page=fm-delivery&project='.$p->ID)).'">'.esc_html($p->post_title).'</a></td><td>'.esc_html($m['customer']).'</td><td>'.absint($m['order']).'</td><td>'.esc_html($m['status']).'</td><td><code>'.esc_html($m['keycard']).'</code></td></tr>';}
     echo '</table></div>';
 }
