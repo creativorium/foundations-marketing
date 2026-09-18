@@ -6,4 +6,5 @@
 @use 'error';
 // Motion last, so its rules win over the static ones they enhance.
 @use 'motion';
-// @use 'pixels';   // PARKED — see _pixels.scss
+@use 'page-transition';
+// The retired full-screen curtain is preserved in _pixels.scss for reference.

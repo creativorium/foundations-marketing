@@ -31,14 +31,8 @@ document.addEventListener('click', event => {
 });
 
 // -----------------------------------------------------------------------------
-// The page transition is PARKED, not deleted. See theme/src/styles/_pixels.scss for
-// what it was and how to switch it back on.
-//
-// It was removed because every arrival started from a black screen, and on a site
-// whose cold render is ~2s — which is every navigation while you are logged in, since
-// theme/inc/performance.php switches the speculation rules off for logged-in users —
-// that black screen is what you spend the wait looking at. A decorative effect is not
-// worth being the slowest-feeling part of the site.
+// The old full-screen pixel curtain remains retired in _pixels.scss. The transition
+// below keeps the current page visible while showing a small progress cue.
 // -----------------------------------------------------------------------------
 
 // -----------------------------------------------------------------------------
@@ -46,6 +40,41 @@ document.addEventListener('click', event => {
 // motion in styles/_header.scss. This file owns state only: it flips `data-open`
 // and lets CSS decide what that looks like.
 // -----------------------------------------------------------------------------
+// Page navigation keeps the old document visible and adds a slim progress cue. The
+// watchdog removes it if navigation is cancelled or the request is slow.
+let pageNavigationPending = false;
+let pageNavigationTimer;
+
+const clearPageTransition = () => {
+  pageNavigationPending = false;
+  clearTimeout(pageNavigationTimer);
+  document.body.classList.remove('fm-page-leaving');
+  document.body.removeAttribute('aria-busy');
+};
+
+window.addEventListener('pageshow', clearPageTransition);
+
+document.addEventListener('click', event => {
+  if (pageNavigationPending || event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  const link = event.target.closest('a[href]');
+  if (!link || link.hasAttribute('download') || link.matches('[target]:not([target="_self"]), [data-fm-demo]')) return;
+
+  const url = new URL(link.href, location.href);
+  if (!['http:', 'https:'].includes(url.protocol) || url.origin !== location.origin) return;
+  if (url.pathname === location.pathname && url.search === location.search && url.hash) return;
+
+  event.preventDefault();
+  pageNavigationPending = true;
+  document.body.classList.add('fm-page-leaving');
+  document.body.setAttribute('aria-busy', 'true');
+
+  const navigate = () => location.assign(url.href);
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) navigate();
+  else setTimeout(navigate, 140);
+
+  pageNavigationTimer = setTimeout(clearPageTransition, 1000);
+});
+
 const nav = document.querySelector('[data-fm-nav]');
 const toggle = document.querySelector('[data-fm-nav-toggle]');
 const scrim = document.querySelector('[data-fm-nav-scrim]');

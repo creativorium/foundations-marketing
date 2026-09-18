@@ -153,7 +153,12 @@ a.meridian-brand { min-height: 44px; display: flex; align-items: center; }
   .meridian-header[data-open] .meridian-nav__mobile-cta { display: block; }
   .meridian-header[data-open] .meridian-nav__mobile-cta a { color: var(--fm-accent); }
   .meridian-header[data-open] .meridian-menu-close { position: absolute; top: 1.5rem; right: 1.75rem; display: grid; place-items: center; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: inherit; font: 400 1.875rem/1 var(--fm-font-body); cursor: pointer; }
+  // Opening the menu moves focus here for keyboard users. Do not draw the browser's
+  // default rectangular button chrome after a pointer tap; keyboard focus keeps the
+  // deliberate high-contrast outline from the shared focus-visible rule above.
+  .meridian-header[data-open] .meridian-menu-close:focus:not(:focus-visible) { outline: none; }
   .meridian-header[data-enhanced] .meridian-menu-toggle { display: flex; flex-direction: column; justify-content: center; gap: 4px; flex-shrink: 0; width: 44px; height: 44px; padding: 12px; background: transparent; color: inherit; border: 0; cursor: pointer; }
+  .meridian-header[data-enhanced] .meridian-menu-toggle { appearance: none; border: 0 !important; box-shadow: none; }
   .meridian-menu-toggle span { display: block; width: 20px; height: 1.5px; background: currentColor; }
   .meridian-hero { grid-template-columns: 1fr; min-height: 0; }
   .meridian-hero__text { padding: 9rem 1.5rem 3.125rem; }

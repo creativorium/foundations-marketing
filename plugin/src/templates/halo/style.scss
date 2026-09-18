@@ -29,7 +29,7 @@
 
   // The gutter every Halo band uses. Shrinks on small screens so a full-bleed band
   // still has air without the body scrolling sideways (how-to-work.md §8).
-  --fm-halo-gutter: 3.5rem;
+  --fm-halo-gutter: 4.5rem;
   --fm-halo-radius: 1.25rem;
   // The height the fixed header reserves, so a band pulled under it still starts below.
   --fm-halo-header: 83px;
@@ -62,7 +62,7 @@
 
 .fm-halo-band {
   padding-inline: var(--fm-halo-gutter);
-  padding-block: var(--fm-space-6);
+  padding-block: 7.5rem;
 }
 
 // The small sage kicker above nearly every heading in this design.
@@ -81,7 +81,7 @@
   margin: 0;
   font-family: var(--fm-font-display);
   font-weight: 400;
-  line-height: 1.02;
+  line-height: 1.06;
   letter-spacing: -0.015em;
   text-wrap: balance;
 }
@@ -215,7 +215,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1.5rem;
-  padding: 1.25rem var(--fm-halo-gutter);
+  padding: 1.375rem 3rem;
   background: color-mix(in srgb, var(--fm-canvas) 72%, transparent);
   backdrop-filter: blur(14px);
   border-bottom: 1px solid color-mix(in srgb, var(--fm-line) 60%, transparent);

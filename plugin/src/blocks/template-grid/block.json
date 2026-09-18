@@ -38,7 +38,7 @@
     },
     "limit": {
       "type": "number",
-      "default": 9
+      "default": 8
     },
     "moreText": {
       "type": "string",

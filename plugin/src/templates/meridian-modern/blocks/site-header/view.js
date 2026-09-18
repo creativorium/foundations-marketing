@@ -8,7 +8,10 @@ document.querySelectorAll('[data-meridian-header]').forEach(header => {
     if (header.hasAttribute('data-open')) close();
     else { header.dataset.open = ''; toggle.setAttribute('aria-expanded', 'true'); toggle.setAttribute('aria-label', 'Close navigation'); document.body.classList.add('meridian-overlay-open'); closeButton?.focus(); }
   });
-  closeButton?.addEventListener('click', () => close(true));
+  // A keyboard-activated close should return focus to the menu button. A pointer or
+  // touch activation should not: moving focus back after a tap leaves a conspicuous
+  // focus rectangle around the hamburger on some mobile browsers.
+  closeButton?.addEventListener('click', event => close(event.detail === 0));
   header.addEventListener('keydown', event => { if (event.key === 'Escape' && header.hasAttribute('data-open')) close(true); });
   header.querySelectorAll('nav a').forEach(link => link.addEventListener('click', close));
   document.addEventListener('click', event => { if (!header.contains(event.target)) close(); });
