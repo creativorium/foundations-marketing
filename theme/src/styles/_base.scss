@@ -2,7 +2,13 @@
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { -webkit-text-size-adjust: 100%; }
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--fm-header-h) + 20px);
+}
+
+:where([id]) { scroll-margin-top: calc(var(--fm-header-h) + 20px); }
 
 body {
   margin: 0;
@@ -56,4 +62,8 @@ ul, ol { margin: 0; padding: 0; list-style: none; }
     padding: 10px 18px;
     border-radius: var(--fm-radius-pill);
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
 }
