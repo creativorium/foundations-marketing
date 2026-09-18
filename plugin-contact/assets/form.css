@@ -1,48 +1,52 @@
-:root {
-  --fm-bg: #F9F7EE;         /* Creamy background */
-  --fm-text: #2a1e1e;       /* Rich brown text */
-  --fm-accent: #D6421E;     /* Orange accent */
-  --fm-accent-light: #E43D12;
-  --fm-border: #d6421e;     /* Subtle line color */
-  --fm-muted: #010101;
+﻿/* Foundations Marketing form tokens inherit the active site palette. */
+.fmcd-form,
+.fmdd-form,
+.fmcd-modal {
+  --fm-text: var(--fm-ink, #1f1e1a);
+  --fm-border: var(--fm-line, #cbcbb9);
+  --fm-accent-light: var(--fm-accent, #ea631b);
+  font-family: var(--fm-font, "Archivo", Helvetica, Arial, sans-serif);
 }
 
-/* Global hide helper used by dynamic form logic */
-.hidden { display: none !important; }
-.shows  { display: block !important; }
+/* Helpers are scoped so this plugin cannot hide unrelated site elements. */
+.fmcd-form .hidden,
+.fmdd-form .hidden { display: none !important; }
+.fmcd-form .shows,
+.fmdd-form .shows { display: block !important; }
 
-/* Base layout */
 .fmcd-form {
-  /*background: var(--fm-bg);*/
-  color: var(--fm-text);
-  font-family: "Inter", "Helvetica Neue", system-ui, sans-serif;
-  /*max-width: 600px;*/
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  width: min(100%, 1040px);
   margin: 0 auto;
-  padding: 24px 30px 36px;
+  padding: clamp(26px, 5vw, 56px);
+  color: var(--fm-text);
+  background: var(--fm-bg-2, #e0e0d1);
+  border: var(--fm-rule, 1.5px) solid var(--fm-text);
 }
 
-.fmcd-form h3 {
+.fmcd-form > label {
+  display: grid;
+  align-content: start;
+  gap: 9px;
+  margin: 0;
+  color: var(--fm-text);
+  font-size: 11px;
   font-weight: 700;
-  font-size: 1.4rem;
-  margin-bottom: 18px;
+  letter-spacing: .14em;
+  line-height: 1.35;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
-/* Labels */
-.fmcd-form label {
-  display: block;
-  margin: 20px 0;
-  font-weight: 600;
-  color: #E43D12;
-  font-size: 1.25rem;
+.fmcd-form > label:nth-of-type(n + 5),
+.fmcd-form > .fmcd-pills,
+.fmcd-form > .fmcd-appointment,
+.fmcd-form > .fmcd-submit,
+.fmcd-form > .fmcd-status {
+  grid-column: 1 / -1;
 }
 
-.fmcd-form legend {
-    color: #E43D12;
-}
-
-/* Inputs & Textareas: minimalist underline style */
 .fmcd-form input[type="text"],
 .fmcd-form input[type="email"],
 .fmcd-form input[type="url"],
@@ -50,220 +54,150 @@
 .fmcd-form textarea,
 .fmcd-form select {
   width: 100%;
-  border: none;
-  border-bottom: 2px solid var(--fm-accent-light);
-  background: transparent;
-  padding: 8px 2px;
-  font-size: 1rem;
+  min-height: 52px;
+  padding: 14px 16px;
+  border: var(--fm-rule, 1.5px) solid var(--fm-text);
+  border-radius: 0;
+  outline: 0;
+  background: var(--fm-bg, #ebebdf);
   color: var(--fm-text);
-  outline: none;
-  transition: border-color 0.2s ease, background-color 0.2s ease;
+  font: 400 16px/1.45 var(--fm-font, "Archivo", Helvetica, Arial, sans-serif);
+  letter-spacing: 0;
+  text-transform: none;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.fmcd-form textarea {
+  min-height: 124px;
+  max-height: 320px;
+  resize: vertical;
 }
 
 .fmcd-form input::placeholder,
-.fmcd-form textarea::placeholder {
-  color: #b8a9a9;
-}
+.fmcd-form textarea::placeholder { color: var(--fm-muted, #5e5d53); opacity: .75; }
 
 .fmcd-form input:focus,
 .fmcd-form textarea:focus,
 .fmcd-form select:focus {
-  border-bottom-color: var(--fm-accent);
+  border-color: var(--fm-accent, #ea631b);
+  box-shadow: 0 0 0 2px var(--fm-accent, #ea631b);
 }
 
-/* Select field */
-.fmcd-form select {
-  appearance: none;
-  border-radius: 0;
-  cursor: pointer;
+.fmcd-req {
+  color: var(--fm-accent-deep, #c24e11);
+  font-size: 10px;
 }
 
-/* Textarea */
-.fmcd-form textarea {
-  resize: vertical;
-  min-height: 45px;
-  max-height: 45px;
-  overflow-y: auto;
-  border-bottom: 2px solid var(--fm-accent-light);
-}
-
-/* Pill Buttons (Root / Grow / Rise) */
 .fmcd-pills {
   display: flex;
+  flex-wrap: wrap;
   gap: 10px;
-  margin: 0px;
+  margin: -12px 0 4px;
 }
 
-.fmcd-pill {
-  border: 1.5px solid var(--fm-accent);
+.fmcd-form .fmcd-pill {
+  margin: 0;
+  padding: 11px 22px;
+  border: var(--fm-rule, 1.5px) solid var(--fm-text);
+  border-radius: var(--fm-radius-pill, 40px);
   background: transparent;
-  color: var(--fm-accent);
-  border-radius: 40px;
-  padding: 10px 22px;
+  color: var(--fm-text);
+  font-size: 12px;
   font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
   cursor: pointer;
-  transition: all 0.2s ease;
-  user-select: none;
-  font-size: 0.95rem;
 }
 
-.fmcd-pill:hover {
-  background: var(--fm-accent);
-  color: #fff;
-}
-
+.fmcd-form .fmcd-pill:hover,
 .fmcd-pills input[type="radio"]:checked + .fmcd-pill {
-  background: var(--fm-accent);
+  border-color: var(--fm-accent, #ea631b);
+  background: var(--fm-accent, #ea631b);
   color: #fff;
 }
 
-/* Appointment area */
-.fmcd-appointment {
-  margin-top: 16px;
-  background: #fff;
-  border-radius: 12px;
-  border: 1px solid var(--fm-border);
-  padding: 12px 16px;
-}
-
-.fmcd-appointment.hidden {
-  display: none;
-}
-
-.fmcd-appointment h4 {
-  margin: 0 0 10px;
-  font-weight: 700;
-  font-size: 1rem;
-  color: var(--fm-accent);
-}
-
-.fmcd-date-row {
+.fmcd-form .fmcd-meet {
   display: flex;
+  grid-template-columns: none;
   align-items: center;
   gap: 10px;
-  padding: 6px 0;
+  padding-top: 4px;
   cursor: pointer;
 }
 
-.fmcd-date {
-  flex: 1;
-  border: none;
-  border-bottom: 2px solid var(--fm-accent-light);
-  background: transparent;
-  padding: 8px 2px;
-  outline: none;
-  font-size: 1rem;
-}
+.fmcd-meet input { width: 18px; height: 18px; accent-color: var(--fm-accent, #ea631b); }
 
-.fmcd-note {
-  margin-top: 6px;
-  color: var(--fm-muted);
-  font-size: 0.9rem;
+.fmcd-appointment {
+  padding: 24px;
+  border: var(--fm-rule, 1.5px) solid var(--fm-text);
+  background: var(--fm-pastel, #c9dcec);
 }
-
-/* Slot buttons */
-.fmcd-slots {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 10px;
-}
-
+.fmcd-appointment h4 { margin: 0 0 14px; color: var(--fm-text); font-size: 20px; }
+.fmcd-date-row { display: flex; align-items: center; gap: 10px; }
+.fmcd-note { margin: 8px 0 0; color: var(--fm-muted, #5e5d53); font-size: 14px; }
+.fmcd-slots { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
 .fmcd-slot {
-  border: 1.5px solid var(--fm-accent);
-  color: var(--fm-accent);
+  padding: 9px 16px;
+  border: var(--fm-rule, 1.5px) solid var(--fm-text);
+  border-radius: var(--fm-radius-pill, 40px);
   background: transparent;
-  border-radius: 40px;
-  padding: 8px 18px;
-  font-weight: 700;
+  color: var(--fm-text);
+  font: 700 12px var(--fm-font, "Archivo", Helvetica, Arial, sans-serif);
   cursor: pointer;
-  transition: all 0.2s ease;
 }
+.fmcd-slot:hover,
+.fmcd-slot.selected { border-color: var(--fm-accent, #ea631b); background: var(--fm-accent, #ea631b); color: #fff; }
+.fmcd-slot.is-disabled { opacity: .45; cursor: not-allowed; }
 
-.fmcd-slot:hover {
-  background: var(--fm-accent);
-  color: #fff;
-}
-
-.fmcd-slot.selected {
-  background: var(--fm-accent);
-  color: #fff;
-}
-
-.fmcd-slot.is-disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-/* Submit button */
 .fmcd-submit {
-  margin-top: 20px;
-  background: var(--fm-accent);
+  min-height: 56px;
+  padding: 15px 28px;
+  border: var(--fm-rule, 1.5px) solid var(--fm-accent, #ea631b);
+  border-radius: var(--fm-radius-pill, 40px);
+  background: var(--fm-accent, #ea631b);
   color: #fff;
-  border: none;
-  border-radius: 40px;
-  padding: 12px 30px;
-  font-weight: 700;
-  font-size: 1rem;
+  font: 700 14px var(--fm-font, "Archivo", Helvetica, Arial, sans-serif);
   cursor: pointer;
-  transition: background 0.2s ease, transform 0.05s ease;
 }
+.fmcd-submit:hover { border-color: var(--fm-accent-deep, #c24e11); background: var(--fm-accent-deep, #c24e11); }
+.fmcd-status { min-height: 1.5em; color: var(--fm-accent-deep, #c24e11); font-weight: 700; }
 
-.fmcd-submit:hover {
-  background: #c23615;
-}
-
-.fmcd-submit:active {
-  transform: translateY(1px);
-}
-
-/* Status */
-.fmcd-status {
-  margin-top: 8px;
-  color: var(--fm-accent);
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-
-/* Modal */
 .fmcd-modal {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   z-index: 9999;
-}
-
-.fmcd-modal[hidden] {
-  display: none !important;
-}
-
-.fmcd-modal__card {
-  background: var(--fm-bg);
+  display: grid;
+  place-items: center;
   padding: 24px;
-  border-radius: 12px;
-  text-align: center;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background: rgba(31, 30, 26, .62);
 }
-
+.fmcd-modal[hidden] { display: none !important; }
+.fmcd-modal__card {
+  width: min(100%, 480px);
+  padding: 36px;
+  border: var(--fm-rule, 1.5px) solid var(--fm-text);
+  border-radius: 0;
+  background: var(--fm-bg, #ebebdf);
+  color: var(--fm-text);
+  text-align: center;
+}
 .fmcd-modal__close {
-  margin-top: 10px;
-  border: 2px solid var(--fm-accent);
-  color: var(--fm-accent);
+  margin-top: 12px;
+  padding: 10px 20px;
+  border: var(--fm-rule, 1.5px) solid var(--fm-text);
+  border-radius: var(--fm-radius-pill, 40px);
   background: transparent;
-  border-radius: 40px;
-  padding: 8px 18px;
+  color: var(--fm-text);
   font-weight: 700;
   cursor: pointer;
 }
+.fmcd-modal__close:hover { background: var(--fm-text); color: var(--fm-bg, #ebebdf); }
 
-.fmcd-modal__close:hover {
-  background: var(--fm-accent);
-  color: #fff;
+@media (max-width: 680px) {
+  .fmcd-form { grid-template-columns: 1fr; gap: 20px; padding: 24px 18px; }
+  .fmcd-form > label { grid-column: 1 / -1; }
+  .fmcd-form .fmcd-pill { flex: 1 1 auto; text-align: center; }
 }
-
 /* ===== DISCOVERY (fmdd) ===== */
 .fmdd-form{
   background: transparent;
@@ -548,20 +482,20 @@
   .fmdd-radio, .fmdd-check{width:100%; justify-content:space-between;}
 }
 
-label{
+.fmdd-form label{
   color: #E43D12;
 }
 
-[type=button]:hover{
+.fmdd-form [type=button]:hover{
   background-color: #E43D12;
 }
 
-button.next {
+.fmdd-form button.next {
   background-color: #E43D12;
   color: white;
 }
 
-button.back {
+.fmdd-form button.back {
   background-color: #E43D12;
   color: white;
 }
@@ -579,15 +513,15 @@ button.back {
   margin: 2px 0px !important;
 }
 
-label.qulified-label {
+.fmdd-form label.qulified-label {
   margin-bottom: 10px !important;
 }
 
-label.service-title-label {
+.fmdd-form label.service-title-label {
   margin: 5px;
 }
 
-legend{
+.fmdd-form legend{
   color: #E43D12;
   font-weight: 500;
 }
@@ -597,6 +531,6 @@ select.fmdd-template {
   min-height: 45px;
 }
 
-textarea{
+.fmdd-form textarea{
   max-height:45px;
 }
