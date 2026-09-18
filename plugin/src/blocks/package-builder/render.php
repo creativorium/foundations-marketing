@@ -110,6 +110,9 @@ $money  = static fn (float $n): string => function_exists('wc_price') ? wc_price
                     <span class="fm-builder__running-label"><?php esc_html_e('Running total', 'foundations'); ?></span>
                     <span class="fm-builder__running-total" data-fm-total><?php echo $money($base_price); ?></span>
                 </p>
+                <button type="submit" class="fm-builder__quick-pay" data-fm-quick-pay hidden>
+                    <?php esc_html_e('Pay now', 'foundations'); ?> &rarr;
+                </button>
                 <button type="button" class="fm-builder__next" data-fm-next>
                     <?php esc_html_e('Add extras', 'foundations'); ?> &rarr;
                 </button>

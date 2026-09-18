@@ -26,6 +26,7 @@ export default function initPackageBuilder() {
   // were one of the three step controls.
   const stepBtns = [...root.querySelectorAll('.fm-builder__step-btn[data-fm-step]')];
   const nextBtn = root.querySelector('[data-fm-next]');
+  const quickPayBtn = root.querySelector('[data-fm-quick-pay]');
   const totals = [...root.querySelectorAll('[data-fm-total]')];
   const linesEl = root.querySelector('[data-fm-lines]');
   const frame = root.querySelector('[data-fm-frame]');
@@ -106,6 +107,10 @@ export default function initPackageBuilder() {
       // On the last step the sticky button would duplicate the real submit sitting a
       // few centimetres below it, so it stands down rather than competing with it.
       nextBtn.hidden = step === 3;
+    }
+
+    if (quickPayBtn) {
+      quickPayBtn.hidden = step !== 3;
     }
 
     paint();

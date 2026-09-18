@@ -2,13 +2,13 @@
 /**
  * Plugin Name: FM Contact & Discovery Forms (with Appointment)
  * Description: Custom Form for Foundations Marketing. Shortcodes: [fm_contact_form], [fm_discovery_form]
- * Version: 1.9.2
+ * Version: 1.9.3
  * Author: Negolast
  */
 
 if (!defined('ABSPATH')) exit;
 
-define('FMCD_VER', '1.9.2');
+define('FMCD_VER', '1.9.3');
 define('FMCD_DIR', plugin_dir_path(__FILE__));
 define('FMCD_URL', plugin_dir_url(__FILE__));
 
