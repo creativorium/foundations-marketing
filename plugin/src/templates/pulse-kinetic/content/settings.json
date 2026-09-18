@@ -1,0 +1,16 @@
+{
+  "site_name": "Pulse Studio",
+  "tagline": "Barre, Pilates and mobility in Brighton",
+  "logo_id": 0,
+  "phone": "07700 900 118",
+  "email": "hey@pulsestudio.co.uk",
+  "address": "Unit 9, North Laine Yard\nBrighton BN1 4GD",
+  "cta_label": "Start free week",
+  "cta_url": "{{page:home|url}}#book",
+  "footer_text": "Barre, Pilates and mobility in Brighton. Twelve mats, one coach, no contracts.",
+  "social": [],
+  "brand_label": "PULSE",
+  "booking_address": "Unit 9, North Laine Yard, Brighton",
+  "opening_hours": "Mon–Fri 06:00 – 20:00\nSaturday 08:00 – 13:00\nSunday closed",
+  "instagram_handle": "@pulse.studio"
+}

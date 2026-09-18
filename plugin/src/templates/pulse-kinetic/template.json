@@ -1,0 +1,22 @@
+{
+  "$comment": "Pulse Kinetic — transcribed from the supplied bundled Pulse Kinetic HTML. Shape follows customer-runtime.md §2.",
+  "name": "Pulse Kinetic",
+  "slug": "pulse-kinetic",
+  "version": "0.1.0",
+  "niche": "Barre, mat Pilates and mobility studios",
+  "category": "Wellness & movement",
+  "description": "A high-energy lime, cream and ink studio design with class cards, a free-week offer, pricing, timetable, coach profile, testimonials, FAQ, contact and privacy pages.",
+  "targetPhrase": "barre and pilates studio website template UK",
+  "demoSlug": "barre-pilates-studio-website-template",
+  "pages": ["home", "contact", "privacy"],
+  "settings": {
+    "brand_label": {"type":"text","label":"Wordmark","default":"PULSE"},
+    "booking_address": {"type":"text","label":"Short booking address","default":""},
+    "opening_hours": {"type":"textarea","label":"Opening hours","default":""},
+    "instagram_handle": {"type":"text","label":"Instagram handle","default":""}
+  },
+  "shell": {
+    "header": {"block":"foundations/pulse-kinetic-site-header"},
+    "footer": {"block":"foundations/pulse-kinetic-site-footer"}
+  }
+}

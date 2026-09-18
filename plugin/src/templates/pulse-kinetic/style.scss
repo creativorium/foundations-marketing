@@ -1,0 +1,49 @@
+@font-face {
+  font-family: 'Pulse Kinetic Bricolage';
+  font-style: normal;
+  font-weight: 600 800;
+  font-display: swap;
+  src: url('./assets/fonts/bricolage-grotesque-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Pulse Kinetic Space';
+  font-style: normal;
+  font-weight: 300 500;
+  font-display: swap;
+  src: url('./assets/fonts/space-grotesk-latin.woff2') format('woff2');
+}
+
+.fm-pulse-kinetic,
+.fm-pulse-kinetic :where(*) { all: revert; }
+
+.fm-pulse-kinetic {
+  display: block;
+  background: #F7F4EC;
+  color: #101413;
+  font-family: 'Pulse Kinetic Space', sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: normal;
+  overflow-x: hidden;
+  text-align: start;
+  letter-spacing: normal;
+}
+
+.fm-pulse-kinetic :where(a) { color: inherit; text-decoration: none; }
+.fm-pulse-kinetic a { text-decoration: none; }
+.fm-pulse-kinetic :where(a:hover) { color: #C6D96B; }
+.fm-pulse-kinetic ::selection { background: #C6D96B; color: #101413; }
+.fm-pulse-kinetic [hidden] { display: none !important; }
+html:has(.fm-pulse-kinetic) { scroll-behavior: smooth; }
+body:has(.fm-pulse-kinetic) { margin: 0; padding: 0; background: #101413; }
+body:has(.fm-pulse-kinetic) > main { margin: 0; padding: 0; max-width: none; }
+
+.fm-pulse-kinetic :is(a, button, input, textarea):focus-visible {
+  outline: 2px solid #C6D96B !important;
+  outline-offset: 3px !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:has(.fm-pulse-kinetic) { scroll-behavior: auto; }
+}

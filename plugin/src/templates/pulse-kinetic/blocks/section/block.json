@@ -1,0 +1,15 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "foundations/pulse-kinetic-section",
+  "title": "Pulse Kinetic section",
+  "category": "foundations",
+  "icon": "performance",
+  "textdomain": "foundations",
+  "supports": {"html":false},
+  "attributes": {
+    "settings": {"type":"object","default":{}},
+    "variant": {"type":"string","default":"hero"}
+  },
+  "render": "file:./render.php"
+}

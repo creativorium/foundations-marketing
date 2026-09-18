@@ -1,0 +1,12 @@
+{
+  "versions": {"base":"1.0.0","template":"0.1.0","blocksRuntime":"0.1.0"},
+  "homepage": "home",
+  "pages": [
+    {"slug":"home","title":"Home","file":"pages/home.blocks.txt"},
+    {"slug":"contact","title":"Contact","file":"pages/contact.blocks.txt"},
+    {"slug":"privacy","title":"Privacy policy","file":"pages/privacy.blocks.txt"}
+  ],
+  "settings": "settings.json",
+  "navigation": "navigation.json",
+  "media": "media.json"
+}

@@ -1,0 +1,11 @@
+{
+  "$schema":"https://schemas.wp.org/trunk/block.json",
+  "apiVersion":3,
+  "name":"foundations/pulse-kinetic-site-footer",
+  "title":"Pulse Kinetic site footer",
+  "category":"foundations",
+  "icon":"editor-insertmore",
+  "textdomain":"foundations",
+  "supports":{"html":false,"multiple":false},
+  "render":"file:./render.php"
+}
