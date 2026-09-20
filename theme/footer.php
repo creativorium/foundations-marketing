@@ -41,7 +41,8 @@ if (!defined('ABSPATH')) {
     </div>
 
     <div class="fm-footer__meta">
-        <span><?php esc_html_e('Made by Cular Creative', 'foundations-marketing'); ?></span>
+        <span><a href="https://cularcreative.com/" target="_blank" rel="noopener noreferrer"><?php esc_html_e('Made by Cular Creative', 'foundations-marketing'); ?></a></span>
+        <span><a href="<?php echo esc_url(home_url('/privacy-policy/')); ?>"><?php esc_html_e('Privacy policy', 'foundations-marketing'); ?></a></span>
         <span>&copy; <?php echo esc_html((string) date('Y')); ?> <?php echo esc_html(FM_BRAND); ?></span>
     </div>
 </footer>

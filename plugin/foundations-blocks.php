@@ -27,6 +27,7 @@ require_once FM_BLOCKS_DIR . 'inc/register.php';
 require_once FM_BLOCKS_DIR . 'inc/assets.php';
 require_once FM_BLOCKS_DIR . 'inc/helpers.php';
 require_once FM_BLOCKS_DIR . 'inc/demo.php';
+require_once FM_BLOCKS_DIR . 'inc/privacy-page.php';
 
 // The WooCommerce side of the package builder. Loaded only when WooCommerce is
 // active: every hook in it is a WooCommerce hook, and on a site without the plugin

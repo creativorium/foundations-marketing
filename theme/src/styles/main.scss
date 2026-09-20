@@ -4,6 +4,7 @@
 @use 'header';
 @use 'footer';
 @use 'error';
+@use 'legal';
 // Motion last, so its rules win over the static ones they enhance.
 @use 'motion';
 @use 'page-transition';
