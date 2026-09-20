@@ -119,7 +119,7 @@ add_shortcode('fm_faq_page', 'fm_faq_page_shortcode');
 
 function fm_install_marketing_pages(): void
 {
-    $version = '6';
+    $version = '7';
     if ((string) get_option('fm_native_marketing_pages_version', '') === $version) {
         return;
     }
@@ -194,6 +194,20 @@ function fm_install_marketing_pages(): void
         if ($old_page instanceof WP_Post && !$new_page instanceof WP_Post) {
             fm_marketing_update_post($old_page->ID, ['post_name' => $new_slug, 'post_title' => $title]);
         }
+    }
+
+    // Run after the singular-page rename: on older installs the catalogue was not at
+    // /templates/ when the first content pass above ran.
+    foreach (['templates' => 'Templates', 'services' => 'Services'] as $slug => $title) {
+        $page = get_page_by_path($slug, OBJECT, 'page');
+        if (!$page instanceof WP_Post) {
+            continue;
+        }
+        $content = str_replace(['£249', '\u00a3249'], ['£299', '\u00a3299'], $page->post_content);
+        if ($slug === 'services') {
+            $content = preg_replace('/("name":"Booking integration","price":")£75/', '${1}£45', $content) ?: $content;
+        }
+        fm_marketing_update_post($page->ID, ['post_title' => $title, 'post_content' => $content]);
     }
 
     // Remove the retired Pricing item from both current menus and normalise the two
