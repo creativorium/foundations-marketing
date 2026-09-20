@@ -34,7 +34,7 @@
     },
     "priceFrom": {
       "type": "string",
-      "default": "From £249"
+      "default": "From £299"
     },
     "limit": {
       "type": "number",

@@ -73,7 +73,7 @@ export default function Controls({ attributes, setAttributes }) {
           label={__('Base price', 'foundations')}
           type="number"
           value={String(basePrice ?? 0)}
-          onChange={(v) => setAttributes({ basePrice: number(v, 249) })}
+          onChange={(v) => setAttributes({ basePrice: number(v, 299) })}
         />
         <TextControl
           label={__('What the base price covers', 'foundations')}

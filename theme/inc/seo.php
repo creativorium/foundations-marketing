@@ -25,6 +25,20 @@ if (!defined('ABSPATH')) {
 /** The canonical brand name. Never write "Foundation Marketing" — see strategy §1a. */
 const FM_BRAND = 'Foundations Marketing';
 
+/** Correct legacy singular page/brand labels even when an SEO plugin owns the title. */
+function fm_normalise_document_title(string $title): string
+{
+    $title = preg_replace('/\bFoundation Marketing\b/u', FM_BRAND, $title) ?: $title;
+    if (is_page('services')) {
+        $title = preg_replace('/^Service\b/u', 'Services', $title) ?: $title;
+    } elseif (is_page('templates')) {
+        $title = preg_replace('/^Template\b/u', 'Templates', $title) ?: $title;
+    }
+    return $title;
+}
+add_filter('pre_get_document_title', 'fm_normalise_document_title', 20);
+add_filter('wpseo_title', 'fm_normalise_document_title', 20);
+
 function fm_seo_has_seo_plugin(): bool
 {
     return defined('WPSEO_VERSION') || defined('RANK_MATH_VERSION');

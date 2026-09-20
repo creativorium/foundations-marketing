@@ -12,7 +12,7 @@
     "number":      { "type": "string",  "default": "01" },
     "label":       { "type": "string",  "default": "The library" },
     "aside":       { "type": "string",  "default": "Every template" },
-    "priceFrom":   { "type": "string",  "default": "From £249" },
+    "priceFrom":   { "type": "string",  "default": "From £299" },
     "allLabel":    { "type": "string",  "default": "All" },
     "showFilters": { "type": "boolean", "default": true },
     "note":        { "type": "string",  "default": "" },

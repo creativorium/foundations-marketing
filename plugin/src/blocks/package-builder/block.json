@@ -15,7 +15,7 @@
   "attributes": {
     "basePrice": {
       "type": "number",
-      "default": 249
+      "default": 299
     },
     "baseLabel": {
       "type": "string",
@@ -63,7 +63,7 @@
     },
     "step1Heading": {
       "type": "string",
-      "default": "What you're getting for £249"
+      "default": "What you're getting for £299"
     },
     "step1Intro": {
       "type": "string",
