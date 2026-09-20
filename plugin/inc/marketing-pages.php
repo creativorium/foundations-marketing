@@ -119,7 +119,7 @@ add_shortcode('fm_faq_page', 'fm_faq_page_shortcode');
 
 function fm_install_marketing_pages(): void
 {
-    $version = '5';
+    $version = '6';
     if ((string) get_option('fm_native_marketing_pages_version', '') === $version) {
         return;
     }
@@ -184,6 +184,16 @@ function fm_install_marketing_pages(): void
 
     if ((string) get_option('blogname', '') === 'Foundation Marketing') {
         update_option('blogname', 'Foundations Marketing');
+    }
+
+    // Dev predates the plural catalogue URL. Rename the existing page in place so
+    // its content, ID, menu relationships and SEO history are retained.
+    foreach (['template' => ['templates', 'Templates'], 'service' => ['services', 'Services']] as $old_slug => [$new_slug, $title]) {
+        $old_page = get_page_by_path($old_slug, OBJECT, 'page');
+        $new_page = get_page_by_path($new_slug, OBJECT, 'page');
+        if ($old_page instanceof WP_Post && !$new_page instanceof WP_Post) {
+            fm_marketing_update_post($old_page->ID, ['post_name' => $new_slug, 'post_title' => $title]);
+        }
     }
 
     // Remove the retired Pricing item from both current menus and normalise the two
