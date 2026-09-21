@@ -39,7 +39,7 @@ function fm_about_page_shortcode(): string
         <h1>Built by two<br><span>mums who get it.</span></h1>
         <div class="fm-story__intro"><h2>Empowering entrepreneurs, one foundation at a time.</h2><div><p>Foundations Marketing was born from a shared experience. Two mothers, two founders, one clear belief: that you shouldn't have to fight your own website to get your business off the ground.</p><p>We are not a traditional agency. We're here to give you one thing, done properly: a clean, functional website that actually looks like you from day one.</p></div></div>
       </header>
-      <div class="fm-story__ticker" aria-hidden="true"><span>Empowering entrepreneurs — one foundation at a time — empowering entrepreneurs — one foundation at a time —</span></div>
+      <div class="fm-story__ticker" aria-hidden="true"><div class="fm-story__ticker-track"><span>Empowering entrepreneurs — one foundation at a time — empowering entrepreneurs — one foundation at a time —</span><span>Empowering entrepreneurs — one foundation at a time — empowering entrepreneurs — one foundation at a time —</span></div></div>
 
       <section class="fm-story__section">
         <div class="fm-story__section-label"><span>01 — Our story</span><span>Chia ↓</span></div>
@@ -104,7 +104,7 @@ function fm_faq_page_shortcode(): string
     ?>
     <article class="fm-story fm-faq-page">
       <header class="fm-story__hero"><div class="fm-story__label"><span>FAQ</span><span>Before you start</span></div><h1>Frequently asked<br><span>questions.</span></h1><div class="fm-story__intro"><h2>Everything we get asked, answered up front.</h2><div><p>If your question isn't here, book a free 20-minute call and ask us directly. You'll speak to one of us, not a help centre.</p><?php echo fm_marketing_cta('Book a discovery call →', '/contact-page/', false); ?></div></div></header>
-      <div class="fm-story__ticker" aria-hidden="true"><span>No contracts — no lock-in — real people — mates' rates — no contracts — no lock-in — real people — mates' rates —</span></div>
+      <div class="fm-story__ticker" aria-hidden="true"><div class="fm-story__ticker-track"><span>No contracts — no lock-in — real people — mates' rates — no contracts — no lock-in — real people — mates' rates —</span><span>No contracts — no lock-in — real people — mates' rates — no contracts — no lock-in — real people — mates' rates —</span></div></div>
       <section class="fm-story__section" id="faqs"><div class="fm-story__section-label"><span>01 — The questions</span><span>Tap to open ↓</span></div><div class="fm-faq-page__list">
         <?php foreach ($faqs as $index => [$question, $answer]) : ?>
           <details name="fm-faq"><summary><span><?php echo esc_html(str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT)); ?></span><strong><?php echo esc_html($question); ?></strong><i aria-hidden="true">+</i></summary><div class="fm-faq-page__answer"><?php echo wp_kses_post($answer); ?></div></details>
