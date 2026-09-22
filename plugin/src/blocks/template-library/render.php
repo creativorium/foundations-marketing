@@ -107,7 +107,11 @@ $show_filters = (bool) ($attributes['showFilters'] ?? true) && count($categories
                         <span class="fm-template-card__device">
                             <span class="fm-template-card__dot" aria-hidden="true"></span>
                             <span class="fm-template-card__screen" style="--fm-card-screen: <?php echo esc_attr($screen); ?>">
-                                <?php if ($template['thumb_id'] > 0) : ?>
+                                <?php if (!empty($template['thumb_url'])) : ?>
+                                    <img class="fm-template-card__shot" src="<?php echo esc_url((string) $template['thumb_url']); ?>"
+                                         alt="<?php echo esc_attr(sprintf(__('%s website template by Foundations Marketing', 'foundations'), $template['name'])); ?>"
+                                         loading="lazy" decoding="async">
+                                <?php elseif ($template['thumb_id'] > 0) : ?>
                                     <?php
                                     echo fm_image(
                                         $template['thumb_id'],

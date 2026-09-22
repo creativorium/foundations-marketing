@@ -37,16 +37,38 @@ function fm_delivery_asset_url(int $id,string $kind,string $file):string
 {
     return add_query_arg(['fm_design_asset'=>$id,'kind'=>$kind,'file'=>$file],home_url('/'));
 }
+
+/** Immutable catalogue preview URL, keyed by the package checksum rather than an attachment id. */
+function fm_delivery_preview_url(int $id): string
+{
+    $design = fm_delivery_design($id);
+    $file = (string) ($design['release']['preview'] ?? '');
+    $hash = (string) ($design['release']['files'][$file] ?? '');
+    return $file === '' ? '' : add_query_arg([
+        'fm_design_asset' => $id,
+        'kind' => 'preview',
+        'file' => $file,
+        'v' => substr($hash, 0, 16),
+    ], home_url('/'));
+}
 add_action('template_redirect',function():void{
     if(!isset($_GET['fm_design_asset'])){return;}
     $id=absint($_GET['fm_design_asset']);
     if(get_post_type($id)!=='fm_design'||(get_post_status($id)!=='publish'&&!current_user_can('manage_options'))){status_header(404);exit;}
     try{$d=fm_delivery_design($id);$kind=$_GET['kind']??'';$file=(string)wp_unslash($_GET['file']??'');
-        if(!in_array($kind,['theme','plugin'],true)){throw new RuntimeException('Unknown asset.');}
-        $path=FM_Delivery_Bundle::path($d[$kind],$file);$ext=strtolower(pathinfo($path,PATHINFO_EXTENSION));
+        if(!in_array($kind,['theme','plugin','preview'],true)){throw new RuntimeException('Unknown asset.');}
+        if($kind==='preview'){
+            $expected=(string)($d['release']['preview']??'');
+            if($file===''||!hash_equals($expected,$file)){throw new RuntimeException('Unknown preview.');}
+            $path=FM_Delivery_Bundle::path($d['root'],$file);
+            $expectedHash=(string)($d['release']['files'][$file]??'');
+            if($expectedHash===''||!is_file($path)||!hash_equals($expectedHash,hash_file('sha256',$path))){throw new RuntimeException('Invalid preview.');}
+        }else{$path=FM_Delivery_Bundle::path($d[$kind],$file);}
+        $ext=strtolower(pathinfo($path,PATHINFO_EXTENSION));
         $types=['css'=>'text/css','js'=>'application/javascript','svg'=>'image/svg+xml','woff'=>'font/woff','ttf'=>'font/ttf','otf'=>'font/otf','woff2'=>'font/woff2','png'=>'image/png','jpg'=>'image/jpeg','jpeg'=>'image/jpeg','webp'=>'image/webp','gif'=>'image/gif'];
         if(!isset($types[$ext])||!is_file($path)){throw new RuntimeException('Unknown asset.');}
         header('Content-Type: '.$types[$ext]);header('X-Content-Type-Options: nosniff');
+        if($kind==='preview'){header('Cache-Control: public, max-age=31536000, immutable');}
         if($ext==='css'){
             $css=(string)file_get_contents($path);
             $css=preg_replace_callback('~url\([\'\"]?([^\)\'\"]+)[\'\"]?\)~',function($m)use($id,$kind,$file){if(preg_match('~^(https?:|data:|/|#)~',$m[1])){return $m[0];}$relative=(dirname($file)==='.'?'':dirname($file).'/').preg_split('/[?#]/',$m[1])[0];$segments=[];foreach(explode('/',$relative) as $segment){if($segment==='..'){if(!$segments){throw new RuntimeException('Asset outside design.');}array_pop($segments);}elseif($segment!=='.'&&$segment!==''){$segments[]=$segment;}}$relative=implode('/',$segments);return 'url("'.esc_url_raw(fm_delivery_asset_url($id,$kind,$relative)).'")';},$css);

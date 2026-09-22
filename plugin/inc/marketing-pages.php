@@ -63,7 +63,7 @@ function fm_marketing_asset(string $file, string $title, string $alt): int
 }
 
 /** Apply the approved supplied photos to the native Homepage and Services blocks. */
-function fm_apply_marketing_photos(): void
+function fm_apply_marketing_photos(): bool
 {
     $ids = [
         'phone' => fm_marketing_asset('marketing/home-client-phone.webp', 'Client viewing a website', 'A client viewing a website on their phone'),
@@ -73,6 +73,9 @@ function fm_apply_marketing_photos(): void
         'services_hero' => fm_marketing_asset('marketing/services-hero.webp', 'Practitioner at work', 'A practitioner working with a client'),
         'services_portrait' => fm_marketing_asset('marketing/services-practitioner.webp', 'Independent practitioner', 'An independent practitioner speaking with a client'),
     ];
+    if (in_array(0, $ids, true)) {
+        return false;
+    }
 
     foreach (['fm-block-test' => 'home', 'services' => 'services'] as $slug => $kind) {
         $page = get_page_by_path($slug, OBJECT, 'page');
@@ -106,6 +109,7 @@ function fm_apply_marketing_photos(): void
         unset($block);
         fm_marketing_update_post($page->ID, ['post_content' => serialize_blocks($blocks)]);
     }
+    return true;
 }
 
 function fm_about_page_shortcode(): string
@@ -199,7 +203,7 @@ add_shortcode('fm_faq_page', 'fm_faq_page_shortcode');
 
 function fm_install_marketing_pages(): void
 {
-    $version = '9';
+    $version = '10';
     if ((string) get_option('fm_native_marketing_pages_version', '') === $version) {
         return;
     }
@@ -290,7 +294,12 @@ function fm_install_marketing_pages(): void
         fm_marketing_update_post($page->ID, ['post_title' => $title, 'post_content' => $content]);
     }
 
-    fm_apply_marketing_photos();
+    // A request can arrive while rsync is still copying plugin assets. Do not mark
+    // the migration complete unless every bundled image was imported successfully;
+    // the next request will retry once deployment has finished.
+    if (!fm_apply_marketing_photos()) {
+        return;
+    }
 
     // Remove the retired Pricing item from both current menus and normalise the two
     // catalogue page links. Old Elementor menus are unassigned and intentionally left.

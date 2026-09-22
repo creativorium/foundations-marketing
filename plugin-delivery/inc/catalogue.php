@@ -17,6 +17,7 @@ add_filter('fm_catalogue_templates', function (array $rows, int $limit): array {
             'niche'=>$meta['niche']??'', 'description'=>$description,
             'category'=>$meta['category']??'', 'sections'=>$meta['sections']??[],
             'packages'=>$meta['packages']??[], 'thumb_id'=>(int)get_post_meta($post->ID,'_fm_preview_image',true),
+            'thumb_url'=>function_exists('fm_delivery_preview_url')?fm_delivery_preview_url((int)$post->ID):'',
             'url'=>home_url('/templates/'.$post->post_name.'/demo/')];
     }
     return $limit < 0 ? $rows : array_slice($rows, 0, $limit);
