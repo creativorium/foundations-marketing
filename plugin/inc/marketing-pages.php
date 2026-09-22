@@ -28,6 +28,81 @@ function fm_marketing_update_post(int $post_id, array $fields): void
     }
 }
 
+/** Import a bundled marketing photo once and return its attachment id. */
+function fm_marketing_asset(string $file, string $title, string $alt): int
+{
+    $key = 'fm_marketing_asset_' . md5($file);
+    $existing = (int) get_option($key, 0);
+    if ($existing > 0 && get_post_type($existing) === 'attachment') {
+        return $existing;
+    }
+
+    $source = FM_BLOCKS_DIR . 'assets/images/' . ltrim($file, '/');
+    if (!is_file($source)) {
+        return 0;
+    }
+
+    $upload = wp_upload_bits(basename($source), null, (string) file_get_contents($source));
+    if (!empty($upload['error'])) {
+        return 0;
+    }
+    $type = wp_check_filetype((string) $upload['file']);
+    $id = wp_insert_attachment([
+        'post_mime_type' => (string) ($type['type'] ?? 'image/webp'),
+        'post_title' => $title,
+        'post_status' => 'inherit',
+    ], (string) $upload['file']);
+    if (is_wp_error($id)) {
+        return 0;
+    }
+    require_once ABSPATH . 'wp-admin/includes/image.php';
+    wp_update_attachment_metadata($id, wp_generate_attachment_metadata($id, (string) $upload['file']));
+    update_post_meta($id, '_wp_attachment_image_alt', $alt);
+    update_option($key, $id, false);
+    return (int) $id;
+}
+
+/** Apply the approved supplied photos to the native Homepage and Services blocks. */
+function fm_apply_marketing_photos(): void
+{
+    $ids = [
+        'phone' => fm_marketing_asset('marketing/home-client-phone.webp', 'Client viewing a website', 'A client viewing a website on their phone'),
+        'practitioner' => fm_marketing_asset('marketing/home-practitioner.webp', 'Practitioner at work', 'A wellness practitioner working with a client in warm natural light'),
+        'studio' => fm_marketing_asset('marketing/home-studio.webp', 'Wellness studio', 'A calm wellness studio and treatment space'),
+        'founders' => fm_marketing_asset('chia-ralu.jpg', 'Chia and Ralu', 'Chia and Ralu, co-founders of Foundations Marketing'),
+        'services_hero' => fm_marketing_asset('marketing/services-hero.webp', 'Practitioner at work', 'A practitioner working with a client'),
+        'services_portrait' => fm_marketing_asset('marketing/services-practitioner.webp', 'Independent practitioner', 'An independent practitioner speaking with a client'),
+    ];
+
+    foreach (['fm-block-test' => 'home', 'services' => 'services'] as $slug => $kind) {
+        $page = get_page_by_path($slug, OBJECT, 'page');
+        if (!$page instanceof WP_Post) {
+            continue;
+        }
+        $blocks = parse_blocks($page->post_content);
+        foreach ($blocks as &$block) {
+            if ($kind === 'home' && $block['blockName'] === 'foundations/photo-strip') {
+                $block['attrs']['items'] = [
+                    ['id' => $ids['practitioner'], 'alt' => 'A wellness practitioner working with a client in warm natural light', 'caption' => 'A practitioner at work'],
+                    ['id' => $ids['studio'], 'alt' => 'A calm wellness studio and treatment space', 'caption' => 'A calm studio or treatment room'],
+                    ['id' => $ids['phone'], 'alt' => 'A client viewing a website on their phone', 'caption' => 'A client viewing their site'],
+                ];
+            } elseif ($kind === 'home' && $block['blockName'] === 'foundations/quotes') {
+                $block['attrs']['founderMediaId'] = $ids['founders'];
+                $block['attrs']['founderMediaAlt'] = 'Chia and Ralu, co-founders of Foundations Marketing';
+            } elseif ($kind === 'services' && $block['blockName'] === 'foundations/photo-banner') {
+                $block['attrs']['mediaId'] = $ids['services_hero'];
+                $block['attrs']['mediaAlt'] = 'A practitioner working with a client';
+            } elseif ($kind === 'services' && $block['blockName'] === 'foundations/audience') {
+                $block['attrs']['mediaId'] = $ids['services_portrait'];
+                $block['attrs']['mediaAlt'] = 'An independent practitioner speaking with a client';
+            }
+        }
+        unset($block);
+        fm_marketing_update_post($page->ID, ['post_content' => serialize_blocks($blocks)]);
+    }
+}
+
 function fm_about_page_shortcode(): string
 {
     $photo = FM_BLOCKS_URL . 'assets/images/chia-ralu.jpg';
@@ -119,7 +194,7 @@ add_shortcode('fm_faq_page', 'fm_faq_page_shortcode');
 
 function fm_install_marketing_pages(): void
 {
-    $version = '7';
+    $version = '8';
     if ((string) get_option('fm_native_marketing_pages_version', '') === $version) {
         return;
     }
@@ -209,6 +284,8 @@ function fm_install_marketing_pages(): void
         }
         fm_marketing_update_post($page->ID, ['post_title' => $title, 'post_content' => $content]);
     }
+
+    fm_apply_marketing_photos();
 
     // Remove the retired Pricing item from both current menus and normalise the two
     // catalogue page links. Old Elementor menus are unassigned and intentionally left.
