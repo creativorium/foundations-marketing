@@ -18,7 +18,7 @@
     "items":      { "type": "array",   "default": [] },
     "showPrice":  { "type": "boolean", "default": true },
     "pricePrefix":{ "type": "string",  "default": "from" },
-    "price":      { "type": "string",  "default": "£249" },
+    "price":      { "type": "string",  "default": "£299" },
     "priceNote":  { "type": "string",  "default": "" },
     "ctaText":    { "type": "string",  "default": "" },
     "ctaUrl":     { "type": "string",  "default": "" }

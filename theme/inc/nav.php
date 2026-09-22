@@ -28,6 +28,15 @@ function fm_nav_menu(string $location, array $args = []): void
     ], $args));
 }
 
+/** Pricing is no longer a standalone navigation destination. */
+function fm_remove_pricing_menu_item(array $items): array
+{
+    return array_values(array_filter($items, static function ($item): bool {
+        return strtolower(trim(wp_strip_all_tags((string) ($item->title ?? '')))) !== 'pricing';
+    }));
+}
+add_filter('wp_nav_menu_objects', 'fm_remove_pricing_menu_item', 5);
+
 /**
  * The secondary links for the foot of the mobile drawer.
  *

@@ -28,7 +28,7 @@ therapists, coaches, doulas, pilates instructors, nutritionists, salons, tutors.
 picks a **site template**, buys a **package**, and we build and deploy the site for them.
 
 Packages (WooCommerce products): **Root £199** · **Growth £349** · **Rise £480**
-Add-ons: Branding kit £199 · Advanced SEO £149 · Booking integration £75 · Extra pages £50 each
+Add-ons: Branding kit £199 · Advanced SEO £149 · Booking integration £45 · Extra pages £50 each
 
 > It is **not** a ThemeForest-style marketplace. Templates are *chosen*, not bought
 > individually, and we do the install. An earlier brief said otherwise — it was wrong.

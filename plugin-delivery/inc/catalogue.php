@@ -12,8 +12,9 @@ add_filter('fm_catalogue_templates', function (array $rows, int $limit): array {
         $meta = FM_Delivery_Bundle::json($design['plugin'].'/template.json');
         $content = (array) get_post_meta($post->ID, '_fm_content', true);
         $rows = array_values(array_filter($rows, fn($row)=>$row['slug']!==$post->post_name));
+        $description = str_replace('editable multi-page content', 'editable single-page content', (string)($meta['description']??''));
         $rows[] = ['id'=>$post->ID,'slug'=>$post->post_name,'name'=>$post->post_title,
-            'niche'=>$meta['niche']??'', 'description'=>$meta['description']??'',
+            'niche'=>$meta['niche']??'', 'description'=>$description,
             'category'=>$meta['category']??'', 'sections'=>$meta['sections']??[],
             'packages'=>$meta['packages']??[], 'thumb_id'=>(int)get_post_meta($post->ID,'_fm_preview_image',true),
             'url'=>home_url('/templates/'.$post->post_name.'/demo/')];

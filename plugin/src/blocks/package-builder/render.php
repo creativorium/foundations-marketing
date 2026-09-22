@@ -25,7 +25,7 @@ if (!defined('ABSPATH')) {
 
 $attr = static fn (string $key, $fallback = '') => $attributes[$key] ?? $fallback;
 
-$base_price = max(0, (int) $attr('basePrice', 249));
+$base_price = max(0, (int) $attr('basePrice', 299));
 $base_label = (string) $attr('baseLabel', 'base build');
 $page_price = max(0, (int) $attr('extraPagePrice', 50));
 $product_id = (int) $attr('productId', 0);

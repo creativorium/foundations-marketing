@@ -13,7 +13,7 @@
     "label":         { "type": "string", "default": "The price" },
     "aside":         { "type": "string", "default": "One number, no tiers" },
     "prefix":        { "type": "string", "default": "from" },
-    "price":         { "type": "string", "default": "\u00a3249" },
+    "price":         { "type": "string", "default": "\u00a3299" },
     "lede":          { "type": "string", "default": "" },
     "ctaText":       { "type": "string", "default": "Start my site" },
     "ctaUrl":        { "type": "string", "default": "#cta" },
