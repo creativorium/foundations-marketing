@@ -1,0 +1,22 @@
+{
+  "$comment": "Bloom — an organic editorial single-page doula design transcribed from the approved Notes/Bloom/Bloom.html source.",
+  "name": "Bloom Birth Support",
+  "slug": "bloom",
+  "version": "0.1.0",
+  "niche": "Birth and postnatal doulas",
+  "category": "Wellness",
+  "description": "A calm organic editorial design for birth and postnatal doulas, with an anchored single-page journey, audience guidance, testimonial, practitioner story and contact section.",
+  "targetPhrase": "doula website design UK",
+  "demoSlug": "doula-website-design",
+  "pages": ["home", "privacy"],
+  "settings": {
+    "brand_label": {"type":"text","label":"Wordmark","default":"Bloom"},
+    "brand_descriptor": {"type":"text","label":"Wordmark descriptor","default":"Birth Support"},
+    "location_line": {"type":"text","label":"Location line","default":"Based in [Location]"},
+    "experience_line": {"type":"text","label":"Experience line","default":"Serving families since [Year]"}
+  },
+  "shell": {
+    "header": {"block":"foundations/bloom-site-header"},
+    "footer": {"block":"foundations/bloom-site-footer"}
+  }
+}

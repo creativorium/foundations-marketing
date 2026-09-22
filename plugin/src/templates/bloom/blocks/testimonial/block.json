@@ -1,0 +1,1 @@
+{"apiVersion":3,"name":"foundations/bloom-testimonial","title":"Bloom — Testimonial","category":"foundations-bloom","icon":"format-quote","attributes":{"quote":{"type":"string","default":""},"name":{"type":"string","default":""},"detail":{"type":"string","default":""}},"supports":{"html":false},"render":"file:./render.php"}

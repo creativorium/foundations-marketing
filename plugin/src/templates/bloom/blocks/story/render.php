@@ -1,0 +1,4 @@
+<?php
+if (!defined('ABSPATH')) { exit; } $a=$attributes; $text=static fn(string $key): string => esc_html((string)($a[$key]??'')); $anchor=sanitize_title((string)($a['anchor']??'story')); $paragraphs=preg_split('/\R{2,}/',(string)($a['body']??''));
+?>
+<section class="bloom bloom-story" id="<?php echo esc_attr($anchor); ?>"><div><p class="bloom-label bloom-label--clay"><?php echo $text('eyebrow'); ?></p><h2><?php echo $text('heading'); ?></h2><p class="bloom-story__intro"><?php echo $text('intro'); ?></p><blockquote><?php echo $text('quote'); ?></blockquote><?php foreach($paragraphs as $paragraph): ?><p><?php echo esc_html(trim($paragraph)); ?></p><?php endforeach; ?></div><figure class="bloom-story__image"><?php echo wp_get_attachment_image((int)($a['imageId']??0),'full'); ?></figure></section>

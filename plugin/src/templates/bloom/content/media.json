@@ -1,0 +1,12 @@
+{
+  "$comment": "Portable media references used by the Bloom page blocks.",
+  "tokens": {
+    "media": "{{media:<filename>|url}} or {{media:<filename>|id}}",
+    "page": "{{page:<slug>|url}} or {{page:<slug>|id}}"
+  },
+  "files": [
+    {"file":"bloom-hero.webp","title":"Bloom birth support","alt":"A doula supporting a pregnant client — doula website design UK by Foundations Marketing","usedBy":["content/pages/home.blocks.txt"],"placeholder":false},
+    {"file":"bloom-journey.webp","title":"A newborn holding a parent's finger","alt":"A newborn holding a parent's finger during postnatal support","usedBy":["content/pages/home.blocks.txt"],"placeholder":false},
+    {"file":"bloom-practitioner.webp","title":"Bloom practitioner","alt":"A birth support practitioner listening to a client","usedBy":["content/pages/home.blocks.txt"],"placeholder":false}
+  ]
+}

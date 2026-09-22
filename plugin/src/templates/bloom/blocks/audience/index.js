@@ -1,0 +1,1 @@
+import '../../components/category.js'; import metadata from './block.json'; import createEdit from '../../components/Edit.jsx'; import register from '../../components/register.js'; import './editor.scss'; register(metadata, createEdit(metadata));

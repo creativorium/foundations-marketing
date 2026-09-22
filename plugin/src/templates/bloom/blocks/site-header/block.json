@@ -1,0 +1,1 @@
+{"apiVersion":3,"name":"foundations/bloom-site-header","title":"Bloom — Site header","category":"foundations-bloom","icon":"menu","attributes":{},"supports":{"html":false,"multiple":false,"inserter":false},"render":"file:./render.php"}

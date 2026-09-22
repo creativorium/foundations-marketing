@@ -1,0 +1,9 @@
+{
+  "nav_primary": [
+    {"label":"The journey","url":"#story"},
+    {"label":"Who I work with","url":"#who"},
+    {"label":"About me","url":"#about"},
+    {"label":"Say hello","url":"#contact"}
+  ],
+  "nav_footer": [{"label":"Privacy policy","page":"privacy"}]
+}
