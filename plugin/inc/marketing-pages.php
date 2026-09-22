@@ -81,7 +81,12 @@ function fm_apply_marketing_photos(): void
         }
         $blocks = parse_blocks($page->post_content);
         foreach ($blocks as &$block) {
-            if ($kind === 'home' && $block['blockName'] === 'foundations/photo-strip') {
+            if ($block['blockName'] === 'foundations/template-grid') {
+                // Home and Services are both previews of the same live catalogue.
+                // Eight is the agreed two-row cap; fewer published masters keep
+                // their four-column card width instead of stretching.
+                $block['attrs']['limit'] = 8;
+            } elseif ($kind === 'home' && $block['blockName'] === 'foundations/photo-strip') {
                 $block['attrs']['items'] = [
                     ['id' => $ids['practitioner'], 'alt' => 'A wellness practitioner working with a client in warm natural light', 'caption' => 'A practitioner at work'],
                     ['id' => $ids['studio'], 'alt' => 'A calm wellness studio and treatment space', 'caption' => 'A calm studio or treatment room'],
@@ -194,7 +199,7 @@ add_shortcode('fm_faq_page', 'fm_faq_page_shortcode');
 
 function fm_install_marketing_pages(): void
 {
-    $version = '8';
+    $version = '9';
     if ((string) get_option('fm_native_marketing_pages_version', '') === $version) {
         return;
     }
