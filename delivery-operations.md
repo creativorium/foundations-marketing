@@ -56,9 +56,17 @@ alternative text), and Site Settings. Select additional pages on the export scre
 This is not a database backup: users, orders, third-party options and Site Editor
 template customizations are not exported.
 
-For a source-code update, build a versioned design slug and review it as a new master.
-Existing releases remain available. Automatic upgrades or merges into existing customer
-projects are not implemented; plan and test those migrations separately.
+For an unpublished or published master that has no customer projects, rebuild with the
+same stable slug and upload it with **Replace an existing master with the same package
+slug** selected. Delivery validates and imports the replacement first, keeps the master
+record, catalogue URL and visibility, then removes the superseded demo content and files.
+The replacement refreshes the demo and future customer packages; it does not update a
+customer website that was already installed.
+
+Replacement is refused as soon as a customer project depends on the master. Use a
+versioned design slug in that case and review it as a new master. Existing releases remain
+available. Automatic upgrades or content merges into customer projects are not
+implemented; plan and test those migrations separately.
 
 Third-party plugins are not silently bundled. Any dependency needs explicit licensing,
 version and installation instructions before that design is released. The customer

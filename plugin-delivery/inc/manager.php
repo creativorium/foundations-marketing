@@ -131,32 +131,113 @@ add_action('init',function():void {
     foreach(get_posts(['post_type'=>'fm_design','post_status'=>'any','numberposts'=>-1]) as $p){$d=get_post_meta($p->ID,'_fm_design',true);if(is_array($d)&&!empty($d['plugin'])){fm_delivery_register_design($d);}}
 },20);
 
+/**
+ * Validate and unpack a compiled master without changing WordPress state.
+ *
+ * Both add and replace use this first so a broken ZIP can never damage the currently
+ * installed master. The caller owns the returned private directories and must either
+ * store them in _fm_design or remove them.
+ */
+function fm_delivery_prepare_design(string $zipFile): array
+{
+    $root = FM_Delivery_Bundle::unzip($zipFile, true);
+    $nested = [];
+
+    try {
+        $release = FM_Delivery_Bundle::json($root . '/release.json');
+        $slug = (string) ($release['slug'] ?? '');
+
+        if (!$slug || sanitize_title($slug) !== $slug) {
+            throw new RuntimeException('Invalid design slug.');
+        }
+
+        foreach (['theme.zip', 'plugin.zip', 'content.zip'] as $file) {
+            $path = $root . '/' . $file;
+
+            if (!is_file($path) || !isset($release['files'][$file]) || !hash_equals((string) $release['files'][$file], hash_file('sha256', $path))) {
+                throw new RuntimeException('Checksum mismatch: ' . $file);
+            }
+        }
+
+        $themeRoot = FM_Delivery_Bundle::unzip($root . '/theme.zip', true);
+        $nested[] = $themeRoot;
+        $pluginRoot = FM_Delivery_Bundle::unzip($root . '/plugin.zip', true);
+        $nested[] = $pluginRoot;
+        $contentRoot = FM_Delivery_Bundle::unzip($root . '/content.zip');
+        $nested[] = $contentRoot;
+        $theme = $themeRoot . '/foundations-' . $slug;
+        $plugin = $pluginRoot . '/foundations-site';
+
+        if (!is_file($theme . '/theme.json') || !is_file($plugin . '/foundations-site.php')) {
+            throw new RuntimeException('Unexpected theme/plugin package structure.');
+        }
+
+        if (!empty($release['preview'])) {
+            $preview = FM_Delivery_Bundle::path($root, (string) $release['preview']);
+
+            if (!is_file($preview) || !hash_equals((string) ($release['files'][$release['preview']] ?? ''), hash_file('sha256', $preview))) {
+                throw new RuntimeException('Preview checksum mismatch.');
+            }
+        }
+
+        return [
+            'root' => $root,
+            'theme' => $theme,
+            'plugin' => $plugin,
+            'content' => $contentRoot,
+            'release' => $release,
+            'nested' => $nested,
+        ];
+    } catch (Throwable $e) {
+        foreach ($nested as $dir) {
+            FM_Delivery_Bundle::remove($dir);
+        }
+
+        FM_Delivery_Bundle::remove($root);
+        throw $e;
+    }
+}
+
+/** Remove files and imported content that belonged only to a superseded master. */
+function fm_delivery_remove_design_payload(array $design, array $content, int $previewId): void
+{
+    foreach ((array) ($content['pages'] ?? []) as $page) {
+        wp_delete_post((int) $page, true);
+    }
+
+    foreach ((array) ($content['media'] ?? []) as $media) {
+        wp_delete_attachment((int) $media, true);
+    }
+
+    if ($previewId > 0) {
+        wp_delete_attachment($previewId, true);
+    }
+
+    foreach ((array) ($design['nested'] ?? []) as $dir) {
+        FM_Delivery_Bundle::remove((string) $dir);
+    }
+
+    if (!empty($design['root'])) {
+        FM_Delivery_Bundle::remove((string) $design['root']);
+    }
+}
+
 /** Upload is admin-only: code in design packages has the same trust boundary as plugins. */
 function fm_delivery_add_design(string $zipFile): int
 {
-    $root=FM_Delivery_Bundle::unzip($zipFile,true);
-    $nested=[];$id=0;$previewId=0;
+    $data=fm_delivery_prepare_design($zipFile);
+    $root=$data['root'];$nested=$data['nested'];$release=$data['release'];$id=0;$previewId=0;
     try {
-        $release=FM_Delivery_Bundle::json($root.'/release.json');
         $slug=$release['slug']??'';
-        if(!$slug||sanitize_title($slug)!==$slug){throw new RuntimeException('Invalid design slug.');}
-        if(get_page_by_path($slug,OBJECT,'fm_design')){throw new RuntimeException('This design slug already exists. Keep existing releases immutable; use a versioned slug for a new release.');}
-        foreach(['theme.zip','plugin.zip','content.zip'] as $file){if(!isset($release['files'][$file])||!hash_equals($release['files'][$file],hash_file('sha256',$root.'/'.$file))){throw new RuntimeException('Checksum mismatch: '.$file);}}
-        $themeRoot=FM_Delivery_Bundle::unzip($root.'/theme.zip',true);$nested[]=$themeRoot;
-        $pluginRoot=FM_Delivery_Bundle::unzip($root.'/plugin.zip',true);$nested[]=$pluginRoot;
-        $contentRoot=FM_Delivery_Bundle::unzip($root.'/content.zip');$nested[]=$contentRoot;
-        $theme=$themeRoot.'/foundations-'.$slug;$plugin=$pluginRoot.'/foundations-site';
-        if(!is_file($theme.'/theme.json')||!is_file($plugin.'/foundations-site.php')){throw new RuntimeException('Unexpected theme/plugin package structure.');}
+        if(get_page_by_path($slug,OBJECT,'fm_design')){throw new RuntimeException('This design slug already exists. Select “Replace an existing master with the same slug” to update it.');}
         $id=wp_insert_post(['post_type'=>'fm_design','post_title'=>sanitize_text_field($release['name']),'post_name'=>$slug,'post_status'=>'draft'],true);
         if(is_wp_error($id)){throw new RuntimeException($id->get_error_message());}
-        $data=['root'=>$root,'theme'=>$theme,'plugin'=>$plugin,'content'=>$contentRoot,'release'=>$release,'nested'=>$nested];
         update_post_meta($id,'_fm_design',wp_slash($data));
         fm_delivery_register_design($data);
-        $content=FM_Delivery_Bundle::import($contentRoot,'fm_project_page',$id);
+        $content=FM_Delivery_Bundle::import($data['content'],'fm_project_page',$id);
         update_post_meta($id,'_fm_content',wp_slash($content));
         if(!empty($release['preview'])){
             $preview=FM_Delivery_Bundle::path($root,$release['preview']);
-            if(!is_file($preview)||!hash_equals($release['files'][$release['preview']]??'',hash_file('sha256',$preview))){throw new RuntimeException('Preview checksum mismatch.');}
             $tmp=wp_tempnam(basename($preview));copy($preview,$tmp);
             $previewId=media_handle_sideload(['name'=>basename($preview),'tmp_name'=>$tmp],$id);
             if(is_wp_error($previewId)){if(is_file($tmp)){unlink($tmp);}throw new RuntimeException($previewId->get_error_message());}
@@ -164,6 +245,101 @@ function fm_delivery_add_design(string $zipFile): int
         }
         return $id;
     }catch(Throwable $e){if(is_int($previewId)&&$previewId){wp_delete_attachment($previewId,true);}if($id){$content=get_post_meta($id,'_fm_content',true);foreach($content['pages']??[] as $page){wp_delete_post($page,true);}foreach($content['media']??[] as $media){wp_delete_attachment($media,true);}wp_delete_post($id,true);}foreach($nested as $dir){FM_Delivery_Bundle::remove($dir);}FM_Delivery_Bundle::remove($root);throw $e;}
+}
+
+/**
+ * Atomically replace an unused master while retaining its WordPress id and catalogue URL.
+ * Existing customer projects are protected because their editor previews depend on the
+ * master's code. Installed customer releases remain immutable ZIPs, but replacing code
+ * beneath an active project would make future edits unreliable.
+ */
+function fm_delivery_replace_design(int $id, string $zipFile): int
+{
+    $post = get_post($id);
+
+    if (!$post || $post->post_type !== 'fm_design') {
+        throw new RuntimeException('Unknown design.');
+    }
+
+    $projects = fm_delivery_design_projects($id);
+
+    if ($projects !== []) {
+        throw new RuntimeException(sprintf(
+            'This master is used by %d customer project(s). Existing customer work is protected; upload the update under a versioned slug instead.',
+            count($projects)
+        ));
+    }
+
+    $new = fm_delivery_prepare_design($zipFile);
+    $previewId = 0;
+    $newContent = [];
+
+    try {
+        $slug = (string) ($new['release']['slug'] ?? '');
+
+        if (!hash_equals($post->post_name, $slug)) {
+            throw new RuntimeException(sprintf('Replacement slug mismatch. Expected %s, received %s.', $post->post_name, $slug ?: '(empty)'));
+        }
+
+        fm_delivery_register_design($new);
+        $newContent = FM_Delivery_Bundle::import($new['content'], 'fm_project_page', $id);
+
+        if (!empty($new['release']['preview'])) {
+            $preview = FM_Delivery_Bundle::path($new['root'], (string) $new['release']['preview']);
+            $tmp = wp_tempnam(basename($preview));
+            copy($preview, $tmp);
+            $previewId = media_handle_sideload(['name' => basename($preview), 'tmp_name' => $tmp], $id);
+
+            if (is_wp_error($previewId)) {
+                if (is_file($tmp)) { unlink($tmp); }
+                throw new RuntimeException($previewId->get_error_message());
+            }
+        }
+
+        $old = fm_delivery_design($id);
+        $oldContent = (array) get_post_meta($id, '_fm_content', true);
+        $oldPreview = (int) get_post_meta($id, '_fm_preview_image', true);
+
+        update_post_meta($id, '_fm_design', wp_slash($new));
+        update_post_meta($id, '_fm_content', wp_slash($newContent));
+
+        if ($previewId > 0) {
+            update_post_meta($id, '_fm_preview_image', $previewId);
+        } else {
+            delete_post_meta($id, '_fm_preview_image');
+        }
+
+        wp_update_post(['ID' => $id, 'post_title' => sanitize_text_field((string) $new['release']['name'])]);
+        fm_delivery_remove_design_payload($old, $oldContent, $oldPreview);
+
+        return $id;
+    } catch (Throwable $e) {
+        foreach ((array) ($newContent['pages'] ?? []) as $page) { wp_delete_post((int) $page, true); }
+        foreach ((array) ($newContent['media'] ?? []) as $media) { wp_delete_attachment((int) $media, true); }
+        if ($previewId > 0) { wp_delete_attachment($previewId, true); }
+        foreach ((array) ($new['nested'] ?? []) as $dir) { FM_Delivery_Bundle::remove((string) $dir); }
+        FM_Delivery_Bundle::remove((string) $new['root']);
+        throw $e;
+    }
+}
+
+/** Read only the stable slug needed to route an explicitly requested replacement. */
+function fm_delivery_uploaded_design_slug(string $zipFile): string
+{
+    $root = FM_Delivery_Bundle::unzip($zipFile, true);
+
+    try {
+        $release = FM_Delivery_Bundle::json($root . '/release.json');
+        $slug = (string) ($release['slug'] ?? '');
+
+        if (!$slug || sanitize_title($slug) !== $slug) {
+            throw new RuntimeException('Invalid design slug.');
+        }
+
+        return $slug;
+    } finally {
+        FM_Delivery_Bundle::remove($root);
+    }
 }
 
 function fm_delivery_create_project(int $designId, string $name, string $customer, string $brief, int $order = 0): int
@@ -240,7 +416,7 @@ function fm_delivery_screen(): void
         echo '<h2>Installations</h2>';foreach($p['deployments'] as $d){echo '<p>'.esc_html($d['domain'].' — '.$d['date'].' — '.$d['release']).'</p>';}
         fm_delivery_form('deployment',$id);echo '<label>Installed domain <input type="url" name="domain" required placeholder="https://customer.example"></label> <label>Release <select name="release">';foreach($p['releases'] as $r){echo '<option value="'.esc_attr($r['id']).'">'.esc_html($r['created_at']).'</option>';}echo '</select></label>';submit_button('Record installation','secondary');echo '</form></div>';return;
     }
-    echo '<h2 id="fm-master-designs">Master designs</h2>';fm_delivery_form('upload');echo '<label>Compiled delivery ZIP <input type="file" name="bundle" accept=".zip" required></label>';submit_button('Add master design');echo '</form>';
+    echo '<h2 id="fm-master-designs">Master designs</h2>';fm_delivery_form('upload');echo '<p><label>Compiled delivery ZIP <input type="file" name="bundle" accept=".zip" required></label></p><p><label><input type="checkbox" name="replace_existing" value="1"> Replace an existing master with the same package slug</label></p><p class="description">Replacement keeps the master’s catalogue URL and visibility, then refreshes its demo, starter content, images and future customer package. It is refused when customer projects already depend on that master.</p>';submit_button('Upload master design');echo '</form>';
     $archived = !empty($_GET['show_archived']);
     $archive_filter = $archived ? [] : [['key'=>'_fm_delivery_archived','compare'=>'NOT EXISTS']];
     echo '<p><a href="'.esc_url(admin_url('admin.php?page=fm-delivery'.($archived?'':'&show_archived=1'))).'">'.($archived?'Hide archived test records':'Show archived test records').'</a></p>';
@@ -286,7 +462,18 @@ add_action('admin_post_fm_delivery',function():void{
         if($task==='upload'||$task==='replace-content'){
             if(empty($_FILES['bundle']['tmp_name'])||!is_uploaded_file($_FILES['bundle']['tmp_name'])){throw new RuntimeException('Choose a ZIP file.');}
         }
-        if($task==='upload'){if(!current_user_can('install_plugins')){throw new RuntimeException('Installing design code requires plugin installation permission.');}fm_delivery_add_design($_FILES['bundle']['tmp_name']);}
+        if($task==='upload'){
+            if(!current_user_can('install_plugins')){throw new RuntimeException('Installing design code requires plugin installation permission.');}
+            $file=$_FILES['bundle']['tmp_name'];
+            if(!empty($_POST['replace_existing'])){
+                $slug=fm_delivery_uploaded_design_slug($file);
+                $existing=get_page_by_path($slug,OBJECT,'fm_design');
+                if(!$existing){throw new RuntimeException('No existing master uses the slug '.$slug.'. Clear the replacement checkbox to add it as a new design.');}
+                fm_delivery_replace_design((int)$existing->ID,$file);
+            }else{
+                fm_delivery_add_design($file);
+            }
+        }
         elseif($task==='save-master'){fm_delivery_design($id);$GLOBALS['fm_delivery_context']=$id;$c=(array)get_post_meta($id,'_fm_content',true);$c['settings']=fm_site_sanitize_settings((array)wp_unslash($_POST['settings']??[]));update_post_meta($id,'_fm_content',wp_slash($c));wp_safe_redirect(admin_url('admin.php?page=fm-delivery&design='.$id));exit;}
         elseif($task==='create'){$id=fm_delivery_create_project(absint($_POST['design']),sanitize_text_field(wp_unslash($_POST['name'])),sanitize_text_field(wp_unslash($_POST['customer'])),sanitize_textarea_field(wp_unslash($_POST['brief']??'')),absint($_POST['order']??0));}
         elseif($task==='publish'){$d=fm_delivery_design($id);if(!empty($d['release']['fixture'])){throw new RuntimeException('Fixtures cannot be published.');}wp_update_post(['ID'=>$id,'post_status'=>get_post_status($id)==='publish'?'draft':'publish']);$id=0;}
