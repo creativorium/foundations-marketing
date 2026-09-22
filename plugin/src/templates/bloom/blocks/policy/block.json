@@ -1,0 +1,1 @@
+{"apiVersion":3,"name":"foundations/bloom-policy","title":"Bloom — Privacy policy","category":"foundations-bloom","icon":"privacy","attributes":{"heading":{"type":"string","default":""},"intro":{"type":"string","default":""},"sections":{"type":"array","default":[]}},"supports":{"html":false,"multiple":false},"render":"file:./render.php"}

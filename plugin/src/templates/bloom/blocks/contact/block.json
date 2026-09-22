@@ -1,0 +1,1 @@
+{"apiVersion":3,"name":"foundations/bloom-contact","title":"Bloom — Contact","category":"foundations-bloom","icon":"email","attributes":{"anchor":{"type":"string","default":"contact"},"heading":{"type":"string","default":""},"body":{"type":"string","default":""},"note":{"type":"string","default":""}},"supports":{"html":false,"multiple":false},"render":"file:./render.php"}

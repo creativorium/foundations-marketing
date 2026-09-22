@@ -1,0 +1,1 @@
+{"apiVersion":3,"name":"foundations/bloom-site-footer","title":"Bloom — Site footer","category":"foundations-bloom","icon":"align-wide","attributes":{},"supports":{"html":false,"multiple":false,"inserter":false},"render":"file:./render.php"}

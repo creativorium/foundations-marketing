@@ -1,0 +1,16 @@
+{
+  "site_name": "Bloom Birth Support",
+  "tagline": "Calm, personal support through birth and beyond",
+  "logo_id": 0,
+  "phone": "+44 7700 900000",
+  "email": "hello@example.co.uk",
+  "address": "[Location]",
+  "cta_label": "Get in touch",
+  "cta_url": "#contact",
+  "footer_text": "Calm, unhurried birth and postnatal support.",
+  "social": [],
+  "brand_label": "Bloom",
+  "brand_descriptor": "Birth Support",
+  "location_line": "Based in [Location]",
+  "experience_line": "Serving families since [Year]"
+}
