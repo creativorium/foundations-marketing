@@ -21,10 +21,6 @@
   padding: 0 1.5rem;
 }
 
-.quartz-header__menu {
-  display: contents;
-}
-
 .quartz-header__brand {
   grid-column: 2;
   grid-row: 1;
@@ -93,88 +89,20 @@
   color: var(--quartz-terra);
 }
 
-.quartz-header__toggle {
-  display: none;
-}
-
-.quartz-header__toggle[hidden] {
-  display: none !important;
-}
-
+// Under 768px the source design hides the links and shows only the centred wordmark.
 @media (max-width: 768px) {
   .quartz-header__nav {
-    grid-template-columns: 1fr auto;
-    padding: 0 1rem 0 1.5rem;
-  }
-
-  .quartz-header__brand {
-    grid-column: 1;
-    margin: 0;
-    padding: 0;
-    border: 0;
-  }
-
-  .quartz-header__toggle {
-    grid-column: 2;
-    grid-row: 1;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.625rem;
-    min-width: 2.75rem;
-    min-height: 2.75rem;
-    padding: 0 0.5rem;
-    font: inherit;
-    font-size: 0.65625rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--quartz-deep);
-    background: none;
-    border: 0;
-    cursor: pointer;
-  }
-
-  .quartz-header__bars {
-    display: grid;
-    gap: 5px;
-    width: 1.125rem;
-  }
-
-  .quartz-header__bars span {
-    display: block;
-    height: 1px;
-    background: currentColor;
-    transition: transform 0.25s;
-  }
-
-  [data-open] .quartz-header__bars span:first-child {
-    transform: translateY(3px) rotate(45deg);
-  }
-
-  [data-open] .quartz-header__bars span:last-child {
-    transform: translateY(-3px) rotate(-45deg);
-  }
-
-  .quartz-header__menu {
-    grid-column: 1 / -1;
-    display: block;
-    padding: 0 0 1rem;
-  }
-
-  // With JavaScript the menu folds away until the toggle opens it.
-  [data-js]:not([data-open]) .quartz-header__menu {
-    display: none;
+    display: flex;
+    justify-content: center;
   }
 
   .quartz-header__list {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
+    display: none;
   }
 
-  .quartz-header__list a {
-    justify-content: flex-start;
-    width: 100%;
+  .quartz-header__brand {
+    margin: 0;
     padding: 0;
-    border-top: 1px solid color-mix(in srgb, var(--quartz-mid) 18%, transparent);
+    border: 0;
   }
 }

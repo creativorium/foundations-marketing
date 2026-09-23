@@ -1,8 +1,8 @@
 <?php
 /**
  * Quartz site header. The primary navigation is split in half around the wordmark on
- * wide screens; under 768px it collapses behind a toggle (view.js). Without JavaScript
- * the links simply stay visible, stacked under the wordmark.
+ * wide screens; under 768px the links are hidden and only the wordmark shows, exactly
+ * as the source design does.
  */
 if (!defined('ABSPATH')) {
     exit;
@@ -36,15 +36,7 @@ $list = static function (array $items, string $modifier): void {
                 <?php echo esc_html($brand); ?>
             <?php endif; ?>
         </a>
-        <?php if ($nav) : ?>
-            <button class="quartz-header__toggle" type="button" aria-expanded="false" aria-controls="quartz-menu" hidden>
-                <span class="quartz-header__bars" aria-hidden="true"><span></span><span></span></span>
-                <span class="quartz-header__toggle-label"><?php esc_html_e('Menu', 'foundations'); ?></span>
-            </button>
-            <div class="quartz-header__menu" id="quartz-menu">
-                <?php $list($lists[0], 'start'); ?>
-                <?php $list($lists[1], 'end'); ?>
-            </div>
-        <?php endif; ?>
+        <?php $list($lists[0], 'start'); ?>
+        <?php $list($lists[1], 'end'); ?>
     </nav>
 </div>
