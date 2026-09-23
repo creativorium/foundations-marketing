@@ -63,7 +63,7 @@ get_header();
             $routes = [
                 ['/#templates', __('The templates', 'foundations-marketing'),  __('Browse the library by niche', 'foundations-marketing')],
                 ['/#price',     __('Pricing', 'foundations-marketing'),        __('One number, no tiers', 'foundations-marketing')],
-                ['/#how',       __('How it works', 'foundations-marketing'),   __('Chosen to launched in three steps', 'foundations-marketing')],
+                ['/how-it-works/', __('How it works', 'foundations-marketing'), __('From choosing a template to launch', 'foundations-marketing')],
                 ['/#faq',       __('Questions', 'foundations-marketing'),      __('Answered up front', 'foundations-marketing')],
             ];
 

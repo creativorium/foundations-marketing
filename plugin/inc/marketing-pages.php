@@ -172,22 +172,7 @@ add_shortcode('fm_about_page', 'fm_about_page_shortcode');
 
 function fm_faq_page_shortcode(): string
 {
-    $faqs = [
-        ['What makes you different from other website providers?', '<p>We built Foundations Marketing for the business we wished we had when we started. We are a couple of mums who know firsthand how lonely and frustrating it is to launch a business.</p><p>Our goal is support. We want to tick one huge box off your list—your professional website—and make the process as easy and affordable as possible. You speak to someone who genuinely cares about you succeeding.</p>'],
-        ['Why should I choose Foundations Marketing over Wix or Squarespace?', '<p>Because you do not need to do the work yourself. You provide your content and an email address; we turn it into your site.</p><p><strong>Your content:</strong> your text, high-quality photos and service descriptions, submitted through our questionnaire.</p><p><strong>Email address:</strong> an address to connect to your calendar and receive customer queries.</p>'],
-        ['If you just provide the template, what else do I need to make my website live?', '<p>Your package includes the design work and implementation. To make it publicly visible, you also need:</p><ul><li><strong>A domain name:</strong> your website address.</li><li><strong>Website hosting:</strong> the server where your website files live.</li></ul><p>We handle the technical setup to connect everything once you have those two things.</p>'],
-        ['What other things do I need to get my website going?', '<p>Our sites provide a flexible foundation without unnecessary features or rigid builder lock-in.</p><ul><li><strong>No unnecessary features:</strong> you get what a solopreneur needs to launch and thrive.</li><li><strong>Built to grow:</strong> your site can expand as your business evolves.</li><li><strong>Personal support:</strong> real people support your journey.</li></ul>'],
-        ['What if I want to upgrade my website later and add more features?', '<p>You can. We build on a flexible platform, so we can add pages, features or integrations as you grow without forcing a complete rebuild.</p>'],
-        ['What can I use as my booking system?', '<p>Our templates can integrate with third-party systems such as Acuity, Calendly or Square Appointments. If you prefer to speak with a potential client first, we can use enquiry forms instead.</p>'],
-        ["What if I don't have all the information ready?", '<p>Our turnaround starts once all information is received, so we recommend preparing your content first. Your purchase includes a free 30-minute consultation to review your content needs. We also offer help with branding and logos.</p>'],
-        ['When do you start making the website?', '<p>The clock starts when we receive your order confirmation and your completed questionnaire with all necessary text and images.</p>'],
-        ['How long does it take to make a website?', '<p>Turnaround depends on your package:</p><div class="fm-faq-page__times"><div><strong>Root package</strong><span>3 working days</span></div><div><strong>Grow package</strong><span>5 working days</span></div><div><strong>Rise package</strong><span>7 working days</span></div></div>'],
-        ['My website needs are a little more complex. Do you do custom-built websites?', '<p>Yes. Our sister brand, <a href="https://cularcreative.com/">Cular Creative</a>, handles custom websites and larger projects. Fill out our questionnaire and mention that you need a custom solution.</p>'],
-        ['Do you offer website maintenance or support after the website is live?', '<p>Yes. We offer separate monthly maintenance plans to keep your site updated, secure and running smoothly.</p>'],
-        ['What training or tutorials do you provide so I can manage my website?', '<p>Every package includes video tutorials showing you how to edit text, swap images and manage the basic functions of your new site.</p>'],
-        ['What are the downloadables for, and do I need them?', '<p>The guides, checklists and planning templates help with content, social media and service planning. You do not need them to start your website, but they can make preparation easier.</p>'],
-        ['What does a round of revisions mean?', '<p>A revision round is one combined set of feedback after we upload your content into your chosen template.</p><p>It covers small refinements such as:</p><ul><li>Wording or copy changes</li><li>Image swaps</li><li>Minor layout or formatting changes within the template</li></ul><p>It does not cover new pages, structural changes or switching templates. Additional revisions cost £75 per round.</p>'],
-    ];
+    $faqs = json_decode((string) file_get_contents(__DIR__ . '/content/faq.json'), true);
 
     ob_start();
     ?>
@@ -196,7 +181,7 @@ function fm_faq_page_shortcode(): string
       <div class="fm-story__ticker" aria-hidden="true"><div class="fm-story__ticker-track"><span>No contracts — no lock-in — real people — mates' rates — no contracts — no lock-in — real people — mates' rates —</span><span>No contracts — no lock-in — real people — mates' rates — no contracts — no lock-in — real people — mates' rates —</span></div></div>
       <section class="fm-story__section" id="faqs"><div class="fm-story__section-label"><span>01 — The questions</span><span>Tap to open ↓</span></div><div class="fm-faq-page__list">
         <?php foreach ($faqs as $index => [$question, $answer]) : ?>
-          <details name="fm-faq"><summary><span><?php echo esc_html(str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT)); ?></span><strong><?php echo esc_html($question); ?></strong><i aria-hidden="true">+</i></summary><div class="fm-faq-page__answer"><?php echo wp_kses_post($answer); ?></div></details>
+          <details name="fm-faq" id="faq-<?php echo esc_attr((string) ($index + 1)); ?>"><summary><span><?php echo esc_html(str_pad((string) ($index + 1), 2, '0', STR_PAD_LEFT)); ?></span><strong><?php echo esc_html($question); ?></strong><i aria-hidden="true">+</i></summary><div class="fm-faq-page__answer"><?php echo wp_kses_post($answer); ?></div></details>
         <?php endforeach; ?>
       </div></section>
       <aside class="fm-story__cta"><h2>Still have a <span>question?</span></h2><p>Book a free 20-minute call. No pitch, no pressure—just two people who have been where you are.</p><div><?php echo fm_marketing_cta('Book a discovery call →', '/contact-page/'); ?><?php echo fm_marketing_cta('See the templates', '/templates/#templates', false); ?></div></aside>
