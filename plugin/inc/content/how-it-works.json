@@ -1,0 +1,69 @@
+{
+  "steps": [
+    {
+      "title": "Pick your template",
+      "badge": "",
+      "html": "<p>Browse our templates and choose the one that feels closest to you. Each one is built for a specific kind of practitioner — massage, Pilates, skincare, coaching, doulas and more — so the layout already makes sense for what you do.</p>\n        <p>Every template is a single scrolling page: what you do, who it's for, what it costs, and how to book. Open the demo, scroll through it on your phone, and when it feels right, click Build this site.</p>\n        <p>Don't worry about the colours or the photos in the demo. Those all change to yours. And if a template has a section you don't need — a timetable, a third package — we simply take it out.</p>"
+    },
+    {
+      "title": "Add what you need, then pay",
+      "badge": "",
+      "html": "<p>Your landing page is £299. That's the template personalised to your brand — your colours, fonts, logo, photos and words — with your contact form connected to your email, basic SEO, your social links, and the privacy and contact pages you need to be UK-compliant.</p>\n        <p>If you need more, add it here. Only what you need, nothing you don't:</p>\n        <div class=\"fm-how__addons\">\n          <div>\n            <div>\n              <span>Branding kit</span>\n              <span>£199</span>\n            </div>\n            <p>a simple logo, fonts and colour palette, if you're starting from scratch and don't have a brand yet.</p>\n          </div>\n          <div>\n            <div>\n              <span>Booking widget</span>\n              <span>£45</span>\n            </div>\n            <p>your Fresha, Treatwell, Calendly or similar booking calendar embedded in your site so clients can book straight away.</p>\n          </div>\n          <div>\n            <div>\n              <span>Advanced SEO</span>\n              <span>£149</span>\n            </div>\n            <p>keyword research and optimisation so you're found for what you do in your area.</p>\n          </div>\n          <div>\n            <div>\n              <span>Extra pages</span>\n              <span>£50 each</span>\n            </div>\n            <p>for the rare case where one page isn't enough.</p>\n          </div>\n        </div>\n        <p>You'll see your total before you pay. It's a one-off payment, not a subscription, and there's no contract, because the site is yours.</p>"
+    },
+    {
+      "title": "Get your content guide and form",
+      "badge": "",
+      "html": "<p>As soon as your payment is through, we email you two things: your template's content guide, and the link to your intake form.</p>\n        <p>The content guide is the bit that makes everything else easy. It walks through your template section by section: here's the headline, here's what we've put as an example, here's what to write for your own business. It tells you exactly how many photos you need — three to five, depending on your template — and what to name them, so nothing gets lost. And it lists every colour used in the template, so you can tell us which ones to swap for yours.</p>\n        <p>You're not writing a website. You're filling in the blanks, one section at a time.</p>"
+    },
+    {
+      "title": "Fill in the intake form",
+      "badge": "",
+      "html": "<p>When your content is ready, complete the intake form. It follows the same order as the guide:</p>\n        <div class=\"fm-how__intake\">\n          <div>The intake form</div>\n          <div>\n            <span>01</span>\n            <p><strong>Confirm your template.</strong></p>\n            <span>02</span>\n            <p><strong>Your style direction</strong> — brand colours and fonts, or \"just use the template's\". If you don't have a brand book yet, we link you to simple colour and font pickers, and if you'd like us to build the brand for you, tick the branding kit and it's added on.</p>\n            <span>03</span>\n            <p><strong>Your content</strong> — your words for each section, your photos, and any client reviews or testimonials.</p>\n            <span>04</span>\n            <p><strong>Your website setup</strong> — your domain and hosting details, the email address enquiries should go to, and your booking calendar link if you have one.</p>\n          </div>\n        </div>\n        <p>One thing to know before you start: the form can only be submitted once every question is answered. That includes your domain name and hosting — if you don't have them yet, we point you to where to get them, and it takes ten minutes and a few pounds. We ask for everything up front because we can't start building without it, and a half-finished form is what turns a five-day website into a five-week one.</p>"
+    },
+    {
+      "title": "We build it",
+      "badge": "Five working days",
+      "html": "<p>From the moment your form is in, the clock starts. Within five working days you'll have a preview link.</p>\n        <p>In that time we personalise the template to your brand, lay out your copy so it reads clearly and leads people to the button that matters, connect your contact form to your inbox, drop in your booking widget if you've added one, set up your basic SEO, add your privacy and contact pages, and test the whole thing on phones, tablets and desktops.</p>\n        <p>You don't need to do anything during this stage except keep an eye out for your preview.</p>"
+    },
+    {
+      "title": "Check it, tweak it",
+      "badge": "",
+      "html": "<p>Open your preview, click around, read it as one of your clients would. Then send us your changes.</p>\n        <p>One round of revisions is included, and it's for the things that make the site yours: a word here, a swapped photo there, a font or a colour you're not sure about. It isn't for new sections or features — if you need those, choose a template that already has them.</p>\n        <p>Our <a href=\"#\">revision policy</a> sets out exactly what's included and how long you have to send your changes, so there are no surprises on either side.</p>"
+    },
+    {
+      "title": "Go live",
+      "badge": "",
+      "html": "<p>Once you're happy, we take it live on your domain, make sure your contact form is landing in the right inbox, run a final check on every device, and hand it over.</p>\n        <p>The site is yours. There's nothing to renew with us and nothing to cancel. If something needs fixing after launch, tell us and we fix it — the site stays up while we do.</p>"
+    }
+  ],
+  "checklist": [
+    "Your About Me — this is the written version of how you'd introduce yourself to a new client. We call this your copy. Aim for 60–90 words in your own voice, no need to sound formal.",
+    "Your services or treatments and prices.",
+    "How people contact or book you — an email address, and your booking calendar link if you use one.",
+    "Your logo and brand colours if you have them. If not, the branding kit sorts that.",
+    "Three to five photos of you, your space or your work, depending on your template. We can fill gaps with stock photos.",
+    "Your domain name and hosting. If you don't have them yet, get those first — we'll point you in the right direction."
+  ],
+  "honest": [
+    {
+      "title": "We don't write your copy.",
+      "text": "We lay it out beautifully, but the words are yours. If writing is the part that scares you, the content guide breaks it into small pieces, and you can always book a call to talk it through."
+    },
+    {
+      "title": "It's one page, done well.",
+      "text": "Not a ten-page site you'll never finish filling. For someone starting out, one clear page beats a big empty one every time. If you grow into needing more, come back and we'll add to it."
+    },
+    {
+      "title": "Bookings, yes. Payments, not yet.",
+      "text": "We'll embed your booking calendar so clients can book straight from your site. Taking payments on the site itself is a different job, and most practitioners don't need it on day one — your booking tool usually handles it. If you do need it, ask us and we'll suggest the simplest route."
+    },
+    {
+      "title": "Your domain and hosting are yours.",
+      "text": "You pay those providers directly, they're a few pounds a month, and they're in your name, so nobody sits between you and your website."
+    },
+    {
+      "title": "Five working days means five working days from a complete form.",
+      "text": "If your form comes in on Wednesday, the clock starts Wednesday. We'll always tell you where things are."
+    }
+  ]
+}

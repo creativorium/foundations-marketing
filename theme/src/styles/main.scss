@@ -6,6 +6,7 @@
 @use 'error';
 @use 'legal';
 @use 'marketing-pages';
+@use 'how-it-works';
 // Motion last, so its rules win over the static ones they enhance.
 @use 'motion';
 @use 'page-transition';
