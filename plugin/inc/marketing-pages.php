@@ -77,10 +77,15 @@ function fm_apply_marketing_photos(): bool
         return false;
     }
 
-    foreach (['fm-block-test' => 'home', 'services' => 'services'] as $slug => $kind) {
-        $page = get_page_by_path($slug, OBJECT, 'page');
+    $targets = [
+        ['id' => (int) get_option('page_on_front'), 'kind' => 'home'],
+        ['id' => (int) (get_page_by_path('services', OBJECT, 'page')->ID ?? 0), 'kind' => 'services'],
+    ];
+    foreach ($targets as $target) {
+        $kind = $target['kind'];
+        $page = get_post($target['id']);
         if (!$page instanceof WP_Post) {
-            continue;
+            return false;
         }
         $blocks = parse_blocks($page->post_content);
         foreach ($blocks as &$block) {
@@ -203,7 +208,7 @@ add_shortcode('fm_faq_page', 'fm_faq_page_shortcode');
 
 function fm_install_marketing_pages(): void
 {
-    $version = '10';
+    $version = '11';
     if ((string) get_option('fm_native_marketing_pages_version', '') === $version) {
         return;
     }

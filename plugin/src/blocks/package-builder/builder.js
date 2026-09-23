@@ -208,12 +208,16 @@ export default function initPackageBuilder() {
 
   if (preview && stage) {
     let settled = false;
+    let pollTimer;
+    let timeoutTimer;
 
     const settle = (state) => {
-      if (settled) {
+      if (settled && state !== 'ready') {
         return;
       }
       settled = true;
+      window.clearInterval(pollTimer);
+      window.clearTimeout(timeoutTimer);
       stage.dataset.fmStage = state;
       // Re-fit once the document inside is real: its height is what the scale was
       // guessing at while the frame was still empty.
@@ -235,19 +239,33 @@ export default function initPackageBuilder() {
       try {
         const doc = preview.contentDocument;
 
-        return !!doc && doc.location.href !== 'about:blank' && (doc.body?.childElementCount ?? 0) > 0;
+        return !!doc && doc.location.href !== 'about:blank'
+          && !!doc.querySelector('.wp-site-blocks, main')
+          && [...doc.querySelectorAll('link[rel="stylesheet"]')].every((link) => !!link.sheet);
       } catch {
         return false;
       }
     };
 
-    preview.addEventListener('load', () => settle(hasContent() ? 'ready' : 'failed'));
+    // A slow navigation may fire an initial load for about:blank before the real demo
+    // arrives. Do not turn that harmless bootstrap document into a permanent failure.
+    preview.addEventListener('load', () => {
+      if (hasContent()) {
+        settle('ready');
+      }
+    });
     preview.addEventListener('error', () => settle('failed'));
 
-    // A preview that has not arrived in fifteen seconds is not going to. Say so rather
-    // than spinning for ever — the buyer can still choose the template, and the
-    // "Open full demo" link beside the heading still works.
-    window.setTimeout(() => settle('failed'), 15000);
+    // The real document can also arrive between events (for example from the browser
+    // cache), so check briefly while it is loading.
+    pollTimer = window.setInterval(() => {
+      if (hasContent()) {
+        settle('ready');
+      }
+    }, 250);
+
+    // Stop the spinner after thirty seconds; a later load can still recover to ready.
+    timeoutTimer = window.setTimeout(() => settle('failed'), 30000);
 
     // A cached preview can beat the bundle to it, in which case there is no `load`
     // event left to hear.
