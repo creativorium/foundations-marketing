@@ -2,13 +2,13 @@
 /**
  * Plugin Name: FM Contact & Discovery Forms (with Appointment)
  * Description: Custom Form for Foundations Marketing. Shortcodes: [fm_contact_form], [fm_discovery_form]
- * Version: 1.9.4
+ * Version: 1.9.5
  * Author: Negolast
  */
 
 if (!defined('ABSPATH')) exit;
 
-define('FMCD_VER', '1.9.4');
+define('FMCD_VER', '1.9.5');
 define('FMCD_DIR', plugin_dir_path(__FILE__));
 define('FMCD_URL', plugin_dir_url(__FILE__));
 
@@ -136,9 +136,9 @@ class FMCD_Plugin {
           if (field.disabled) return;
           if (!field.hasAttribute('required')) return;
           if (field.type === 'checkbox' || field.type === 'radio') return; // checkbox groups handled separately
-          if (field.closest('.hidden')) return;
-          if (field.offsetParent === null) return;
-          if (String(field.value || '').trim()){
+          var hiddenParent = field.closest('.hidden');
+          if (hiddenParent && hiddenParent !== section) return;
+          if (String(field.value || '').trim() && field.checkValidity()){
             window.fmddClearFieldError(field);
             return;
           }
@@ -210,8 +210,10 @@ class FMCD_Plugin {
         }
 
         if (firstInvalid){
-          if (typeof firstInvalid.reportValidity === 'function') firstInvalid.reportValidity();
-          else firstInvalid.focus();
+          if (!section.classList.contains('hidden')) {
+            if (typeof firstInvalid.reportValidity === 'function') firstInvalid.reportValidity();
+            else firstInvalid.focus();
+          }
           return false;
         }
 
@@ -370,7 +372,7 @@ class FMCD_Plugin {
     return '<section class="fmcd-page">'
       . '<header class="fmcd-page__intro">'
       . '<p class="fmcd-page__eyebrow">Start a conversation</p>'
-      . '<h1 class="fmcd-page__title">Tell us what you are building.</h1>'
+      . '<h1 class="fmcd-page__title">Tell us what<br><span>you are building.</span></h1>'
       . '<p class="fmcd-page__lede">Share where your business is now and what you need from the website. We will reply with the clearest next step.</p>'
       . ($email !== '' ? '<p class="fmcd-page__email"><span>Email</span><a href="mailto:' . esc_attr($email) . '">' . esc_html($email) . '</a></p>' : '')
       . '</header>'
@@ -475,7 +477,7 @@ class FMCD_Plugin {
     return '<section class="fmdd-page">'
       . '<header class="fmdd-page__intro">'
       . '<p class="fmdd-page__eyebrow">Website discovery</p>'
-      . '<h1 class="fmdd-page__title">Tell us about your business.</h1>'
+      . '<h1 class="fmdd-page__title">Tell us about<br><span>your business.</span></h1>'
       . '<p class="fmdd-page__lede">Share the content, style and setup details we need to turn your chosen template into your website. You can save complex answers elsewhere and paste them in when you are ready.</p>'
       . '</header>'
       . $this->shortcode_discovery()
@@ -485,38 +487,22 @@ class FMCD_Plugin {
   public function shortcode_discovery() {
     wp_enqueue_style('fmcd-form'); wp_enqueue_script('fmcd-form');
 
-    $templates = apply_filters('fmcd/discovery_templates', [
-      ['value' => 'Aether',      'label' => 'Aether',      'colors' => 4, 'url' => 'https://foundationsmarketing.co.uk/template/aether/',      'image_guide' => 'https://foundationsmarketing.co.uk/wp-content/uploads/2025/11/Aether_Mark-scaled.webp',      'image_count' => 7],
-      ['value' => 'Birth Space', 'label' => 'Birth Space', 'colors' => 4, 'url' => 'https://foundationsmarketing.co.uk/template/birth-space/', 'image_guide' => 'https://foundationsmarketing.co.uk/wp-content/uploads/2025/11/BirthSpace_Mark-scaled.webp', 'image_count' => 8],
-      ['value' => 'Bloom',       'label' => 'Bloom',       'colors' => 2, 'url' => 'https://foundationsmarketing.co.uk/template/bloom/',       'image_guide' => 'https://foundationsmarketing.co.uk/wp-content/uploads/2025/11/Bloom_Mark-scaled.webp',       'image_count' => 7],
-      ['value' => 'Lumen',       'label' => 'Lumen',       'colors' => 4, 'url' => 'https://foundationsmarketing.co.uk/template/lumen/',       'image_guide' => 'https://foundationsmarketing.co.uk/wp-content/uploads/2025/11/Lumen_Mark.webp',           'image_count' => 7],
-      ['value' => 'Nova',        'label' => 'Nova',        'colors' => 3, 'url' => 'https://foundationsmarketing.co.uk/template/nova/',        'image_guide' => 'https://foundationsmarketing.co.uk/wp-content/uploads/2025/11/Nova_Mark-scaled.webp',        'image_count' => 14],
-      ['value' => 'Sequoia',     'label' => 'Sequoia',     'colors' => 4, 'url' => 'https://foundationsmarketing.co.uk/template/sequoia/',     'image_guide' => 'https://foundationsmarketing.co.uk/wp-content/uploads/2025/11/Sequoia_Mark-1-scaled.webp',    'image_count' => 7],
-      ['value' => 'Solis',       'label' => 'Solis',       'colors' => 4, 'url' => 'https://foundationsmarketing.co.uk/template/solis/',       'image_guide' => 'https://foundationsmarketing.co.uk/wp-content/uploads/2025/11/Solis_Mark-image-scaled.webp',  'image_count' => 7],
-      ['value' => 'Solstice',    'label' => 'Solstice',    'colors' => 5, 'url' => 'https://foundationsmarketing.co.uk/template/solstice/',    'image_guide' => 'https://foundationsmarketing.co.uk/wp-content/uploads/2025/11/Solstice_Mark-scaled.webp',     'image_count' => 11],
-    ]);
+    $templates = apply_filters('fmcd/discovery_templates', []);
 
-    $asset_items = apply_filters('fmcd/discovery_assets', [
-      'logo'          => ['label' => 'Logo',                    'upload_label' => 'Upload logo file'],
-      'hosting'       => ['label' => 'Hosting access',          'upload_label' => 'Upload hosting access (PDF/Doc)'],
-      'domain'        => ['label' => 'Domain access',           'upload_label' => 'Upload domain access (PDF/Doc)'],
-      'brand'         => ['label' => 'Brand colours / palette', 'upload_label' => 'Upload brand colours or guidelines'],
-      'photo_self'    => ['label' => 'Photos of yourself',      'upload_label' => 'Upload photos of yourself'],
-      'photo_space'   => ['label' => 'Photos of your space',    'upload_label' => 'Upload workspace photos'],
-      'business_email'=> ['label' => 'Business email details',  'upload_label' => 'Upload business email info'],
-      'social'        => ['label' => 'Social media links',      'upload_label' => 'Upload social media info'],
-      'testimonials'  => ['label' => 'Testimonials',            'upload_label' => 'Upload testimonials'],
-      'booking'       => ['label' => 'Booking system setup',    'upload_label' => 'Upload booking system info'],
-    ]);
+    $asset_items = [
+      'logo' => ['label' => 'Logo', 'upload_label' => 'Upload your logo'],
+      'photo_self' => ['label' => 'Photos of yourself', 'upload_label' => 'Upload photos of yourself'],
+      'photo_space' => ['label' => 'Photos of your space', 'upload_label' => 'Upload photos of your space or work'],
+    ];
 
     ob_start(); ?>
-  <form method="post" class="fmdd-form" data-form="discovery" enctype="multipart/form-data">
+  <form method="post" class="fmdd-form" data-form="discovery" enctype="multipart/form-data" novalidate>
     <div class="fmdd-steps">
-      <button type="button" class="active" data-step="1">1. You & Business</button>
+      <button type="button" class="active" data-step="1">1. You & Your Business</button>
       <button type="button" data-step="2">2. Services & Audience</button>
       <button type="button" data-step="3">3. Style Direction</button>
-      <button type="button" data-step="4">4. Website Setup</button>
-      <button type="button" data-step="5">5. Content</button>
+      <button type="button" data-step="4">4. Content Setup</button>
+      <button type="button" data-step="5">5. Website Setup</button>
     </div>
 
     <!-- STEP 1 -->
@@ -538,7 +524,7 @@ class FMCD_Plugin {
       </label>
 
       <label class="qualified-label">5. How long have you been working?<span class="fmdd-req">*</span></label>
-      <div class="fmdd-group fmdd-group-inline fmdd-experience">
+      <div class="fmdd-group fmdd-group-inline fmdd-experience" data-required-radio data-required-message="Please select your experience.">
         <label class="fmdd-radio qualified-radio"><input type="radio" name="experience_length" value="Recently qualified" required> <span>Recently qualified</span></label>
         <label class="fmdd-radio qualified-radio"><input type="radio" name="experience_length" value="6-12 months"> <span>6–12 months</span></label>
         <label class="fmdd-radio qualified-radio"><input type="radio" name="experience_length" value="2 years or more"> <span>2 years</span></label>
@@ -621,27 +607,30 @@ class FMCD_Plugin {
       </label>
       <div class="fmdd-template-link" aria-live="polite"></div>
 
+      <p class="fmdd-note">If you don’t currently have your preferred brand colours, please select your favourite 3 colours from <a href="https://htmlcolorcodes.com/color-picker/" target="_blank" rel="noopener noreferrer">this hex colour picker</a>, then enter the hex codes below.</p>
       <label>11. Do you have your own colours for the theme?<span class="fmdd-req">*</span></label>
       <div class="fmdd-group fmdd-group-inline fmdd-color-choice" data-required-radio data-required-message="Please choose an option for colours.">
-        <label class="fmdd-radio"><input type="radio" name="own_colors" value="yes" required> <span>Yes</span></label>
+        <label class="fmdd-radio"><input type="radio" name="own_colors" value="yes" required> <span>I’ll enter my colours</span></label>
         <label class="fmdd-radio"><input type="radio" name="own_colors" value="no"> <span>No — follow the template colours</span></label>
       </div>
       <div class="fmdd-sub fmdd-color-wrap hidden">
         <p class="fmdd-note">Enter your colours:</p>
-        <p class="fmdd-note fmdd-color-note" aria-live="polite" hidden>This template has <strong><span class="fmdd-color-required">0</span></strong> colours please fill them all.</p>
+        <p class="fmdd-note">Enter three preferred colours as hex codes, for example #EA631B.</p>
         <div class="fmdd-color-fields"></div>
       </div>
 
+      <label>Brand palette / guidelines (optional)<input type="file" name="asset_uploads[brand][]" data-max-bytes="20971520" multiple></label>
+      <p class="fmdd-note">If you don’t currently have your preferred brand fonts, please select 2 main fonts (main and secondary) from <a href="https://fonts.google.com/" target="_blank" rel="noopener noreferrer">Google Fonts</a>, then enter their names below.</p>
       <label>12. Do you have your own fonts for the theme?<span class="fmdd-req">*</span></label>
       <div class="fmdd-group fmdd-group-inline fmdd-font-choice" data-required-radio data-required-message="Please choose an option for fonts.">
-        <label class="fmdd-radio"><input type="radio" name="own_fonts" value="yes" required> <span>Yes — I have my own fonts</span></label>
+        <label class="fmdd-radio"><input type="radio" name="own_fonts" value="yes" required> <span>I’ll enter my chosen fonts</span></label>
         <label class="fmdd-radio"><input type="radio" name="own_fonts" value="no"> <span>No — follow the template font</span></label>
       </div>
       <div class="fmdd-sub fmdd-font-wrap hidden">
-        <p class="fmdd-note">Recommended: 2 main fonts (heading + body). You can add up to 4 including accent.</p>
+        <p class="fmdd-note">Enter your main and secondary fonts. You can add up to 2 extra accent fonts.</p>
         <div class="fmdd-fonts">
-          <div class="fmdd-font-row"><input type="text" name="fonts[]" placeholder="e.g., Playfair Display"></div>
-          <div class="fmdd-font-row"><input type="text" name="fonts[]" placeholder="e.g., Inter"></div>
+          <div class="fmdd-font-row"><input type="text" name="fonts[]" aria-label="Main font" placeholder="Main font, e.g. Playfair Display"></div>
+          <div class="fmdd-font-row"><input type="text" name="fonts[]" aria-label="Secondary font" placeholder="Secondary font, e.g. Inter"></div>
         </div>
         <div class="fmdd-font-actions">
           <button type="button" class="fmdd-add-font">+ Add another font</button>
@@ -654,83 +643,11 @@ class FMCD_Plugin {
       </div>
     </section>
 
-    <!-- STEP 4 -->
+    <!-- STEP 4: all content is collected together, without duplicate image questions. -->
     <section class="fmdd-step hidden" data-step="4">
-      <fieldset class="fmdd-credential" data-credential="domain">
-        <legend>13. Domain registrar access<span class="fmdd-req">*</span></legend>
-        <div class="fmdd-group fmdd-group-inline" data-required-radio data-required-message="Please let us know if you can share domain access.">
-          <label class="fmdd-radio"><input type="radio" name="domain_status" value="have" required data-credential-status="domain"> <span>I can share login details</span></label>
-          <label class="fmdd-radio"><input type="radio" name="domain_status" value="need" data-credential-status="domain"> <span>I don't have this yet</span></label>
-        </div>
-        <div class="fmdd-credential-fields hidden" data-credential-fields="domain">
-          <label>Domain provider<span class="fmdd-req">*</span>
-            <input type="text" name="domain_provider" placeholder="Registrar name (e.g., GoDaddy)" data-error="Please add your domain provider.">
-          </label>
-          <label>Domain username<span class="fmdd-req">*</span>
-            <input type="text" name="domain_username" placeholder="Registrar username" data-error="Please add your domain username.">
-          </label>
-          <p class="fmcd-note">We will arrange delegated access or a secure handover after reviewing your request. Please do not send passwords in this form.</p>
-        </div>
-        <p class="fmdd-note fmdd-credential-note hidden" data-credential-recommendation="domain">Need a domain? We recommend getting started with Bluehost or Hostinger.</p>
-      </fieldset>
-
-      <fieldset class="fmdd-credential" data-credential="hosting">
-        <legend>14. Hosting account access<span class="fmdd-req">*</span></legend>
-        <div class="fmdd-group fmdd-group-inline" data-required-radio data-required-message="Please let us know if you can share hosting access.">
-          <label class="fmdd-radio"><input type="radio" name="hosting_status" value="have" required data-credential-status="hosting"> <span>I can share login details</span></label>
-          <label class="fmdd-radio"><input type="radio" name="hosting_status" value="need" data-credential-status="hosting"> <span>I don't have this yet</span></label>
-        </div>
-        <div class="fmdd-credential-fields hidden" data-credential-fields="hosting">
-          <label>Hosting provider<span class="fmdd-req">*</span>
-            <input type="text" name="hosting_provider" placeholder="Hosting provider (e.g., Hostinger)" data-error="Please add your hosting provider.">
-          </label>
-          <label>Hosting username<span class="fmdd-req">*</span>
-            <input type="text" name="hosting_username" placeholder="Hosting username" data-error="Please add your hosting username.">
-          </label>
-          <p class="fmcd-note">We will arrange delegated access or a secure handover after reviewing your request. Please do not send passwords in this form.</p>
-        </div>
-        <p class="fmdd-note fmdd-credential-note hidden" data-credential-recommendation="hosting">Need hosting? We recommend getting started with Hostinger or Bluehost.</p>
-      </fieldset>
-
-      <fieldset class="fmdd-credential" data-credential="email">
-        <legend>15. Business email access<span class="fmdd-req">*</span></legend>
-        <div class="fmdd-group fmdd-group-inline" data-required-radio data-required-message="Please let us know if you can share business email access.">
-          <label class="fmdd-radio"><input type="radio" name="email_status" value="have" required data-credential-status="email"> <span>I can share login details</span></label>
-          <label class="fmdd-radio"><input type="radio" name="email_status" value="need" data-credential-status="email"> <span>I don't have this yet</span></label>
-        </div>
-        <div class="fmdd-credential-fields hidden" data-credential-fields="email">
-          <label>Email platform<span class="fmdd-req">*</span>
-            <input type="text" name="email_platform" placeholder="Platform name" data-error="Please add your email platform.">
-          </label>
-          <label>Email username<span class="fmdd-req">*</span>
-            <input type="text" name="email_username" placeholder="Login username" data-error="Please add your email username.">
-          </label>
-          <p class="fmcd-note">We will arrange delegated access or a secure handover after reviewing your request. Please do not send passwords in this form.</p>
-        </div>
-        <p class="fmdd-note fmdd-credential-note hidden" data-credential-recommendation="email">Need a business email? We recommend Google.</p>
-      </fieldset>
-
-      <fieldset class="fmdd-credential" data-credential="booking">
-        <legend>16. Booking system access<span class="fmdd-req">*</span></legend>
-        <div class="fmdd-group fmdd-group-inline" data-required-radio data-required-message="Please let us know if you can share booking system access.">
-          <label class="fmdd-radio"><input type="radio" name="booking_status" value="have" required data-credential-status="booking"> <span>I can share login details</span></label>
-          <label class="fmdd-radio"><input type="radio" name="booking_status" value="need" data-credential-status="booking"> <span>I don't have this yet</span></label>
-        </div>
-        <div class="fmdd-credential-fields hidden" data-credential-fields="booking">
-          <label>Booking platform<span class="fmdd-req">*</span>
-            <input type="text" name="booking_platform" placeholder="Platform name" data-error="Please add your booking platform.">
-          </label>
-          <label>Booking username<span class="fmdd-req">*</span>
-            <input type="text" name="booking_username" placeholder="Login username" data-error="Please add your booking username.">
-          </label>
-          <p class="fmcd-note">We will arrange delegated access or a secure handover after reviewing your request. Please do not send passwords in this form.</p>
-        </div>
-        <p class="fmdd-note fmdd-credential-note hidden" data-credential-recommendation="booking">Need a booking system? We recommend Calendly or similar easy-to-use services.</p>
-      </fieldset>
-
-      <fieldset class="fmdd-assets" data-required-group data-required-message="Select at least one item so we know what you already have ready.">
-        <legend>17. Please click the items you already have on hand.</legend>
-        <small class="fmdd-note">When selected, an upload field will appear for that item (you can upload multiple files, each max 20MB).</small>
+            <fieldset class="fmdd-assets">
+        <legend>13. Upload your logo and photos</legend>
+        <small class="fmdd-note">Select the materials you want to upload, or share your photo folder below (you can upload multiple files, each max 20MB).</small>
         <?php foreach ($asset_items as $slug => $item): ?>
           <div class="fmdd-asset" data-asset="<?php echo esc_attr($slug); ?>">
             <label class="fmdd-check">
@@ -753,76 +670,101 @@ class FMCD_Plugin {
         <?php endforeach; ?>
       </fieldset>
 
-      <div class="fmdd-nav">
-        <button type="button" class="back" data-fmdd="back" onclick="fmddInlineBack(this)">Back</button>
-        <button type="button" class="next" data-fmdd="next" onclick="fmddInlineNext(this)">Next</button>
-      </div>
-    </section>
 
-    <!-- STEP 5 -->
-    <section class="fmdd-step hidden" data-step="5">
-      <label>18. Do you have images for the template?<span class="fmdd-req">*</span></label>
-      <div class="fmdd-group fmdd-group-inline fmdd-images-toggle" data-required-radio data-required-message="Please let us know if you already have images.">
-        <label class="fmdd-radio"><input type="radio" name="have_images" value="yes" required> <span>Yes</span></label>
-        <label class="fmdd-radio"><input type="radio" name="have_images" value="freepik"> <span>No – I want to choose from Freepik stock images</span></label>
-      </div>
-
-      <div class="fmdd-template-summary" aria-live="polite">
-        <p>You have chosen <strong><span class="fmdd-template-chosen">No template selected yet</span></strong>
-          <a href="#" class="fmdd-template-view" target="_blank" rel="noopener" hidden>View template</a>
-        </p>
-        <p class="fmdd-note">Once you pick a template we’ll recap the highlights here.</p>
-      </div>
-
-      <div class="fmdd-template-images" aria-live="polite">
-        <p>
-          <span class="fmdd-template-image-text">Select a template to see the image requirements.</span>
-          <a href="#" class="fmdd-image-guide" target="_blank" rel="noopener" hidden>Click this guide to see the image and text map</a>
-        </p>
-      </div>
- 
-      <div class="fmdd-images-have hidden">
-        <p class="fmdd-note">Add a public link to your image folder so we can download everything in one go.</p>
-
-        <label>Link to your image folder<span class="fmdd-req">*</span>
-          <input type="url" name="image_drive_link" placeholder="Link to your drive/dropbox URL" data-error="Please add your Drive/Dropbox link.">
-        </label>
-      </div>
- 
-      <div class="fmdd-images-freepik hidden">
-        <p class="fmdd-note">We can source photos for you with our <a href="https://www.freepik.com" target="_blank" rel="noopener">Freepik account</a>. Search for images you like, copy the Freepik links, and paste them below.</p>
-        <div class="fmdd-image-links"></div>
-      </div>
-
-      <label>19. Upload website copy – following the guide above<span class="fmdd-req">*</span>
+      <label>Photo folder link (optional)<input type="url" name="image_drive_link" placeholder="https://drive.google.com/..."></label>
+      <p class="fmdd-note">Follow the photo guidance in the guide sent via email. Include photos of you, your space or your work.</p>
+            <label>14. Upload website copy – following the guide sent via email<span class="fmdd-req">*</span>
         <input type="url" name="content_link" placeholder="Link to your drive/dropbox URL" required data-error="Please add your content link.">
       </label>
       <div class="fmdd-file">
         <span class="fmdd-file-copy"><em>Or upload website content documents (each max 20MB)</em></span>
         <label class="fmdd-file-trigger">
           <span class="fmdd-file-button">upload file</span>
-          <input type="file" name="content_file[]" data-max-bytes="20971520" multiple>
+          <input type="file" name="content_file[]" accept=".pdf,.doc,.docx,.txt,.odt,.rtf" data-max-bytes="20971520" multiple>
         </label>
         <span class="fmdd-file-name" data-placeholder="No files chosen">No files chosen</span>
       </div>
 
-      <label>20. Upload your client reviews or testimonials in text or screenshot form
+      <label>Client reviews / testimonials (paste text)<textarea name="review_text" rows="5" placeholder="Paste your testimonials here, or share a text document below."></textarea></label>
+      <label>15. Upload your client reviews or testimonials in text form
         <input type="url" name="review_link" placeholder="Link to your drive/dropbox URL">
       </label>
       <div class="fmdd-file">
         <span class="fmdd-file-copy"><em>Or upload review files (each max 20MB)</em></span>
         <label class="fmdd-file-trigger">
           <span class="fmdd-file-button">upload file</span>
-          <input type="file" name="review_file[]" data-max-bytes="20971520" multiple>
+          <input type="file" name="review_file[]" accept=".pdf,.doc,.docx,.txt,.odt,.rtf" data-max-bytes="20971520" multiple>
         </label>
         <span class="fmdd-file-name" data-placeholder="No files chosen">No files chosen</span>
       </div>
 
-      <div class="fmdd-nav">
-        <button type="button" class="back" data-fmdd="back" onclick="fmddInlineBack(this)">Back</button>
-        <button type="submit" class="fmdd-submit">Submit</button>
-      </div>
-      <div class="fmdd-status" aria-live="polite"></div>
+<div class="fmdd-nav"><button type="button" class="back" data-fmdd="back" onclick="fmddInlineBack(this)">Back</button><button type="button" class="next" data-fmdd="next" onclick="fmddInlineNext(this)">Next</button></div>
+    </section>
+    <!-- STEP 5: setup details must be complete before submission. -->
+    <section class="fmdd-step hidden" data-step="5">
+      <p class="fmdd-note fmdd-setup-note">You cannot submit this form without your domain, hosting and business email details. If you need a booking widget, its details are required too. We can only start once this information is complete.</p>
+            <fieldset class="fmdd-credential" data-credential="domain">
+        <legend>16. Domain registrar access<span class="fmdd-req">*</span></legend>
+        <input type="hidden" name="domain_status" value="have"><p class="fmdd-note">These details are required. You cannot submit the form until they are complete.</p>
+        <div class="fmdd-credential-fields" data-credential-fields="domain">
+          <label>Your domain / website address<span class="fmdd-req">*</span><input type="url" name="domain_url" required placeholder="https://yourbusiness.co.uk" data-error="Please add your domain, including https://."></label><label>Domain provider<span class="fmdd-req">*</span>
+            <input required type="text" name="domain_provider" placeholder="Registrar name (e.g., GoDaddy)" data-error="Please add your domain provider.">
+          </label>
+          <label>Domain username<span class="fmdd-req">*</span>
+            <input required type="text" name="domain_username" placeholder="Registrar username" data-error="Please add your domain username.">
+          </label>
+          <p class="fmcd-note">We will arrange delegated access or a secure handover after reviewing your request. Please do not send passwords in this form.</p>
+        </div>
+      </fieldset>
+
+      <fieldset class="fmdd-credential" data-credential="hosting">
+        <legend>17. Hosting account access<span class="fmdd-req">*</span></legend>
+        <input type="hidden" name="hosting_status" value="have"><p class="fmdd-note">These details are required. You cannot submit the form until they are complete.</p>
+        <div class="fmdd-credential-fields" data-credential-fields="hosting">
+          <label>Hosting provider<span class="fmdd-req">*</span>
+            <input required type="text" name="hosting_provider" placeholder="Hosting provider (e.g., Hostinger)" data-error="Please add your hosting provider.">
+          </label>
+          <label>Hosting username<span class="fmdd-req">*</span>
+            <input required type="text" name="hosting_username" placeholder="Hosting username" data-error="Please add your hosting username.">
+          </label>
+          <p class="fmcd-note">We will arrange delegated access or a secure handover after reviewing your request. Please do not send passwords in this form.</p>
+        </div>
+      </fieldset>
+
+      <fieldset class="fmdd-credential" data-credential="email">
+        <legend>18. Business email access<span class="fmdd-req">*</span></legend>
+        <input type="hidden" name="email_status" value="have"><p class="fmdd-note">These details are required. You cannot submit the form until they are complete.</p>
+        <div class="fmdd-credential-fields" data-credential-fields="email">
+          <label>Email platform<span class="fmdd-req">*</span>
+            <input required type="text" name="email_platform" placeholder="Platform name" data-error="Please add your email platform.">
+          </label>
+          <label>Email username<span class="fmdd-req">*</span>
+            <input required type="text" name="email_username" placeholder="Login username" data-error="Please add your email username.">
+          </label>
+          <p class="fmcd-note">We will arrange delegated access or a secure handover after reviewing your request. Please do not send passwords in this form.</p>
+        </div>
+      </fieldset>
+
+      <fieldset class="fmdd-credential" data-credential="booking">
+        <legend>19. Booking widget / calendar link<span class="fmdd-req">*</span></legend>
+        <div class="fmdd-group fmdd-group-inline" data-required-radio data-required-message="Please choose whether you need a booking widget.">
+          <label class="fmdd-radio"><input type="radio" name="booking_status" value="have" required data-credential-status="booking"> <span>I have a booking widget / calendar</span></label>
+          <label class="fmdd-radio"><input type="radio" name="booking_status" value="not_applicable" data-credential-status="booking"> <span>No booking widget needed</span></label>
+        </div>
+        <div class="fmdd-credential-fields hidden" data-credential-fields="booking">
+          <p class="fmdd-note">If you need a booking widget, complete these details before submitting.</p><label>Widget / calendar link<span class="fmdd-req">*</span><input type="url" name="booking_url" placeholder="https://calendly.com/your-business" data-error="Please add your widget or calendar link."></label><label>Booking platform<span class="fmdd-req">*</span>
+            <input type="text" name="booking_platform" placeholder="Platform name" data-error="Please add your booking platform.">
+          </label>
+          <label>Booking username<span class="fmdd-req">*</span>
+            <input type="text" name="booking_username" placeholder="Login username" data-error="Please add your booking username.">
+          </label>
+          <p class="fmcd-note">We will arrange delegated access or a secure handover after reviewing your request. Please do not send passwords in this form.</p>
+        </div>
+      </fieldset>
+
+
+      <label>20. Social media links (optional)<textarea name="social_links" rows="3" placeholder="Paste the links you want on your website."></textarea></label>
+      <div class="fmdd-nav"><button type="button" class="back" data-fmdd="back" onclick="fmddInlineBack(this)">Back</button><button type="submit" class="fmdd-submit">Submit</button></div><div class="fmdd-status" aria-live="polite"></div>
     </section>
   </form>
 

@@ -230,15 +230,19 @@
 
 .fmcd-page__title,
 .fmdd-page__title {
-  max-width: 12ch;
+  max-width: 14ch;
   margin: 0;
-  font-size: clamp(46px, 7vw, 92px);
+  font-size: clamp(46px, 7.5vw, 108px);
   font-weight: 800;
   letter-spacing: -.055em;
   line-height: .9;
   text-transform: uppercase;
   text-wrap: balance;
 }
+
+.fmcd-page__title span,
+.fmdd-page__title span { color:var(--fm-accent, #ea631b); }
+.fmdd-setup-note { padding:20px; border-left:3px solid var(--fm-accent, #ea631b); background:var(--fm-bg, #ebebdf); }
 
 .fmcd-page__lede,
 .fmdd-page__lede {

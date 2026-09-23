@@ -34,6 +34,9 @@
   &__cta > p { max-width:60ch; margin:24px 0; color:var(--fm-muted); font-size:13px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
   &__button { display:inline-flex; padding:16px 28px; border:var(--fm-rule) solid var(--fm-ink); border-radius:999px; color:var(--fm-ink); font-size:13px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; }
   &__button--primary { border-color:var(--fm-accent); background:var(--fm-accent); color:#fff; }
+  &__button:not(:disabled) { transition:background-color .15s ease,color .15s ease,border-color .15s ease; }
+  &__button:not(:disabled):hover { background:var(--fm-ink); border-color:var(--fm-ink); color:var(--fm-bg); text-decoration:none; }
+  &__button--primary:not(:disabled):hover { background:var(--fm-accent-deep); border-color:var(--fm-accent-deep); color:var(--fm-cta-btn-ink); }
 }
 
 .fm-faq-page {

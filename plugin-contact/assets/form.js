@@ -419,7 +419,7 @@ window.fmcdRequestId = function(form) {
           const plural = data.imageCount === 1 ? 'image' : 'images';
           $imageText.html('This template needs <strong>'+data.imageCount+' '+plural+'</strong>.');
         } else {
-          $imageText.text('This template does not require specific imagery.');
+          $imageText.text('Follow the photo guidance in the guide sent via email.');
         }
       } else {
         $imageText.text('Select a template to see the image requirements.');
@@ -452,8 +452,7 @@ window.fmcdRequestId = function(form) {
   }
 
   function ensureColorState($form){
-    const rawCount = parseInt($form.data('tplColorCount'), 10);
-    const expected = Math.max(1, Math.min(8, rawCount || 3));
+    const expected = 3;
     const yes = $form.find('input[name=own_colors][value=yes]').prop('checked');
     const $note = $form.find('.fmdd-color-note');
     const templateChosen = !!($form.data('tplValue') || $form.find('.fmdd-template').val());
@@ -469,11 +468,13 @@ window.fmcdRequestId = function(form) {
         renderColorFields($form, expected);
       }
     }
+    $form.find('.fmdd-color-fields input').prop('required', yes);
   }
 
   function ensureFontState($form){
     const yes = $form.find('input[name=own_fonts][value=yes]').prop('checked');
     fmddToggle($form, '.fmdd-font-wrap', yes);
+    $form.find('.fmdd-fonts input').each(function(i){$(this).prop('required', yes && i < 2);});
     fmddUpdateFontButtons($form);
   }
 
@@ -487,7 +488,7 @@ window.fmcdRequestId = function(form) {
       const $fieldsWrap = $section.find('[data-credential-fields="'+key+'"]');
       const $note = $section.find('[data-credential-recommendation="'+key+'"]');
       const $statusRadios = $form.find('input[name="'+key+'_status"]');
-      const status = $statusRadios.length ? $form.find('input[name="'+key+'_status"]:checked').val() : 'have';
+      const status = $statusRadios.filter('[type=hidden]').val() || ($statusRadios.length ? $form.find('input[name="'+key+'_status"]:checked').val() : 'have');
       const showFields = status === 'have';
       if ($fieldsWrap.length){
         $fieldsWrap.toggleClass('hidden', !showFields).toggleClass('shows', !!showFields);
@@ -634,6 +635,7 @@ window.fmcdRequestId = function(form) {
   }
 
   function ensureImageSourceState($form){
+    if (!$form.find('input[name=have_images]').length) return;
     const val = $form.find('input[name=have_images]:checked').val();
     const $drive = $form.find('[name="image_drive_link"]');
     const $imageLinks = $form.find('.fmdd-image-links input[name="image_links[]"]');
@@ -719,6 +721,7 @@ window.fmcdRequestId = function(form) {
   function fmddInit($form){
     if (!$form.length || $form.data('fmddReady')) return;
     $form.data('fmddReady', true);
+    $form.find('[data-fmdd]').removeAttr('onclick');
     if ($form[0] && $form[0].getAttribute){
       const inline = $form[0].getAttribute('onsubmit');
       if (inline) $form.data('fmcd-inline', inline);
@@ -788,6 +791,10 @@ window.fmcdRequestId = function(form) {
     ensureColorState($form);
   });
 
+  $(document).on('change', '.fmdd-form input[name=location_mode]', function(){
+    ensureLocationMode(fmddGetForm(this));
+  });
+
   $(document).on('change', '.fmdd-form input[name=own_fonts]', function(){
     const $form = fmddGetForm(this);
     ensureFontState($form);
@@ -840,6 +847,12 @@ window.fmcdRequestId = function(form) {
     updateFileNameDisplay(this);
   });
 
+  $(document).on('change', '.fmdd-form input[name="content_file[]"]', function(){
+    const link = this.form.querySelector('[name=content_link]');
+    link.required = !this.files.length;
+    if (this.files.length && window.fmddClearFieldError) window.fmddClearFieldError(link);
+  });
+
   $(document).on('submit', '.fmdd-form', function(e){
     e.preventDefault();
     const $form = $(this);
@@ -869,6 +882,7 @@ window.fmcdRequestId = function(form) {
       window.setTimeout(function(){ showModal($form); }, 30);
       $form[0].reset();
       fmddGo($form,1);
+      $form.find('[name=content_link]').prop('required', true);
       delete $form[0].dataset.requestId;
       $form.removeData('tplValue tplImageCount tplUrl tplGuide tplColorCount');
       ensureServiceRows($form);
@@ -888,5 +902,3 @@ window.fmcdRequestId = function(form) {
   });
 
 })(jQuery);
-
-

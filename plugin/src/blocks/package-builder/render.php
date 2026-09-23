@@ -45,7 +45,7 @@ $template = fm_selected_template();
 $steps = [
     __('Preview', 'foundations'),
     __('Add extras', 'foundations'),
-    __('Review package', 'foundations'),
+    __('Review order', 'foundations'),
 ];
 
 $devices = [

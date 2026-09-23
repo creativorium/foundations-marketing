@@ -1,5 +1,6 @@
 <?php
 if (!defined('ABSPATH')) exit;
+require_once __DIR__ . '/discovery-validation.php';
 
 class FMCD_REST {
   public function __construct() {
@@ -120,6 +121,7 @@ class FMCD_REST {
 
       $rows .= $this->html_row('Template images', $this->format_have_images_label($data['have_images'] ?? ''));
       $rows .= $this->html_row('Domain access status', $this->format_access_status($data['domain_status'] ?? ''));
+      $rows .= $this->html_row('Domain / website address', esc_html($data['domain_url'] ?? ''));
       $rows .= $this->html_row('Domain provider', $data['domain_provider'] ?? '');
       $rows .= $this->html_row('Domain username', $data['domain_username'] ?? '');
       $rows .= $this->html_row('Hosting access status', $this->format_access_status($data['hosting_status'] ?? ''));
@@ -128,6 +130,9 @@ class FMCD_REST {
       $rows .= $this->html_row('Business email access status', $this->format_access_status($data['email_status'] ?? ''));
       $rows .= $this->html_row('Business email platform', $data['email_platform'] ?? '');
       $rows .= $this->html_row('Business email username', $data['email_username'] ?? '');
+      $rows .= $this->html_row('Widget / calendar link', esc_html($data['booking_url'] ?? ''));
+      $rows .= $this->html_row('Client reviews / testimonials', nl2br(esc_html($data['review_text'] ?? '')));
+      $rows .= $this->html_row('Social media links', nl2br(esc_html($data['social_links'] ?? '')));
       $rows .= $this->html_row('Booking access status', $this->format_access_status($data['booking_status'] ?? ''));
       $rows .= $this->html_row('Booking platform', $data['booking_platform'] ?? '');
       $rows .= $this->html_row('Booking username', $data['booking_username'] ?? '');
@@ -221,7 +226,7 @@ class FMCD_REST {
 
   private function sanitize_status($value){
     $status = sanitize_text_field($this->clean($value));
-    return in_array($status, ['have','need'], true) ? $status : '';
+    return in_array($status, ['have','need','not_applicable'], true) ? $status : '';
   }
 
   private function discovery_assets(){
@@ -289,6 +294,8 @@ class FMCD_REST {
         return 'Login details provided';
       case 'need':
         return 'Needs setup';
+      case 'not_applicable':
+        return 'No booking widget needed';
       default:
         return '';
     }
@@ -344,9 +351,7 @@ class FMCD_REST {
       $data['fonts']       = $this->sanitize_text_array($data['fonts'] ?? []);
       $data['assets_have'] = $this->sanitize_text_array($data['assets_have'] ?? []);
       $data['image_links'] = $this->sanitize_url_array($data['image_links'] ?? []);
-      if (empty($data['assets_have'])){
-        $errors[] = 'Select at least one item you already have on hand.';
-      }
+
 
       $data['profession_services'] = sanitize_textarea_field($data['profession_services'] ?? '');
       $data['ideal_client']        = sanitize_textarea_field($data['ideal_client'] ?? '');
@@ -367,6 +372,10 @@ class FMCD_REST {
       $data['image_drive_link']    = esc_url_raw($data['image_drive_link'] ?? '');
       $data['content_link']        = esc_url_raw($data['content_link'] ?? '');
       $data['review_link']         = esc_url_raw($data['review_link'] ?? '');
+      $data['domain_url'] = esc_url_raw($data['domain_url'] ?? '');
+      $data['booking_url'] = esc_url_raw($data['booking_url'] ?? '');
+      $data['review_text'] = sanitize_textarea_field($data['review_text'] ?? '');
+      $data['social_links'] = sanitize_textarea_field($data['social_links'] ?? '');
 
       $data['domain_status']       = $this->sanitize_status($data['domain_status'] ?? 'have');
       if ($data['domain_status'] === '') $data['domain_status'] = 'have';
@@ -388,66 +397,16 @@ class FMCD_REST {
       $data['booking_username']    = sanitize_text_field($data['booking_username'] ?? '');
       $data['booking_password']    = sanitize_text_field($data['booking_password'] ?? '');
 
-      $credentialSets = [
-        [
-          'title'  => 'domain',
-          'status' => 'domain_status',
-          'require_status' => false,
-          'fields' => [
-            'domain_provider' => 'domain provider',
-            'domain_username' => 'domain username',          ],
-        ],
-        [
-          'title'  => 'hosting',
-          'status' => 'hosting_status',
-          'require_status' => false,
-          'fields' => [
-            'hosting_provider' => 'hosting provider',
-            'hosting_username' => 'hosting username',          ],
-        ],
-        [
-          'title'  => 'business email',
-          'status' => 'email_status',
-          'require_status' => true,
-          'fields' => [
-            'email_platform' => 'email platform',
-            'email_username' => 'email username',          ],
-        ],
-        [
-          'title'  => 'booking system',
-          'status' => 'booking_status',
-          'require_status' => true,
-          'fields' => [
-            'booking_platform' => 'booking platform',
-            'booking_username' => 'booking username',          ],
-        ],
-      ];
-
-      foreach ($credentialSets as $set){
-        $statusKey = $set['status'];
-        $statusVal = $data[$statusKey] ?? '';
-        $requireStatus = isset($set['require_status']) ? (bool) $set['require_status'] : true;
-        if (!$requireStatus && $statusVal === '') {
-          $statusVal = 'have';
-          $data[$statusKey] = 'have';
-        }
-        if ($statusVal === '' && $requireStatus){
-          $errors[] = sprintf('Please choose if you can share your %s access.', $set['title']);
-          continue;
-        }
-        if ($statusVal === 'have'){
-          foreach ($set['fields'] as $field => $label){
-            if (empty($data[$field])){
-              $errors[] = sprintf('Please provide your %s.', $label);
-            }
-          }
-        } elseif ($statusVal === 'need'){
-          foreach ($set['fields'] as $field => $label){
-            $data[$field] = '';
-          }
-        } else {
-          $errors[] = sprintf('Please choose an option for your %s access.', $set['title']);
-        }
+      $errors = array_merge($errors, fmcd_discovery_setup_errors($data));
+      if ($data['booking_status'] === 'not_applicable') {
+        $data['booking_url'] = $data['booking_platform'] = $data['booking_username'] = '';
+      }
+      $hasContentUpload = !empty(array_filter((array) ($_FILES['content_file']['name'] ?? [])));
+      if ($data['content_link'] === '' && !$hasContentUpload) {
+        $errors[] = 'Please provide your website copy as a document upload or a shared link.';
+      }
+      if ($data['content_link'] !== '' && !filter_var($data['content_link'], FILTER_VALIDATE_URL)) {
+        $errors[] = 'Please provide a valid website copy link.';
       }
 
       $locationParts = array_filter([
@@ -465,7 +424,7 @@ class FMCD_REST {
     // Handle file uploads (Media Library) and collect URLs with labels
     $uploaded_urls = [];
     $upload_items  = [];
-    $errors        = [];
+    // Preserve field validation errors when processing uploads.
     $max_size      = 20 * 1024 * 1024; // 20MB
 
     if ($type === 'discovery') {
@@ -544,6 +503,10 @@ class FMCD_REST {
             continue;
           }
 
+          if (!in_array(strtolower(pathinfo($name, PATHINFO_EXTENSION)), ['pdf', 'doc', 'docx', 'txt', 'odt', 'rtf'], true)) {
+            $errors[] = $label . ' must be a text document (PDF, Word, TXT, ODT or RTF).';
+            continue;
+          }
           $key = 'fmcd_'.$field.'_'.$idx;
           $_FILES[$key] = [
             'name'     => $name,
