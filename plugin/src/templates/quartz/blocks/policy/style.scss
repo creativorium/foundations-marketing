@@ -1,0 +1,64 @@
+.quartz-policy {
+  padding: calc(var(--quartz-nav-height) + 5rem) 4.5rem 6rem;
+  background: var(--quartz-ice);
+}
+
+.quartz-policy__header,
+.quartz-policy__section {
+  max-width: 45rem;
+  margin: 0 auto;
+}
+
+.quartz-policy__header {
+  padding-bottom: 3rem;
+}
+
+.quartz-policy h1 {
+  font-family: var(--quartz-serif);
+  font-size: clamp(2.75rem, 5vw, 4.25rem);
+  font-weight: 300;
+  line-height: 1.05;
+  color: var(--quartz-deep);
+  margin: 0 0 1.5rem;
+}
+
+.quartz-policy__intro {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--quartz-muted);
+  margin: 0;
+}
+
+.quartz-policy__updated {
+  margin: 1.25rem 0 0;
+  font-size: 0.65625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--quartz-muted);
+}
+
+.quartz-policy__section {
+  padding: 2rem 0;
+  border-top: 1px solid var(--quartz-pale);
+}
+
+.quartz-policy h2 {
+  font-family: var(--quartz-serif);
+  font-size: 1.625rem;
+  font-weight: 400;
+  color: var(--quartz-deep);
+  margin: 0 0 0.75rem;
+}
+
+.quartz-policy__section p {
+  font-size: 0.9375rem;
+  line-height: 1.8;
+  color: var(--quartz-body);
+  margin: 0 0 0.75rem;
+}
+
+@media (max-width: 768px) {
+  .quartz-policy {
+    padding: calc(var(--quartz-nav-height) + 3rem) 1.5rem 4rem;
+  }
+}

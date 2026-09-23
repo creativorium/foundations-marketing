@@ -1,0 +1,11 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/quartz-site-footer",
+  "title": "Quartz — Site footer",
+  "category": "foundations-quartz",
+  "icon": "align-wide",
+  "description": "Dark single-row footer: wordmark, copyright line, footer navigation and credit. Content comes from Site Settings.",
+  "attributes": {},
+  "supports": { "html": false, "multiple": false, "inserter": false },
+  "render": "file:./render.php"
+}

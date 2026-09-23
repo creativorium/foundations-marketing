@@ -1,0 +1,16 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/quartz-treatments",
+  "title": "Quartz — Treatments",
+  "category": "foundations-quartz",
+  "icon": "list-view",
+  "description": "A horizontally scrolling, numbered treatment menu with price and duration.",
+  "attributes": {
+    "anchor": { "type": "string", "default": "services" },
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "items": { "type": "array", "default": [] }
+  },
+  "supports": { "html": false },
+  "render": "file:./render.php"
+}

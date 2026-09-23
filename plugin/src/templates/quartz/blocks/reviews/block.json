@@ -1,0 +1,16 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/quartz-reviews",
+  "title": "Quartz — Reviews",
+  "category": "foundations-quartz",
+  "icon": "format-quote",
+  "description": "Client reviews as a one-at-a-time slider with arrows and dots.",
+  "attributes": {
+    "anchor": { "type": "string", "default": "reviews" },
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "items": { "type": "array", "default": [] }
+  },
+  "supports": { "html": false },
+  "render": "file:./render.php"
+}

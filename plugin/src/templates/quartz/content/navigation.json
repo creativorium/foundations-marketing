@@ -1,0 +1,16 @@
+{
+  "$comment": "Section links point at the homepage by token so they also work from the privacy page. The header splits nav_primary in half around the wordmark.",
+  "nav_primary": [
+    { "label": "About", "url": "{{page:home|url}}#about" },
+    { "label": "Services", "url": "{{page:home|url}}#services" },
+    { "label": "Results", "url": "{{page:home|url}}#results" },
+    { "label": "Book", "url": "{{page:home|url}}#book" }
+  ],
+  "nav_footer": [
+    { "label": "About", "url": "{{page:home|url}}#about" },
+    { "label": "Services", "url": "{{page:home|url}}#services" },
+    { "label": "Results", "url": "{{page:home|url}}#results" },
+    { "label": "Book", "url": "{{page:home|url}}#book" },
+    { "label": "Privacy", "page": "privacy" }
+  ]
+}

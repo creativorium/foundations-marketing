@@ -1,0 +1,204 @@
+// Quartz — template-level styles: self-hosted fonts, the --quartz-* token aliases, the
+// page shell overrides and the few classes every Quartz block shares.
+//
+// Colours are NOT defined here. They live once in theme.json as presets and are aliased
+// below, so a palette change is a theme.json edit and no block CSS changes.
+
+@font-face {
+  font-family: 'Quartz Cormorant';
+  src: url('./assets/fonts/cormorant-garamond.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 300 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quartz Cormorant';
+  src: url('./assets/fonts/cormorant-garamond-italic.woff2') format('woff2');
+  font-style: italic;
+  font-weight: 300 600;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Quartz DM Sans';
+  src: url('./assets/fonts/dm-sans-latin.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 300 500;
+  font-display: swap;
+}
+
+:root {
+  --quartz-ice: var(--wp--preset--color--canvas);
+  --quartz-cream: var(--wp--preset--color--surface);
+  --quartz-night: var(--wp--preset--color--ink);
+  --quartz-body: var(--wp--preset--color--body);
+  --quartz-muted: var(--wp--preset--color--muted);
+  --quartz-light: var(--wp--preset--color--line);
+  --quartz-terra: var(--wp--preset--color--accent);
+  --quartz-white: var(--wp--preset--color--on-accent);
+  --quartz-deep: var(--wp--preset--color--deep);
+  --quartz-steel: var(--wp--preset--color--steel);
+  --quartz-mid: var(--wp--preset--color--mid);
+  --quartz-pale: var(--wp--preset--color--pale);
+  --quartz-terra-bright: var(--wp--preset--color--terra-bright);
+  --quartz-terra-light: var(--wp--preset--color--terra-light);
+  --quartz-mist: var(--wp--preset--color--mist);
+  --quartz-slate: var(--wp--preset--color--slate);
+  --quartz-sand: var(--wp--preset--color--sand);
+  --quartz-clay: var(--wp--preset--color--clay);
+
+  --quartz-serif: var(--wp--preset--font-family--display);
+  --quartz-sans: var(--wp--preset--font-family--body);
+  --quartz-nav-height: 3.625rem;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--quartz-nav-height) + 1rem);
+}
+
+body {
+  margin: 0;
+  font-family: var(--quartz-sans);
+  font-size: 0.9375rem;
+  line-height: 1.65;
+  color: var(--quartz-body);
+  background: var(--quartz-ice);
+  overflow-x: hidden;
+}
+
+// Page shell: sections are full-bleed, so the constrained layout from the base theme is
+// switched off for Quartz content and the block gap is removed between sections.
+.wp-site-blocks {
+  padding: 0 !important;
+}
+
+.wp-site-blocks > header,
+.wp-site-blocks > footer {
+  margin: 0 !important;
+}
+
+.fm-main {
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.fm-main > .wp-block-post-content,
+.fm-main > .wp-block-post-content > * {
+  max-width: none !important;
+  margin-block: 0 !important;
+}
+
+.quartz,
+.quartz *,
+.quartz-header,
+.quartz-header *,
+.quartz-footer,
+.quartz-footer * {
+  box-sizing: border-box;
+}
+
+.quartz :where(h1, h2, h3) {
+  font-family: var(--quartz-serif);
+}
+
+.quartz :where(a, button, [tabindex]):focus-visible,
+.quartz-header :where(a, button):focus-visible,
+.quartz-footer a:focus-visible {
+  outline: 2px solid var(--quartz-terra);
+  outline-offset: 3px;
+}
+
+.quartz-booking :where(a):focus-visible,
+.quartz-footer a:focus-visible {
+  outline-color: var(--quartz-terra-light);
+}
+
+// Shared furniture.
+.quartz-eyebrow {
+  margin: 0 0 1.125rem;
+  font-size: 0.65625rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--quartz-terra);
+}
+
+.quartz-hero .quartz-eyebrow {
+  margin-bottom: 1.75rem;
+}
+
+.quartz-h2 {
+  margin: 0 0 1.5rem;
+  font-family: var(--quartz-serif);
+  font-size: clamp(1.875rem, 3vw, 3rem);
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--quartz-deep);
+  text-wrap: balance;
+}
+
+.quartz-section-header {
+  margin-bottom: 3.75rem;
+  text-align: center;
+}
+
+.quartz-section-header .quartz-h2 {
+  margin-bottom: 0;
+}
+
+.quartz-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.8125rem 2.125rem;
+  font-family: var(--quartz-sans);
+  font-size: 0.6875rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: background 0.25s, color 0.25s, border-color 0.25s;
+}
+
+.quartz-button--fill {
+  color: var(--quartz-white);
+  background: var(--quartz-terra);
+}
+
+.quartz-button--fill:hover {
+  background: var(--quartz-deep);
+}
+
+.quartz-button--ghost {
+  color: var(--quartz-deep);
+  background: transparent;
+  border-color: var(--quartz-mid);
+}
+
+.quartz-button--ghost:hover {
+  color: var(--quartz-white);
+  background: var(--quartz-steel);
+  border-color: var(--quartz-steel);
+}
+
+.screen-reader-text {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

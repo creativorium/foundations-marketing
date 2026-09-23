@@ -1,0 +1,24 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/quartz-hero",
+  "title": "Quartz — Hero",
+  "category": "foundations-quartz",
+  "icon": "cover-image",
+  "description": "Split hero with the page H1, two buttons and a practitioner photograph.",
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "highlight": { "type": "string", "default": "" },
+    "headingEnd": { "type": "string", "default": "" },
+    "body": { "type": "string", "default": "" },
+    "primaryLabel": { "type": "string", "default": "" },
+    "primaryUrl": { "type": "string", "default": "" },
+    "secondaryLabel": { "type": "string", "default": "" },
+    "secondaryUrl": { "type": "string", "default": "" },
+    "imageId": { "type": "integer", "default": 0 },
+    "badgeNumber": { "type": "string", "default": "" },
+    "badgeLabel": { "type": "string", "default": "" }
+  },
+  "supports": { "html": false, "multiple": false },
+  "render": "file:./render.php"
+}

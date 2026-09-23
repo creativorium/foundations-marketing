@@ -1,0 +1,57 @@
+.quartz-booking {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4.5rem;
+  align-items: center;
+  padding: 6rem 4.5rem;
+  background: var(--quartz-terra);
+}
+
+.quartz-booking .quartz-eyebrow {
+  color: rgb(255 255 255 / 0.85);
+}
+
+.quartz-booking h2 {
+  font-family: var(--quartz-serif);
+  font-size: clamp(2rem, 3.5vw, 3.125rem);
+  font-weight: 300;
+  line-height: 1.15;
+  color: var(--quartz-white);
+  text-wrap: balance;
+  margin: 0 0 1.25rem;
+}
+
+.quartz-booking__copy > p:not(.quartz-eyebrow) {
+  font-size: 0.9375rem;
+  line-height: 1.75;
+  color: rgb(255 255 255 / 0.92);
+  margin: 0;
+}
+
+.quartz-booking__box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  min-height: 16.25rem;
+  padding: 2.75rem;
+  text-align: center;
+  background: var(--quartz-white);
+}
+
+.quartz-booking__box p {
+  font-size: 0.8125rem;
+  line-height: 1.6;
+  color: var(--quartz-muted);
+  margin: 0;
+  white-space: pre-line;
+}
+
+@media (max-width: 768px) {
+  .quartz-booking {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    padding: 4rem 1.5rem;
+  }
+}
