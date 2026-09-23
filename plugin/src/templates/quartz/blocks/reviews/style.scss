@@ -84,7 +84,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
   margin-top: 2.25rem;
 }
 
@@ -92,56 +92,63 @@
   display: none;
 }
 
+// Drawn exactly as the design: a 36px outlined square with a mid-blue arrow. The
+// transparent ::after stretches the tap target to 44px without changing the look.
 .quartz-slider__arrow {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 2.25rem;
+  height: 2.25rem;
   padding: 0;
   font-size: 0.875rem;
-  color: var(--quartz-deep);
+  color: var(--quartz-mid);
   background: none;
   border: 1px solid var(--quartz-light);
   cursor: pointer;
   transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 
+.quartz-slider__arrow::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+}
+
 .quartz-slider__arrow:hover,
 .quartz-slider__arrow:focus-visible {
   color: var(--quartz-white);
-  background: var(--quartz-terra);
-  border-color: var(--quartz-terra);
+  background: var(--quartz-terra-bright);
+  border-color: var(--quartz-terra-bright);
 }
 
 .quartz-slider__dots {
   display: flex;
+  gap: 8px;
 }
 
-// A 44px target around the design's 5px dot.
+// The design's 5px dot, 8px apart. The button is the dot; ::after gives it a taller,
+// wider hit area that stops at the neighbouring dot's edge.
 .quartz-slider__dot {
   position: relative;
-  width: 2.75rem;
-  height: 2.75rem;
-  padding: 0;
-  background: none;
-  border: 0;
-  cursor: pointer;
-}
-
-.quartz-slider__dot::before {
-  content: '';
-  position: absolute;
-  inset: 50% auto auto 50%;
   width: 5px;
   height: 5px;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
-  background: var(--quartz-steel);
-  transform: translate(-50%, -50%);
+  background: var(--quartz-light);
+  cursor: pointer;
   transition: background 0.25s, transform 0.25s;
 }
 
-.quartz-slider__dot[aria-current='true']::before {
-  background: var(--quartz-terra);
-  transform: translate(-50%, -50%) scale(1.4);
+.quartz-slider__dot::after {
+  content: '';
+  position: absolute;
+  inset: -20px -4px;
+}
+
+.quartz-slider__dot[aria-current='true'] {
+  background: var(--quartz-terra-bright);
+  transform: scale(1.4);
 }

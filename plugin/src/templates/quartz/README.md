@@ -10,7 +10,7 @@ Target phrase: **facialist website design UK** (`/templates/facialist-website-de
 
 - **Contrast (WCAG AA, how-to-work.md §8).** The source terra `#C06B52` gives 3.5:1 for small text on the ice background and 3.9:1 under white button text. Text and filled buttons use `#A9573F` (4.7:1+); the original terra is kept only for decorative marks (the About corner square, divider lines). Low-opacity white text on the treatments, booking and footer bands was raised to pass AA, and `terra-light` is `#EDB0A2` so prices pass on deep blue.
 - **Mobile navigation.** The source hides the menu links under 768px with no replacement; Quartz adds a Menu toggle (`site-header/view.js`). With JavaScript off the links stay visible.
-- **Tap targets** are 44×44px (slider arrows and dots, nav and footer links).
+- **Tap targets.** Nav and footer links are 44×44px. The review slider controls are drawn exactly as the source (36px arrow squares, 5px dots 8px apart); an invisible `::after` enlarges each hit area instead — 46px for the arrows, 13×45px for the dots, which cannot grow wider without overlapping their neighbours.
 - **Treatments row** shows a thin scrollbar and is keyboard-focusable, so the row visibly continues; the source hid the scrollbar.
 - **Reviews slider** is a scroll-snap row that works without JavaScript; autoplay is off under `prefers-reduced-motion` and pauses on hover/focus.
 - **Before & after** cards accept real photos; with no photo they show the source's colour washes.
