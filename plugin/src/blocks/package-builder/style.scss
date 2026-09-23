@@ -795,21 +795,17 @@
   @media (max-width: 820px) {
     &__bar { gap: 10px; padding-block: 6px; }
 
-    // The labels go visually; the numbered dots carry the meaning. Clipped rather
-    // than display:none so a screen reader still reads "Preview", "Add extras",
-    // "Review & pay" — the dots alone say nothing.
+    &__steps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); width:100%; gap:8px; }
+    &__step-btn { width:100%; min-height:44px; justify-content:center; gap:6px; padding:8px 2px; }
     &__step-label {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip-path: inset(50%);
-      white-space: nowrap;
+      font-size:10px;
+      letter-spacing:.04em;
+      white-space:normal;
+      text-align:left;
+      line-height:1.25;
     }
-
-    &__step-btn { padding: 10px 4px; }
+    &__bar-end { width:100%; justify-content:space-between; }
+    &__running { text-align:left; }
     &__running-total { font-size: 21px; }
     &__next, &__quick-pay, &__pay { padding: 13px 20px; font-size: 12px; }
     &__box { padding: 20px; }
@@ -818,10 +814,10 @@
 
   @media (max-width: 560px) {
     &__bar { align-items: center; }
-    &__steps { flex: 1 1 100%; justify-content: center; }
+    &__steps { flex: 1 1 100%; }
     &__bar-end { width: 100%; justify-content: flex-end; gap: 10px; }
     &__running { margin-right: auto; text-align: left; }
-    &__next { display: none; }
+    &__next, &__quick-pay { min-height:44px; min-width:148px; text-align:center; }
 
     // The head stacks: a 40px wordmark and a three-way segmented control cannot
     // share a row this narrow without one of them wrapping mid-word.
