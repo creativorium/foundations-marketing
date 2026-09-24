@@ -50,6 +50,7 @@ $id     = 'quartz-reviews-' . $anchor;
                 <button class="quartz-slider__arrow" type="button" data-quartz-next aria-controls="<?php echo esc_attr($id); ?>">
                     <span aria-hidden="true">&rarr;</span><span class="screen-reader-text"><?php esc_html_e('Next review', 'foundations'); ?></span>
                 </button>
+                <button class="quartz-slider__pause" type="button" data-quartz-pause aria-pressed="false"><?php esc_html_e('Pause autoplay', 'foundations'); ?></button>
             </div>
         <?php endif; ?>
     </div>

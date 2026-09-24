@@ -9,7 +9,7 @@ import { TextControl, TextareaControl, Button } from '@wordpress/components';
  * Image fields store attachment ids and are named …Id so export/import can remap them
  * (team-template-workflow.md, "stable import references").
  */
-const LONG = ['body', 'intro', 'quote', 'boxText'];
+const LONG = ['heading', 'body', 'intro', 'quote', 'boxText'];
 const label = key => key.replace(/([A-Z])/g, ' $1').replace(/^./, char => char.toUpperCase());
 
 function ImageField({ title, value, onChange }) {

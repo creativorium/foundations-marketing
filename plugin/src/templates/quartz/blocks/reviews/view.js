@@ -11,6 +11,8 @@ document.querySelectorAll('[data-quartz-slider]').forEach(slider => {
   let current = 0;
   let timer = 0;
   let paused = false;
+  let userPaused = false;
+  const toggle = slider.querySelector('[data-quartz-pause]');
 
   const mark = index => dots.forEach((dot, i) => dot.setAttribute('aria-current', i === index ? 'true' : 'false'));
   const goTo = index => {
@@ -21,8 +23,14 @@ document.querySelectorAll('[data-quartz-slider]').forEach(slider => {
   const stop = () => { clearInterval(timer); timer = 0; };
   const start = () => {
     stop();
-    if (!reduced.matches && !paused && !document.hidden) timer = setInterval(() => goTo(current + 1), 4500);
+    if (!reduced.matches && !paused && !userPaused && !document.hidden) timer = setInterval(() => goTo(current + 1), 4500);
   };
+  toggle.hidden = reduced.matches;
+  toggle.addEventListener('click', () => {
+    userPaused = !userPaused;
+    toggle.setAttribute('aria-pressed', String(userPaused));
+    start();
+  });
 
   controls.hidden = false;
   slider.querySelector('[data-quartz-prev]').addEventListener('click', () => { goTo(current - 1); start(); });
@@ -43,6 +51,6 @@ document.querySelectorAll('[data-quartz-slider]').forEach(slider => {
   slider.addEventListener('focusin', pause);
   slider.addEventListener('focusout', event => { if (!slider.contains(event.relatedTarget)) resume(); });
   document.addEventListener('visibilitychange', start);
-  reduced.addEventListener('change', start);
+  reduced.addEventListener('change', () => { toggle.hidden = reduced.matches; start(); });
   start();
 });

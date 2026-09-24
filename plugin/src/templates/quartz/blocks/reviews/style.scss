@@ -86,6 +86,7 @@
   align-items: center;
   gap: 1.5rem;
   margin-top: 2.25rem;
+  flex-wrap: wrap;
 }
 
 .quartz-slider__controls[hidden] {
@@ -125,30 +126,49 @@
 
 .quartz-slider__dots {
   display: flex;
-  gap: 8px;
+  gap: 0;
 }
 
-// The design's 5px dot, 8px apart. The button is the dot; ::after gives it a taller,
-// wider hit area that stops at the neighbouring dot's edge.
+// Keep the design's 5px mark inside a separate, non-overlapping 44px touch target.
 .quartz-slider__dot {
   position: relative;
-  width: 5px;
-  height: 5px;
+  width: 2.75rem;
+  height: 2.75rem;
   padding: 0;
   border: 0;
-  border-radius: 50%;
-  background: var(--quartz-light);
+  background: transparent;
   cursor: pointer;
   transition: background 0.25s, transform 0.25s;
 }
 
-.quartz-slider__dot::after {
+.quartz-slider__dot::before {
   content: '';
   position: absolute;
-  inset: -20px -4px;
+  width: 5px;
+  height: 5px;
+  left: calc(50% - 2.5px);
+  top: calc(50% - 2.5px);
+  border-radius: 50%;
+  background: var(--quartz-light);
 }
 
-.quartz-slider__dot[aria-current='true'] {
+.quartz-slider__dot[aria-current='true']::before {
   background: var(--quartz-terra-bright);
   transform: scale(1.4);
 }
+
+.quartz-slider__pause {
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  color: var(--quartz-deep);
+  border: 1px solid var(--quartz-light);
+  background: transparent;
+  cursor: pointer;
+}
+.quartz-slider__pause:hover,
+.quartz-slider__pause[aria-pressed='true'] {
+  color: var(--quartz-white);
+  background: var(--quartz-deep);
+}
+.quartz-slider__pause[hidden] { display: none; }

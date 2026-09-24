@@ -13,6 +13,15 @@ $half  = (int) ceil(count($nav) / 2);
 $lists = [array_slice($nav, 0, $half), array_slice($nav, $half)];
 $brand = (string) fm_setting('brand_label', (string) fm_setting('site_name', get_bloginfo('name')));
 $logo  = (int) fm_setting('logo_id', 0);
+$home = home_url('/');
+// A catalogue preview must stay inside this design when its wordmark is clicked.
+$context = (int) ($GLOBALS['fm_delivery_context'] ?? 0);
+if ($context) {
+    $content = (array) get_post_meta($context, '_fm_content', true);
+    if (!empty($content['homepage'])) {
+        $home = get_permalink((int) $content['homepage']);
+    }
+}
 
 $list = static function (array $items, string $modifier): void {
     if (!$items) {
@@ -29,7 +38,7 @@ $list = static function (array $items, string $modifier): void {
 ?>
 <div class="quartz-header" data-quartz-header>
     <nav class="quartz-header__nav" aria-label="<?php esc_attr_e('Primary', 'foundations'); ?>">
-        <a class="quartz-header__brand" href="<?php echo esc_url(home_url('/')); ?>">
+        <a class="quartz-header__brand" href="<?php echo esc_url($home); ?>">
             <?php if ($logo > 0) : ?>
                 <?php echo wp_get_attachment_image($logo, 'medium', false, ['class' => 'quartz-header__logo', 'alt' => $brand, 'loading' => 'eager']); ?>
             <?php else : ?>
