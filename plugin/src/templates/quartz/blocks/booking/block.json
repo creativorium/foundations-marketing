@@ -1,0 +1,19 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/quartz-booking",
+  "title": "Quartz — Booking",
+  "category": "foundations-quartz",
+  "icon": "calendar-alt",
+  "description": "Closing booking band: copy on the left, a white panel with the booking button on the right. The button falls back to the Booking link in Site Settings.",
+  "attributes": {
+    "anchor": { "type": "string", "default": "book" },
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "body": { "type": "string", "default": "" },
+    "boxText": { "type": "string", "default": "" },
+    "buttonLabel": { "type": "string", "default": "" },
+    "buttonUrl": { "type": "string", "default": "" }
+  },
+  "supports": { "html": false },
+  "render": "file:./render.php"
+}

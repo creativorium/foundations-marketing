@@ -1,0 +1,16 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/quartz-results",
+  "title": "Quartz — Before & after",
+  "category": "foundations-quartz",
+  "icon": "images-alt2",
+  "description": "Before and after pairs, separated by a numbered divider. Photos are optional; each card falls back to the design's colour wash.",
+  "attributes": {
+    "anchor": { "type": "string", "default": "results" },
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "pairs": { "type": "array", "default": [] }
+  },
+  "supports": { "html": false },
+  "render": "file:./render.php"
+}

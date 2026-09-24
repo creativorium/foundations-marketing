@@ -1,0 +1,108 @@
+.quartz-header {
+  position: fixed;
+  top: calc(var(--wp-admin--admin-bar--height, 0px) + env(safe-area-inset-top, 0px));
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: color-mix(in srgb, var(--quartz-ice) 92%, transparent);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid color-mix(in srgb, var(--quartz-mid) 12%, transparent);
+}
+
+// Desktop: [start links] | WORDMARK | [end links], centred as a group like the design.
+.quartz-header__nav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  max-width: 60rem;
+  min-height: var(--quartz-nav-height);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+.quartz-header__brand {
+  grid-column: 2;
+  grid-row: 1;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.75rem;
+  margin: 0 0.5rem;
+  padding: 0 2.75rem;
+  font-family: var(--quartz-serif);
+  font-size: 1.0625rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--quartz-deep);
+  text-decoration: none;
+  border-left: 1px solid var(--quartz-light);
+  border-right: 1px solid var(--quartz-light);
+}
+
+.quartz-header__logo {
+  display: block;
+  max-height: 2.25rem;
+  width: auto;
+}
+
+.quartz-header__list {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  grid-row: 1;
+}
+
+.quartz-header__list--start {
+  grid-column: 1;
+  justify-content: flex-end;
+}
+
+.quartz-header__list--end {
+  grid-column: 3;
+  justify-content: flex-start;
+}
+
+.quartz-header__list a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  padding: 0 0.5rem;
+  font-size: 0.65625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: var(--quartz-muted);
+  text-decoration: none;
+  transition: color 0.25s;
+}
+
+.quartz-header__list a:hover,
+.quartz-header__list a:focus-visible,
+.quartz-header__list a[aria-current='page'] {
+  color: var(--quartz-terra);
+}
+
+// Under 768px the source design hides the links and shows only the centred wordmark.
+@media (max-width: 768px) {
+  .quartz-header__nav {
+    display: flex;
+    justify-content: center;
+  }
+
+  .quartz-header__list {
+    display: none;
+  }
+
+  .quartz-header__brand {
+    margin: 0;
+    padding: 0;
+    border: 0;
+  }
+}

@@ -1,0 +1,18 @@
+// The shared Quartz editor form. Every other block's editor.scss is empty on purpose —
+// this file ships once in the design's editor bundle and styles them all.
+.quartz-editor {
+  border: 1px solid #5b9bb5;
+  padding: 24px;
+  background: #edf6fa;
+  color: #1a1a1a;
+}
+
+.quartz-editor fieldset {
+  border: 1px solid #a8d4e6;
+  padding: 16px;
+  margin: 16px 0;
+}
+
+.quartz-editor__media {
+  margin: 16px 0;
+}

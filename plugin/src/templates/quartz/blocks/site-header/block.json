@@ -1,0 +1,11 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/quartz-site-header",
+  "title": "Quartz — Site header",
+  "category": "foundations-quartz",
+  "icon": "menu",
+  "description": "Fixed translucent bar: the main navigation split either side of a centred wordmark. Content comes from Site Settings.",
+  "attributes": {},
+  "supports": { "html": false, "multiple": false, "inserter": false },
+  "render": "file:./render.php"
+}

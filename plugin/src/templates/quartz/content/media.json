@@ -1,0 +1,23 @@
+{
+  "$comment": "Portable media references used by the Quartz page blocks. Both photographs were supplied with the design in doc/theme/Quartz/ and compressed to WebP.",
+  "tokens": {
+    "media": "{{media:<filename>|url}} or {{media:<filename>|id}}",
+    "page": "{{page:<slug>|url}} or {{page:<slug>|id}}"
+  },
+  "files": [
+    {
+      "file": "quartz-hero.webp",
+      "title": "Facial treatment",
+      "alt": "A client relaxing during a facial treatment — facialist website design UK by Foundations Marketing",
+      "usedBy": ["content/pages/home.blocks.txt"],
+      "placeholder": false
+    },
+    {
+      "file": "quartz-practitioner.webp",
+      "title": "The practitioner",
+      "alt": "Smiling facialist in her London treatment room",
+      "usedBy": ["content/pages/home.blocks.txt"],
+      "placeholder": false
+    }
+  ]
+}

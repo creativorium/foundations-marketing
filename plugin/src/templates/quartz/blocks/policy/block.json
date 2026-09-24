@@ -1,0 +1,17 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/quartz-policy",
+  "title": "Quartz — Privacy policy",
+  "category": "foundations-quartz",
+  "icon": "privacy",
+  "description": "A legal page: owns its H1, then one heading and body per section.",
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "intro": { "type": "string", "default": "" },
+    "updated": { "type": "string", "default": "" },
+    "sections": { "type": "array", "default": [] }
+  },
+  "supports": { "html": false, "multiple": false },
+  "render": "file:./render.php"
+}

@@ -1,0 +1,18 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/quartz-about",
+  "title": "Quartz — About",
+  "category": "foundations-quartz",
+  "icon": "admin-users",
+  "description": "Practitioner photo beside a short introduction and headline numbers.",
+  "attributes": {
+    "anchor": { "type": "string", "default": "about" },
+    "eyebrow": { "type": "string", "default": "" },
+    "heading": { "type": "string", "default": "" },
+    "body": { "type": "string", "default": "" },
+    "stats": { "type": "array", "default": [] },
+    "imageId": { "type": "integer", "default": 0 }
+  },
+  "supports": { "html": false },
+  "render": "file:./render.php"
+}

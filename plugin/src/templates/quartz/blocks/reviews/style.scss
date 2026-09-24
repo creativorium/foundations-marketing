@@ -1,0 +1,174 @@
+.quartz-reviews {
+  padding: 6rem 1.5rem;
+  background: var(--quartz-cream);
+}
+
+.quartz-reviews .quartz-section-header {
+  margin-bottom: 3.5rem;
+}
+
+.quartz-slider {
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.quartz-slider__track {
+  display: flex;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.quartz-slider__track::-webkit-scrollbar {
+  display: none;
+}
+
+.quartz-slider__track:focus-visible {
+  outline: 2px solid var(--quartz-terra);
+  outline-offset: 4px;
+}
+
+.quartz-slide {
+  flex: 0 0 100%;
+  scroll-snap-align: center;
+  text-align: center;
+  padding: 1rem 2rem 2.5rem;
+}
+
+.quartz-slide figure {
+  margin: 0;
+}
+
+.quartz-slide__stars {
+  margin: 0 0 1.5rem;
+  font-size: 0.8125rem;
+  letter-spacing: 5px;
+  color: var(--quartz-terra);
+}
+
+.quartz-slide__mark {
+  display: block;
+  font-family: var(--quartz-serif);
+  font-size: 4.5rem;
+  font-weight: 300;
+  line-height: 0.6;
+  color: var(--quartz-pale);
+  margin-bottom: 1.75rem;
+}
+
+.quartz-slide blockquote {
+  margin: 0 0 1.75rem;
+}
+
+.quartz-slide blockquote p {
+  margin: 0;
+  font-family: var(--quartz-serif);
+  font-size: clamp(1.125rem, 2.5vw, 1.4375rem);
+  font-style: italic;
+  font-weight: 300;
+  line-height: 1.55;
+  color: var(--quartz-deep);
+}
+
+.quartz-slide figcaption {
+  font-size: 0.65625rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--quartz-terra);
+}
+
+.quartz-slider__controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2.25rem;
+  flex-wrap: wrap;
+}
+
+.quartz-slider__controls[hidden] {
+  display: none;
+}
+
+// Drawn exactly as the design: a 36px outlined square with a mid-blue arrow. The
+// transparent ::after stretches the tap target to 44px without changing the look.
+.quartz-slider__arrow {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0;
+  font-size: 0.875rem;
+  color: var(--quartz-mid);
+  background: none;
+  border: 1px solid var(--quartz-light);
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+
+.quartz-slider__arrow::after {
+  content: '';
+  position: absolute;
+  inset: -5px;
+}
+
+.quartz-slider__arrow:hover,
+.quartz-slider__arrow:focus-visible {
+  color: var(--quartz-white);
+  background: var(--quartz-terra-bright);
+  border-color: var(--quartz-terra-bright);
+}
+
+.quartz-slider__dots {
+  display: flex;
+  gap: 0;
+}
+
+// Keep the design's 5px mark inside a separate, non-overlapping 44px touch target.
+.quartz-slider__dot {
+  position: relative;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  transition: background 0.25s, transform 0.25s;
+}
+
+.quartz-slider__dot::before {
+  content: '';
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  left: calc(50% - 2.5px);
+  top: calc(50% - 2.5px);
+  border-radius: 50%;
+  background: var(--quartz-light);
+}
+
+.quartz-slider__dot[aria-current='true']::before {
+  background: var(--quartz-terra-bright);
+  transform: scale(1.4);
+}
+
+.quartz-slider__pause {
+  min-height: 2.75rem;
+  padding: 0.5rem 1rem;
+  font: inherit;
+  color: var(--quartz-deep);
+  border: 1px solid var(--quartz-light);
+  background: transparent;
+  cursor: pointer;
+}
+.quartz-slider__pause:hover,
+.quartz-slider__pause[aria-pressed='true'] {
+  color: var(--quartz-white);
+  background: var(--quartz-deep);
+}
+.quartz-slider__pause[hidden] { display: none; }

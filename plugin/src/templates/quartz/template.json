@@ -1,0 +1,25 @@
+{
+  "$comment": "Quartz — a single-practitioner facialist design transcribed from doc/theme/Quartz/Quartz.html (with its two supplied photographs). Shape per customer-runtime.md §2.",
+  "name": "Quartz Facialist",
+  "slug": "quartz",
+  "version": "0.1.0",
+  "niche": "Facialists and independent skin specialists",
+  "category": "Wellness",
+  "description": "A cool ice-blue and terra editorial design for a one-person facial practice: split hero, practitioner story, before and after pairs, a scrolling priced treatment menu, a review slider, a booking band and a UK GDPR privacy page.",
+  "targetPhrase": "facialist website design UK",
+  "demoSlug": "facialist-website-design",
+  "$seo": "Halo owns 'skincare clinic website design UK' and Onyx 'aesthetics clinic website design UK'. Quartz takes 'facialist website design UK' so the three skin designs never compete for one phrase (how-to-work.md §6a). Add the row to doc/SEO-AND-PERFORMANCE.md when the owner confirms it.",
+  "pages": ["home", "privacy"],
+  "settings": {
+    "$comment": "Extensions beyond the shared core in theme-customer-base/inc/settings-contract.php — only fields the Quartz shell and blocks read.",
+    "brand_label": { "type": "text", "label": "Header wordmark", "default": "Claire · M" },
+    "footer_brand": { "type": "text", "label": "Footer wordmark", "default": "Claire · Moreau" },
+    "location_line": { "type": "text", "label": "Footer location", "default": "London" },
+    "booking_url": { "type": "url", "label": "Booking link (Fresha, Acuity, Vagaro, Calendly…)", "default": "" }
+  },
+  "shell": {
+    "$comment": "Quartz owns its header and footer: a fixed translucent bar with the menu split either side of a centred wordmark, and a one-row dark footer. The shared shell draws neither.",
+    "header": { "block": "foundations/quartz-site-header" },
+    "footer": { "block": "foundations/quartz-site-footer" }
+  }
+}

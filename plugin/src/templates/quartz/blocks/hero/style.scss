@@ -1,0 +1,103 @@
+.quartz-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  padding-top: var(--quartz-nav-height);
+  background: var(--quartz-ice);
+}
+
+.quartz-hero__text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5rem 3.5rem 5rem 4.5rem;
+}
+
+.quartz-hero h1 {
+  font-family: var(--quartz-serif);
+  font-size: clamp(2.75rem, 4.5vw, 4.25rem);
+  font-weight: 300;
+  line-height: 1.08;
+  color: var(--quartz-deep);
+  text-wrap: balance;
+  margin: 0 0 1.5rem;
+}
+
+.quartz-hero h1 em {
+  font-style: italic;
+  color: var(--quartz-terra);
+}
+
+.quartz-hero__sub {
+  font-size: 0.9375rem;
+  color: var(--quartz-muted);
+  line-height: 1.8;
+  max-width: 23.75rem;
+  margin: 0 0 2.75rem;
+}
+
+.quartz-hero__actions {
+  display: flex;
+  gap: 0.875rem;
+  flex-wrap: wrap;
+}
+
+.quartz-hero__visual {
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  padding: 2.5rem;
+  min-height: 30rem;
+  background: linear-gradient(140deg, var(--quartz-pale) 0%, var(--quartz-light) 45%, var(--quartz-mid) 100%);
+}
+
+.quartz-hero__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+.quartz-hero__badge {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 1.125rem 1.625rem;
+  background: var(--quartz-white);
+  box-shadow: 0 4px 24px color-mix(in srgb, var(--quartz-deep) 14%, transparent);
+}
+
+.quartz-hero__badge-number {
+  font-family: var(--quartz-serif);
+  font-size: 2.375rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--quartz-terra);
+}
+
+.quartz-hero__badge-label {
+  font-size: 0.65625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--quartz-muted);
+}
+
+@media (max-width: 768px) {
+  .quartz-hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .quartz-hero__visual {
+    order: -1;
+    min-height: 18.75rem;
+  }
+
+  .quartz-hero__text {
+    padding: 3.5rem 1.5rem;
+  }
+}

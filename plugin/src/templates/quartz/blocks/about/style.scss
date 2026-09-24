@@ -1,0 +1,95 @@
+.quartz-about {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  background: var(--quartz-cream);
+}
+
+.quartz-about .quartz-h2 { white-space: pre-line; }
+
+.quartz-about__visual {
+  position: relative;
+  min-height: 30rem;
+  margin: 0;
+  overflow: hidden;
+  background: linear-gradient(170deg, var(--quartz-light) 0%, var(--quartz-mid) 55%, var(--quartz-steel) 100%);
+}
+
+.quartz-about__visual img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100% !important;
+  object-fit: cover;
+  object-position: 70% center;
+}
+
+// The terra square that sits in the photo's corner in the design.
+.quartz-about__visual::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 4rem;
+  height: 4rem;
+  background: var(--quartz-terra-bright);
+}
+
+.quartz-about__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4.5rem 4.5rem 4.5rem 4rem;
+}
+
+.quartz-about__content > p:not(.quartz-eyebrow) {
+  font-size: 0.9375rem;
+  line-height: 1.8;
+  color: var(--quartz-muted);
+  margin: 0 0 1rem;
+}
+
+.quartz-about__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2.25rem;
+  margin: 2.25rem 0 0;
+  padding-top: 2.25rem;
+  border-top: 1px solid var(--quartz-pale);
+}
+
+// Number above label visually; the label stays first in the source so it reads as a term.
+.quartz-about__stats div {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 0.25rem;
+}
+
+.quartz-about__stats dd {
+  margin: 0;
+  font-family: var(--quartz-serif);
+  font-size: 2.25rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--quartz-terra);
+}
+
+.quartz-about__stats dt {
+  font-size: 0.65625rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--quartz-muted);
+}
+
+@media (max-width: 768px) {
+  .quartz-about {
+    grid-template-columns: 1fr;
+  }
+
+  .quartz-about__visual {
+    min-height: 16.25rem;
+  }
+
+  .quartz-about__content {
+    padding: 3rem 1.5rem;
+  }
+}
