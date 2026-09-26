@@ -1,0 +1,21 @@
+{
+  "$comment": "Ember massage therapist template reconstructed from the supplied Ember.html reference.",
+  "name": "Ember",
+  "slug": "ember",
+  "version": "0.1.0",
+  "niche": "Massage therapist / therapeutic bodywork",
+  "category": "Wellness",
+  "description": "A dark, intimate one-page template for an independent massage therapist, with treatments, client testimonials and booking details.",
+  "targetPhrase": "massage therapist website design UK",
+  "demoSlug": "massage-therapist-website-design",
+  "pages": ["home"],
+  "settings": {
+    "brand_label": { "type": "text", "label": "Wordmark", "default": "Serene · Touch" },
+    "opening_hours": { "type": "text", "label": "Opening hours", "default": "Tue–Sat, 9am–7pm" },
+    "cancellation_notice": { "type": "text", "label": "Cancellation notice", "default": "24 hrs cancellation required" }
+  },
+  "shell": {
+    "header": { "block": "foundations/ember-site-header" },
+    "footer": { "block": "foundations/ember-site-footer" }
+  }
+}

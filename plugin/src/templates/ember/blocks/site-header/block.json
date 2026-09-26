@@ -1,0 +1,1 @@
+{"apiVersion":3,"name":"foundations/ember-site-header","title":"Ember — Site header","category":"foundations-ember","icon":"menu","attributes":{},"supports":{"html":false,"multiple":false,"inserter":false},"render":"file:./render.php"}
