@@ -1,0 +1,16 @@
+{
+  "$comment": "Default Site Settings for the supplied reference content.",
+  "site_name": "Serene · Touch",
+  "tagline": "Therapeutic massage & bodywork",
+  "logo_id": 0,
+  "phone": "",
+  "email": "hello@seretouch.com",
+  "address": "Stoke Newington, London N16",
+  "cta_label": "Reserve a session",
+  "cta_url": "{{page:home|url}}#book",
+  "footer_text": "Template by Foundations Marketing",
+  "social": [],
+  "brand_label": "Serene · Touch",
+  "opening_hours": "Tue–Sat, 9am–7pm",
+  "cancellation_notice": "24 hrs cancellation required"
+}

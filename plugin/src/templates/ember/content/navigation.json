@@ -1,0 +1,12 @@
+{
+  "nav_primary": [
+    { "label": "About", "url": "{{page:home|url}}#about" },
+    { "label": "Treatments", "url": "{{page:home|url}}#treatments" },
+    { "label": "Book", "url": "{{page:home|url}}#book" }
+  ],
+  "nav_footer": [
+    { "label": "About", "url": "{{page:home|url}}#about" },
+    { "label": "Treatments", "url": "{{page:home|url}}#treatments" },
+    { "label": "Book", "url": "{{page:home|url}}#book" }
+  ]
+}

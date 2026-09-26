@@ -1,0 +1,15 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/ember-about",
+  "title": "Ember — About",
+  "category": "foundations-ember",
+  "icon": "admin-users",
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "About" },
+    "heading": { "type": "string", "default": "Sofía Rivera" },
+    "paragraphs": { "type": "array", "default": [{"paragraph":""}] },
+    "tags": { "type": "array", "default": [{"tag":""}] }
+  },
+  "supports": { "html": false },
+  "render": "file:./render.php"
+}
