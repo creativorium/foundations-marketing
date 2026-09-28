@@ -2,13 +2,13 @@
 /**
  * Plugin Name: FM Contact & Discovery Forms (with Appointment)
  * Description: Custom Form for Foundations Marketing. Shortcodes: [fm_contact_form], [fm_discovery_form]
- * Version: 1.9.5
+ * Version: 1.9.6
  * Author: Negolast
  */
 
 if (!defined('ABSPATH')) exit;
 
-define('FMCD_VER', '1.9.5');
+define('FMCD_VER', '1.9.6');
 define('FMCD_DIR', plugin_dir_path(__FILE__));
 define('FMCD_URL', plugin_dir_url(__FILE__));
 
@@ -369,7 +369,7 @@ class FMCD_Plugin {
   public function shortcode_contact_page() {
     $email = sanitize_email((string) get_option('fmcd_to_email', get_option('admin_email')));
 
-    return '<section class="fmcd-page">'
+    return '<section class="fmcd-page"><div class="fmcd-page__layout">'
       . '<header class="fmcd-page__intro">'
       . '<p class="fmcd-page__eyebrow">Start a conversation</p>'
       . '<h1 class="fmcd-page__title">Tell us what<br><span>you are building.</span></h1>'
@@ -377,7 +377,7 @@ class FMCD_Plugin {
       . ($email !== '' ? '<p class="fmcd-page__email"><span>Email</span><a href="mailto:' . esc_attr($email) . '">' . esc_html($email) . '</a></p>' : '')
       . '</header>'
       . $this->shortcode_contact()
-      . '</section>';
+      . '</div></section>';
   }
 
   public function shortcode_contact() {
