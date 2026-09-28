@@ -12,21 +12,20 @@
 
 // Desktop: [start links] | WORDMARK | [end links], centred as a group like the design.
 .quartz-header__nav {
-  display: grid;
-  grid-template-columns: 1fr auto 1fr;
+  display: flex;
+  justify-content: center;
   align-items: center;
   max-width: 60rem;
-  min-height: var(--quartz-nav-height);
+
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 1.125rem 1.5rem;
 }
 
 .quartz-header__brand {
-  grid-column: 2;
-  grid-row: 1;
+  order: 2;
   display: inline-flex;
   align-items: center;
-  min-height: 2.75rem;
+
   margin: 0 0.5rem;
   padding: 0 2.75rem;
   font-family: var(--quartz-serif);
@@ -50,20 +49,19 @@
 .quartz-header__list {
   display: flex;
   align-items: center;
-  gap: 1.25rem;
+  gap: 2.25rem;
   margin: 0;
   padding: 0;
   list-style: none;
-  grid-row: 1;
 }
 
 .quartz-header__list--start {
-  grid-column: 1;
+  order: 1;
   justify-content: flex-end;
 }
 
 .quartz-header__list--end {
-  grid-column: 3;
+  order: 3;
   justify-content: flex-start;
 }
 
@@ -71,9 +69,8 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 2.75rem;
-  min-height: 2.75rem;
-  padding: 0 0.5rem;
+
+  padding: 0;
   font-size: 0.65625rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -82,6 +79,10 @@
   text-decoration: none;
   transition: color 0.25s;
 }
+
+.quartz-header__list li { display: flex; }
+.quartz-header a { position: relative; }
+.quartz-header a::after { content: ''; position: absolute; inset: -8px -4px; }
 
 .quartz-header__list a:hover,
 .quartz-header__list a:focus-visible,

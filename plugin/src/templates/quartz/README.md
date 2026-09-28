@@ -8,10 +8,10 @@ Target phrase: **facialist website design UK** (`/templates/facialist-website-de
 
 ## Intentional differences from the source HTML
 
-- **Contrast (WCAG AA, how-to-work.md §8).** The source terra `#C06B52` gives 3.5:1 for small text on the ice background and 3.9:1 under white button text. Text and filled buttons use `#A9573F` (4.7:1+); the original terra is kept only for decorative marks (the About corner square, divider lines). Low-opacity white text on the treatments, booking and footer bands was raised to pass AA, and `terra-light` is `#EDB0A2` so prices pass on deep blue.
-- **Tap targets.** Nav and footer links are 44×44px. The review slider controls are drawn exactly as the source (36px arrow squares, 5px dots with wider spacing); an invisible `::after` gives the arrows a 46px target, and each dot sits inside its own 44×44px button.
+- **Contrast (WCAG AA, how-to-work.md §8).** The source terra `#C06B52` gives 3.5:1 for small text on the ice background and 3.9:1 under white button text. Most accent text and filled buttons use `#A9573F` (4.7:1+); the original terra is retained for the source booking background, review accents and decorative marks. Low-opacity white text on the treatments, booking and footer bands was raised to pass AA, and `terra-light` is `#EDB0A2` so prices pass on deep blue.
+- **Review controls.** Compact 5px dots with 8px gaps and 36px arrow squares match the approved design. Arrow hit areas are enlarged to 46px; swipe and keyboard scrolling are also available.
 - **Treatments row** shows a thin scrollbar and is keyboard-focusable, so the row visibly continues; the source hid the scrollbar.
-- **Reviews slider** is a scroll-snap row that works without JavaScript; autoplay is off under `prefers-reduced-motion` and pauses on hover/focus, with an explicit pause toggle for touch users.
+- **Reviews slider** uses manual arrows, dots and swipe only (owner decision). No autoplay or pause button. Reduced motion disables animated scrolling.
 - **Before & after** cards accept real photos; with no photo they show the source's colour washes.
 - **Footer credit** reads "Website by Foundations Marketing" and links to the studio (SEO strategy backlink).
 - The booking panel keeps the source's widget placeholder text; replace it with the customer's Fresha/Acuity/Vagaro/Calendly link via the **Booking link** Site Setting or the block's button URL.
@@ -28,4 +28,8 @@ Replace the placeholder name, location, email, statistics, treatment prices, rev
 
 Compared with the approved Quartz HTML at 375, 820 and 1440px. The source has empty hero/About image panels; the two supplied photographs are applied in those panels. Source heading line breaks are preserved in editable multiline fields. Before/after photos were not supplied and remain the source's gradient placeholders.
 
-Verified the compiled delivery package on foundations-fixture: both page imports, image remapping, responsive rendering, review arrows/pause/reduced motion, privacy navigation, and Gutenberg content edits saved and reloaded on both pages. No browser script errors. The existing fixture is restored after acceptance; the Quartz master is available separately on the marketing Local site.
+Verified the compiled delivery package on foundations-fixture: both page imports, image remapping, responsive rendering, review arrows and reduced motion, privacy navigation, and Gutenberg content edits saved and reloaded on both pages. No browser script errors. The existing fixture is restored after acceptance; the Quartz master is available separately on the marketing Local site.
+
+## Layout correction (28 September 2026)
+
+Rechecked all homepage sections against the approved HTML at 375, 820 and 1440px. Restored source header spacing, hero line break and mobile height, About label typography, result captions, booking line height and footer spacing. Reviews use the original straight quote mark and compact dots with manual navigation only. The additional privacy link, supplied photographs, readable text contrast and keyboard/touch support remain intentional additions.
