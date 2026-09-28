@@ -2,7 +2,7 @@
   "$comment": "Quartz — a single-practitioner facialist design transcribed from doc/theme/Quartz/Quartz.html (with its two supplied photographs). Shape per customer-runtime.md §2.",
   "name": "Quartz Facialist",
   "slug": "quartz",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "niche": "Facialists and independent skin specialists",
   "category": "Wellness",
   "description": "A cool ice-blue and terra editorial design for a one-person facial practice: split hero, practitioner story, before and after pairs, a scrolling priced treatment menu, a review slider, a booking band and a UK GDPR privacy page.",

@@ -89,7 +89,7 @@
 @media (max-width: 768px) {
   .quartz-hero {
     grid-template-columns: 1fr;
-    min-height: 0;
+    min-height: 100vh;
   }
 
   .quartz-hero__visual {

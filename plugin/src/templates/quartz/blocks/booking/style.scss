@@ -4,10 +4,12 @@
   gap: 4.5rem;
   align-items: center;
   padding: 6rem 4.5rem;
-  background: var(--quartz-terra);
+  background: var(--quartz-terra-bright);
 }
 
 .quartz-booking .quartz-eyebrow {
+  font-size: 0.9375rem;
+  line-height: 1.75;
   color: rgb(255 255 255 / 0.85);
 }
 
@@ -16,7 +18,7 @@
   font-family: var(--quartz-serif);
   font-size: clamp(2rem, 3.5vw, 3.125rem);
   font-weight: 300;
-  line-height: 1.15;
+  line-height: 1.65;
   color: var(--quartz-white);
   text-wrap: balance;
   margin: 0 0 1.25rem;

@@ -46,7 +46,7 @@
   margin: 0 0 1.5rem;
   font-size: 0.8125rem;
   letter-spacing: 5px;
-  color: var(--quartz-terra);
+  color: var(--quartz-terra-bright);
 }
 
 .quartz-slide__mark {
@@ -61,6 +61,8 @@
 
 .quartz-slide blockquote {
   margin: 0 0 1.75rem;
+  padding: 0;
+  border: 0;
 }
 
 .quartz-slide blockquote p {
@@ -126,14 +128,14 @@
 
 .quartz-slider__dots {
   display: flex;
-  gap: 0;
+  gap: 8px;
 }
 
-// Keep the design's 5px mark inside a separate, non-overlapping 44px touch target.
+// Compact source dots; arrows and swipe provide larger touch controls.
 .quartz-slider__dot {
   position: relative;
-  width: 2.75rem;
-  height: 2.75rem;
+  width: 5px;
+  height: 5px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -152,23 +154,13 @@
   background: var(--quartz-light);
 }
 
+.quartz-slider__dot::after {
+  content: '';
+  position: absolute;
+  inset: -20px -4px;
+}
+
 .quartz-slider__dot[aria-current='true']::before {
   background: var(--quartz-terra-bright);
   transform: scale(1.4);
 }
-
-.quartz-slider__pause {
-  min-height: 2.75rem;
-  padding: 0.5rem 1rem;
-  font: inherit;
-  color: var(--quartz-deep);
-  border: 1px solid var(--quartz-light);
-  background: transparent;
-  cursor: pointer;
-}
-.quartz-slider__pause:hover,
-.quartz-slider__pause[aria-pressed='true'] {
-  color: var(--quartz-white);
-  background: var(--quartz-deep);
-}
-.quartz-slider__pause[hidden] { display: none; }
