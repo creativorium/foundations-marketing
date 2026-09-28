@@ -16,7 +16,7 @@ $image = (int) ($a['imageId'] ?? 0);
             <p class="quartz-eyebrow"><?php echo esc_html($text('eyebrow')); ?></p>
         <?php endif; ?>
         <h1>
-            <?php echo esc_html($text('heading')); ?>
+            <?php echo nl2br(esc_html($text('heading'))); ?>
             <?php if ($text('highlight') !== '') : ?><em><?php echo esc_html($text('highlight')); ?></em><?php endif; ?>
             <?php echo esc_html($text('headingEnd')); ?>
         </h1>

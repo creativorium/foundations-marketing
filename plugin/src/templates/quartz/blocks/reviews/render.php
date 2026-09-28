@@ -1,7 +1,7 @@
 <?php
 /**
  * Quartz reviews. Works as a swipeable scroll-snap row with no JavaScript; view.js adds
- * the arrows, dots and gentle autoplay the design shows.
+ * the arrows and dots. Reviews only move when a visitor chooses to navigate.
  */
 if (!defined('ABSPATH')) {
     exit;
@@ -26,7 +26,7 @@ $id     = 'quartz-reviews-' . $anchor;
                 <li class="quartz-slide" aria-roledescription="slide" aria-label="<?php echo esc_attr(sprintf('%d of %d', $index + 1, $count)); ?>">
                     <figure>
                         <p class="quartz-slide__stars" role="img" aria-label="<?php esc_attr_e('Five out of five stars', 'foundations'); ?>">★★★★★</p>
-                        <span class="quartz-slide__mark" aria-hidden="true">&ldquo;</span>
+                        <span class="quartz-slide__mark" aria-hidden="true">&quot;</span>
                         <blockquote><p><?php echo esc_html((string) ($item['quote'] ?? '')); ?></p></blockquote>
                         <figcaption>
                             <?php echo esc_html(implode(' · ', array_filter([(string) ($item['name'] ?? ''), (string) ($item['detail'] ?? '')]))); ?>
@@ -50,7 +50,6 @@ $id     = 'quartz-reviews-' . $anchor;
                 <button class="quartz-slider__arrow" type="button" data-quartz-next aria-controls="<?php echo esc_attr($id); ?>">
                     <span aria-hidden="true">&rarr;</span><span class="screen-reader-text"><?php esc_html_e('Next review', 'foundations'); ?></span>
                 </button>
-                <button class="quartz-slider__pause" type="button" data-quartz-pause aria-pressed="false"><?php esc_html_e('Pause autoplay', 'foundations'); ?></button>
             </div>
         <?php endif; ?>
     </div>
