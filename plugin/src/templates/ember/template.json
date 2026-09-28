@@ -10,6 +10,7 @@
   "demoSlug": "massage-therapist-website-design",
   "pages": ["home"],
   "settings": {
+    "booking_url": { "type": "url", "label": "Booking calendar URL", "default": "" },
     "brand_label": { "type": "text", "label": "Wordmark", "default": "Serene · Touch" },
     "opening_hours": { "type": "text", "label": "Opening hours", "default": "Tue–Sat, 9am–7pm" },
     "cancellation_notice": { "type": "text", "label": "Cancellation notice", "default": "24 hrs cancellation required" }

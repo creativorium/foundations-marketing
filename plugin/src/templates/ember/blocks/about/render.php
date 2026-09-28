@@ -6,7 +6,11 @@ $tags = (array) ($a['tags'] ?? []);
 ?>
 <section class="ember ember-about" id="about">
   <div class="ember-about-inner">
-    <div class="ember-about-portrait" aria-hidden="true"><div class="ember-portrait-frame"></div></div>
+    <div class="ember-about-portrait"><div class="ember-portrait-frame">
+      <?php if (!empty($a['imageId'])) : ?>
+        <?php echo wp_get_attachment_image((int) $a['imageId'], 'large', false, ['loading' => 'lazy', 'decoding' => 'async', 'sizes' => '(max-width: 700px) 100vw, 448px']); ?>
+      <?php endif; ?>
+    </div></div>
     <div class="ember-about-text">
       <p class="ember-section-eyebrow"><?php echo esc_html((string) ($a['eyebrow'] ?? 'About')); ?></p>
       <h2 class="ember-section-title"><?php echo esc_html((string) ($a['heading'] ?? 'Sofía Rivera')); ?></h2>

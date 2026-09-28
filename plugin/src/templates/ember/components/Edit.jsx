@@ -1,4 +1,4 @@
-import { useBlockProps } from '@wordpress/block-editor';
+import { useBlockProps, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { Button, TextControl, TextareaControl } from '@wordpress/components';
 import ServerSideRender from '@wordpress/server-side-render';
 
@@ -16,6 +16,9 @@ export default function createEdit(metadata) {
         {!schemas.length && <p>Edit this block through Site Settings.</p>}
         {schemas.map(([key, schema]) => {
           const value = attributes[key] ?? schema.default ?? '';
+          if (schema.type === 'integer' && key.endsWith('Id')) {
+            return <div key={key}><MediaUploadCheck><MediaUpload allowedTypes={['image']} value={value} onSelect={media => setAttributes({[key]: media.id})} render={({open}) => <Button variant="secondary" onClick={open}>{value ? 'Replace image' : 'Choose image'}</Button>} /></MediaUploadCheck>{!!value && <Button variant="tertiary" onClick={() => setAttributes({[key]: 0})}>Remove image</Button>}</div>;
+          }
           if (schema.type !== 'array') {
             const Control = isLong(key) ? TextareaControl : TextControl;
             return <Control key={key} label={label(key)} value={value} onChange={(next) => setAttributes({ [key]: next })} />;

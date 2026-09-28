@@ -5,6 +5,7 @@
   "category": "foundations-ember",
   "icon": "admin-users",
   "attributes": {
+    "imageId": { "type": "integer", "default": 0 },
     "eyebrow": { "type": "string", "default": "About" },
     "heading": { "type": "string", "default": "Sofía Rivera" },
     "paragraphs": { "type": "array", "default": [{"paragraph":""}] },
