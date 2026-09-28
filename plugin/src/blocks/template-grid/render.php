@@ -37,7 +37,13 @@ $more_url   = fm_marketing_cta_url($more_text, $more_url);
 $compact    = (bool) ($attributes['compact'] ?? false);
 $tone       = (string) ($attributes['tone'] ?? 'plain');
 
-$templates = fm_get_templates($limit);
+// Fetch one extra design so a capped grid always offers the full catalogue.
+$templates = fm_get_templates($limit + 1);
+if (count($templates) > $limit) {
+    $more_text = __('View all templates', 'foundations');
+    $more_url = fm_template_catalogue_url();
+}
+$templates = array_slice($templates, 0, $limit);
 
 if ($templates === []) {
     // Nothing published yet. Say so in the editor, but render nothing on the front end
