@@ -1,0 +1,18 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/ember-hero",
+  "title": "Ember — Hero",
+  "category": "foundations-ember",
+  "icon": "cover-image",
+  "attributes": {
+    "photoCaption": { "type": "string", "default": "where stillness becomes medicine" },
+    "dateLine": { "type": "string", "default": "Est. 2026 · London" },
+    "headingLineOne": { "type": "string", "default": "Touch that" },
+    "headingLineTwo": { "type": "string", "default": "restores" },
+    "tagline": { "type": "string", "default": "Therapeutic massage & bodywork" },
+    "ctaLabel": { "type": "string", "default": "Reserve a session" },
+    "ctaUrl": { "type": "string", "default": "#book" }
+  },
+  "supports": { "html": false, "multiple": false },
+  "render": "file:./render.php"
+}

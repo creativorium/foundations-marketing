@@ -1,0 +1,17 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/ember-booking",
+  "title": "Ember — Booking",
+  "category": "foundations-ember",
+  "icon": "calendar-alt",
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "Bookings" },
+    "heading": { "type": "string", "default": "Reserve your session" },
+    "body": { "type": "string", "default": "" },
+    "details": { "type": "array", "default": [{"label":"","value":""}] },
+    "widgetLabel": { "type": "string", "default": "Booking widget\nplaceholder" },
+    "widgetExamples": { "type": "string", "default": "e.g. Fresha · Treatwell · Mindbody" }
+  },
+  "supports": { "html": false },
+  "render": "file:./render.php"
+}

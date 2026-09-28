@@ -1,0 +1,14 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/ember-treatments",
+  "title": "Ember — Treatments",
+  "category": "foundations-ember",
+  "icon": "list-view",
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "Treatments" },
+    "heading": { "type": "string", "default": "What I offer" },
+    "items": { "type": "array", "default": [{"name":"","description":"","duration":"","price":""}] }
+  },
+  "supports": { "html": false },
+  "render": "file:./render.php"
+}

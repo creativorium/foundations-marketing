@@ -1,0 +1,14 @@
+{
+  "apiVersion": 3,
+  "name": "foundations/ember-testimonials",
+  "title": "Ember — Testimonials",
+  "category": "foundations-ember",
+  "icon": "format-quote",
+  "attributes": {
+    "eyebrow": { "type": "string", "default": "Client words" },
+    "heading": { "type": "string", "default": "What they say" },
+    "items": { "type": "array", "default": [{"quote":"","author":""}] }
+  },
+  "supports": { "html": false },
+  "render": "file:./render.php"
+}

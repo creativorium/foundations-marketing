@@ -1,0 +1,13 @@
+{
+  "files": [
+    {
+      "file": "ember-about.webp",
+      "title": "Massage treatment",
+      "alt": "A therapist pouring warm massage oil into their palm during a treatment",
+      "usedBy": [
+        "content/pages/home.blocks.txt"
+      ],
+      "placeholder": false
+    }
+  ]
+}

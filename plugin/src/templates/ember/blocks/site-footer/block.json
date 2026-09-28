@@ -1,0 +1,1 @@
+{"apiVersion":3,"name":"foundations/ember-site-footer","title":"Ember — Site footer","category":"foundations-ember","icon":"admin-site-alt3","attributes":{},"supports":{"html":false,"multiple":false,"inserter":false},"render":"file:./render.php"}
